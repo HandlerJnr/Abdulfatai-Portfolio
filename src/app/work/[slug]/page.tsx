@@ -177,7 +177,11 @@ export default async function CaseStudy({ params }: { params: Params }) {
             {project.gallery.map((img) => (
               <Reveal as="li" key={img.src} y={48}>
                 <figure>
-                  <div className="overflow-hidden rounded-sm border border-line/60 bg-[#05050C]">
+                  <div
+                    className={`overflow-hidden rounded-sm border border-line/60 bg-[#05050C] ${
+                      img.portrait ? "mx-auto w-fit max-w-[22rem]" : ""
+                    }`}
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={img.src}

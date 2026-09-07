@@ -11,9 +11,9 @@ export type Project = {
   /** Behance cover image. When absent, generated SVG artwork is used instead. */
   cover?: string;
   /** How the cover should be framed in the mockup shell. */
-  frame?: "browser" | "phone" | "flat";
+  frame?: "browser" | "phone" | "flat" | "portrait";
   /** Extra imagery shown below the case-study body. */
-  gallery?: { src: string; alt: string }[];
+  gallery?: { src: string; alt: string; portrait?: boolean }[];
   /** Direct link to the full project deck on Behance. */
   externalUrl?: string;
   /**
@@ -280,6 +280,53 @@ export const projects: Project[] = [
     overview:
       "A mobile banking interface covering core everyday banking tasks. The full presentation is published on Behance.",
     deliverables: ["Mobile UX", "UI design", "Banking flows"],
+  },
+
+  {
+    slug: "pay4me",
+    title: "Pay4Me App",
+    category: "Cross-Border Payments Platform",
+    tagline:
+      "Paying tuition, SEVIS and visa fees across borders — for students whose admission depends on the transfer clearing.",
+    year: "2025",
+    status: "Full case study",
+    role: "Product designer",
+    tags: ["Fintech UX", "Cross-Border Payments", "Trust & Credibility", "Mobile UX"],
+    caseStudy: true,
+    cover: "/projects/pay4me-app.jpg",
+    frame: "portrait",
+    gallery: [
+      {
+        src: "/projects/pay4me-app.jpg",
+        alt: "The Pay4Me home screen: a multi-currency balance with its own currency switcher and privacy toggle, Transfer and Withdraw as the only two primary actions, recent recipients shown as faces rather than account numbers, and support reachable from the bottom navigation",
+        portrait: true,
+      },
+    ],
+    art: { hue: "#0f2418", accent: "#3ddc84", kind: "banking" },
+    overview:
+      "Pay4Me is a cross-border payments platform for international students and immigrants — paying tuition, SEVIS, I-20, visa and credential-evaluation fees to institutions and government agencies abroad. I designed the mobile product and the marketing site that has to earn a stranger's trust before they will download it.",
+    challenge:
+      "For an international student, a payment is not a transaction — it is a deadline. Miss a SEVIS fee and the visa appointment goes with it; miss a tuition instalment and the admission can lapse. Yet the money usually has to travel the hardest possible route: from a family in one currency, through a banking system with limited access to dollars, to a university that only recognises payments arriving in a particular form. Traditional wires are slow, expensive and opaque, and the person waiting has no way to see where their money is. Two design problems follow from that. The sums are often a family's savings, sent by someone who has never heard of the company — so credibility has to be established before the app is even installed. And the person paying is frequently not the person benefiting, which breaks the assumption almost every payment app is built on.",
+    process: [
+      "Designed for the sponsor, not just the account holder. Parents and relatives fund most of these payments, so the product treats sponsored payment as a first-class type alongside seamless and cross-border — rather than bending a personal wallet into a use case it was never shaped for.",
+      "Made recipients people instead of account numbers. Recent transfers appear as faces and first names, and the search field asks you to find a friend or family member to send money to — matching how these transfers are actually described out loud, and removing a common source of costly typos.",
+      "Put currency where the money is. The balance carries its own currency switcher rather than burying conversion in a settings screen, because holding and thinking in more than one currency is the normal state for this user, not an edge case.",
+      "Surfaced verification status as identity. The account tier sits beside the user's name and verified badge, because in this category tier determines transfer limits — so what would otherwise be buried compliance state becomes information the user needs before starting a large payment.",
+      "Named the real jobs rather than generic ones. The product speaks in SEVIS, I-20, visa applications and credential evaluations, not payments and services — using the exact vocabulary of the immigration journey, which both signals competence and lets people recognise their situation instantly.",
+      "Built the marketing site as trust architecture. Payment processors and partners, universities served, a world map of the countries covered, video testimonials from students, and an FAQ given two full columns of the page — because the honest barrier for a stranger about to send tuition is not persuasion, it is doubt.",
+      "Kept everyday utility in the app between the big moments. Airtime top-up and bill payment give people a reason to open it in the months between tuition instalments, so the product is already familiar when the payment that matters arrives.",
+      "Made support a destination, not a dead end. It sits in the bottom navigation as one of four primary tabs — appropriate for high-value, high-anxiety transfers where being unable to reach a human is itself the failure.",
+    ],
+    outcome:
+      "A payments product shaped around the real unit of work — a family funding someone else's education across a border, against a deadline. Sponsored payments are designed for rather than tolerated, verification and currency are treated as everyday context instead of settings, the interface speaks the immigration journey's own vocabulary, and the site does the credibility work before the download rather than after it.",
+    deliverables: [
+      "Mobile app design",
+      "Sponsored & cross-border payment flows",
+      "Multi-currency balance & transfers",
+      "Marketing site design",
+      "Trust & credibility system",
+      "FAQ and support experience",
+    ],
   },
 
   /* ---- CV-documented work, written case studies, generated artwork ---- */

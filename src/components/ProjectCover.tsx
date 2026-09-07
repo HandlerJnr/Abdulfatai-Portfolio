@@ -56,6 +56,38 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
     },
   };
 
+  // "portrait" — a tall phone screen that already carries its own device bezel.
+  // Contained and centred on the project's tinted ground so it is never cropped
+  // or upscaled past its natural size.
+  if (project.frame === "portrait") {
+    return (
+      <div
+        className="relative flex h-full w-full items-center justify-center overflow-hidden py-6"
+        style={{
+          backgroundImage: `radial-gradient(120% 100% at 78% 12%, ${accent}22, transparent 62%), linear-gradient(140deg, ${hue}, #05050C 78%)`,
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-50"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          {...imgProps}
+          className="relative h-full w-auto max-w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,.7)]"
+        />
+        <span className="display pointer-events-none absolute bottom-3 left-4 text-xs tracking-[0.22em] text-white/45 md:bottom-5 md:left-7 md:text-sm">
+          {project.title.toUpperCase()} — {project.year}
+        </span>
+      </div>
+    );
+  }
+
   // "flat" — the image is already a finished mockup with its own staging, so it
   // fills the frame edge to edge rather than sitting inside a second chrome.
   if (project.frame === "flat") {
