@@ -4,7 +4,7 @@ export const site = {
   title: "UI/UX Product Designer & Researcher",
   location: "Brighton, United Kingdom",
   email: "aabdulfataijamiu@gmail.com",
-  linkedin: "https://www.linkedin.com/in/abdulfataijamiu",
+  linkedin: "https://www.linkedin.com/in/jamiudesign/",
   behance: "https://www.behance.net/abdulfataijamiu",
   cv: "/Abdulfatai_Jamiu_CV.pdf",
   availability: "Open to product design opportunities in the UK and Europe.",
