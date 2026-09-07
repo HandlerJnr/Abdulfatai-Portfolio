@@ -149,24 +149,62 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "ai-architectural-design",
-    title: "AI Design Assistant",
-    category: "Conversational AI Product for Architecture",
+    slug: "archi-tek",
+    title: "Archi-Tek",
+    category: "AI Architectural Design Tool",
     tagline:
-      "A ChatGPT-style product experience applied to architectural design work.",
+      "Turning a sentence into an editable architectural model — not just a picture of a building.",
     year: "2025",
-    status: "Deck on Behance",
+    status: "Full case study",
     role: "Product designer",
-    tags: ["AI Product Design", "Conversational UX", "Interface Design"],
-    caseStudy: false,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/404/5542d4235692645.Y3JvcCwyODY4LDIyNDQsMzQwLDA.png",
-    frame: "browser",
+    tags: [
+      "AI Product Design",
+      "Conversational UX",
+      "Information Architecture",
+      "Interface Design",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/architek-prompt.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/architek-design-type.jpg",
+        alt: "Design type modal offering Concept Sketch, Schematic Plan and Detailed Model, each with a plain-language description of what it is for",
+      },
+      {
+        src: "/projects/architek-preview.jpg",
+        alt: "Preview modal showing a generated design with download format options — DWG, OBJ, SKP and PDF — and an entry point into the Archi-Tek editor",
+      },
+      {
+        src: "/projects/architek-editor.jpg",
+        alt: "The Archi-Tek 3D editor: a viewport with orientation gizmo, object-mode toolbar and an Export Design action",
+      },
+    ],
     externalUrl: `${BEHANCE}/235692645/Chat-Gpt-like-Product-design-for-Architectural-design`,
     art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
     overview:
-      "A conversational AI product experience designed for architectural design work. The full presentation is published on Behance.",
-    deliverables: ["Conversational UX", "Interface design", "Product concept"],
+      "Archi-Tek is a text-to-design tool for architecture. Describe a building in plain language and it generates concept sketches, schematic plans or detailed models — then hands you the result as a real CAD file you can keep working in. I designed the end-to-end product: the prompt experience, the design-type system, the preview and export flow, and the 3D editor.",
+    challenge:
+      "Generative AI is good at producing a convincing picture of a building. That is precisely what an architect cannot use. A render is a dead end: it cannot be dimensioned, measured, revised or handed to an engineer. Meanwhile the tools that do produce workable geometry — CAD and 3D modelling suites — carry a learning curve measured in months, which puts early-stage massing and client-facing concepts out of reach for the people who most need them quickly. The design problem was to sit a conversational interface on top of real architectural output, without either half undermining the other: the chat could not feel like a toy, and the output could not be a JPEG.",
+    process: [
+      "Framed the core insight that fidelity is a decision the user makes, not one the model should guess. A quick massing study and a dimensioned model are different jobs with different tolerances for error, so the interface asks up front — Concept Sketch, Schematic Plan or Detailed Model — and describes each in plain language rather than jargon.",
+      "Designed the prompt screen around the blank-page problem. A bare text field asks the user to already know what to say, so the entry point pairs a single open field with typed starting points — 3-Bedroom Bungalow, Duplex Sample, 3-Story Building, Filling Station — and a wall of generated samples underneath, so the first move is recognition rather than recall.",
+      "Structured the results as a browsable gallery of named, comparable options (Modern Villa, Neo-Classical Duplex, Urban Courtyard Duplex) rather than a single answer. Architectural ideation is comparative; showing one output invites acceptance instead of judgement.",
+      "Made export the moment of trust. The preview modal puts format selection — DWG, OBJ, SKP, PDF — directly beside the generated design, so it is unambiguous from first use that the output is a working file destined for AutoCAD, Blender or SketchUp, not an image to screenshot.",
+      "Designed the in-product 3D editor as the continuation of that promise: a familiar viewport with orientation gizmo, object-mode toolbar and its own Export Design action, so refinement does not require leaving the tool — and staged it honestly in the UI as coming soon rather than implying capability that is not there yet.",
+      "Kept the chat conversational and the workspace professional, using a restrained neutral interface so the generated architecture is the only thing on screen carrying colour and detail.",
+    ],
+    outcome:
+      "An AI design assistant that behaves like a drafting collaborator rather than an image generator: fidelity chosen deliberately, options compared side by side, and every result leaving the product as an editable CAD file. The flow moves from a sentence, through a design-type decision and a compared set of options, to a downloadable model — with an editor waiting for the work that follows.",
+    deliverables: [
+      "Conversational UX",
+      "Design-type system",
+      "Prompt & sample gallery",
+      "Preview and export flow",
+      "3D editor interface",
+      "Interface design",
+    ],
   },
   {
     slug: "loan-investment-app",

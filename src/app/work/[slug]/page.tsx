@@ -176,16 +176,21 @@ export default async function CaseStudy({ params }: { params: Params }) {
           <ul className="grid gap-6 md:gap-10">
             {project.gallery.map((img) => (
               <Reveal as="li" key={img.src} y={48}>
-                <div className="overflow-hidden rounded-sm border border-line/60 bg-[#05050C]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="block w-full"
-                  />
-                </div>
+                <figure>
+                  <div className="overflow-hidden rounded-sm border border-line/60 bg-[#05050C]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="block w-full"
+                    />
+                  </div>
+                  <figcaption className="mt-4 max-w-[70ch] text-sm leading-relaxed text-white/55">
+                    {img.alt}
+                  </figcaption>
+                </figure>
               </Reveal>
             ))}
           </ul>
