@@ -110,24 +110,43 @@ export const projects: Project[] = [
   },
   {
     slug: "project-management-dashboard",
-    title: "Project Management Dashboard",
-    category: "SaaS Dashboard & Data Design",
+    title: "Reporting Portal",
+    category: "Project Management Dashboard",
     tagline:
-      "A dense, role-based dashboard for planning, tracking and reporting on work.",
+      "A KPI-first reporting dashboard where task boards, milestones and risk all read at a glance.",
     year: "2025",
     status: "Deck on Behance",
     role: "Product designer",
     tags: ["Dashboard Design", "Information Architecture", "Data Visualisation"],
     featured: true,
     caseStudy: false,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/404/c2126d235694983.Y3JvcCwyOTA3LDIyNzQsMzM4LDA.png",
-    frame: "browser",
+    cover: "/projects/pm-dashboard-laptop.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/pm-dashboard-light.jpg",
+        alt: "Reporting Portal in light mode: key metrics row, filter bar, and a four-column task board beside upcoming milestones",
+      },
+      {
+        src: "/projects/pm-dashboard-dark.jpg",
+        alt: "The same dashboard in dark mode, with the metric cards and task board colour-coded by status",
+      },
+      {
+        src: "/projects/pm-dashboard-phone.jpg",
+        alt: "Reporting Portal's mobile layout shown on a phone",
+      },
+    ],
     externalUrl: `${BEHANCE}/235694983/Project-Management-Dashboard`,
     art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
     overview:
-      "A project management dashboard covering planning, tracking and reporting surfaces. The full presentation is published on Behance.",
-    deliverables: ["Dashboard design", "Information architecture", "UI system"],
+      "Reporting Portal is a project management dashboard built around a KPI-first overview: a key-metrics row for total projects, tasks due, at-risk and critical items, a filter bar across project, team, date range and status, and a task board that moves work through To Do, In Progress, Review and Done alongside upcoming milestones. It ships in both light and dark themes, and adapts down to mobile. The full presentation is published on Behance.",
+    deliverables: [
+      "Dashboard design",
+      "Information architecture",
+      "Task board & milestone views",
+      "Light and dark themes",
+      "Responsive layout",
+    ],
   },
   {
     slug: "ai-architectural-design",
