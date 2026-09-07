@@ -5,7 +5,7 @@ const facts = [
   {
     label: "Experience",
     value:
-      "UI/UX Designer with hands-on experience creating responsive web and mobile products, including roles with Kremor AI, BIZINC and ITSS (Vista Fintech & Morabahah Bank).",
+      "UI/UX Designer building responsive web and mobile products since 2023. At BIZINC I moved from intern to UI/UX Manager, leading other designers and interns; at Kremor AI I designed the platform end to end on contract; at ITSS I joined the Vista banking programme as an intern and moved onto staff.",
   },
   {
     label: "Sectors",
@@ -30,7 +30,7 @@ const facts = [
   {
     label: "Recognition",
     value:
-      "Best Intern Award (ITSS / Vista) and Top 10 Finalist, Synergy Africa Design Quest 2023.",
+      "Best Intern Award (ITSS / Vista) and Top 10 Finalist, Synergy Africa Design Quest 2023. Written reference from the CEO of Bizinc available on request.",
   },
 ];
 

@@ -48,7 +48,7 @@ export const projects: Project[] = [
       "One platform where a business is found, booked and run — discovery on one side, operations on the other.",
     year: "2024 — 2026",
     status: "Full case study · Live product",
-    role: "UI/UX Designer, BIZINC",
+    role: "UI/UX Intern → Designer → Manager, BIZINC",
     tags: [
       "Marketplace UX",
       "Booking Flows",
@@ -82,7 +82,7 @@ export const projects: Project[] = [
     externalLabel: "bizinc.io",
     art: { hue: "#0d1c2e", accent: "#3f8cff", kind: "booking" },
     overview:
-      "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. As UI/UX Designer at BIZINC — remote, from Atlanta, Georgia — I worked across the product from April 2024 to May 2026, designing responsive user journeys, sitemaps, wireframes and interface concepts for its booking, e-commerce and SaaS surfaces, and building the Figma component library the team designed against.",
+      "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. I joined BIZINC — remote, from Atlanta, Georgia — in April 2024 and moved from intern to designer to UI/UX Manager, leading the other designers and interns. My first project was rebuilding the platform's interface from scratch; from there I owned the UI across its booking, e-commerce and SaaS surfaces, along with the user journeys, sitemaps, wireframes and the component library the team designed against.",
     challenge:
       "A marketplace has to satisfy two people whose interests only partly overlap. Someone looking for a service wants to find a business, judge whether to trust it and book it in a few minutes, on a phone, without learning a system first. The business on the other side needs the opposite kind of product — somewhere to run those bookings, manage its listing and see whether any of it is actually bringing customers in. Building both into one platform, across service categories that book quite differently, risks two failures: a customer experience buried under operator tooling, or an operator experience reduced to a profile page no business would actually run on. The problem was to make one platform legible from both directions without maintaining two disconnected products.",
     process: [
@@ -97,7 +97,7 @@ export const projects: Project[] = [
       "Worked directly with stakeholders to turn business requirements into interface decisions, and kept every journey responsive from the first wireframe, since the customer side is used mostly on a phone and the operator side mostly at a desk.",
     ],
     outcome:
-      "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. The product is live at bizinc.io.",
+      "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. I finished the engagement as UI/UX Manager, leading the designers and interns working in the same file. The product is live at bizinc.io.",
     deliverables: [
       "User flows & site map",
       "Requirements specification",
@@ -149,7 +149,7 @@ export const projects: Project[] = [
     externalLabel: "vistabankgroup.com",
     art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
     overview:
-      "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso. I received the Best Intern Award for my contribution to Vista.",
+      "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. I joined as an intern on the programme and moved onto staff during it, receiving the Best Intern Award for my contribution to Vista. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso.",
     challenge:
       "Business banking in a multi-market group breaks the assumption every consumer banking app is built on: that one person means one account in one currency in one country. A Vista customer might be a finance manager holding mandates over several legal entities across Gambia, Guinea, Sierra Leone and Burkina Faso, each with its own currency, its own regulator and its own local rules — and payments they initiate may need someone else's approval before money moves. Designing for that means holding real institutional complexity on a phone screen without either flattening it into something unsafe or exposing all of it at once. The subsidiaries added a second problem on top: four markets — anglophone and francophone, each with its own currency and regulator — needed to feel like one bank without ignoring what made each of them local.",
     process: [
@@ -316,7 +316,7 @@ export const projects: Project[] = [
       "African textiles as a design language, not a print — a generator, a storefront, and the workshop floor that turns a prompt into a garment.",
     year: "2024 — 2026",
     status: "Full case study",
-    role: "UI/UX Designer, Kremor AI",
+    role: "UI/UX Designer, Kremor AI (contract)",
     tags: [
       "AI Product Design",
       "Conversational UI",
@@ -357,7 +357,7 @@ export const projects: Project[] = [
     ],
     art: { hue: "#2b0f1d", accent: "#e0a955", kind: "fashion" },
     overview:
-      "Kremor AI is a fashion-technology platform that generates custom African clothing from a prompt and then has it made. It runs as three connected surfaces: a storefront selling AI-generated Ankara womenswear, menswear and bags; a creative workspace where a design is explored and iterated; and an admin platform where measurements, artisans, design approvals and production are managed by role. I worked across all three from June 2024 to July 2026, covering flows, interface design, AI interaction patterns and design-system maintenance, and evaluated 96+ complex AI interaction tasks to find the patterns worth keeping.",
+      "Kremor AI is a fashion-technology platform that generates custom African clothing from a prompt and then has it made. It runs as three connected surfaces: a storefront selling AI-generated Ankara womenswear, menswear and bags; a creative workspace where a design is explored and iterated; and an admin platform where measurements, artisans, design approvals and production are managed by role. I designed all three end to end on contract from June 2024 to July 2026 — flows, interface design, AI interaction patterns and the design system — and evaluated 96+ complex AI interaction tasks to find the patterns worth keeping.",
     challenge:
       "African fashion is usually flattened twice over. Globally it is reduced to a single decorative idea — African print — when Ankara, Aso-Oke, Adire and Kente are distinct traditions with their own rules. And in most AI tools it would be flattened again, into a style filter applied to a Western silhouette. The brief was the opposite of that: use AI to widen what someone can imagine wearing, while treating the textiles as a language rather than a texture. That created two problems. Most people cannot describe a garment they have not seen, so a blank prompt box would fail exactly the person the product exists for. And a generated image is not a dress — someone still has to take measurements, approve a design, cut fabric and sew it, which meant the creative surface was worthless unless the workshop behind it was designed with the same care.",
     process: [
