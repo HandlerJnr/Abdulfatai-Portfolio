@@ -1,0 +1,28 @@
+export const site = {
+  name: "Abdulfatai Jamiu",
+  shortName: "AJ",
+  title: "UI/UX Product Designer & Researcher",
+  location: "Brighton, United Kingdom",
+  email: "aabdulfataijamiu@gmail.com",
+  linkedin: "https://www.linkedin.com/in/abdulfataijamiu",
+  behance: "https://www.behance.net/abdulfataijamiu",
+  cv: "/Abdulfatai_Jamiu_CV.pdf",
+  availability: "Open to product design opportunities in the UK and Europe.",
+  heroMarquee: "DESIGNING DIGITAL PRODUCTS FOR REAL PEOPLE",
+  skillsStrip: [
+    "USER RESEARCH",
+    "UX STRATEGY",
+    "INTERACTION DESIGN",
+    "PROTOTYPING",
+    "UI DESIGN",
+    "DESIGN SYSTEMS",
+    "USABILITY TESTING",
+    "ACCESSIBILITY",
+  ],
+  nav: [
+    { label: "Home", href: "/" },
+    { label: "Work", href: "/#work" },
+    { label: "About", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
+  ],
+};
