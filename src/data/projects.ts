@@ -209,22 +209,57 @@ export const projects: Project[] = [
   {
     slug: "loan-investment-app",
     title: "Loan & Investment App",
-    category: "Fintech Mobile Product",
+    category: "Fintech Super-App",
     tagline:
-      "Mobile lending and investing journeys where clarity around money is the whole job.",
+      "Borrowing, investing, banking, insurance and bills in one app — without any of them losing their meaning.",
     year: "2025",
-    status: "Deck on Behance",
+    status: "Full case study",
     role: "Product designer",
-    tags: ["Fintech UX", "Mobile UX", "High-Fidelity UI"],
-    caseStudy: false,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/404/4d02ad235692477.Y3JvcCwzMzg1LDI2NDgsMjkzLDA.jpeg",
-    frame: "phone",
+    tags: [
+      "Fintech UX",
+      "Transaction Design",
+      "Mobile UX",
+      "Trust and Clarity",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/loan-home.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/loan-myloan.jpg",
+        alt: "The loan screen with no active loan: rather than an empty balance, it explains what a loan can be used for — daily expenses, personal goals, business growth — above a single Request Loan action",
+      },
+      {
+        src: "/projects/loan-equities.jpg",
+        alt: "Buying equities: indicative value at maturity stated gross of withholding tax, the minimum investment shown beneath the amount field, and wallet balance surfaced beside the payment method before Buy Now",
+      },
+    ],
     externalUrl: `${BEHANCE}/235692477/Loan-Investment-Mobile-App`,
-    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
+    art: { hue: "#2a1d0f", accent: "#f4b860", kind: "web3" },
     overview:
-      "A mobile app for loans and investments. The full presentation is published on Behance.",
-    deliverables: ["Mobile UX", "High-fidelity UI", "Fintech flows"],
+      "A Nigerian fintech super-app that combines lending, investing, everyday banking, property insurance and bill payments in a single product. I designed the mobile experience across those journeys — the home dashboard, the loan flow, and the investment and transaction surfaces — with an emphasis on stating plainly what money is doing at every step.",
+    challenge:
+      "Most people end up running their financial life across four or five apps: one to borrow, one to save, one to invest, another for bills and insurance. Consolidating them is easy to propose and difficult to design well. Each product carries its own risk profile, its own regulatory language and its own vocabulary, and stacking them tends to produce one of two failures — a dashboard so dense that nothing is findable, or an interface so friendly that it quietly obscures what a decision actually costs. Investing raises the stakes further: a product that makes buying equities feel as frictionless as ordering food has not removed complexity, it has hidden risk. The problem was to hold five financial products in one app while keeping each one legible enough to be trusted with real money.",
+    process: [
+      "Anchored the home screen on one balance rather than five. Everything else — quick actions, savings prompts, pending tasks — arranges itself around that single number, so the first question the app answers is always the one people actually open it to ask.",
+      "Designed for use in public. The balance masks by default behind a reveal control, because the realistic context for this app is a phone held on a street or in a queue, not a desk.",
+      "Turned empty states into the teaching moment. With no active loan, the screen does not simply report ₦0.00 — it explains what borrowing here is for (daily expenses, personal goals, business growth) before offering a single Request Loan action, so a first-time user learns the product at the point they are considering it.",
+      "Surfaced every constraint before commitment, not after it. The ₦100,000 minimum sits under the amount field as you type, and the wallet balance appears beside the payment method, so the two most common causes of a failed transaction are visible before the button is pressed rather than reported as an error afterwards.",
+      "Wrote the investment language to be honest rather than flattering. A projected return is labelled indicative value at maturity and stated gross of withholding tax — the interface tells you the number is an estimate and that tax has not yet been taken out, at the exact moment you are deciding how much to commit.",
+      "Kept transactions in context using bottom sheets over the instrument's own price chart, so committing money never fully hides the performance data the decision rests on.",
+      "Unified five products under one restrained visual system — a warm gold accent on near-black and white — so moving from a loan to an equity purchase to a bill payment feels like one institution rather than four bolted-together apps.",
+    ],
+    outcome:
+      "A super-app that earns the breadth it claims: five financial products sharing one balance, one visual language and one standard of disclosure. Constraints appear before commitment, projections are labelled as projections, and empty states teach rather than stall — so consolidation makes the user's financial picture clearer instead of merely shorter.",
+    deliverables: [
+      "Home dashboard",
+      "Loan request flow",
+      "Investment & equity purchase flow",
+      "Transaction and payment design",
+      "Empty & error states",
+      "Mobile design system",
+    ],
   },
   {
     slug: "mobile-banking-app",
