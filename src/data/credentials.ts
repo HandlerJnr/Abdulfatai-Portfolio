@@ -32,8 +32,7 @@ export const credentialGroups: CredentialGroup[] = [
   {
     id: "references",
     title: "References",
-    blurb:
-      "Written by the people I reported to. Referee contact details are withheld here and shared on request.",
+    blurb: "Written by the people I reported to, and readable in full.",
     items: [
       {
         slug: "bizinc-ceo-reference",
@@ -44,6 +43,16 @@ export const credentialGroups: CredentialGroup[] = [
         preview: `${P}/bizinc-ceo-reference.jpg`,
         shape: "portrait",
         note: "Covers the progression from UI/UX intern to designer to UI/UX Manager leading other designers and interns, and the rebuild of the Bizinc platform interface from scratch.",
+      },
+      {
+        slug: "kremor-founder-reference",
+        title: "Letter of recommendation",
+        issuer: "Saheed Alabi — Founder, Kremor AI",
+        date: "27 July 2026",
+        file: `${F}/kremor-founder-reference.pdf`,
+        preview: `${P}/kremor-founder-reference.jpg`,
+        shape: "portrait",
+        note: "Covers the dual role — UI/UX design alongside AI model evaluation: forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative image output.",
       },
       {
         slug: "academic-reference",
@@ -182,15 +191,6 @@ export const credentialGroups: CredentialGroup[] = [
         date: "4 June 2024",
         file: `${F}/project-management-foundations.pdf`,
         preview: `${P}/project-management-foundations.jpg`,
-        shape: "landscape",
-      },
-      {
-        slug: "ibm-skillsbuild-itexperience",
-        title: "ITExperience Orientation 2026",
-        issuer: "IBM SkillsBuild — 1h 30m",
-        date: "9 February 2026",
-        file: `${F}/ibm-skillsbuild-itexperience.jpg`,
-        preview: `${P}/ibm-skillsbuild-itexperience.jpg`,
         shape: "landscape",
       },
     ],

@@ -71,8 +71,8 @@ export default function CredentialsPage() {
             Anything else you need?
           </h2>
           <p className="mt-6 max-w-[60ch] leading-relaxed text-white/70">
-            Referee contact details, the full CV, or a walkthrough of any project
-            in this portfolio — just ask.
+            Further references, the full CV, or a walkthrough of any project in
+            this portfolio — just ask.
           </p>
           <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
             <a

@@ -31,7 +31,7 @@ const facts = [
   {
     label: "Recognition",
     value:
-      "Most Outstanding Intern of the Year (ITSS / Vista) and Finalist, Synergy Africa Design Quest 2023. A written reference from the CEO of Bizinc, the ITSS award letter and every certification can be read in full on the credentials page.",
+      "Most Outstanding Intern of the Year (ITSS / Vista) and Finalist, Synergy Africa Design Quest 2023. Written references from the CEO of Bizinc and the founder of Kremor AI, the ITSS award letter and every certification can be read in full on the credentials page.",
   },
 ];
 
