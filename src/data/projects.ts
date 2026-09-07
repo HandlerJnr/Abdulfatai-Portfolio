@@ -58,6 +58,26 @@ export const projects: Project[] = [
     ],
     featured: true,
     caseStudy: true,
+    cover: "/projects/bizinc-home.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/bizinc-flows.jpg",
+        alt: "The structural work behind the product: sign-up, business-owner and client user flows mapped side by side, the MVP 2.0 support notes, the full site map, and the mobile screens grouped by journey — account creation, business and client profiles, lists and deals, services and products",
+      },
+      {
+        src: "/projects/bizinc-wireframes.jpg",
+        alt: "Seven desktop wireframes resolving layout before visual design — profile, search results, performance dashboard, business profile, marketing tools with spotlight recommendations and promotion opportunities, listings, and the community forum",
+      },
+      {
+        src: "/projects/bizinc-requirements.jpg",
+        alt: "Business Profile 2.0 specified as requirements in top-down order, business view beside client view — so the two audiences could be compared field by field and the difference between them decided deliberately rather than by omission",
+      },
+      {
+        src: "/projects/bizinc-figma.jpg",
+        alt: "The working Figma file: v1.2 and v2.0 desktop and mobile pages, a components page and a development-ready page, with the AI integration revamp and the Bizzy assistant conversation open on the canvas",
+      },
+    ],
     externalUrl: "https://www.bizinc.io",
     externalLabel: "bizinc.io",
     art: { hue: "#0d1c2e", accent: "#3f8cff", kind: "booking" },
@@ -66,24 +86,28 @@ export const projects: Project[] = [
     challenge:
       "A marketplace has to satisfy two people whose interests only partly overlap. Someone looking for a service wants to find a business, judge whether to trust it and book it in a few minutes, on a phone, without learning a system first. The business on the other side needs the opposite kind of product — somewhere to run those bookings, manage its listing and see whether any of it is actually bringing customers in. Building both into one platform, across service categories that book quite differently, risks two failures: a customer experience buried under operator tooling, or an operator experience reduced to a profile page no business would actually run on. The problem was to make one platform legible from both directions without maintaining two disconnected products.",
     process: [
-      "Mapped the platform as two journeys sharing one spine — discovery to booking on the customer side, listing to operations to growth on the business side — and settled in sitemaps where those paths meet, rather than letting each surface grow its own navigation.",
-      "Designed discovery for people who are comparing, not browsing. Category and listing layouts lead with the signals that actually decide a booking — what the business does, where it is, and what it costs to start — so a shortlist can be built without opening five tabs.",
-      "Wireframed the booking journey before styling it, so the number of steps between finding a business and confirming a service was resolved as structure rather than negotiated later in high fidelity.",
-      "Treated the business dashboard as the product operators run on, not a settings screen. Bookings, listing management and performance sit in one view, so being discoverable and being operational are not two separate tools.",
-      "Designed the lead-generation surfaces inside that dashboard rather than as a marketing add-on, so the line from a listing to the enquiries it produces to what the operator does next is visible in one place.",
-      "Built the interface as reusable Figma components with Auto Layout, variants and design tokens, so booking, e-commerce and SaaS surfaces stayed consistent as categories were added — a new category became a configuration of existing components rather than a new design.",
+      "Mapped the two audiences as separate flows before drawing a single screen — sign-up, business-owner and client journeys side by side — then reconciled them into one site map, so where the paths diverge and where they share a screen was a decision rather than an accident.",
+      "Specified Business Profile 2.0 as requirements in top-down order, business view beside client view. Laying the two lists against each other made every difference deliberate: what an owner can edit, what a visitor sees instead, and which fields belong to neither.",
+      "Wireframed at desktop scale before any visual design — profile, search, dashboard, marketing tools, listings and the community forum — so layout and hierarchy were settled while they were still cheap to change.",
+      "Designed discovery for people who are comparing, not browsing. Business cards lead with the signals that decide an enquiry — what the business does, where it is, how far away, whether it is open right now — so a shortlist forms without opening five tabs.",
+      "Treated the business dashboard as the product operators run on, not a settings screen: listing management, deals, services and products, and performance sit together, so being discoverable and being operational are not two separate tools.",
+      "Kept the marketing and lead-generation surfaces inside that dashboard rather than bolting them on, so the line from a listing to the enquiries it produces to what the owner does next stays visible in one place.",
+      "Designed the AI assistant as a way into the marketplace rather than a support widget — it asks what you need, then returns real business profiles with availability you can act on, so the conversation ends in a booking instead of a link.",
+      "Built the interface as reusable components with Auto Layout, variants and design tokens, and versioned the file from v1.2 through v2.0 to a development-ready page — so consistency survived the redesign and engineering had one place to build from.",
       "Worked directly with stakeholders to turn business requirements into interface decisions, and kept every journey responsive from the first wireframe, since the customer side is used mostly on a phone and the operator side mostly at a desk.",
     ],
     outcome:
       "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. The product is live at bizinc.io.",
     deliverables: [
-      "Responsive user journeys",
-      "Sitemaps & information architecture",
-      "Wireframes & interface concepts",
-      "Booking flows",
+      "User flows & site map",
+      "Requirements specification",
+      "Desktop & mobile wireframes",
       "Business dashboard",
+      "Marketplace & deals",
       "Lead-generation experience",
-      "Figma component library & design tokens",
+      "AI assistant interface",
+      "Component library & design tokens",
+      "Development-ready handoff",
     ],
   },
   {
@@ -121,6 +145,8 @@ export const projects: Project[] = [
         alt: "Marketing and product screens together — the campaign framing of the app alongside account filtering, custom views, pending bulk and single payment requests, and net worth summaries",
       },
     ],
+    externalUrl: "https://vistabankgroup.com/group/about/",
+    externalLabel: "vistabankgroup.com",
     art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
     overview:
       "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso. I received the Best Intern Award for my contribution to Vista.",
@@ -250,6 +276,8 @@ export const projects: Project[] = [
         alt: "Admin analytics where each AI insight names the course and module, quantifies the drop-off, recommends an action and states its own confidence",
       },
     ],
+    externalUrl: "https://chalantwork.com/",
+    externalLabel: "chalantwork.com",
     art: { hue: "#101a2e", accent: "#2b6cff", kind: "workflow" },
     overview:
       "Chalant AI is a learning platform for people who need to work with AI rather than merely read about it. Alongside courses, live sessions and voice learning sits the AI Manager Path — a simulated workspace where learners run a team of AI agents, assign real tasks, review the output and answer for the quality. I led end-to-end product design across the learner and admin experiences.",
@@ -278,6 +306,64 @@ export const projects: Project[] = [
       "Admin analytics & insights",
       "Gamification system",
       "Design system",
+    ],
+  },
+  {
+    slug: "shortlet-lagos",
+    title: "Shortlet Lagos",
+    category: "Property Booking Platform",
+    tagline:
+      "Property discovery, search, filtering and booking inside a reusable responsive design system.",
+    year: "2024",
+    status: "Full case study",
+    role: "Product designer & researcher",
+    tags: [
+      "Marketplace UX",
+      "PropTech",
+      "Booking Flows",
+      "Mobile UX",
+      "Investment UX",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/shortlet-laptop.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/shortlet-invest.jpg",
+        alt: "The investment side: shares in high-yield rental properties from ₦50,000, with the property gallery, valuation and share count shown together — the same apartment a guest would book, presented as an asset",
+      },
+      {
+        src: "/projects/shortlet-phone.jpg",
+        alt: "The guest side on mobile: where, check-in, check-out and who, held in a single search card above the listings — the four questions a stay actually turns on",
+        portrait: false,
+      },
+    ],
+    externalUrl: "https://www.shortlet-lagos.com",
+    externalLabel: "shortlet-lagos.com",
+    art: { hue: "#101c33", accent: "#f4823c", kind: "booking" },
+    overview:
+      "Shortlet Lagos runs two products against one portfolio of apartments: guests book short stays, and investors buy shares in the same rental properties from ₦50,000 upward. I owned end-to-end UX/UI design and research across both — discovery, search, filtering and booking on the guest side, and the property marketplace on the investment side.",
+    challenge:
+      "The same apartment has to read two completely different ways depending on who is looking at it. To a guest it is somewhere to sleep next weekend, judged on photos, location and whether the dates are free — a decision made in minutes, usually on a phone. To an investor it is an asset, judged on yield, entry price and what happens to the money afterwards — a decision made slowly, at a desk, and one that carries real risk. Fractional property investment also has a credibility problem before it has a usability one: asking someone to put money into a share of a building they will never hold the keys to means the interface has to make the mechanics obvious rather than exciting. Designing both without letting the marketing energy of the booking side leak into the investment side was the core problem.",
+    process: [
+      "Split the product into two entry points rather than one blended homepage, so a guest and an investor are answering different questions from the first screen instead of being sold the wrong one.",
+      "Reduced the guest search to the four things a stay actually turns on — where, check-in, check-out, who — and kept them in a single card above the listings, so the whole query is visible and editable in one place on a phone.",
+      "Led the investment side with the mechanic rather than the promise: buy shares in rental properties, share by share, from a stated minimum, so the model is understood before any return is discussed.",
+      "Put the entry price on the surface. Naming the ₦50,000 minimum up front lets someone rule themselves in or out immediately, instead of discovering the threshold after signing up.",
+      "Kept the property itself central on the investment side — gallery, valuation and share count together — so an investment decision is still anchored in a real building rather than an abstract instrument.",
+      "Wrote the value proposition against the objection rather than around it: building wealth through real estate without huge capital or the hassle of tenant management names the two reasons people rule property out.",
+      "Built responsive components in Figma with Auto Layout and variants for listing cards, calendars, forms and property tiles, so the guest and investor surfaces stayed recognisably one company.",
+    ],
+    outcome:
+      "One platform serving two audiences with genuinely different decisions to make — a mobile booking journey reduced to the four questions a stay depends on, and a fractional investment marketplace that leads with its mechanics and its entry price rather than with projected returns. Both sit on a shared responsive component set. The product is live at shortlet-lagos.com.",
+    deliverables: [
+      "User flows & research",
+      "Guest booking journey",
+      "Fractional investment marketplace",
+      "Property listing & detail design",
+      "Responsive design system",
+      "High-fidelity UI & prototype",
     ],
   },
   {
@@ -365,7 +451,6 @@ export const projects: Project[] = [
       "Information Architecture",
       "Interface Design",
     ],
-    featured: true,
     caseStudy: true,
     cover: "/projects/architek-prompt.jpg",
     frame: "flat",
@@ -460,39 +545,6 @@ export const projects: Project[] = [
       "Transaction and payment design",
       "Empty & error states",
       "Mobile design system",
-    ],
-  },
-  {
-    slug: "shortlet-lagos",
-    title: "Shortlet Lagos",
-    category: "Property Booking Platform",
-    tagline:
-      "Property discovery, search, filtering and booking inside a reusable responsive design system.",
-    year: "2024",
-    status: "Full case study",
-    role: "Product designer & researcher",
-    tags: ["User Flows", "Mobile UX", "Interaction Design", "High-Fidelity UI"],
-    caseStudy: true,
-    art: { hue: "#2a1d0f", accent: "#f4b860", kind: "booking" },
-    overview:
-      "Shortlet Lagos is a short-stay property booking platform. I owned end-to-end UX/UI design and research for discovery, search, filtering and booking journeys.",
-    challenge:
-      "Guests needed to find a trustworthy short-let quickly on mobile, compare options with confidence, and book without hitting dead ends around availability or payment.",
-    process: [
-      "Researched how guests shortlist properties and which signals (photos, location, host response) drive trust.",
-      "Designed mobile-first search and filtering that keeps results visible while refining criteria.",
-      "Mapped the booking flow to reduce steps between listing and confirmation.",
-      "Built responsive components in Figma with Auto Layout and variants for listing cards, calendars and forms.",
-      "Produced high-fidelity UI and interactive prototypes for both guest and host sides.",
-    ],
-    outcome:
-      "A cohesive, responsive booking experience and a reusable design system that scales across guest and host journeys.",
-    deliverables: [
-      "User flows",
-      "Mobile UX",
-      "Responsive design system",
-      "High-fidelity UI",
-      "Interactive prototype",
     ],
   },
   {
