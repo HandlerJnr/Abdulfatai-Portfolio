@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal, RevealLines } from "./Reveal";
 import { site } from "@/data/site";
 
@@ -30,7 +31,7 @@ const facts = [
   {
     label: "Recognition",
     value:
-      "Best Intern Award (ITSS / Vista) and Top 10 Finalist, Synergy Africa Design Quest 2023. Written reference from the CEO of Bizinc available on request.",
+      "Most Outstanding Intern of the Year (ITSS / Vista) and Finalist, Synergy Africa Design Quest 2023. A written reference from the CEO of Bizinc, the ITSS award letter and every certification can be read in full on the credentials page.",
   },
 ];
 
@@ -61,6 +62,9 @@ export function About() {
             <a href={site.cv} download className="display link-line text-2xl tracking-wide">
               Download CV
             </a>
+            <Link href="/credentials" className="display link-line text-2xl tracking-wide">
+              Credentials
+            </Link>
             <a
               href={site.linkedin}
               target="_blank"
