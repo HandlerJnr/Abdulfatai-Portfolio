@@ -39,6 +39,40 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
   const isPhone = project.frame === "phone";
   const pad = size === "hero" ? "p-6 md:p-14" : "p-4 md:p-8";
 
+  /**
+   * Shared image wiring. The ref check matters: the browser can attempt (and
+   * fail) the request before React hydrates, so the onError event is missed
+   * entirely. Re-checking `complete && naturalWidth === 0` on mount catches
+   * that case and still hands over to the generated artwork.
+   */
+  const imgProps = {
+    src,
+    alt: `${project.title} — ${project.category}`,
+    loading: (priority ? "eager" : "lazy") as "eager" | "lazy",
+    decoding: "async" as const,
+    onError: () => setFailed(true),
+    ref: (el: HTMLImageElement | null) => {
+      if (el?.complete && el.naturalWidth === 0) setFailed(true);
+    },
+  };
+
+  // "flat" — the image is already a finished mockup with its own staging, so it
+  // fills the frame edge to edge rather than sitting inside a second chrome.
+  if (project.frame === "flat") {
+    return (
+      <div className="relative h-full w-full overflow-hidden bg-[#05050C]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          {...imgProps}
+          className="h-full w-full object-cover"
+        />
+        <span className="display pointer-events-none absolute bottom-3 left-4 text-xs tracking-[0.22em] text-white/55 mix-blend-difference md:bottom-5 md:left-7 md:text-sm">
+          {project.title.toUpperCase()} — {project.year}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative flex h-full w-full items-center justify-center overflow-hidden ${pad}`}
@@ -63,11 +97,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
             <div className="relative h-full overflow-hidden rounded-[8%/4%] border border-white/15 bg-[#0b0b14] p-[0.8%] shadow-[0_30px_80px_-20px_rgba(0,0,0,.8)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={src}
-                alt={`${project.title} — ${project.category}`}
-                loading={priority ? "eager" : "lazy"}
-                decoding="async"
-                onError={() => setFailed(true)}
+                {...imgProps}
                 className="h-full w-auto rounded-[7%/3.4%] object-cover"
               />
             </div>
@@ -89,11 +119,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={src}
-            alt={`${project.title} — ${project.category}`}
-            loading={priority ? "eager" : "lazy"}
-            decoding="async"
-            onError={() => setFailed(true)}
+            {...imgProps}
             className="block w-full object-cover"
             style={{ aspectRatio: size === "hero" ? "16 / 9" : "16 / 10" }}
           />

@@ -12,6 +12,8 @@ export type Project = {
   cover?: string;
   /** How the cover should be framed in the mockup shell. */
   frame?: "browser" | "phone" | "flat";
+  /** Extra imagery shown below the case-study body. */
+  gallery?: { src: string; alt: string }[];
   /** Direct link to the full project deck on Behance. */
   externalUrl?: string;
   /**
@@ -76,25 +78,35 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "web3-platform",
-    title: "Web3 Platform",
-    category: "Web3 Product Interface",
+    slug: "synqit",
+    title: "Synqit",
+    category: "Web3 Collaboration Platform",
     tagline:
-      "Interface and interaction design for a Web3 platform — my most-viewed project on Behance.",
+      "Helping teams discover and engage with the right partners, projects and communities across Web3.",
     year: "2025",
     status: "Deck on Behance",
     role: "Product designer",
     tags: ["Product Design", "Interaction Design", "High-Fidelity UI"],
     featured: true,
     caseStudy: false,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/404/818004235692945.Y3JvcCwyMTM4LDE2NzIsMCw1OA.png",
-    frame: "browser",
+    cover: "/projects/synqit-laptop.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/synqit-desk.jpg",
+        alt: "Synqit's mobile experience shown on a phone alongside a laptop on a desk",
+      },
+    ],
     externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
     art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
     overview:
-      "Interface and interaction design for a Web3 platform. The full presentation — screens, flows and visual system — is published on Behance.",
-    deliverables: ["Interaction design", "High-fidelity UI", "Visual system"],
+      "Synqit is a Web3 collaboration platform built around discovering and engaging with the right partners, projects and communities. I designed the responsive product and marketing surfaces across desktop and mobile. The full presentation is published on Behance.",
+    deliverables: [
+      "Responsive web design",
+      "Interaction design",
+      "High-fidelity UI",
+      "Visual system",
+    ],
   },
   {
     slug: "project-management-dashboard",

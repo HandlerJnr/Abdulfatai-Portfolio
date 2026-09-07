@@ -167,6 +167,31 @@ export default async function CaseStudy({ params }: { params: Params }) {
         </div>
       </div>
 
+      {/* Additional imagery */}
+      {project.gallery?.length ? (
+        <section
+          aria-label={`More images from ${project.title}`}
+          className="border-t border-line/60 px-5 py-16 md:px-10 md:py-24"
+        >
+          <ul className="grid gap-6 md:gap-10">
+            {project.gallery.map((img) => (
+              <Reveal as="li" key={img.src} y={48}>
+                <div className="overflow-hidden rounded-sm border border-line/60 bg-[#05050C]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="block w-full"
+                  />
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       {/* Next project */}
       <Link
         href={`/work/${next.slug}`}
