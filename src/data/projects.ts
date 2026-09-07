@@ -460,6 +460,8 @@ export const projects: Project[] = [
         alt: "The admin dashboard laid out in the working Figma file — orders, measurements, artisans, design approvals, production board, messages and exports as one continuous pipeline, alongside the Ready for Dev and component pages",
       },
     ],
+    externalUrl: "https://kremor-ai-clone.vercel.app/",
+    externalLabel: "the live site",
     art: { hue: "#2b0f1d", accent: "#e0a955", kind: "fashion" },
     overview:
       "Kremor AI is a fashion-technology platform that generates custom African clothing from a prompt and then has it made. It runs as three connected surfaces: a storefront selling AI-generated Ankara womenswear, menswear and bags; a creative workspace where a design is explored and iterated; and an admin platform where measurements, artisans, design approvals and production are managed by role. I designed all three end to end on contract from June 2024 to July 2026 — flows, interface design, AI interaction patterns and the design system — and evaluated 96+ complex AI interaction tasks to find the patterns worth keeping.",
@@ -512,6 +514,134 @@ export const projects: Project[] = [
       "Audit log & accountability model",
       "Staff & conversation management",
       "Design system & dev handoff",
+    ],
+  },
+  {
+    slug: "arete",
+    title: "Arete",
+    category: "Digital Healthcare & Telemedicine Platform",
+    tagline:
+      "Care that stays connected — from needing a doctor to actually holding the medicine.",
+    year: "2026",
+    status: "Full case study",
+    role: "End-to-end product designer",
+    tags: [
+      "Healthcare UX",
+      "Service Design",
+      "UX Writing",
+      "Design Systems",
+      "Accessibility",
+    ],
+    featured: true,
+    caseStudy: true,
+    // Local asset. The Behance CDN URL that used to sit here hotlink-blocked
+    // and failed intermittently in production.
+    cover: "/projects/arete-journey.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/arete-overview.jpg",
+        alt:
+          "The project framing: an end-to-end product design role across the patient, provider, HMO and pharmacy surfaces, focused on access, trust and continuity",
+      },
+      {
+        src: "/projects/arete-challenge.jpg",
+        alt:
+          "The problem stated as four jobs rather than one: reaching trusted care, understanding what coverage pays for, connecting a consultation to medication fulfilment, and continuing treatment afterwards",
+      },
+      {
+        src: "/projects/arete-ecosystem.jpg",
+        alt:
+          "The actors the requirements had to serve — patient, doctor and nurse, community health worker, HMO, pharmacy and administrator — mapped around the product, because the design problem was how information and actions move between roles rather than how any single screen looks",
+      },
+      {
+        src: "/projects/arete-principles.jpg",
+        alt:
+          "The four principles the requirements resolved into: simple first in high-stakes tasks, accessible through explicit rather than icon-only actions, localised for language and cultural context, and transparent about eligibility, status and next steps",
+      },
+      {
+        src: "/projects/arete-onboarding.jpg",
+        alt:
+          "Onboarding as a structured entry into a sensitive product — account creation, OTP verification and profile setup broken into steps with progress shown, explicit verification language and recovery paths, rather than one long form",
+      },
+      {
+        src: "/projects/arete-hmo.jpg",
+        alt:
+          "The HMO module: membership verification with its own loading state, what the plan covers and its limits, eligible providers, and the plan card showing balance and validity — with Skip for Now kept available so an uninsured patient is never blocked",
+      },
+      {
+        src: "/projects/arete-pharmacy.jpg",
+        alt:
+          "Pharmacy fulfilment as a chain rather than a hand-off: prescription, nearby stock on a map, reserve or deliver with pickup and rider options, then medication reminders per drug with dosage, timing and days remaining",
+      },
+      {
+        src: "/projects/arete-states.jpg",
+        alt:
+          "The non-happy paths designed as first-class: OTP errors, incorrect password, verification loading, plan removal with reason capture and an explicit warning that it cannot be undone, plus the full status vocabulary — error, loading, pending approval, success, unavailable, confirmation",
+      },
+      {
+        src: "/projects/arete-design-system.jpg",
+        alt:
+          "The system underneath: a calm healthcare green with high-contrast neutrals, Noto Sans set at four defined sizes, and reusable patterns for fields, cards, alerts, buttons and status feedback so high-stakes interactions stay familiar across patient, insurance and pharmacy journeys",
+      },
+      {
+        src: "/projects/arete-reflection.jpg",
+        alt:
+          "The closing reflection from the case study deck — owning UX strategy, IA, user flows, UX writing, UI, the design system and interactive prototyping, and bringing them into one consistent product experience",
+      },
+      {
+        src: "/projects/arete-hero.jpg",
+        alt:
+          "The project's positioning line — care should feel connected — over the disciplines the work covered",
+      },
+    ],
+    externalUrl: `${BEHANCE}/255070051/Arete-Telemedicine-UXUI-Case-Study`,
+    art: { hue: "#0f2a1e", accent: "#16A34A", kind: "health" },
+    overview:
+      "Arete is a connected healthcare ecosystem rather than a doctor-booking app. It brings care discovery, consultations, medical records, insurance coverage, prescriptions and pharmacy fulfilment into one experience, designed for accessibility, localisation and low-connectivity environments. I was the end-to-end product designer, covering UX, UX writing, UI and prototyping across the patient, provider, HMO and pharmacy surfaces.",
+    context: {
+      product:
+        "Arete — a connected healthcare and telemedicine ecosystem",
+      team:
+        "End-to-end product designer across the whole experience",
+      scope:
+        "UX strategy, information architecture, user flows, UX writing, UI design, design system and interactive prototyping",
+      platform:
+        "Mobile-first, across four surfaces — patient, provider, HMO and pharmacy",
+      constraints:
+        "Consultation, coverage and medication are separately operated services; multilingual users; low-connectivity environments",
+    },
+    challenge:
+      "Getting medical advice is only one part of a patient's journey. Someone also has to understand whether care is covered, find a provider their plan will accept, receive a prescription, locate the medication and keep taking it afterwards — and each of those steps usually lives in a different place, run by a different organisation. The product had to bring those disconnected steps into one understandable experience without hiding the detail that clinicians and insurers require, and it had to do it for patients, doctors and nurses, community health workers, HMO teams, pharmacies and administrators at once.",
+    difficulty:
+      "The four things a patient needs are run by different organisations with different systems and different obligations, so presenting them as one journey is a claim the underlying services do not make on their own — and the risk is a product that feels seamless right up to the moment it hands you off and stops helping. Coverage is where that hurts most: eligibility language has to be plain enough to act on and precise enough not to promise something an insurer will later refuse, and getting it wrong in either direction costs the patient. The context tightened it further. Multilingual users, low-connectivity environments and high-stakes tasks ruled out clever interactions and icon-only affordances, and writing for people who are unwell ruled out most of the reassuring tone a product designer reaches for by default — reassurance that overstates is worse than silence.",
+    process: [
+      "Framed the design around how information and actions move between roles rather than how individual screens look, because the requirements covered patients, doctors and nurses, community health workers, HMO teams, pharmacies and administrators sharing one product.",
+      "Resolved the requirements into four principles that could settle arguments later — simple first, accessible, localised, transparent — and held decisions against them rather than against taste.",
+      "Designed the journey past the booking, which is where most telemedicine products stop: need care, find provider, consult, check coverage, get prescription, find pharmacy, continue care. Each step is a place the journey can fail, so each got designed rather than assumed.",
+      "Broke registration into progressive steps with visible progress, explicit verification language and real recovery paths, because the first interaction with a health product is where trust is either established or lost.",
+      "Put coverage before commitment. The HMO module verifies membership, states what the plan covers and its limits, and surfaces eligible providers before a patient chooses care — and Skip for Now stays available throughout, so an uninsured patient is never blocked from reaching a doctor.",
+      "Treated a prescription as unfinished until the medicine is in hand: nearby stock, pickup or delivery, fulfilment confirmation, reminders, and explicit out-of-stock and alternative-medication paths.",
+      "Designed the non-happy paths as core UX rather than edge cases — OTP errors, verification loading, HMO approval states, plan removal with reason capture, availability signals and confirmations — and gave status its own vocabulary so error, pending, unavailable and success are never ambiguous.",
+      "Paired every action with legible text instead of icon-only interactions, and kept language and cultural context in the copy, so the interface holds up for multilingual users on poor connections.",
+      "Built the system underneath — a calm healthcare green with high-contrast neutrals, Noto Sans at defined sizes, and reusable field, card, alert, button and status patterns — so a high-stakes interaction feels the same whether it sits in the patient, insurance or pharmacy journey.",
+    ],
+    outcome:
+      "A healthcare product designed as a chain rather than a set of features: the patient journey continues past the consultation into coverage, prescription and fulfilment, and the moments where it could break — an unverified plan, an out-of-stock medicine, a failed OTP, a removed HMO — are designed states rather than dead ends. One system of colour, type and components holds the patient, provider, HMO and pharmacy surfaces together, and the whole experience is built for legibility, localisation and low connectivity rather than assuming ideal conditions.",
+    evidence:
+      "No measured outcome is available to me — this work has not been through usability testing with patients. What is observable in the artefacts: the seven-step journey is designed end to end rather than stopping at booking; the status vocabulary and edge cases are specified alongside the happy paths; the HMO module keeps Skip for Now available so coverage never blocks access to care; and the design system defines a palette, four type sizes and reusable patterns across all four surfaces. The full presentation is published on Behance.",
+    improveNext:
+      "Eligibility comprehension is the thing to test first — whether a patient reads a coverage state as something they can act on rather than a status they have to interpret — and it needs real patients rather than colleagues. I would then validate the hand-off points with an actual insurer and pharmacy, since the journey's credibility rests on partners the design cannot control, and test the low-connectivity assumptions on real networks rather than on a design file.",
+    deliverables: [
+      "Journey mapping across seven steps",
+      "Information architecture",
+      "Onboarding & identity flows",
+      "HMO coverage experience",
+      "Prescription & pharmacy fulfilment",
+      "States, errors & edge cases",
+      "UX writing",
+      "Design system",
+      "Interactive prototype",
     ],
   },
   {
@@ -586,62 +716,6 @@ export const projects: Project[] = [
       "Property listing & detail design",
       "Responsive design system",
       "High-fidelity UI & prototype",
-    ],
-  },
-  {
-    slug: "arete",
-    title: "Arete",
-    category: "Digital Healthcare & Telemedicine Platform",
-    tagline:
-      "Connecting consultations, HMO coverage, prescriptions and pharmacy fulfilment in one calm journey.",
-    year: "2026",
-    status: "Full case study",
-    role: "End-to-end product designer",
-    tags: ["Research", "UX Strategy", "Product Design", "Usability Testing"],
-    caseStudy: true,
-    // No `cover`: the Behance CDN blocks hotlinking, so the remote URL that
-    // used to sit here failed intermittently in production. Omitting it makes
-    // the locally generated artwork the cover deterministically — served with
-    // the page, no network request, no failure mode. Replace this with a real
-    // screenshot when one is available.
-    externalUrl: `${BEHANCE}/255070051/Arete-Telemedicine-UXUI-Case-Study`,
-    art: { hue: "#0f2a2a", accent: "#4fd1c5", kind: "health" },
-    overview:
-      "Arete is a digital healthcare and telemedicine platform. I designed the end-to-end experience across research, information architecture, user flows, UX writing, UI design, design systems and prototyping.",
-    context: {
-      product:
-        "Arete — a digital healthcare and telemedicine platform",
-      scope:
-        "Research, information architecture, user flows, UX writing, UI design, design system and prototyping",
-      platform:
-        "Responsive web and mobile",
-      constraints:
-        "Consultation, insurance coverage, prescription and pharmacy fulfilment are separately operated services",
-    },
-    challenge:
-      "Healthcare journeys are fragmented: a patient books a consultation in one place, checks HMO coverage in another, then chases a prescription and a pharmacy separately. The product needed to make those hand-offs feel like a single, trustworthy path without hiding the detail clinicians and insurers require.",
-    difficulty:
-      "The four things a patient needs — a consultation, confirmation that it is covered, a prescription, and a pharmacy that will fill it — are run by different organisations with different systems and different obligations. Presenting them as one journey is a claim the underlying services do not make on their own, and the risk is a product that feels seamless right up to the moment it hands you off and stops helping. Coverage is where that hurts most: eligibility language has to be plain enough to act on and precise enough not to promise something an insurer will later refuse, and getting it wrong in either direction costs the patient. Writing for people who are unwell also rules out most of the tone a product designer reaches for by default — reassurance that overstates is worse than silence.",
-    process: [
-      "Mapped the patient journey from symptom to fulfilled prescription and identified the moments where coverage uncertainty caused drop-off.",
-      "Defined the information architecture so consultations, coverage, prescriptions and pharmacy fulfilment share one navigation model.",
-      "Wrote the UX copy for eligibility, consent and prescription states so the language stayed plain and non-alarming.",
-      "Built a component library and design tokens to keep clinical, patient and admin surfaces visually consistent.",
-      "Prototyped the core flows in Figma and ran usability sessions to refine step order and error recovery.",
-    ],
-    outcome:
-      "A connected healthcare experience with a reusable design system, documented flows and prototypes ready for engineering hand-off.",
-    evidence:
-      "No measured outcome is available to me. What is observable in the design: consultations, coverage, prescriptions and pharmacy fulfilment share one navigation model rather than sitting as four separate services; eligibility, consent and prescription states are written in plain, non-alarming language; and a component library with tokens keeps the clinical, patient and admin surfaces consistent. The full presentation is published on Behance.",
-    improveNext:
-      "Eligibility comprehension is the thing to test first — whether a patient reads a coverage state as something they can act on rather than a status they have to interpret — and it needs real patients rather than colleagues. I would also want to validate the hand-off points with an insurer and a pharmacy, because the journey's credibility rests on partners the design cannot control.",
-    deliverables: [
-      "Journey maps",
-      "Information architecture",
-      "User flows",
-      "UX writing",
-      "Design system",
-      "Interactive prototype",
     ],
   },
   {
