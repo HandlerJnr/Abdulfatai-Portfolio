@@ -31,9 +31,40 @@ export type Project = {
     kind: "health" | "workflow" | "booking" | "web3" | "fashion" | "banking";
   };
   overview: string;
+  /**
+   * Scannable facts for the meta panel. Every field is optional and omitted
+   * rather than guessed — a missing duration means it is not verified, not
+   * that the project was short.
+   */
+  context?: {
+    product?: string;
+    team?: string;
+    duration?: string;
+    scope?: string;
+    platform?: string;
+    constraints?: string;
+  };
+  /** The problem — user, business or operational. */
   challenge?: string;
+  /** What made it hard: the real constraint or tension that shaped the work. */
+  difficulty?: string;
+  /** Key decisions and why they were made. */
   process?: string[];
+  /**
+   * Alternatives, early directions or rejected options — only where the
+   * project files actually show them. Absent means no documented evidence,
+   * not that nothing was explored.
+   */
+  explored?: string;
+  /** What changed as a result of the work. */
   outcome?: string;
+  /**
+   * Observable or measured result. Where a number appears it must state what
+   * it measures and whether it was measured, reported or estimated.
+   */
+  evidence?: string;
+  /** What I would test, measure or improve with more time or access. */
+  improveNext?: string;
   deliverables: string[];
 };
 
@@ -83,8 +114,24 @@ export const projects: Project[] = [
     art: { hue: "#0d1c2e", accent: "#3f8cff", kind: "booking" },
     overview:
       "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. I joined BIZINC — remote, from Atlanta, Georgia — in April 2024 and moved from intern to designer to UI/UX Manager, leading the other designers and interns. My first project was rebuilding the platform's interface from scratch; from there I owned the UI across its booking, e-commerce and SaaS surfaces, along with the user journeys, sitemaps, wireframes and the component library the team designed against.",
+    context: {
+      product:
+        "Bizinc — an all-in-one marketplace platform, live at bizinc.io",
+      team:
+        "BIZINC design team; joined as an intern and progressed to UI/UX Manager, leading other designers and interns",
+      duration:
+        "April 2024 – May 2026",
+      scope:
+        "User flows, site map, requirements, wireframes and UI across the booking, e-commerce and SaaS surfaces; component library; development handoff",
+      platform:
+        "Responsive web — the customer side used mostly on a phone, the operator side at a desk",
+      constraints:
+        "Two audiences in one platform, service categories that book differently, and a live product redesigned in place from v1.2 to v2.0",
+    },
     challenge:
       "A marketplace has to satisfy two people whose interests only partly overlap. Someone looking for a service wants to find a business, judge whether to trust it and book it in a few minutes, on a phone, without learning a system first. The business on the other side needs the opposite kind of product — somewhere to run those bookings, manage its listing and see whether any of it is actually bringing customers in. Building both into one platform, across service categories that book quite differently, risks two failures: a customer experience buried under operator tooling, or an operator experience reduced to a profile page no business would actually run on. The problem was to make one platform legible from both directions without maintaining two disconnected products.",
+    difficulty:
+      "The hardest part was Business Profile 2.0 — one profile serving an owner who edits it and a visitor who judges it. Deciding field by field what an owner controls, what a visitor sees instead, and what belongs to neither is the kind of thing that quietly becomes two disconnected products if it is never settled explicitly. Working it out as a written requirements list, business view beside client view, was slower than designing screens directly and it was the only way to make each difference deliberate rather than accidental. Redesigning in place added a second constraint: the platform was already live with businesses on it, so v2.0 had to be a version people could be moved to, not a fresh start.",
     process: [
       "Mapped the two audiences as separate flows before drawing a single screen — sign-up, business-owner and client journeys side by side — then reconciled them into one site map, so where the paths diverge and where they share a screen was a decision rather than an accident.",
       "Specified Business Profile 2.0 as requirements in top-down order, business view beside client view. Laying the two lists against each other made every difference deliberate: what an owner can edit, what a visitor sees instead, and which fields belong to neither.",
@@ -96,8 +143,14 @@ export const projects: Project[] = [
       "Built the interface as reusable components with Auto Layout, variants and design tokens, and versioned the file from v1.2 through v2.0 to a development-ready page — so consistency survived the redesign and engineering had one place to build from.",
       "Worked directly with stakeholders to turn business requirements into interface decisions, and kept every journey responsive from the first wireframe, since the customer side is used mostly on a phone and the operator side mostly at a desk.",
     ],
+    explored:
+      "The working file carries the exploration rather than describing it. The v1.2 desktop and mobile pages sit alongside v2.0 instead of being overwritten, separate landing-page and marketplace directions from other designers and interns are kept as parallel frames, and an AI-integration direction was explored as its own branch before the assistant took the form it shipped in. The redesign was chosen against the version it replaced rather than in a vacuum.",
     outcome:
       "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. I finished the engagement as UI/UX Manager, leading the designers and interns working in the same file. The product is live at bizinc.io.",
+    evidence:
+      "The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. That figure was reported to me by the business rather than measured by me, and I do not hold the baseline or the measurement window — so it should be read as the direction activation moved over the period, not as a result attributable to any single screen. What is independently checkable: the product is live at bizinc.io, and Bizinc's CEO has written a reference describing the platform rebuild and the progression to UI/UX Manager, published on the credentials page.",
+    improveNext:
+      "I would put numbers against the two assumptions the design rests on: whether the open-now, distance and category signals on a business card actually shorten the path to an enquiry, and whether owners find the marketing surfaces inside the dashboard or ignore them. Both are answerable with a short moderated study and the analytics that already exist. I would also test the AI assistant with people who have never used the platform, since its usefulness depends entirely on a stranger trusting it enough to start the conversation.",
     deliverables: [
       "User flows & site map",
       "Requirements specification",
@@ -150,8 +203,24 @@ export const projects: Project[] = [
     art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
     overview:
       "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. I joined as an intern on the programme and moved onto staff during it, receiving the Best Intern Award for my contribution to Vista. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso.",
+    context: {
+      product:
+        "Vista digital banking — corporate and retail, across four West African subsidiaries",
+      team:
+        "ITSS (Geneva) delivering for the Vista banking group; joined as an intern on the programme and moved onto staff during it",
+      duration:
+        "May 2023 – April 2024",
+      scope:
+        "Onboarding and identity verification, account dashboards, transfer and approval journeys, campaign and graphic design, front-end review in HTML/CSS",
+      platform:
+        "Mobile banking app, with campaign and marketing surfaces",
+      constraints:
+        "Four regulated markets, two languages, separate currencies, and corporate approval mandates",
+    },
     challenge:
       "Business banking in a multi-market group breaks the assumption every consumer banking app is built on: that one person means one account in one currency in one country. A Vista customer might be a finance manager holding mandates over several legal entities across Gambia, Guinea, Sierra Leone and Burkina Faso, each with its own currency, its own regulator and its own local rules — and payments they initiate may need someone else's approval before money moves. Designing for that means holding real institutional complexity on a phone screen without either flattening it into something unsafe or exposing all of it at once. The subsidiaries added a second problem on top: four markets — anglophone and francophone, each with its own currency and regulator — needed to feel like one bank without ignoring what made each of them local.",
+    difficulty:
+      "Four subsidiaries — Gambia, Sierra Leone, Guinea and Burkina Faso — each with its own currency, regulator and language meant every shared screen had to survive four sets of local requirements without fragmenting into four products. Anglophone and francophone markets pushed language selection up into sign-in rather than leaving it in settings: a small decision with a large consequence, because it sits in front of the most sensitive screen in the app. Corporate banking then broke the assumption the retail patterns were built on — one person, one account, one currency, one country — so patterns that worked for retail customers had to be rethought rather than reused for a finance manager holding mandates across several legal entities.",
     process: [
       "Made entity the top-level context rather than a setting. The switcher sits directly beneath the user's name and last sign-in on the menu screen, so which legal entity and market you are acting in is answered before any transaction begins — the question that determines what every subsequent number and permission means.",
       "Designed approvals as a first-class destination, not a notification. Pending requests — bulk payment, single payment, other — are surfaced above the fold on the accounts screen with their own counts, because in corporate banking the blocking task is usually someone else's payment waiting on you.",
@@ -164,6 +233,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "A digital banking product that treats multi-entity, multi-currency, multi-market operation as the normal case rather than an edge case — with approvals designed as core workflow, account views that scale to real portfolios, and one design system serving four localised subsidiaries across Gambia, Guinea, Sierra Leone and Burkina Faso. The work was recognised with the Best Intern Award for contributions to Vista.",
+    evidence:
+      "The work was recognised with ITSS's Most Outstanding Intern of the Year award, and the letter names the Vista Bank project UI/UX design specifically as what it was awarded for — client-side recognition tied to this project rather than a general commendation. The letter is readable in full on the credentials page. I do not have post-launch adoption or task-completion data for the app.",
+    improveNext:
+      "The entity switcher carries the most risk in the product, because acting in the wrong entity means moving the wrong company's money. I would test whether mandate holders can tell at a glance which entity they are operating in before they initiate a transfer, and whether the approval counts read as work assigned to them rather than as notifications they can dismiss. That needs real corporate customers rather than internal reviewers.",
     deliverables: [
       "Onboarding & identity verification",
       "Account dashboards & filtering",
@@ -210,8 +283,20 @@ export const projects: Project[] = [
     art: { hue: "#0f2418", accent: "#3ddc84", kind: "banking" },
     overview:
       "Pay4Me is a cross-border payments platform for international students and immigrants — paying tuition, SEVIS, I-20, visa and credential-evaluation fees to institutions and government agencies abroad. I designed the mobile product and the marketing site that has to earn a stranger's trust before they will download it.",
+    context: {
+      product:
+        "Pay4Me — cross-border payments for international students and immigrants",
+      scope:
+        "Mobile app design, sponsored and cross-border payment flows, multi-currency balance, marketing site, trust and credibility system",
+      platform:
+        "Mobile app and responsive marketing site",
+      constraints:
+        "High-value payments against hard deadlines, where the person paying is frequently not the person benefiting",
+    },
     challenge:
       "For an international student, a payment is not a transaction — it is a deadline. Miss a SEVIS fee and the visa appointment goes with it; miss a tuition instalment and the admission can lapse. Yet the money usually has to travel the hardest possible route: from a family in one currency, through a banking system with limited access to dollars, to a university that only recognises payments arriving in a particular form. Traditional wires are slow, expensive and opaque, and the person waiting has no way to see where their money is. Two design problems follow from that. The sums are often a family's savings, sent by someone who has never heard of the company — so credibility has to be established before the app is even installed. And the person paying is frequently not the person benefiting, which breaks the assumption almost every payment app is built on.",
+    difficulty:
+      "The product has to earn trust in the wrong order. Someone judges a payments company on a laptop, at the point where they know least and have most at stake, then pays on a phone — which forced the credibility work into the marketing site, where reassurance can arrive before the decision, rather than into the app, where it would arrive too late to matter. The second difficulty is structural rather than emotional: the account holder is often a parent or relative and the beneficiary is the student, which breaks the assumption almost every payment app is built on. Sponsored payment had to become a first-class transfer type rather than a personal wallet bent into a shape it was never designed for.",
     process: [
       "Designed for the sponsor, not just the account holder. Parents and relatives fund most of these payments, so the product treats sponsored payment as a first-class type alongside seamless and cross-border — rather than bending a personal wallet into a use case it was never shaped for.",
       "Made recipients people instead of account numbers. Recent transfers appear as faces and first names, and the search field asks you to find a friend or family member to send money to — matching how these transfers are actually described out loud, and removing a common source of costly typos.",
@@ -225,6 +310,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "A payments product shaped around the real unit of work — a family funding someone else's education across a border, against a deadline. Sponsored payments are designed for rather than tolerated, verification and currency are treated as everyday context instead of settings, the interface speaks the immigration journey's own vocabulary, and the site does the credibility work before the download rather than after it.",
+    evidence:
+      "No measured outcome is available to me. What is observable in the design: payment types are modelled around a sponsor rather than a single account holder; verification tier and currency are treated as everyday context instead of settings; and the marketing site is layered by kind of doubt — payment processors and named institutions, a coverage map, video testimonials from students, then a two-column FAQ — with a QR code closing the desktop-to-mobile gap. These are structural design choices, not measured results.",
+    improveNext:
+      "Two numbers would tell me whether this works: the completion rate of a first sponsored payment by someone who has never used the app, and the drop-off between the marketing site and the app install. I would also usability-test the fee and timing disclosure with families sending money abroad for the first time, since that is the moment trust is either earned or lost.",
     deliverables: [
       "Mobile app design",
       "Sponsored & cross-border payment flows",
@@ -281,8 +370,20 @@ export const projects: Project[] = [
     art: { hue: "#101a2e", accent: "#2b6cff", kind: "workflow" },
     overview:
       "Chalant AI is a learning platform for people who need to work with AI rather than merely read about it. Alongside courses, live sessions and voice learning sits the AI Manager Path — a simulated workspace where learners run a team of AI agents, assign real tasks, review the output and answer for the quality. I led end-to-end product design across the learner and admin experiences.",
+    context: {
+      product:
+        "Chalant AI — an AI learning platform built around a simulated agent workspace",
+      scope:
+        "End-to-end product design across the learner and administrator experiences",
+      platform:
+        "Responsive web application",
+      constraints:
+        "One system serving a learner who wants to progress and an operator who runs it as a business",
+    },
     challenge:
       "The skill people actually need around AI is not prompting — it is management: deciding what to delegate, judging whether the result is good enough, and knowing when a confident-sounding output should be rejected. That judgement cannot be transferred by watching a video, because the failure mode being trained against is precisely the one a passive learner exhibits: accepting plausible work without checking it. So the platform had to teach through practice with consequences, while remaining a product an administrator could run as a business — which meant one system serving a learner who wants to progress and an operator who needs to see engagement, revenue and where courses are failing.",
+    difficulty:
+      "Quick Approve is the whole tension in a single control. The product exists to teach people not to accept plausible AI output without checking it, so a shortcut that lets them do exactly that is the obvious thing to delete. Deleting it makes the exercise dishonest: in real work the shortcut always exists, and a tool that forbids it trains compliance rather than judgement. Keeping it meant accepting that learners can take the easy path, and designing the surrounding signals — confidence score, estimated review time, SOP compliance — so that taking it is a decision they can watch themselves make. The same tension runs through the progression system: XP and streaks sustain a path measured in weeks, but rewarding throughput inside a product about careful review would teach precisely the wrong habit, which is why progression sits in the sidebar as ambient context instead of driving the work.",
     process: [
       "Made the lesson a workspace. The AI Manager Path drops the learner into a team of five agents with roles, live status and current tasks — so the unit of learning is a decision made under realistic conditions rather than a module completed.",
       "Exposed the numbers a manager would actually use. Every agent card carries accuracy, task volume, average turnaround and progress, so judging performance means reading evidence instead of trusting a vibe.",
@@ -297,6 +398,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "A learning product where the curriculum is the work itself: agents to delegate to, confidence scores and SOPs to judge against, a review step that cannot be skipped structurally, and exports that turn practice into deliverables. Learner and operator share one design system, and the same principle runs through both — surface the evidence, name the confidence, and leave the judgement with the person.",
+    evidence:
+      "No measured outcome is available to me. What is observable in the design: the human checkpoint is structural rather than advisory, since Needs Review is its own column and work cannot reach Done without passing through a person; quality is anchored to versioned SOPs rather than to taste; and learner and operator share one design system instead of splitting into two disconnected apps. Whether the platform actually improves calibrated trust is a claim I cannot make without study data.",
+    improveNext:
+      "The obvious study is whether a learner's approval accuracy improves across sessions — comparing what they approve early against what they approve after working through the SOP library — and whether Quick Approve use falls as judgement develops. That would turn the product's central claim into something measured rather than argued.",
     deliverables: [
       "AI agent workspace",
       "Review queue & confidence system",
@@ -358,8 +463,24 @@ export const projects: Project[] = [
     art: { hue: "#2b0f1d", accent: "#e0a955", kind: "fashion" },
     overview:
       "Kremor AI is a fashion-technology platform that generates custom African clothing from a prompt and then has it made. It runs as three connected surfaces: a storefront selling AI-generated Ankara womenswear, menswear and bags; a creative workspace where a design is explored and iterated; and an admin platform where measurements, artisans, design approvals and production are managed by role. I designed all three end to end on contract from June 2024 to July 2026 — flows, interface design, AI interaction patterns and the design system — and evaluated 96+ complex AI interaction tasks to find the patterns worth keeping.",
+    context: {
+      product:
+        "Kremor AI — AI-generated African fashion, and the operations that turn a design into a garment",
+      team:
+        "Contract engagement working with the founder",
+      duration:
+        "June 2024 – July 2026",
+      scope:
+        "Storefront, generative workspace, role-based admin platform, and the design system across all three",
+      platform:
+        "Responsive web",
+      constraints:
+        "Generated designs have to be manufacturable by real tailors, and the workshop runs on five roles with different permissions",
+    },
     challenge:
       "African fashion is usually flattened twice over. Globally it is reduced to a single decorative idea — African print — when Ankara, Aso-Oke, Adire and Kente are distinct traditions with their own rules. And in most AI tools it would be flattened again, into a style filter applied to a Western silhouette. The brief was the opposite of that: use AI to widen what someone can imagine wearing, while treating the textiles as a language rather than a texture. That created two problems. Most people cannot describe a garment they have not seen, so a blank prompt box would fail exactly the person the product exists for. And a generated image is not a dress — someone still has to take measurements, approve a design, cut fabric and sew it, which meant the creative surface was worthless unless the workshop behind it was designed with the same care.",
+    difficulty:
+      "Two forces pulled against each other. A generative tool is only useful to someone who can describe what they want, and the people this product exists for often cannot — they have an occasion, a feeling, a fabric they have seen somewhere, and no vocabulary for any of it. The blank prompt box is the honest interface for a generator and the wrong interface for this audience, so scaffolding had to be added without narrowing what someone is allowed to ask for. The harder constraint is physical: a generated image is not a dress. Somebody still takes measurements, approves the design, cuts fabric and sews it, which made the creative surface worthless unless the workshop behind it was designed with equal care — and that workshop involves five roles, genuinely dangerous actions like suspending an artisan or refunding a payment, and a need to reconstruct afterwards who did what.",
     process: [
       "Named the textiles rather than the continent. The product speaks in Ankara, Aso-Oke, Adire, Kente and Afro-fusion instead of African print, because specificity is both the respect the subject is owed and the vocabulary the generator needs to work with.",
       "Refused the blank prompt box. The assistant opens with quick actions — generate design concepts, show style options, explore trends, create layout variations for Ankara patterns — and the home page offers openers phrased how people actually talk: I want an African vibe wear for an event. Someone with a feeling but no vocabulary still gets a first move.",
@@ -373,8 +494,14 @@ export const projects: Project[] = [
       "Designed staff changes around the customer, not the employee record. Suspending a support agent surfaces their twelve open conversations before anything else and offers reassignment — automatically by workload and availability, or by hand with each agent's active count and workload visible, and a preview of the conversation being moved.",
       "Maintained the design system across all three surfaces — shared text and colour styles, a component page, and a Ready for Dev page — so the storefront, the workspace and the admin platform read as one product and engineering had a single source to build from.",
     ],
+    explored:
+      "The working file keeps its versions rather than overwriting them: Design V1.0 and V1.1 sit alongside the admin dashboard and component pages, and an AI-proposed direction was explored as its own branch before the assistant settled into the form it shipped in. A Ready for Dev page marks what was actually handed over, which keeps the explored directions separable from the delivered ones.",
     outcome:
       "One product across three surfaces that each answer a different question: can I imagine it, can I buy it, can it actually be made. The generative side is scaffolded so that people who cannot yet describe what they want still get somewhere, the commerce side grounds AI output in fabric, care and provenance, and the operations side carries a role model, a permissions matrix and an immutable audit trail sturdy enough for real orders passing between managers, support agents and artisans. All three share one design system and a documented development handoff.",
+    evidence:
+      "Kremor AI's founder has written a reference describing the dual role — UI/UX design alongside AI model evaluation covering forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative image output — and it is readable in full on the credentials page. On the evaluation side, 96+ complex AI interaction tasks were assessed to identify usability patterns. No adoption or conversion data for the storefront is available to me.",
+    improveNext:
+      "I would test the prompt scaffolding with people who have no design vocabulary and no familiarity with the textiles, because that is the audience the product is built for and the one most likely to stall at the first screen. On the operations side, I would want to know whether the permissions matrix matches how the workshop actually runs — whether the roles as designed correspond to the roles people really hold — before treating that model as settled.",
     deliverables: [
       "AI design assistant & prompt scaffolding",
       "Generative workspace",
@@ -423,8 +550,20 @@ export const projects: Project[] = [
     art: { hue: "#101c33", accent: "#f4823c", kind: "booking" },
     overview:
       "Shortlet Lagos runs two products against one portfolio of apartments: guests book short stays, and investors buy shares in the same rental properties from ₦50,000 upward. I owned end-to-end UX/UI design and research across both — discovery, search, filtering and booking on the guest side, and the property marketplace on the investment side.",
+    context: {
+      product:
+        "Shortlet Lagos — short-stay booking and fractional property investment against one portfolio, live at shortlet-lagos.com",
+      scope:
+        "Research and user flows, guest discovery, search, filtering and booking, the investment marketplace, and a responsive design system",
+      platform:
+        "Mobile-first guest experience, desktop-first investment experience",
+      constraints:
+        "Two audiences making opposite kinds of decision about the same apartments",
+    },
     challenge:
       "The same apartment has to read two completely different ways depending on who is looking at it. To a guest it is somewhere to sleep next weekend, judged on photos, location and whether the dates are free — a decision made in minutes, usually on a phone. To an investor it is an asset, judged on yield, entry price and what happens to the money afterwards — a decision made slowly, at a desk, and one that carries real risk. Fractional property investment also has a credibility problem before it has a usability one: asking someone to put money into a share of a building they will never hold the keys to means the interface has to make the mechanics obvious rather than exciting. Designing both without letting the marketing energy of the booking side leak into the investment side was the core problem.",
+    difficulty:
+      "The same apartment has to read two ways. A guest decides in minutes, on a phone, on photos, location and whether the dates are free. An investor decides slowly, at a desk, on yield and entry price and what happens to the money afterwards, with real risk attached. The pull throughout was to let the booking side's marketing energy carry across into the investment side, because that energy converts — and that is exactly where it would do damage, since making an investment decision feel effortless is not the same as making it clear. Holding the two apart while keeping them recognisably one company was the constant tension, and it is why the investment side leads with the buying mechanic and the entry price rather than with projected returns.",
     process: [
       "Split the product into two entry points rather than one blended homepage, so a guest and an investor are answering different questions from the first screen instead of being sold the wrong one.",
       "Reduced the guest search to the four things a stay actually turns on — where, check-in, check-out, who — and kept them in a single card above the listings, so the whole query is visible and editable in one place on a phone.",
@@ -436,6 +575,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "One platform serving two audiences with genuinely different decisions to make — a mobile booking journey reduced to the four questions a stay depends on, and a fractional investment marketplace that leads with its mechanics and its entry price rather than with projected returns. Both sit on a shared responsive component set. The product is live at shortlet-lagos.com.",
+    evidence:
+      "The product is live at shortlet-lagos.com. No measured outcome from my work is available to me. What is observable: the guest search is reduced to the four inputs a stay actually depends on, and the investment side states the mechanic and the minimum entry price before it discusses return. The platform figures shown on the client's own site are theirs and are not outcomes of this design work, so they are not presented as results here.",
+    improveNext:
+      "The question I most want answered is whether people understand what they are buying. A share in a rental property is not an intuitive instrument, and comprehension rather than conversion is the right measure of whether that page works — a short comprehension test with first-time investors would settle it. I would also check whether guests who arrive to book ever discover the investment side at all, since the two entry points are deliberately separate.",
     deliverables: [
       "User flows & research",
       "Guest booking journey",
@@ -456,15 +599,29 @@ export const projects: Project[] = [
     role: "End-to-end product designer",
     tags: ["Research", "UX Strategy", "Product Design", "Usability Testing"],
     caseStudy: true,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/original/8e80fc255070051.Y3JvcCwyOTE3LDIyODIsNDYyLDA.png",
-    frame: "browser",
+    // No `cover`: the Behance CDN blocks hotlinking, so the remote URL that
+    // used to sit here failed intermittently in production. Omitting it makes
+    // the locally generated artwork the cover deterministically — served with
+    // the page, no network request, no failure mode. Replace this with a real
+    // screenshot when one is available.
     externalUrl: `${BEHANCE}/255070051/Arete-Telemedicine-UXUI-Case-Study`,
     art: { hue: "#0f2a2a", accent: "#4fd1c5", kind: "health" },
     overview:
       "Arete is a digital healthcare and telemedicine platform. I designed the end-to-end experience across research, information architecture, user flows, UX writing, UI design, design systems and prototyping.",
+    context: {
+      product:
+        "Arete — a digital healthcare and telemedicine platform",
+      scope:
+        "Research, information architecture, user flows, UX writing, UI design, design system and prototyping",
+      platform:
+        "Responsive web and mobile",
+      constraints:
+        "Consultation, insurance coverage, prescription and pharmacy fulfilment are separately operated services",
+    },
     challenge:
       "Healthcare journeys are fragmented: a patient books a consultation in one place, checks HMO coverage in another, then chases a prescription and a pharmacy separately. The product needed to make those hand-offs feel like a single, trustworthy path without hiding the detail clinicians and insurers require.",
+    difficulty:
+      "The four things a patient needs — a consultation, confirmation that it is covered, a prescription, and a pharmacy that will fill it — are run by different organisations with different systems and different obligations. Presenting them as one journey is a claim the underlying services do not make on their own, and the risk is a product that feels seamless right up to the moment it hands you off and stops helping. Coverage is where that hurts most: eligibility language has to be plain enough to act on and precise enough not to promise something an insurer will later refuse, and getting it wrong in either direction costs the patient. Writing for people who are unwell also rules out most of the tone a product designer reaches for by default — reassurance that overstates is worse than silence.",
     process: [
       "Mapped the patient journey from symptom to fulfilled prescription and identified the moments where coverage uncertainty caused drop-off.",
       "Defined the information architecture so consultations, coverage, prescriptions and pharmacy fulfilment share one navigation model.",
@@ -474,6 +631,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "A connected healthcare experience with a reusable design system, documented flows and prototypes ready for engineering hand-off.",
+    evidence:
+      "No measured outcome is available to me. What is observable in the design: consultations, coverage, prescriptions and pharmacy fulfilment share one navigation model rather than sitting as four separate services; eligibility, consent and prescription states are written in plain, non-alarming language; and a component library with tokens keeps the clinical, patient and admin surfaces consistent. The full presentation is published on Behance.",
+    improveNext:
+      "Eligibility comprehension is the thing to test first — whether a patient reads a coverage state as something they can act on rather than a status they have to interpret — and it needs real patients rather than colleagues. I would also want to validate the hand-off points with an insurer and a pharmacy, because the journey's credibility rests on partners the design cannot control.",
     deliverables: [
       "Journey maps",
       "Information architecture",
@@ -519,8 +680,20 @@ export const projects: Project[] = [
     art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
     overview:
       "Archi-Tek is a text-to-design tool for architecture. Describe a building in plain language and it generates concept sketches, schematic plans or detailed models — then hands you the result as a real CAD file you can keep working in. I designed the end-to-end product: the prompt experience, the design-type system, the preview and export flow, and the 3D editor.",
+    context: {
+      product:
+        "Archi-Tek — a text-to-design tool for architecture",
+      scope:
+        "Prompt experience, design-type system, results gallery, preview and export flow, and the 3D editor interface",
+      platform:
+        "Desktop web application",
+      constraints:
+        "The output has to be a working CAD file rather than an image, and the in-product editor did not exist at the time of design",
+    },
     challenge:
       "Generative AI is good at producing a convincing picture of a building. That is precisely what an architect cannot use. A render is a dead end: it cannot be dimensioned, measured, revised or handed to an engineer. Meanwhile the tools that do produce workable geometry — CAD and 3D modelling suites — carry a learning curve measured in months, which puts early-stage massing and client-facing concepts out of reach for the people who most need them quickly. The design problem was to sit a conversational interface on top of real architectural output, without either half undermining the other: the chat could not feel like a toy, and the output could not be a JPEG.",
+    difficulty:
+      "Generative models are good at producing a convincing picture of a building, which is the one thing an architect cannot use — a render cannot be dimensioned, revised or handed to an engineer. Putting a conversational front end onto real geometry meant neither half could undermine the other: the chat could not feel like a toy, and the output could not be a JPEG. The sharper constraint was capability. The in-product 3D editor did not exist yet, so the interface had to communicate the workflow it belongs to without implying it was available — which is why it is staged in the UI as coming soon rather than presented as working. Overstating it would have been the easier design and the wrong one.",
     process: [
       "Framed the core insight that fidelity is a decision the user makes, not one the model should guess. A quick massing study and a dimensioned model are different jobs with different tolerances for error, so the interface asks up front — Concept Sketch, Schematic Plan or Detailed Model — and describes each in plain language rather than jargon.",
       "Designed the prompt screen around the blank-page problem. A bare text field asks the user to already know what to say, so the entry point pairs a single open field with typed starting points — 3-Bedroom Bungalow, Duplex Sample, 3-Story Building, Filling Station — and a wall of generated samples underneath, so the first move is recognition rather than recall.",
@@ -531,6 +704,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "An AI design assistant that behaves like a drafting collaborator rather than an image generator: fidelity chosen deliberately, options compared side by side, and every result leaving the product as an editable CAD file. The flow moves from a sentence, through a design-type decision and a compared set of options, to a downloadable model — with an editor waiting for the work that follows.",
+    evidence:
+      "No usage data is available to me. What is observable in the design: fidelity is a decision the user makes rather than one the model guesses; results are presented as comparable named options instead of a single answer; and the export formats — DWG, OBJ, SKP and PDF — sit beside the generated design, so the nature of the output is unambiguous before anyone invests time in it. The full presentation is published on Behance.",
+    improveNext:
+      "This needs practising architects and a real file. The test that matters is whether an exported DWG opens in AutoCAD and survives being edited — if the geometry is not workable, the clarity of the interface counts for nothing. I would also check whether the three fidelity levels match how architects actually think about early-stage work, or whether they are a designer's categories rather than a practitioner's.",
     deliverables: [
       "Conversational UX",
       "Design-type system",
@@ -572,8 +749,20 @@ export const projects: Project[] = [
     art: { hue: "#2a1d0f", accent: "#f4b860", kind: "web3" },
     overview:
       "A Nigerian fintech super-app that combines lending, investing, everyday banking, property insurance and bill payments in a single product. I designed the mobile experience across those journeys — the home dashboard, the loan flow, and the investment and transaction surfaces — with an emphasis on stating plainly what money is doing at every step.",
+    context: {
+      product:
+        "A Nigerian fintech super-app spanning lending, investing, everyday banking, property insurance and bill payments",
+      scope:
+        "Home dashboard, loan request flow, investment and equity purchase, transaction and payment design, empty and error states, mobile design system",
+      platform:
+        "Mobile app",
+      constraints:
+        "Five financial products with different risk profiles and different regulatory language, in one interface",
+    },
     challenge:
       "Most people end up running their financial life across four or five apps: one to borrow, one to save, one to invest, another for bills and insurance. Consolidating them is easy to propose and difficult to design well. Each product carries its own risk profile, its own regulatory language and its own vocabulary, and stacking them tends to produce one of two failures — a dashboard so dense that nothing is findable, or an interface so friendly that it quietly obscures what a decision actually costs. Investing raises the stakes further: a product that makes buying equities feel as frictionless as ordering food has not removed complexity, it has hidden risk. The problem was to hold five financial products in one app while keeping each one legible enough to be trusted with real money.",
+    difficulty:
+      "Making investing feel as easy as ordering food is the obvious way to grow the product and the fastest way to do harm — friction removed from a risk decision does not remove the risk, it hides it. Every simplification had to be checked against whether it made the money clearer or merely made the screen calmer. That is why a projected return is labelled indicative value at maturity and stated gross of withholding tax at the moment of commitment rather than in a footnote, and why the minimum investment and the wallet balance appear before the button instead of arriving as an error after it. The competing pull was consolidation itself: five products in one app tends to produce either a dashboard too dense to navigate or a friendliness that flattens the difference between borrowing and investing, which are not the same kind of decision at all.",
     process: [
       "Anchored the home screen on one balance rather than five. Everything else — quick actions, savings prompts, pending tasks — arranges itself around that single number, so the first question the app answers is always the one people actually open it to ask.",
       "Designed for use in public. The balance masks by default behind a reveal control, because the realistic context for this app is a phone held on a street or in a queue, not a desk.",
@@ -585,6 +774,10 @@ export const projects: Project[] = [
     ],
     outcome:
       "A super-app that earns the breadth it claims: five financial products sharing one balance, one visual language and one standard of disclosure. Constraints appear before commitment, projections are labelled as projections, and empty states teach rather than stall — so consolidation makes the user's financial picture clearer instead of merely shorter.",
+    evidence:
+      "No usage or conversion data is available to me. What is observable in the design: one balance anchors the home screen rather than five; constraints are surfaced before commitment rather than reported as failures afterwards; projections are labelled as estimates with tax status stated; and empty states explain the product rather than reporting zero. The full presentation is published on Behance.",
+    improveNext:
+      "I would test whether people actually read indicative value at maturity as an estimate rather than a promise — that phrase is carrying a lot of weight, and its comprehension is testable in minutes. I would also check whether masking the balance by default helps or irritates in daily use, since it trades a small constant cost against a privacy benefit that only matters occasionally.",
     deliverables: [
       "Home dashboard",
       "Loan request flow",

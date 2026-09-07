@@ -25,15 +25,40 @@ const body = localFont({
   fallback: ["Inter", "system-ui", "Helvetica Neue", "sans-serif"],
 });
 
+const description =
+  "UI/UX Product Designer and Researcher in Brighton, UK. I design clearer experiences for complex digital products across multi-market fintech, marketplace platforms, AI product operations and digital healthcare.";
+
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.title}`,
-  description:
-    "UI/UX Product Designer and Researcher in Brighton, UK, creating clear, useful digital experiences for complex products across healthcare, fintech, SaaS, AI and booking platforms.",
+  // Required for absolute OG/Twitter image URLs — without it, link previews
+  // resolve the image against a relative path and silently show nothing.
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} — ${site.title}`,
+    template: `%s | ${site.name}`,
+  },
+  description,
+  alternates: { canonical: "/" },
   openGraph: {
     title: `${site.name} — ${site.title}`,
-    description:
-      "Product designer experienced in SaaS, fintech, AI, healthcare, booking platforms, design systems, user research and developer handoff.",
+    description,
     type: "website",
+    url: site.url,
+    siteName: site.name,
+    locale: "en_GB",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${site.name} — ${site.title}`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — ${site.title}`,
+    description,
+    images: ["/og.jpg"],
   },
 };
 

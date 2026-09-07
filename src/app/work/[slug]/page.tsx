@@ -97,6 +97,37 @@ export default async function CaseStudy({ params }: { params: Params }) {
             <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Overview</h2>
             <p className="mt-6 leading-relaxed text-white/75">{project.overview}</p>
           </Reveal>
+
+          {project.context && (
+            <Reveal delay={0.1} className="mt-12">
+              <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                At a glance
+              </h2>
+              <dl className="mt-6 border-t border-line/60">
+                {(
+                  [
+                    ["Product", project.context.product],
+                    ["Team", project.context.team],
+                    ["Duration", project.context.duration],
+                    ["Scope", project.context.scope],
+                    ["Platform", project.context.platform],
+                    ["Constraints", project.context.constraints],
+                  ] as const
+                )
+                  .filter(([, v]) => Boolean(v))
+                  .map(([k, v]) => (
+                    <div
+                      key={k}
+                      className="grid gap-1 border-b border-line/60 py-4 sm:grid-cols-[7rem_1fr] sm:gap-4"
+                    >
+                      <dt className="eyebrow pt-0.5">{k}</dt>
+                      <dd className="text-sm leading-relaxed text-white/75">{v}</dd>
+                    </div>
+                  ))}
+              </dl>
+            </Reveal>
+          )}
+
           <Reveal delay={0.1} className="mt-12">
             <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Deliverables</h2>
             <ul className="mt-6 flex flex-wrap gap-2">
@@ -114,34 +145,84 @@ export default async function CaseStudy({ params }: { params: Params }) {
             <>
               <Reveal>
                 <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
-                  The challenge
+                  The problem
                 </h2>
                 <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
                   {project.challenge}
                 </p>
               </Reveal>
 
+              {project.difficulty && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    What made this hard
+                  </h2>
+                  <p className="mt-6 border-l-2 border-accent/70 pl-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                    {project.difficulty}
+                  </p>
+                </Reveal>
+              )}
+
               <Reveal delay={0.1} className="mt-16">
-                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Process</h2>
+                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                  Key decisions
+                </h2>
                 <ol className="mt-8 border-t border-line/60">
                   {project.process?.map((step, i) => (
                     <li
                       key={i}
                       className="grid gap-3 border-b border-line/60 py-6 sm:grid-cols-[4rem_1fr]"
                     >
-                      <span className="display text-2xl text-accent">0{i + 1}</span>
+                      <span className="display text-2xl text-accent">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                       <p className="leading-relaxed text-white/80">{step}</p>
                     </li>
                   ))}
                 </ol>
               </Reveal>
 
+              {project.explored && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    What I explored
+                  </h2>
+                  <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                    {project.explored}
+                  </p>
+                </Reveal>
+              )}
+
               <Reveal delay={0.1} className="mt-16">
-                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Outcome</h2>
+                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                  What changed
+                </h2>
                 <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
                   {project.outcome}
                 </p>
               </Reveal>
+
+              {project.evidence && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    Evidence
+                  </h2>
+                  <p className="mt-6 rounded-sm border border-line/60 bg-white/[0.025] p-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                    {project.evidence}
+                  </p>
+                </Reveal>
+              )}
+
+              {project.improveNext && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    What I would improve next
+                  </h2>
+                  <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/75">
+                    {project.improveNext}
+                  </p>
+                </Reveal>
+              )}
             </>
           ) : (
             <Reveal>

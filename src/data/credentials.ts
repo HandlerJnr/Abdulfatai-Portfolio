@@ -14,6 +14,8 @@ export type Credential = {
   verifyUrl?: string;
   /** Certificate or reference number printed on the document. */
   ref?: string;
+  /** What this document proves — one short line for a scanning recruiter. */
+  proves?: string;
   /** Rough shape of the preview, so cards reserve the right space. */
   shape?: "portrait" | "landscape";
 };
@@ -36,6 +38,7 @@ export const credentialGroups: CredentialGroup[] = [
     items: [
       {
         slug: "bizinc-ceo-reference",
+        proves: "Evidence of progression into increased responsibility",
         title: "Letter of recommendation",
         issuer: "Michael Fulton II — Chief Executive Officer, Bizinc",
         date: "9 December 2025",
@@ -46,6 +49,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "kremor-founder-reference",
+        proves: "Client confirmation of the design and AI-evaluation scope",
         title: "Letter of recommendation",
         issuer: "Saheed Alabi — Founder, Kremor AI",
         date: "27 July 2026",
@@ -56,6 +60,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "academic-reference",
+        proves: "Independent assessment of analytical ability and character",
         title: "Academic reference",
         issuer:
           "Adamu Muhammad Aminu, MNIP — Department of Physics, Federal University Dutsin-Ma",
@@ -74,6 +79,7 @@ export const credentialGroups: CredentialGroup[] = [
     items: [
       {
         slug: "itss-most-outstanding-intern",
+        proves: "Client recognition naming the Vista project shown in this portfolio",
         title: "Most Outstanding Intern of the Year",
         issuer: "ITSS — Information Technology Solution Services, Geneva",
         date: "6 November 2023",
@@ -84,6 +90,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "synergy-africa-design-quest",
+        proves: "Independent design recognition, judged competition",
         title: "Finalist — Synergy Africa Design Quest 2023",
         issuer: "Synergyy",
         date: "25 October 2023",
@@ -93,6 +100,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "hult-prize-runner-up",
+        proves: "Team placement in an international entrepreneurship competition",
         title: "1st runner-up team — Hult Prize",
         issuer: "Hult Prize Foundation, Federal University Dutsin-Ma",
         date: "11 January 2021",
@@ -109,6 +117,7 @@ export const credentialGroups: CredentialGroup[] = [
     items: [
       {
         slug: "zidio-uiux-internship",
+        proves: "Completed structured UI/UX design programme",
         title: "UI/UX Design internship programme",
         issuer: "Zidio Development",
         date: "15 Feb – 15 Mar 2024",
@@ -119,6 +128,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "alison-ui-design-figma",
+        proves: "Assessed competence in the primary design tool",
         title: "User Interface Design with Figma",
         issuer: "Alison — CPD certified",
         date: "24 March 2024",
@@ -129,6 +139,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "alison-uiux-adobe-xd",
+        proves: "Assessed competence in UI/UX tooling",
         title: "UI/UX Design using Adobe XD",
         issuer: "Alison — CPD certified",
         date: "24 March 2024",
@@ -139,6 +150,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "great-learning-css",
+        proves: "Front-end fluency behind the HTML/CSS handoff work",
         title: "Front-End Development — CSS",
         issuer: "Great Learning Academy",
         date: "March 2024",
@@ -156,6 +168,7 @@ export const credentialGroups: CredentialGroup[] = [
     items: [
       {
         slug: "udemy-ai-voice-agents",
+        proves: "Applied grounding for the AI product work",
         title: "AI Voice Agents: Automation with Vapi, ElevenLabs, n8n & MCP",
         issuer: "Udemy — 12.5 hours",
         date: "19 October 2025",
@@ -166,6 +179,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "udemy-langflow",
+        proves: "Applied grounding for the AI product work",
         title: "Build AI Apps Fast: Master Langflow Step by Step",
         issuer: "Udemy — 3.5 hours",
         date: "3 October 2025",
@@ -176,6 +190,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "udemy-vibe-coding",
+        proves: "Applied grounding for AI-assisted build workflows",
         title: "Vibe Coding Bootcamp: Build Any App, Game or Website with AI",
         issuer: "Udemy — 4 hours",
         date: "3 October 2025",
@@ -186,6 +201,7 @@ export const credentialGroups: CredentialGroup[] = [
       },
       {
         slug: "project-management-foundations",
+        proves: "Delivery and stakeholder practice behind the manager role",
         title: "Project Management Foundations",
         issuer: "LinkedIn Learning — 3h 32m",
         date: "4 June 2024",
@@ -202,6 +218,7 @@ export const credentialGroups: CredentialGroup[] = [
     items: [
       {
         slug: "efset-english-c1",
+        proves: "Independently assessed English at C1 Advanced",
         title: "English — C1 Advanced (63/100)",
         issuer: "EF SET",
         date: "29 March 2026",

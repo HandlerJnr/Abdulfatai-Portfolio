@@ -60,6 +60,12 @@ export function CredentialGrid({ items }: { items: Credential[] }) {
               </div>
 
               <div className="flex flex-1 flex-col gap-2 p-5">
+                {/* What a recruiter should take from this document, in one line. */}
+                {c.proves && (
+                  <p className="text-[0.6875rem] uppercase leading-relaxed tracking-[0.14em] text-accent/90">
+                    {c.proves}
+                  </p>
+                )}
                 <h3 className="text-[0.975rem] font-medium leading-snug text-white">
                   {c.title}
                 </h3>
@@ -101,6 +107,11 @@ export function CredentialGrid({ items }: { items: Credential[] }) {
                   {open.issuer} · {open.date}
                   {open.ref ? ` · ${open.ref}` : ""}
                 </p>
+                {open.proves && (
+                  <p className="mt-2 text-[0.6875rem] uppercase tracking-[0.14em] text-accent/90">
+                    {open.proves}
+                  </p>
+                )}
               </div>
               <button
                 type="button"
