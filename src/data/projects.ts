@@ -309,6 +309,85 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "kremor-ai",
+    title: "Kremor AI",
+    category: "AI Fashion Platform & Artisan Operations",
+    tagline:
+      "African textiles as a design language, not a print — a generator, a storefront, and the workshop floor that turns a prompt into a garment.",
+    year: "2024 — 2026",
+    status: "Full case study",
+    role: "UI/UX Designer, Kremor AI",
+    tags: [
+      "AI Product Design",
+      "Conversational UI",
+      "E-commerce UX",
+      "Role-Based Admin",
+      "Design Systems",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/kremor-hero.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/kremor-mobile.jpg",
+        alt: "The mobile system end to end — the design assistant with its quick actions, the generative home page, shop filtered by Ankara womenswear, menswear and bags, the product detail with size, colour, fabric and how the piece was made, About, contact, login and account creation",
+      },
+      {
+        src: "/projects/kremor-workspace.jpg",
+        alt: "Kremor.AI Workspace: one prompt field reading ask anything, create anything, with attachment and voice input, a generate action, and Marketplace and History in the top bar — so a session of creative work can be returned to rather than restarted",
+      },
+      {
+        src: "/projects/kremor-phone.jpg",
+        alt: "The storefront on a phone — the hero states the proposition in one line: African fashion designed by AI, sustainable, and rooted in heritage rather than borrowing from it",
+        portrait: true,
+      },
+      {
+        src: "/projects/kremor-admin.jpg",
+        alt: "The accountability layer: an immutable audit log where every action is attributed to the role that took it, and a permissions matrix across Super Admin, Design Manager, Production Manager, Support Agent and Inventory Manager — with dangerous actions marked and locked permissions shown as locked",
+      },
+      {
+        src: "/projects/kremor-staffing.jpg",
+        alt: "Reassigning work when a support agent is suspended: the modal raises their twelve open conversations first, then offers auto-distribution by workload or manual selection, with each agent's active conversation count and workload level visible before you choose",
+      },
+      {
+        src: "/projects/kremor-figma.jpg",
+        alt: "The admin dashboard laid out in the working Figma file — orders, measurements, artisans, design approvals, production board, messages and exports as one continuous pipeline, alongside the Ready for Dev and component pages",
+      },
+    ],
+    art: { hue: "#2b0f1d", accent: "#e0a955", kind: "fashion" },
+    overview:
+      "Kremor AI is a fashion-technology platform that generates custom African clothing from a prompt and then has it made. It runs as three connected surfaces: a storefront selling AI-generated Ankara womenswear, menswear and bags; a creative workspace where a design is explored and iterated; and an admin platform where measurements, artisans, design approvals and production are managed by role. I worked across all three from June 2024 to July 2026, covering flows, interface design, AI interaction patterns and design-system maintenance, and evaluated 96+ complex AI interaction tasks to find the patterns worth keeping.",
+    challenge:
+      "African fashion is usually flattened twice over. Globally it is reduced to a single decorative idea — African print — when Ankara, Aso-Oke, Adire and Kente are distinct traditions with their own rules. And in most AI tools it would be flattened again, into a style filter applied to a Western silhouette. The brief was the opposite of that: use AI to widen what someone can imagine wearing, while treating the textiles as a language rather than a texture. That created two problems. Most people cannot describe a garment they have not seen, so a blank prompt box would fail exactly the person the product exists for. And a generated image is not a dress — someone still has to take measurements, approve a design, cut fabric and sew it, which meant the creative surface was worthless unless the workshop behind it was designed with the same care.",
+    process: [
+      "Named the textiles rather than the continent. The product speaks in Ankara, Aso-Oke, Adire, Kente and Afro-fusion instead of African print, because specificity is both the respect the subject is owed and the vocabulary the generator needs to work with.",
+      "Refused the blank prompt box. The assistant opens with quick actions — generate design concepts, show style options, explore trends, create layout variations for Ankara patterns — and the home page offers openers phrased how people actually talk: I want an African vibe wear for an event. Someone with a feeling but no vocabulary still gets a first move.",
+      "Sequenced the promise the way creative confidence is built: personalised designs takes what you already know about yourself, AI-powered creativity opens options you had not considered, and unique and exclusive returns ownership of the result to you. Input, exploration, authorship — in that order.",
+      "Kept the assistant present across the whole storefront rather than parking it in a separate tool, so browsing and creating stay one activity and inspiration can be acted on where it strikes.",
+      "Designed the Workspace around iteration rather than one-shot generation. A single field — ask anything, create anything — accepts reference material and voice, and History and Marketplace sit in the top bar, so a train of thought can be resumed instead of restarted. Creative process only compounds if it persists.",
+      "Anchored the generated in the physical. Product pages state fabric, care, delivery and how this was made, so the sustainability claim is carried by facts about the garment instead of a banner over the top of it.",
+      "Designed the pipeline from prompt to finished piece as one path — orders, measurements, artisans, design approval, production board, messages, exports — so a generated design has a documented route to a tailor's hands, and craftsmanship stays in the loop rather than being replaced by the model.",
+      "Made the operating model explicit in a permissions matrix. Super Admin, Design Manager, Production Manager, Support Agent and Inventory Manager are laid against every action, with dangerous ones — suspend an artisan, cancel an order, refund a payment, override a status — marked and confirmation-gated, and always-allowed permissions shown as locked rather than quietly missing.",
+      "Made accountability legible with an immutable, read-only audit log where every entry is timestamped and attributed to the role that acted, human or system — necessary in a product where a model, an agent and a manager all touch the same order.",
+      "Designed staff changes around the customer, not the employee record. Suspending a support agent surfaces their twelve open conversations before anything else and offers reassignment — automatically by workload and availability, or by hand with each agent's active count and workload visible, and a preview of the conversation being moved.",
+      "Maintained the design system across all three surfaces — shared text and colour styles, a component page, and a Ready for Dev page — so the storefront, the workspace and the admin platform read as one product and engineering had a single source to build from.",
+    ],
+    outcome:
+      "One product across three surfaces that each answer a different question: can I imagine it, can I buy it, can it actually be made. The generative side is scaffolded so that people who cannot yet describe what they want still get somewhere, the commerce side grounds AI output in fabric, care and provenance, and the operations side carries a role model, a permissions matrix and an immutable audit trail sturdy enough for real orders passing between managers, support agents and artisans. All three share one design system and a documented development handoff.",
+    deliverables: [
+      "AI design assistant & prompt scaffolding",
+      "Generative workspace",
+      "Storefront & product experience",
+      "Order, measurement & production pipeline",
+      "Artisan & design approval workflows",
+      "Role-based permissions matrix",
+      "Audit log & accountability model",
+      "Staff & conversation management",
+      "Design system & dev handoff",
+    ],
+  },
+  {
     slug: "shortlet-lagos",
     title: "Shortlet Lagos",
     category: "Property Booking Platform",
@@ -364,38 +443,6 @@ export const projects: Project[] = [
       "Property listing & detail design",
       "Responsive design system",
       "High-fidelity UI & prototype",
-    ],
-  },
-  {
-    slug: "kremor-ai",
-    title: "Kremor AI",
-    category: "AI Product Experience",
-    tagline:
-      "Role-based experiences for an AI-powered African fashion platform, from artisan workflows to AI-assisted custom outfits.",
-    year: "2024 — 2026",
-    status: "Full case study",
-    role: "UI/UX Designer (part-time)",
-    tags: ["Product Strategy", "Workflow Design", "Interface Design"],
-    caseStudy: true,
-    art: { hue: "#2b0f1d", accent: "#ff3c31", kind: "fashion" },
-    overview:
-      "At Kremor AI I designed role-based product experiences for an AI-powered African fashion platform, supporting artisan and admin workflows alongside AI-assisted custom outfit journeys.",
-    challenge:
-      "Three audiences — customers, artisans and admins — share one platform but need very different views of the same order. AI-assisted design also had to feel like a helpful collaborator rather than a black box.",
-    process: [
-      "Created user flows and interface concepts for AI-driven product features.",
-      "Translated stakeholder requirements and usability findings into practical design improvements during product discovery.",
-      "Maintained design-system components, documentation and hand-off specifications for front-end implementation.",
-      "Evaluated 96+ complex AI interaction tasks to identify usability patterns and improve internal design workflows.",
-    ],
-    outcome:
-      "Role-based experiences with a maintained design system and clearer AI interaction patterns across the platform.",
-    deliverables: [
-      "User flows",
-      "Role-based dashboards",
-      "AI interaction patterns",
-      "Design system maintenance",
-      "Hand-off documentation",
     ],
   },
   {
