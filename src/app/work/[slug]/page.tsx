@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects, getProject } from "@/data/projects";
-import { ProjectArt } from "@/components/ProjectArt";
+import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal, RevealLines } from "@/components/Reveal";
 import { site } from "@/data/site";
 
@@ -73,8 +73,19 @@ export default async function CaseStudy({ params }: { params: Params }) {
       {/* Hero art */}
       <Reveal className="px-5 py-10 md:px-10 md:py-16" y={48}>
         <div className="aspect-[16/9] overflow-hidden rounded-sm border border-line/60">
-          <ProjectArt project={project} />
+          <ProjectCover project={project} size="hero" priority />
         </div>
+        {project.externalUrl && (
+          <a
+            href={project.externalUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-cursor="link"
+            className="link-line display mt-8 inline-block text-[clamp(1.4rem,2.4vw,2.2rem)] tracking-wide"
+          >
+            View the full project on Behance ↗
+          </a>
+        )}
       </Reveal>
 
       {/* Body */}
@@ -97,31 +108,62 @@ export default async function CaseStudy({ params }: { params: Params }) {
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6">
-          <Reveal>
-            <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">The challenge</h2>
-            <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
-              {project.challenge}
-            </p>
-          </Reveal>
+          {project.caseStudy ? (
+            <>
+              <Reveal>
+                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                  The challenge
+                </h2>
+                <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                  {project.challenge}
+                </p>
+              </Reveal>
 
-          <Reveal delay={0.1} className="mt-16">
-            <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Process</h2>
-            <ol className="mt-8 border-t border-line/60">
-              {project.process.map((step, i) => (
-                <li key={i} className="grid gap-3 border-b border-line/60 py-6 sm:grid-cols-[4rem_1fr]">
-                  <span className="display text-2xl text-accent">0{i + 1}</span>
-                  <p className="leading-relaxed text-white/80">{step}</p>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
+              <Reveal delay={0.1} className="mt-16">
+                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Process</h2>
+                <ol className="mt-8 border-t border-line/60">
+                  {project.process?.map((step, i) => (
+                    <li
+                      key={i}
+                      className="grid gap-3 border-b border-line/60 py-6 sm:grid-cols-[4rem_1fr]"
+                    >
+                      <span className="display text-2xl text-accent">0{i + 1}</span>
+                      <p className="leading-relaxed text-white/80">{step}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Reveal>
 
-          <Reveal delay={0.1} className="mt-16">
-            <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Outcome</h2>
-            <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
-              {project.outcome}
-            </p>
-          </Reveal>
+              <Reveal delay={0.1} className="mt-16">
+                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">Outcome</h2>
+                <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                  {project.outcome}
+                </p>
+              </Reveal>
+            </>
+          ) : (
+            <Reveal>
+              <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                The full presentation
+              </h2>
+              <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                Screens, flows and the visual system for this project are
+                published in full on Behance — including the work that sits
+                behind the cover shown here.
+              </p>
+              {project.externalUrl && (
+                <a
+                  href={project.externalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="link"
+                  className="link-line display mt-10 inline-block text-[clamp(1.8rem,3.4vw,3.2rem)] tracking-wide"
+                >
+                  Open {project.title} on Behance ↗
+                </a>
+              )}
+            </Reveal>
+          )}
         </div>
       </div>
 

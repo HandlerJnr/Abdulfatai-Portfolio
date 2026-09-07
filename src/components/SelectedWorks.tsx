@@ -58,6 +58,11 @@ export function SelectedWorks() {
               </span>
               <span className="text-sm leading-relaxed text-white/55 md:col-span-4">
                 {p.tags.join(", ")}
+                {p.externalUrl && (
+                  <span className="mt-2 block text-xs uppercase tracking-[0.16em] text-white/35">
+                    On Behance
+                  </span>
+                )}
               </span>
               <span className="flex items-center justify-between md:col-span-2 md:justify-end md:gap-6">
                 <span className="eyebrow">{p.year}</span>
@@ -65,7 +70,7 @@ export function SelectedWorks() {
                   aria-hidden="true"
                   className="display text-sm tracking-[0.2em] text-white/50 transition-colors group-hover:text-accent"
                 >
-                  Case study →
+                  {p.caseStudy ? "Case study →" : "View project →"}
                 </span>
               </span>
             </Link>

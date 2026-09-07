@@ -8,19 +8,32 @@ export type Project = {
   role: string;
   tags: string[];
   featured?: boolean;
-  /** Art direction for the generated cover artwork */
+  /** Behance cover image. When absent, generated SVG artwork is used instead. */
+  cover?: string;
+  /** How the cover should be framed in the mockup shell. */
+  frame?: "browser" | "phone" | "flat";
+  /** Direct link to the full project deck on Behance. */
+  externalUrl?: string;
+  /**
+   * True when a full written case study exists below the cover. False for
+   * projects whose deck lives on Behance — those pages link out instead of
+   * presenting a narrative that isn't documented here.
+   */
+  caseStudy: boolean;
+  /** Art direction for the generated fallback artwork */
   art: {
     hue: string;
     accent: string;
     kind: "health" | "workflow" | "booking" | "web3" | "fashion" | "banking";
   };
   overview: string;
-  challenge: string;
-  process: string[];
-  outcome: string;
+  challenge?: string;
+  process?: string[];
+  outcome?: string;
   deliverables: string[];
-  externalUrl?: string;
 };
+
+const BEHANCE = "https://www.behance.net/gallery";
 
 export const projects: Project[] = [
   {
@@ -30,10 +43,15 @@ export const projects: Project[] = [
     tagline:
       "Connecting consultations, HMO coverage, prescriptions and pharmacy fulfilment in one calm journey.",
     year: "2025",
-    status: "Case study",
+    status: "Full case study",
     role: "End-to-end product designer",
     tags: ["Research", "UX Strategy", "Product Design", "Usability Testing"],
     featured: true,
+    caseStudy: true,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/original/8e80fc255070051.Y3JvcCwyOTE3LDIyODIsNDYyLDA.png",
+    frame: "browser",
+    externalUrl: `${BEHANCE}/255070051/Arete-Telemedicine-UXUI-Case-Study`,
     art: { hue: "#0f2a2a", accent: "#4fd1c5", kind: "health" },
     overview:
       "Arete is a digital healthcare and telemedicine platform. I designed the end-to-end experience across research, information architecture, user flows, UX writing, UI design, design systems and prototyping.",
@@ -58,13 +76,118 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "web3-platform",
+    title: "Web3 Platform",
+    category: "Web3 Product Interface",
+    tagline:
+      "Interface and interaction design for a Web3 platform — my most-viewed project on Behance.",
+    year: "2025",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["Product Design", "Interaction Design", "High-Fidelity UI"],
+    featured: true,
+    caseStudy: false,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/404/818004235692945.Y3JvcCwyMTM4LDE2NzIsMCw1OA.png",
+    frame: "browser",
+    externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
+    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
+    overview:
+      "Interface and interaction design for a Web3 platform. The full presentation — screens, flows and visual system — is published on Behance.",
+    deliverables: ["Interaction design", "High-fidelity UI", "Visual system"],
+  },
+  {
+    slug: "project-management-dashboard",
+    title: "Project Management Dashboard",
+    category: "SaaS Dashboard & Data Design",
+    tagline:
+      "A dense, role-based dashboard for planning, tracking and reporting on work.",
+    year: "2025",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["Dashboard Design", "Information Architecture", "Data Visualisation"],
+    featured: true,
+    caseStudy: false,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/404/c2126d235694983.Y3JvcCwyOTA3LDIyNzQsMzM4LDA.png",
+    frame: "browser",
+    externalUrl: `${BEHANCE}/235694983/Project-Management-Dashboard`,
+    art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
+    overview:
+      "A project management dashboard covering planning, tracking and reporting surfaces. The full presentation is published on Behance.",
+    deliverables: ["Dashboard design", "Information architecture", "UI system"],
+  },
+  {
+    slug: "ai-architectural-design",
+    title: "AI Design Assistant",
+    category: "Conversational AI Product for Architecture",
+    tagline:
+      "A ChatGPT-style product experience applied to architectural design work.",
+    year: "2025",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["AI Product Design", "Conversational UX", "Interface Design"],
+    caseStudy: false,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/404/5542d4235692645.Y3JvcCwyODY4LDIyNDQsMzQwLDA.png",
+    frame: "browser",
+    externalUrl: `${BEHANCE}/235692645/Chat-Gpt-like-Product-design-for-Architectural-design`,
+    art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
+    overview:
+      "A conversational AI product experience designed for architectural design work. The full presentation is published on Behance.",
+    deliverables: ["Conversational UX", "Interface design", "Product concept"],
+  },
+  {
+    slug: "loan-investment-app",
+    title: "Loan & Investment App",
+    category: "Fintech Mobile Product",
+    tagline:
+      "Mobile lending and investing journeys where clarity around money is the whole job.",
+    year: "2025",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["Fintech UX", "Mobile UX", "High-Fidelity UI"],
+    caseStudy: false,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/404/4d02ad235692477.Y3JvcCwzMzg1LDI2NDgsMjkzLDA.jpeg",
+    frame: "phone",
+    externalUrl: `${BEHANCE}/235692477/Loan-Investment-Mobile-App`,
+    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
+    overview:
+      "A mobile app for loans and investments. The full presentation is published on Behance.",
+    deliverables: ["Mobile UX", "High-fidelity UI", "Fintech flows"],
+  },
+  {
+    slug: "mobile-banking-app",
+    title: "Mobile Banking App",
+    category: "Digital Banking Interface",
+    tagline:
+      "Everyday banking on mobile — balances, transfers and transaction history.",
+    year: "2024",
+    status: "Deck on Behance",
+    role: "UI/UX Designer",
+    tags: ["Fintech UX", "Mobile UX", "UI Design"],
+    caseStudy: false,
+    cover:
+      "https://mir-s3-cdn-cf.behance.net/projects/404/3f6097175308707.Y3JvcCw5MTQsNzE1LDYsMA.png",
+    frame: "phone",
+    externalUrl: `${BEHANCE}/175308707/Mobile-banking-App-UI-design`,
+    art: { hue: "#101a2b", accent: "#f4f3ef", kind: "banking" },
+    overview:
+      "A mobile banking interface covering core everyday banking tasks. The full presentation is published on Behance.",
+    deliverables: ["Mobile UX", "UI design", "Banking flows"],
+  },
+
+  /* ---- CV-documented work, written case studies, generated artwork ---- */
+
+  {
     slug: "chalant-ai",
     title: "Chalant AI",
     category: "AI Workflow Automation Engine",
     tagline:
       "Simplifying multi-step AI automation so non-technical teams can build workflows with confidence.",
     year: "2025",
-    status: "Case study",
+    status: "Full case study",
     role: "Lead product designer",
     tags: [
       "Information Architecture",
@@ -72,7 +195,7 @@ export const projects: Project[] = [
       "Prototyping",
       "Design System",
     ],
-    featured: true,
+    caseStudy: true,
     art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
     overview:
       "Chalant AI is a workflow automation engine. I led end-to-end product design, from research and journey mapping through interaction design, UI and prototyping.",
@@ -103,10 +226,10 @@ export const projects: Project[] = [
     tagline:
       "Property discovery, search, filtering and booking inside a reusable responsive design system.",
     year: "2024",
-    status: "Case study",
+    status: "Full case study",
     role: "Product designer & researcher",
     tags: ["User Flows", "Mobile UX", "Interaction Design", "High-Fidelity UI"],
-    featured: true,
+    caseStudy: true,
     art: { hue: "#2a1d0f", accent: "#f4b860", kind: "booking" },
     overview:
       "Shortlet Lagos is a short-stay property booking platform. I owned end-to-end UX/UI design and research for discovery, search, filtering and booking journeys.",
@@ -130,45 +253,16 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "mintrise",
-    title: "Mintrise",
-    category: "Web3 Investment Flow",
-    tagline:
-      "Clear onboarding and transaction flows for an investment product where trust is the feature.",
-    year: "2024",
-    status: "Case study",
-    role: "Product designer",
-    tags: ["Fintech UX", "Transaction Design", "Trust and Clarity"],
-    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
-    overview:
-      "Mintrise is a Web3 investment product. I owned and created end-to-end high-fidelity prototypes with clear onboarding and transaction flows.",
-    challenge:
-      "Web3 products often assume fluency in wallets, gas and confirmations. Investors needed plain-language onboarding and transaction states that explain what is happening and what it costs before they commit.",
-    process: [
-      "Audited comparable investment and wallet flows to benchmark clarity and friction.",
-      "Designed onboarding that introduces one concept at a time and surfaces risk information where decisions are made.",
-      "Structured transaction screens around review, confirm and status with explicit fees and timing.",
-      "Prototyped end-to-end journeys in Figma for stakeholder review and iteration.",
-    ],
-    outcome:
-      "High-fidelity prototypes and transaction patterns that prioritise trust, legibility and predictable outcomes.",
-    deliverables: [
-      "Onboarding flow",
-      "Transaction design",
-      "High-fidelity prototype",
-      "UI patterns",
-    ],
-  },
-  {
     slug: "kremor-ai",
     title: "Kremor AI",
     category: "AI Product Experience",
     tagline:
       "Role-based experiences for an AI-powered African fashion platform, from artisan workflows to AI-assisted custom outfits.",
     year: "2024 — 2026",
-    status: "Case study",
+    status: "Full case study",
     role: "UI/UX Designer (part-time)",
     tags: ["Product Strategy", "Workflow Design", "Interface Design"],
+    caseStudy: true,
     art: { hue: "#2b0f1d", accent: "#ff3c31", kind: "fashion" },
     overview:
       "At Kremor AI I designed role-based product experiences for an AI-powered African fashion platform, supporting artisan and admin workflows alongside AI-assisted custom outfit journeys.",
@@ -197,9 +291,10 @@ export const projects: Project[] = [
     tagline:
       "Onboarding, identity verification, dashboards and transactions across four localised market subsidiaries.",
     year: "2020 — 2024",
-    status: "Case study",
+    status: "Full case study",
     role: "UI/UX Designer & Front-End Developer",
     tags: ["Fintech UX", "Service Design", "Responsive Product Design"],
+    caseStudy: true,
     art: { hue: "#101a2b", accent: "#f4f3ef", kind: "banking" },
     overview:
       "With ITSS I supported Vista Fintech and Morabahah Bank on onboarding, identity-verification, dashboard and transaction journeys for digital banking products.",

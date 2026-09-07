@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { featuredProjects } from "@/data/projects";
-import { ProjectArt } from "./ProjectArt";
+import { ProjectCover } from "./ProjectCover";
 import { Reveal } from "./Reveal";
 
 export function FeaturedGallery() {
@@ -44,17 +44,19 @@ export function FeaturedGallery() {
               href={`/work/${p.slug}`}
               data-cursor="view"
               className="group block focus-visible:outline-accent"
-              aria-label={`${p.title} — ${p.category}. View case study`}
+              aria-label={`${p.title} — ${p.category}. ${
+                p.caseStudy ? "View case study" : "View project"
+              }`}
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-line/60 bg-[#0b0b14]">
                 <div className="h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]">
-                  <ProjectArt project={p} />
+                  <ProjectCover project={p} priority={i === 0} />
                 </div>
-                <span className="display pointer-events-none absolute bottom-5 left-5 rounded-full border border-white/40 bg-ink/60 px-4 py-2 text-sm tracking-[0.2em] text-white opacity-0 backdrop-blur transition-all duration-500 group-hover:opacity-100 group-focus-visible:opacity-100 md:translate-y-2 md:group-hover:translate-y-0">
-                  View case study →
+                <span className="display pointer-events-none absolute bottom-5 right-5 rounded-full border border-white/40 bg-ink/60 px-4 py-2 text-sm tracking-[0.2em] text-white opacity-0 backdrop-blur transition-all duration-500 group-hover:opacity-100 group-focus-visible:opacity-100 md:translate-y-2 md:group-hover:translate-y-0">
+                  {p.caseStudy ? "View case study →" : "View project →"}
                 </span>
               </div>
-              <div className="mt-5 flex items-start justify-between gap-6 border-b border-line/60 pb-5">
+              <div className="mt-5 flex items-start justify-between gap-6">
                 <div>
                   <h3 className="display text-[clamp(1.9rem,3vw,3rem)] leading-none">
                     {p.title}
@@ -67,6 +69,18 @@ export function FeaturedGallery() {
                 <span className="eyebrow shrink-0 pt-2">{p.year}</span>
               </div>
             </Link>
+            {p.externalUrl && (
+              <a
+                href={p.externalUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="link"
+                className="link-line eyebrow mt-4 inline-block !text-white/70 hover:!text-white"
+              >
+                Open on Behance ↗
+              </a>
+            )}
+            <div className="mt-5 border-b border-line/60" />
           </motion.li>
         ))}
       </ul>
