@@ -83,7 +83,9 @@ export default async function CaseStudy({ params }: { params: Params }) {
             data-cursor="link"
             className="link-line display mt-8 inline-block text-[clamp(1.4rem,2.4vw,2.2rem)] tracking-wide"
           >
-            View the full project on Behance ↗
+            {project.externalLabel
+              ? `Visit ${project.externalLabel} ↗`
+              : "View the full project on Behance ↗"}
           </a>
         )}
       </Reveal>

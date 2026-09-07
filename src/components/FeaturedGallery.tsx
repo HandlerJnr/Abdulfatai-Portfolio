@@ -77,7 +77,9 @@ export function FeaturedGallery() {
                 data-cursor="link"
                 className="link-line eyebrow mt-4 inline-block !text-white/70 hover:!text-white"
               >
-                Open on Behance ↗
+                {p.externalLabel
+                  ? `Visit ${p.externalLabel} ↗`
+                  : "Open on Behance ↗"}
               </a>
             )}
             <div className="mt-5 border-b border-line/60" />

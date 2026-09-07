@@ -59,8 +59,8 @@ export function SelectedWorks() {
               <span className="text-sm leading-relaxed text-white/55 md:col-span-4">
                 {p.tags.join(", ")}
                 {p.externalUrl && (
-                  <span className="mt-2 block text-xs uppercase tracking-[0.16em] text-white/35">
-                    On Behance
+                  <span className="mt-2 block text-xs uppercase tracking-[0.16em] text-white/45">
+                    {p.externalLabel ? `Live — ${p.externalLabel}` : "On Behance"}
                   </span>
                 )}
               </span>

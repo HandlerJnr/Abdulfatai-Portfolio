@@ -14,8 +14,10 @@ export type Project = {
   frame?: "browser" | "phone" | "flat" | "portrait";
   /** Extra imagery shown below the case-study body. */
   gallery?: { src: string; alt: string; portrait?: boolean }[];
-  /** Direct link to the full project deck on Behance. */
+  /** Direct link to the project elsewhere — a Behance deck, or a live product. */
   externalUrl?: string;
+  /** Where `externalUrl` points, named for link text. Defaults to "Behance". */
+  externalLabel?: string;
   /**
    * True when a full written case study exists below the cover. False for
    * projects whose deck lives on Behance — those pages link out instead of
@@ -39,16 +41,287 @@ const BEHANCE = "https://www.behance.net/gallery";
 
 export const projects: Project[] = [
   {
+    slug: "bizinc",
+    title: "Bizinc",
+    category: "Marketplace & Booking Platform",
+    tagline:
+      "One platform where a business is found, booked and run — discovery on one side, operations on the other.",
+    year: "2024 — 2026",
+    status: "Full case study · Live product",
+    role: "UI/UX Designer, BIZINC",
+    tags: [
+      "Marketplace UX",
+      "Booking Flows",
+      "SaaS Dashboards",
+      "Design Systems",
+      "Responsive Design",
+    ],
+    featured: true,
+    caseStudy: true,
+    externalUrl: "https://www.bizinc.io",
+    externalLabel: "bizinc.io",
+    art: { hue: "#0d1c2e", accent: "#3f8cff", kind: "booking" },
+    overview:
+      "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. As UI/UX Designer at BIZINC — remote, from Atlanta, Georgia — I worked across the product from April 2024 to May 2026, designing responsive user journeys, sitemaps, wireframes and interface concepts for its booking, e-commerce and SaaS surfaces, and building the Figma component library the team designed against.",
+    challenge:
+      "A marketplace has to satisfy two people whose interests only partly overlap. Someone looking for a service wants to find a business, judge whether to trust it and book it in a few minutes, on a phone, without learning a system first. The business on the other side needs the opposite kind of product — somewhere to run those bookings, manage its listing and see whether any of it is actually bringing customers in. Building both into one platform, across service categories that book quite differently, risks two failures: a customer experience buried under operator tooling, or an operator experience reduced to a profile page no business would actually run on. The problem was to make one platform legible from both directions without maintaining two disconnected products.",
+    process: [
+      "Mapped the platform as two journeys sharing one spine — discovery to booking on the customer side, listing to operations to growth on the business side — and settled in sitemaps where those paths meet, rather than letting each surface grow its own navigation.",
+      "Designed discovery for people who are comparing, not browsing. Category and listing layouts lead with the signals that actually decide a booking — what the business does, where it is, and what it costs to start — so a shortlist can be built without opening five tabs.",
+      "Wireframed the booking journey before styling it, so the number of steps between finding a business and confirming a service was resolved as structure rather than negotiated later in high fidelity.",
+      "Treated the business dashboard as the product operators run on, not a settings screen. Bookings, listing management and performance sit in one view, so being discoverable and being operational are not two separate tools.",
+      "Designed the lead-generation surfaces inside that dashboard rather than as a marketing add-on, so the line from a listing to the enquiries it produces to what the operator does next is visible in one place.",
+      "Built the interface as reusable Figma components with Auto Layout, variants and design tokens, so booking, e-commerce and SaaS surfaces stayed consistent as categories were added — a new category became a configuration of existing components rather than a new design.",
+      "Worked directly with stakeholders to turn business requirements into interface decisions, and kept every journey responsive from the first wireframe, since the customer side is used mostly on a phone and the operator side mostly at a desk.",
+    ],
+    outcome:
+      "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. The dashboard and lead-generation experiences I contributed to were associated with a 45% improvement in user activation. The product is live at bizinc.io.",
+    deliverables: [
+      "Responsive user journeys",
+      "Sitemaps & information architecture",
+      "Wireframes & interface concepts",
+      "Booking flows",
+      "Business dashboard",
+      "Lead-generation experience",
+      "Figma component library & design tokens",
+    ],
+  },
+  {
+    slug: "vista-itss",
+    title: "Vista Digital Banking",
+    category: "Multi-Country Corporate Banking",
+    tagline:
+      "One banking app for businesses operating across four markets — entities, currencies and approval mandates included.",
+    year: "2023 — 2024",
+    status: "Full case study",
+    role: "UI/UX Designer & Front-End Developer, ITSS",
+    tags: [
+      "Fintech UX",
+      "Enterprise UX",
+      "Service Design",
+      "Design Systems",
+      "Front-End",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/vista-devices.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/vista-menu.jpg",
+        alt: "The menu screen, where the entity switcher sits directly under the user's name and last sign-in — one person moving between the legal entities and countries they hold mandates for, above transfer activities, recipient management and approvals",
+        portrait: true,
+      },
+      {
+        src: "/projects/vista-banner.jpg",
+        alt: "My Accounts: pending approvals surfaced above the fold, then accounts grouped by type with balances shown in local currency",
+      },
+      {
+        src: "/projects/vista-screens.jpg",
+        alt: "Marketing and product screens together — the campaign framing of the app alongside account filtering, custom views, pending bulk and single payment requests, and net worth summaries",
+      },
+    ],
+    art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
+    overview:
+      "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso. I received the Best Intern Award for my contribution to Vista.",
+    challenge:
+      "Business banking in a multi-market group breaks the assumption every consumer banking app is built on: that one person means one account in one currency in one country. A Vista customer might be a finance manager holding mandates over several legal entities across Gambia, Guinea, Sierra Leone and Burkina Faso, each with its own currency, its own regulator and its own local rules — and payments they initiate may need someone else's approval before money moves. Designing for that means holding real institutional complexity on a phone screen without either flattening it into something unsafe or exposing all of it at once. The subsidiaries added a second problem on top: four markets — anglophone and francophone, each with its own currency and regulator — needed to feel like one bank without ignoring what made each of them local.",
+    process: [
+      "Made entity the top-level context rather than a setting. The switcher sits directly beneath the user's name and last sign-in on the menu screen, so which legal entity and market you are acting in is answered before any transaction begins — the question that determines what every subsequent number and permission means.",
+      "Designed approvals as a first-class destination, not a notification. Pending requests — bulk payment, single payment, other — are surfaced above the fold on the accounts screen with their own counts, because in corporate banking the blocking task is usually someone else's payment waiting on you.",
+      "Built filtering for people who hold many accounts. Default and custom views, sorting by name or balance, and account-type selection let a user with dozens of accounts across entities save the shape they actually work in, rather than scrolling a flat list every session.",
+      "Kept balances in local currency and led with available balance rather than ledger balance, since the practical question before a transfer is what can actually be moved today.",
+      "Anchored navigation on the four things corporate users return to — accounts, transfers, messages and menu — and kept secure messaging and support inside the app, because for business banking the alternative is a branch visit.",
+      "Treated last sign-in, session state and language selection as trust signals rather than clutter, surfacing them where an account holder checks for anything unexpected.",
+      "Built one design system across the four subsidiaries so shared journeys stayed consistent while local requirements, languages and regulatory copy could vary. With Gambia and Sierra Leone operating in English and Guinea and Burkina Faso in French, language selection had to be a first-class part of the sign-in experience rather than a setting found later.",
+      "Carried the same visual system into campaign and graphic design for the product, and used HTML/CSS to review front-end builds against the designs, keeping interfaces responsive and pixel-accurate through implementation.",
+    ],
+    outcome:
+      "A digital banking product that treats multi-entity, multi-currency, multi-market operation as the normal case rather than an edge case — with approvals designed as core workflow, account views that scale to real portfolios, and one design system serving four localised subsidiaries across Gambia, Guinea, Sierra Leone and Burkina Faso. The work was recognised with the Best Intern Award for contributions to Vista.",
+    deliverables: [
+      "Onboarding & identity verification",
+      "Account dashboards & filtering",
+      "Transfer & approval workflows",
+      "Multi-entity architecture",
+      "Design system across four markets",
+      "English & French localisation",
+      "Campaign & graphic design",
+      "Front-end review (HTML/CSS)",
+    ],
+  },
+  {
+    slug: "pay4me",
+    title: "Pay4Me App",
+    category: "Cross-Border Payments Platform",
+    tagline:
+      "Paying tuition, SEVIS and visa fees across borders — for students whose admission depends on the transfer clearing.",
+    year: "2025",
+    status: "Full case study",
+    role: "Product designer",
+    tags: ["Fintech UX", "Cross-Border Payments", "Trust & Credibility", "Mobile UX"],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/pay4me-hero.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/pay4me-features.jpg",
+        alt: "The product named in the vocabulary of the journey: tuition and school fees paid to named institutions, and a separate block for SEVIS, WES, visa and credential-evaluation payments",
+      },
+      {
+        src: "/projects/pay4me-map.jpg",
+        alt: "Trust built through evidence — a world map of the countries served, with video testimonials from students rather than written quotes",
+      },
+      {
+        src: "/projects/pay4me-qr.jpg",
+        alt: "The FAQ handoff: a QR code that carries the visitor from desktop research to the app on their phone, where the payment actually happens",
+      },
+      {
+        src: "/projects/pay4me-download.jpg",
+        alt: "Download section pairing the app-store routes with the in-app home screen, so the product is visible before installation",
+      },
+    ],
+    art: { hue: "#0f2418", accent: "#3ddc84", kind: "banking" },
+    overview:
+      "Pay4Me is a cross-border payments platform for international students and immigrants — paying tuition, SEVIS, I-20, visa and credential-evaluation fees to institutions and government agencies abroad. I designed the mobile product and the marketing site that has to earn a stranger's trust before they will download it.",
+    challenge:
+      "For an international student, a payment is not a transaction — it is a deadline. Miss a SEVIS fee and the visa appointment goes with it; miss a tuition instalment and the admission can lapse. Yet the money usually has to travel the hardest possible route: from a family in one currency, through a banking system with limited access to dollars, to a university that only recognises payments arriving in a particular form. Traditional wires are slow, expensive and opaque, and the person waiting has no way to see where their money is. Two design problems follow from that. The sums are often a family's savings, sent by someone who has never heard of the company — so credibility has to be established before the app is even installed. And the person paying is frequently not the person benefiting, which breaks the assumption almost every payment app is built on.",
+    process: [
+      "Designed for the sponsor, not just the account holder. Parents and relatives fund most of these payments, so the product treats sponsored payment as a first-class type alongside seamless and cross-border — rather than bending a personal wallet into a use case it was never shaped for.",
+      "Made recipients people instead of account numbers. Recent transfers appear as faces and first names, and the search field asks you to find a friend or family member to send money to — matching how these transfers are actually described out loud, and removing a common source of costly typos.",
+      "Put currency where the money is. The balance carries its own currency switcher rather than burying conversion in a settings screen, because holding and thinking in more than one currency is the normal state for this user, not an edge case.",
+      "Surfaced verification status as identity. The account tier sits beside the user's name and verified badge, because in this category tier determines transfer limits — so what would otherwise be buried compliance state becomes information the user needs before starting a large payment.",
+      "Named the real jobs rather than generic ones. The site speaks in SEVIS, WES, I-20, visa applications and credential evaluations, not payments and services — using the exact vocabulary of the immigration journey, which both signals competence and lets people recognise their situation instantly.",
+      "Built the marketing site as trust architecture, layered by kind of doubt: payment processors and named universities answer is this real, a world map answers do you work where I am, video testimonials from students answer has this worked for someone like me, and an FAQ given two full columns answers the rest.",
+      "Bridged desktop research to mobile action with a QR code. People investigate a payments company on a laptop but pay on a phone, so the site closes that gap directly rather than asking them to search an app store later.",
+      "Kept everyday utility in the app between the big moments. Airtime top-up and bill payment give people a reason to open it in the months between tuition instalments, so the product is already familiar when the payment that matters arrives.",
+      "Made support a destination, not a dead end. It sits in the bottom navigation as one of four primary tabs — appropriate for high-value, high-anxiety transfers where being unable to reach a human is itself the failure.",
+    ],
+    outcome:
+      "A payments product shaped around the real unit of work — a family funding someone else's education across a border, against a deadline. Sponsored payments are designed for rather than tolerated, verification and currency are treated as everyday context instead of settings, the interface speaks the immigration journey's own vocabulary, and the site does the credibility work before the download rather than after it.",
+    deliverables: [
+      "Mobile app design",
+      "Sponsored & cross-border payment flows",
+      "Multi-currency balance & transfers",
+      "Marketing site design",
+      "Trust & credibility system",
+      "FAQ and support experience",
+    ],
+  },
+  {
+    slug: "chalant-ai",
+    title: "Chalant AI",
+    category: "AI Learning Platform & Agent Workspace",
+    tagline:
+      "Teaching people to manage AI by giving them a team to manage — with the judgement built in, not lectured about.",
+    year: "2025",
+    status: "Full case study",
+    role: "Lead product designer",
+    tags: [
+      "AI Product Design",
+      "Information Architecture",
+      "Dashboard Design",
+      "Design System",
+      "Gamification",
+    ],
+    featured: true,
+    caseStudy: true,
+    cover: "/projects/chalant-tasks.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/chalant-workspace.jpg",
+        alt: "The AI Agent Workspace: five agents with role, live status, current task and progress, alongside accuracy and volume figures — the learner reads their team the way a manager reads a standup",
+      },
+      {
+        src: "/projects/chalant-review.jpg",
+        alt: "The Review Queue states each output's confidence score, an estimated review time and whether it passed SOP compliance — Quick Approve sits beside a full Review rather than replacing it",
+      },
+      {
+        src: "/projects/chalant-sop.jpg",
+        alt: "The SOP Library: versioned standard operating procedures with compliance rings, a critical alert surfaced at the top, and each SOP linkable directly to a task",
+      },
+      {
+        src: "/projects/chalant-export.jpg",
+        alt: "The Export Center turns practice into artefacts — agent reports, analytics, decks and task data leaving in PDF, Excel, PowerPoint and JSON",
+      },
+      {
+        src: "/projects/chalant-analytics.jpg",
+        alt: "Admin analytics where each AI insight names the course and module, quantifies the drop-off, recommends an action and states its own confidence",
+      },
+    ],
+    art: { hue: "#101a2e", accent: "#2b6cff", kind: "workflow" },
+    overview:
+      "Chalant AI is a learning platform for people who need to work with AI rather than merely read about it. Alongside courses, live sessions and voice learning sits the AI Manager Path — a simulated workspace where learners run a team of AI agents, assign real tasks, review the output and answer for the quality. I led end-to-end product design across the learner and admin experiences.",
+    challenge:
+      "The skill people actually need around AI is not prompting — it is management: deciding what to delegate, judging whether the result is good enough, and knowing when a confident-sounding output should be rejected. That judgement cannot be transferred by watching a video, because the failure mode being trained against is precisely the one a passive learner exhibits: accepting plausible work without checking it. So the platform had to teach through practice with consequences, while remaining a product an administrator could run as a business — which meant one system serving a learner who wants to progress and an operator who needs to see engagement, revenue and where courses are failing.",
+    process: [
+      "Made the lesson a workspace. The AI Manager Path drops the learner into a team of five agents with roles, live status and current tasks — so the unit of learning is a decision made under realistic conditions rather than a module completed.",
+      "Exposed the numbers a manager would actually use. Every agent card carries accuracy, task volume, average turnaround and progress, so judging performance means reading evidence instead of trusting a vibe.",
+      "Designed the Review Queue as the heart of the product. Each submission states a confidence score, an estimated review time and whether it passed SOP compliance — three signals that together teach calibrated trust rather than blanket acceptance or blanket suspicion.",
+      "Kept Quick Approve next to full Review, deliberately. The shortcut has to exist for the trade-off to be real; a tool that forbids it teaches compliance, not judgement.",
+      "Anchored quality in written standards. The SOP Library holds versioned procedures with ownership, compliance scoring and critical alerts, and any SOP can be linked to a task — so good output means measured against something, not merely looks right.",
+      "Made the human checkpoint structural. Needs Review is its own column on the task board rather than a flag, so work cannot reach Done without passing through a person.",
+      "Gave practice an artefact. The Export Center sends reports, analytics, decks and task data out as PDF, Excel, PowerPoint and JSON, so a training exercise ends in something the learner can actually use at work.",
+      "Tuned progression for a long path. XP, levels, streaks, badges and rank sustain momentum across weeks of practice, and sit in the sidebar as ambient context rather than interrupting the work.",
+      "Built one product for two roles. A role switch reveals the operator's surfaces — course builder, path analytics, plan and revenue — so learner and admin share a single design system instead of splitting into two disconnected apps.",
+      "Made analytics end in a decision. Each AI insight names the course and module, quantifies the problem, proposes a specific action and states its own confidence — modelling, in the admin product, exactly the calibrated-trust behaviour the learner product is teaching.",
+    ],
+    outcome:
+      "A learning product where the curriculum is the work itself: agents to delegate to, confidence scores and SOPs to judge against, a review step that cannot be skipped structurally, and exports that turn practice into deliverables. Learner and operator share one design system, and the same principle runs through both — surface the evidence, name the confidence, and leave the judgement with the person.",
+    deliverables: [
+      "AI agent workspace",
+      "Review queue & confidence system",
+      "SOP library",
+      "Task management (Kanban, timeline, checklist)",
+      "Export centre",
+      "Admin analytics & insights",
+      "Gamification system",
+      "Design system",
+    ],
+  },
+  {
+    slug: "kremor-ai",
+    title: "Kremor AI",
+    category: "AI Product Experience",
+    tagline:
+      "Role-based experiences for an AI-powered African fashion platform, from artisan workflows to AI-assisted custom outfits.",
+    year: "2024 — 2026",
+    status: "Full case study",
+    role: "UI/UX Designer (part-time)",
+    tags: ["Product Strategy", "Workflow Design", "Interface Design"],
+    caseStudy: true,
+    art: { hue: "#2b0f1d", accent: "#ff3c31", kind: "fashion" },
+    overview:
+      "At Kremor AI I designed role-based product experiences for an AI-powered African fashion platform, supporting artisan and admin workflows alongside AI-assisted custom outfit journeys.",
+    challenge:
+      "Three audiences — customers, artisans and admins — share one platform but need very different views of the same order. AI-assisted design also had to feel like a helpful collaborator rather than a black box.",
+    process: [
+      "Created user flows and interface concepts for AI-driven product features.",
+      "Translated stakeholder requirements and usability findings into practical design improvements during product discovery.",
+      "Maintained design-system components, documentation and hand-off specifications for front-end implementation.",
+      "Evaluated 96+ complex AI interaction tasks to identify usability patterns and improve internal design workflows.",
+    ],
+    outcome:
+      "Role-based experiences with a maintained design system and clearer AI interaction patterns across the platform.",
+    deliverables: [
+      "User flows",
+      "Role-based dashboards",
+      "AI interaction patterns",
+      "Design system maintenance",
+      "Hand-off documentation",
+    ],
+  },
+  {
     slug: "arete",
     title: "Arete",
     category: "Digital Healthcare & Telemedicine Platform",
     tagline:
       "Connecting consultations, HMO coverage, prescriptions and pharmacy fulfilment in one calm journey.",
-    year: "2025",
+    year: "2026",
     status: "Full case study",
     role: "End-to-end product designer",
     tags: ["Research", "UX Strategy", "Product Design", "Usability Testing"],
-    featured: true,
     caseStudy: true,
     cover:
       "https://mir-s3-cdn-cf.behance.net/projects/original/8e80fc255070051.Y3JvcCwyOTE3LDIyODIsNDYyLDA.png",
@@ -75,77 +348,6 @@ export const projects: Project[] = [
       "UX writing",
       "Design system",
       "Interactive prototype",
-    ],
-  },
-  {
-    slug: "synqit",
-    title: "Synqit",
-    category: "Web3 Collaboration Platform",
-    tagline:
-      "Helping teams discover and engage with the right partners, projects and communities across Web3.",
-    year: "2025",
-    status: "Deck on Behance",
-    role: "Product designer",
-    tags: ["Product Design", "Interaction Design", "High-Fidelity UI"],
-    featured: true,
-    caseStudy: false,
-    cover: "/projects/synqit-laptop.jpg",
-    frame: "flat",
-    gallery: [
-      {
-        src: "/projects/synqit-desk.jpg",
-        alt: "Synqit's mobile experience shown on a phone alongside a laptop on a desk",
-      },
-    ],
-    externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
-    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
-    overview:
-      "Synqit is a Web3 collaboration platform built around discovering and engaging with the right partners, projects and communities. I designed the responsive product and marketing surfaces across desktop and mobile. The full presentation is published on Behance.",
-    deliverables: [
-      "Responsive web design",
-      "Interaction design",
-      "High-fidelity UI",
-      "Visual system",
-    ],
-  },
-  {
-    slug: "project-management-dashboard",
-    title: "Reporting Portal",
-    category: "Project Management Dashboard",
-    tagline:
-      "A KPI-first reporting dashboard where task boards, milestones and risk all read at a glance.",
-    year: "2025",
-    status: "Deck on Behance",
-    role: "Product designer",
-    tags: ["Dashboard Design", "Information Architecture", "Data Visualisation"],
-    featured: true,
-    caseStudy: false,
-    cover: "/projects/pm-dashboard-laptop.jpg",
-    frame: "flat",
-    gallery: [
-      {
-        src: "/projects/pm-dashboard-light.jpg",
-        alt: "Reporting Portal in light mode: key metrics row, filter bar, and a four-column task board beside upcoming milestones",
-      },
-      {
-        src: "/projects/pm-dashboard-dark.jpg",
-        alt: "The same dashboard in dark mode, with the metric cards and task board colour-coded by status",
-      },
-      {
-        src: "/projects/pm-dashboard-phone.jpg",
-        alt: "Reporting Portal's mobile layout shown on a phone",
-      },
-    ],
-    externalUrl: `${BEHANCE}/235694983/Project-Management-Dashboard`,
-    art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
-    overview:
-      "Reporting Portal is a project management dashboard built around a KPI-first overview: a key-metrics row for total projects, tasks due, at-risk and critical items, a filter bar across project, team, date range and status, and a task board that moves work through To Do, In Progress, Review and Done alongside upcoming milestones. It ships in both light and dark themes, and adapts down to mobile. The full presentation is published on Behance.",
-    deliverables: [
-      "Dashboard design",
-      "Information architecture",
-      "Task board & milestone views",
-      "Light and dark themes",
-      "Responsive layout",
     ],
   },
   {
@@ -221,7 +423,6 @@ export const projects: Project[] = [
       "Mobile UX",
       "Trust and Clarity",
     ],
-    featured: true,
     caseStudy: true,
     cover: "/projects/loan-home.jpg",
     frame: "flat",
@@ -262,161 +463,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "mobile-banking-app",
-    title: "Mobile Banking App",
-    category: "Digital Banking Interface",
-    tagline:
-      "Everyday banking on mobile — balances, transfers and transaction history.",
-    year: "2024",
-    status: "Deck on Behance",
-    role: "UI/UX Designer",
-    tags: ["Fintech UX", "Mobile UX", "UI Design"],
-    caseStudy: false,
-    cover:
-      "https://mir-s3-cdn-cf.behance.net/projects/404/3f6097175308707.Y3JvcCw5MTQsNzE1LDYsMA.png",
-    frame: "phone",
-    externalUrl: `${BEHANCE}/175308707/Mobile-banking-App-UI-design`,
-    art: { hue: "#101a2b", accent: "#f4f3ef", kind: "banking" },
-    overview:
-      "A mobile banking interface covering core everyday banking tasks. The full presentation is published on Behance.",
-    deliverables: ["Mobile UX", "UI design", "Banking flows"],
-  },
-
-  {
-    slug: "pay4me",
-    title: "Pay4Me App",
-    category: "Cross-Border Payments Platform",
-    tagline:
-      "Paying tuition, SEVIS and visa fees across borders — for students whose admission depends on the transfer clearing.",
-    year: "2025",
-    status: "Full case study",
-    role: "Product designer",
-    tags: ["Fintech UX", "Cross-Border Payments", "Trust & Credibility", "Mobile UX"],
-    featured: true,
-    caseStudy: true,
-    cover: "/projects/pay4me-hero.jpg",
-    frame: "flat",
-    gallery: [
-      {
-        src: "/projects/pay4me-features.jpg",
-        alt: "The product named in the vocabulary of the journey: tuition and school fees paid to named institutions, and a separate block for SEVIS, WES, visa and credential-evaluation payments",
-      },
-      {
-        src: "/projects/pay4me-map.jpg",
-        alt: "Trust built through evidence — a world map of the countries served, with video testimonials from students rather than written quotes",
-      },
-      {
-        src: "/projects/pay4me-qr.jpg",
-        alt: "The FAQ handoff: a QR code that carries the visitor from desktop research to the app on their phone, where the payment actually happens",
-      },
-      {
-        src: "/projects/pay4me-download.jpg",
-        alt: "Download section pairing the app-store routes with the in-app home screen, so the product is visible before installation",
-      },
-    ],
-    art: { hue: "#0f2418", accent: "#3ddc84", kind: "banking" },
-    overview:
-      "Pay4Me is a cross-border payments platform for international students and immigrants — paying tuition, SEVIS, I-20, visa and credential-evaluation fees to institutions and government agencies abroad. I designed the mobile product and the marketing site that has to earn a stranger's trust before they will download it.",
-    challenge:
-      "For an international student, a payment is not a transaction — it is a deadline. Miss a SEVIS fee and the visa appointment goes with it; miss a tuition instalment and the admission can lapse. Yet the money usually has to travel the hardest possible route: from a family in one currency, through a banking system with limited access to dollars, to a university that only recognises payments arriving in a particular form. Traditional wires are slow, expensive and opaque, and the person waiting has no way to see where their money is. Two design problems follow from that. The sums are often a family's savings, sent by someone who has never heard of the company — so credibility has to be established before the app is even installed. And the person paying is frequently not the person benefiting, which breaks the assumption almost every payment app is built on.",
-    process: [
-      "Designed for the sponsor, not just the account holder. Parents and relatives fund most of these payments, so the product treats sponsored payment as a first-class type alongside seamless and cross-border — rather than bending a personal wallet into a use case it was never shaped for.",
-      "Made recipients people instead of account numbers. Recent transfers appear as faces and first names, and the search field asks you to find a friend or family member to send money to — matching how these transfers are actually described out loud, and removing a common source of costly typos.",
-      "Put currency where the money is. The balance carries its own currency switcher rather than burying conversion in a settings screen, because holding and thinking in more than one currency is the normal state for this user, not an edge case.",
-      "Surfaced verification status as identity. The account tier sits beside the user's name and verified badge, because in this category tier determines transfer limits — so what would otherwise be buried compliance state becomes information the user needs before starting a large payment.",
-      "Named the real jobs rather than generic ones. The site speaks in SEVIS, WES, I-20, visa applications and credential evaluations, not payments and services — using the exact vocabulary of the immigration journey, which both signals competence and lets people recognise their situation instantly.",
-      "Built the marketing site as trust architecture, layered by kind of doubt: payment processors and named universities answer is this real, a world map answers do you work where I am, video testimonials from students answer has this worked for someone like me, and an FAQ given two full columns answers the rest.",
-      "Bridged desktop research to mobile action with a QR code. People investigate a payments company on a laptop but pay on a phone, so the site closes that gap directly rather than asking them to search an app store later.",
-      "Kept everyday utility in the app between the big moments. Airtime top-up and bill payment give people a reason to open it in the months between tuition instalments, so the product is already familiar when the payment that matters arrives.",
-      "Made support a destination, not a dead end. It sits in the bottom navigation as one of four primary tabs — appropriate for high-value, high-anxiety transfers where being unable to reach a human is itself the failure.",
-    ],
-    outcome:
-      "A payments product shaped around the real unit of work — a family funding someone else's education across a border, against a deadline. Sponsored payments are designed for rather than tolerated, verification and currency are treated as everyday context instead of settings, the interface speaks the immigration journey's own vocabulary, and the site does the credibility work before the download rather than after it.",
-    deliverables: [
-      "Mobile app design",
-      "Sponsored & cross-border payment flows",
-      "Multi-currency balance & transfers",
-      "Marketing site design",
-      "Trust & credibility system",
-      "FAQ and support experience",
-    ],
-  },
-
-  /* ---- CV-documented work, written case studies, generated artwork ---- */
-
-  {
-    slug: "chalant-ai",
-    title: "Chalant AI",
-    category: "AI Learning Platform & Agent Workspace",
-    tagline:
-      "Teaching people to manage AI by giving them a team to manage — with the judgement built in, not lectured about.",
-    year: "2025",
-    status: "Full case study",
-    role: "Lead product designer",
-    tags: [
-      "AI Product Design",
-      "Information Architecture",
-      "Dashboard Design",
-      "Design System",
-      "Gamification",
-    ],
-    featured: true,
-    caseStudy: true,
-    cover: "/projects/chalant-tasks.jpg",
-    frame: "flat",
-    gallery: [
-      {
-        src: "/projects/chalant-workspace.jpg",
-        alt: "The AI Agent Workspace: five agents with role, live status, current task and progress, alongside accuracy and volume figures — the learner reads their team the way a manager reads a standup",
-      },
-      {
-        src: "/projects/chalant-review.jpg",
-        alt: "The Review Queue states each output's confidence score, an estimated review time and whether it passed SOP compliance — Quick Approve sits beside a full Review rather than replacing it",
-      },
-      {
-        src: "/projects/chalant-sop.jpg",
-        alt: "The SOP Library: versioned standard operating procedures with compliance rings, a critical alert surfaced at the top, and each SOP linkable directly to a task",
-      },
-      {
-        src: "/projects/chalant-export.jpg",
-        alt: "The Export Center turns practice into artefacts — agent reports, analytics, decks and task data leaving in PDF, Excel, PowerPoint and JSON",
-      },
-      {
-        src: "/projects/chalant-analytics.jpg",
-        alt: "Admin analytics where each AI insight names the course and module, quantifies the drop-off, recommends an action and states its own confidence",
-      },
-    ],
-    art: { hue: "#101a2e", accent: "#2b6cff", kind: "workflow" },
-    overview:
-      "Chalant AI is a learning platform for people who need to work with AI rather than merely read about it. Alongside courses, live sessions and voice learning sits the AI Manager Path — a simulated workspace where learners run a team of AI agents, assign real tasks, review the output and answer for the quality. I led end-to-end product design across the learner and admin experiences.",
-    challenge:
-      "The skill people actually need around AI is not prompting — it is management: deciding what to delegate, judging whether the result is good enough, and knowing when a confident-sounding output should be rejected. That judgement cannot be transferred by watching a video, because the failure mode being trained against is precisely the one a passive learner exhibits: accepting plausible work without checking it. So the platform had to teach through practice with consequences, while remaining a product an administrator could run as a business — which meant one system serving a learner who wants to progress and an operator who needs to see engagement, revenue and where courses are failing.",
-    process: [
-      "Made the lesson a workspace. The AI Manager Path drops the learner into a team of five agents with roles, live status and current tasks — so the unit of learning is a decision made under realistic conditions rather than a module completed.",
-      "Exposed the numbers a manager would actually use. Every agent card carries accuracy, task volume, average turnaround and progress, so judging performance means reading evidence instead of trusting a vibe.",
-      "Designed the Review Queue as the heart of the product. Each submission states a confidence score, an estimated review time and whether it passed SOP compliance — three signals that together teach calibrated trust rather than blanket acceptance or blanket suspicion.",
-      "Kept Quick Approve next to full Review, deliberately. The shortcut has to exist for the trade-off to be real; a tool that forbids it teaches compliance, not judgement.",
-      "Anchored quality in written standards. The SOP Library holds versioned procedures with ownership, compliance scoring and critical alerts, and any SOP can be linked to a task — so good output means measured against something, not merely looks right.",
-      "Made the human checkpoint structural. Needs Review is its own column on the task board rather than a flag, so work cannot reach Done without passing through a person.",
-      "Gave practice an artefact. The Export Center sends reports, analytics, decks and task data out as PDF, Excel, PowerPoint and JSON, so a training exercise ends in something the learner can actually use at work.",
-      "Tuned progression for a long path. XP, levels, streaks, badges and rank sustain momentum across weeks of practice, and sit in the sidebar as ambient context rather than interrupting the work.",
-      "Built one product for two roles. A role switch reveals the operator's surfaces — course builder, path analytics, plan and revenue — so learner and admin share a single design system instead of splitting into two disconnected apps.",
-      "Made analytics end in a decision. Each AI insight names the course and module, quantifies the problem, proposes a specific action and states its own confidence — modelling, in the admin product, exactly the calibrated-trust behaviour the learner product is teaching.",
-    ],
-    outcome:
-      "A learning product where the curriculum is the work itself: agents to delegate to, confidence scores and SOPs to judge against, a review step that cannot be skipped structurally, and exports that turn practice into deliverables. Learner and operator share one design system, and the same principle runs through both — surface the evidence, name the confidence, and leave the judgement with the person.",
-    deliverables: [
-      "AI agent workspace",
-      "Review queue & confidence system",
-      "SOP library",
-      "Task management (Kanban, timeline, checklist)",
-      "Export centre",
-      "Admin analytics & insights",
-      "Gamification system",
-      "Design system",
-    ],
-  },
-  {
     slug: "shortlet-lagos",
     title: "Shortlet Lagos",
     category: "Property Booking Platform",
@@ -450,98 +496,72 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "kremor-ai",
-    title: "Kremor AI",
-    category: "AI Product Experience",
+    slug: "synqit",
+    title: "Synqit",
+    category: "Web3 Collaboration Platform",
     tagline:
-      "Role-based experiences for an AI-powered African fashion platform, from artisan workflows to AI-assisted custom outfits.",
-    year: "2024 — 2026",
-    status: "Full case study",
-    role: "UI/UX Designer (part-time)",
-    tags: ["Product Strategy", "Workflow Design", "Interface Design"],
-    caseStudy: true,
-    art: { hue: "#2b0f1d", accent: "#ff3c31", kind: "fashion" },
-    overview:
-      "At Kremor AI I designed role-based product experiences for an AI-powered African fashion platform, supporting artisan and admin workflows alongside AI-assisted custom outfit journeys.",
-    challenge:
-      "Three audiences — customers, artisans and admins — share one platform but need very different views of the same order. AI-assisted design also had to feel like a helpful collaborator rather than a black box.",
-    process: [
-      "Created user flows and interface concepts for AI-driven product features.",
-      "Translated stakeholder requirements and usability findings into practical design improvements during product discovery.",
-      "Maintained design-system components, documentation and hand-off specifications for front-end implementation.",
-      "Evaluated 96+ complex AI interaction tasks to identify usability patterns and improve internal design workflows.",
-    ],
-    outcome:
-      "Role-based experiences with a maintained design system and clearer AI interaction patterns across the platform.",
-    deliverables: [
-      "User flows",
-      "Role-based dashboards",
-      "AI interaction patterns",
-      "Design system maintenance",
-      "Hand-off documentation",
-    ],
-  },
-  {
-    slug: "vista-itss",
-    title: "Vista Digital Banking",
-    category: "Multi-Country Corporate Banking",
-    tagline:
-      "One banking app for businesses operating across four markets — entities, currencies and approval mandates included.",
-    year: "2020 — 2024",
-    status: "Full case study",
-    role: "UI/UX Designer & Front-End Developer, ITSS",
-    tags: [
-      "Fintech UX",
-      "Enterprise UX",
-      "Service Design",
-      "Design Systems",
-      "Front-End",
-    ],
-    featured: true,
-    caseStudy: true,
-    cover: "/projects/vista-devices.jpg",
+      "Helping teams discover and engage with the right partners, projects and communities across Web3.",
+    year: "2026",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["Product Design", "Interaction Design", "High-Fidelity UI"],
+    caseStudy: false,
+    cover: "/projects/synqit-laptop.jpg",
     frame: "flat",
     gallery: [
       {
-        src: "/projects/vista-menu.jpg",
-        alt: "The menu screen, where the entity switcher sits directly under the user's name and last sign-in — one person moving between the legal entities and countries they hold mandates for, above transfer activities, recipient management and approvals",
-        portrait: true,
-      },
-      {
-        src: "/projects/vista-banner.jpg",
-        alt: "My Accounts: pending approvals surfaced above the fold, then accounts grouped by type with balances shown in local currency",
-      },
-      {
-        src: "/projects/vista-screens.jpg",
-        alt: "Marketing and product screens together — the campaign framing of the app alongside account filtering, custom views, pending bulk and single payment requests, and net worth summaries",
+        src: "/projects/synqit-desk.jpg",
+        alt: "Synqit's mobile experience shown on a phone alongside a laptop on a desk",
       },
     ],
-    art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
+    externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
+    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
     overview:
-      "Vista is a banking group operating across several West African markets. With ITSS I worked on its digital banking product — corporate and retail — covering onboarding and identity verification, account dashboards, transfer and approval journeys. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso. I received the Best Intern Award for my contribution to Vista.",
-    challenge:
-      "Business banking in a multi-market group breaks the assumption every consumer banking app is built on: that one person means one account in one currency in one country. A Vista customer might be a finance manager holding mandates over several legal entities across Gambia, Guinea, Sierra Leone and Burkina Faso, each with its own currency, its own regulator and its own local rules — and payments they initiate may need someone else's approval before money moves. Designing for that means holding real institutional complexity on a phone screen without either flattening it into something unsafe or exposing all of it at once. The subsidiaries added a second problem on top: four markets — anglophone and francophone, each with its own currency and regulator — needed to feel like one bank without ignoring what made each of them local.",
-    process: [
-      "Made entity the top-level context rather than a setting. The switcher sits directly beneath the user's name and last sign-in on the menu screen, so which legal entity and market you are acting in is answered before any transaction begins — the question that determines what every subsequent number and permission means.",
-      "Designed approvals as a first-class destination, not a notification. Pending requests — bulk payment, single payment, other — are surfaced above the fold on the accounts screen with their own counts, because in corporate banking the blocking task is usually someone else's payment waiting on you.",
-      "Built filtering for people who hold many accounts. Default and custom views, sorting by name or balance, and account-type selection let a user with dozens of accounts across entities save the shape they actually work in, rather than scrolling a flat list every session.",
-      "Kept balances in local currency and led with available balance rather than ledger balance, since the practical question before a transfer is what can actually be moved today.",
-      "Anchored navigation on the four things corporate users return to — accounts, transfers, messages and menu — and kept secure messaging and support inside the app, because for business banking the alternative is a branch visit.",
-      "Treated last sign-in, session state and language selection as trust signals rather than clutter, surfacing them where an account holder checks for anything unexpected.",
-      "Built one design system across the four subsidiaries so shared journeys stayed consistent while local requirements, languages and regulatory copy could vary. With Gambia and Sierra Leone operating in English and Guinea and Burkina Faso in French, language selection had to be a first-class part of the sign-in experience rather than a setting found later.",
-      "Carried the same visual system into campaign and graphic design for the product, and used HTML/CSS to review front-end builds against the designs, keeping interfaces responsive and pixel-accurate through implementation.",
-    ],
-    outcome:
-      "A digital banking product that treats multi-entity, multi-currency, multi-market operation as the normal case rather than an edge case — with approvals designed as core workflow, account views that scale to real portfolios, and one design system serving four localised subsidiaries across Gambia, Guinea, Sierra Leone and Burkina Faso. The work was recognised with the Best Intern Award for contributions to Vista.",
+      "Synqit is a Web3 collaboration platform built around discovering and engaging with the right partners, projects and communities. I designed the responsive product and marketing surfaces across desktop and mobile. The full presentation is published on Behance.",
     deliverables: [
-      "Onboarding & identity verification",
-      "Account dashboards & filtering",
-      "Transfer & approval workflows",
-      "Multi-entity architecture",
-      "Design system across four markets",
-      "English & French localisation",
-      "Campaign & graphic design",
-      "Front-end review (HTML/CSS)",
+      "Responsive web design",
+      "Interaction design",
+      "High-fidelity UI",
+      "Visual system",
+    ],
+  },
+  {
+    slug: "project-management-dashboard",
+    title: "Reporting Portal",
+    category: "Project Management Dashboard",
+    tagline:
+      "A KPI-first reporting dashboard where task boards, milestones and risk all read at a glance.",
+    year: "2025",
+    status: "Deck on Behance",
+    role: "Product designer",
+    tags: ["Dashboard Design", "Information Architecture", "Data Visualisation"],
+    caseStudy: false,
+    cover: "/projects/pm-dashboard-laptop.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/pm-dashboard-light.jpg",
+        alt: "Reporting Portal in light mode: key metrics row, filter bar, and a four-column task board beside upcoming milestones",
+      },
+      {
+        src: "/projects/pm-dashboard-dark.jpg",
+        alt: "The same dashboard in dark mode, with the metric cards and task board colour-coded by status",
+      },
+      {
+        src: "/projects/pm-dashboard-phone.jpg",
+        alt: "Reporting Portal's mobile layout shown on a phone",
+      },
+    ],
+    externalUrl: `${BEHANCE}/235694983/Project-Management-Dashboard`,
+    art: { hue: "#14122b", accent: "#7c68fd", kind: "workflow" },
+    overview:
+      "Reporting Portal is a project management dashboard built around a KPI-first overview: a key-metrics row for total projects, tasks due, at-risk and critical items, a filter bar across project, team, date range and status, and a task board that moves work through To Do, In Progress, Review and Done alongside upcoming milestones. It ships in both light and dark themes, and adapts down to mobile. The full presentation is published on Behance.",
+    deliverables: [
+      "Dashboard design",
+      "Information architecture",
+      "Task board & milestone views",
+      "Light and dark themes",
+      "Responsive layout",
     ],
   },
 ];
