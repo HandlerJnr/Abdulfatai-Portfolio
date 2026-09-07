@@ -34,7 +34,7 @@ export default async function CaseStudy({ params }: { params: Params }) {
       {/* Header */}
       <header className="border-b border-line/60 px-5 pb-12 pt-16 md:px-10 md:pb-16 md:pt-24">
         <Reveal>
-          <Link href="/#work" className="link-line eyebrow !text-white/70">
+          <Link href="/#featured" className="link-line eyebrow !text-white/70">
             ← All work
           </Link>
         </Reveal>

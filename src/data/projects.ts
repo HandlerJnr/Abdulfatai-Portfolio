@@ -666,5 +666,11 @@ export const projects: Project[] = [
 ];
 
 export const featuredProjects = projects.filter((p) => p.featured);
+/**
+ * Everything not in the featured gallery. The two lists are deliberately
+ * disjoint — repeating a featured project further down the page adds length
+ * without adding information.
+ */
+export const otherProjects = projects.filter((p) => !p.featured);
 export const getProject = (slug: string) =>
   projects.find((p) => p.slug === slug);

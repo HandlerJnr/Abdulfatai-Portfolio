@@ -2,36 +2,40 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { projects } from "@/data/projects";
+import { otherProjects } from "@/data/projects";
 import { Marquee } from "./Marquee";
 import { Reveal } from "./Reveal";
 
 export function SelectedWorks() {
   const reduce = useReducedMotion();
+  // The featured gallery above already carries those projects in full; listing
+  // them again here would only lengthen the page.
+  if (!otherProjects.length) return null;
+
   return (
     <section id="work" aria-labelledby="work-heading" className="scroll-mt-16">
       <Marquee
-        items={["SELECTED WORK", "SELECTED WORK", "SELECTED WORK"]}
+        items={["MORE WORK", "MORE WORK", "MORE WORK"]}
         separator="—"
         duration={30}
         className="display border-y border-line/60 py-4 text-[clamp(2.4rem,7vw,7rem)] text-white"
-        ariaLabel="Selected work"
+        ariaLabel="More work"
       />
 
       <div className="px-5 pt-16 md:px-10 md:pt-24">
         <Reveal>
           <h2 id="work-heading" className="sr-only">
-            Selected work
+            More work
           </h2>
-          <p className="max-w-[40ch] text-[clamp(1.1rem,1.6vw,1.6rem)] leading-snug text-white/80">
-            Selected work across healthcare, fintech, AI, SaaS, property, and
-            digital services.
+          <p className="max-w-[42ch] text-[clamp(1.1rem,1.6vw,1.6rem)] leading-snug text-white/80">
+            Beyond the featured work — further case studies, and decks published
+            in full on Behance.
           </p>
         </Reveal>
       </div>
 
       <ol className="mt-14 border-t border-line/60 md:mt-20">
-        {projects.map((p, i) => (
+        {otherProjects.map((p, i) => (
           <motion.li
             key={p.slug}
             className="border-b border-line/60"

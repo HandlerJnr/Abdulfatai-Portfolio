@@ -12,7 +12,7 @@ export function FeaturedGallery() {
     <section
       id="featured"
       aria-labelledby="featured-heading"
-      className="border-t border-line/60 py-20 md:py-28"
+      className="scroll-mt-16 border-t border-line/60 py-20 md:py-28"
     >
       <div className="mb-10 flex items-end justify-between px-5 md:px-10">
         <Reveal>
@@ -22,7 +22,7 @@ export function FeaturedGallery() {
         </Reveal>
         <Reveal delay={0.1}>
           <Link href="/#work" className="link-line eyebrow !text-white/80">
-            All projects
+            More projects
           </Link>
         </Reveal>
       </div>

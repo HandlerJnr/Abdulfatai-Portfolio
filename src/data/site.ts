@@ -21,7 +21,9 @@ export const site = {
   ],
   nav: [
     { label: "Home", href: "/" },
-    { label: "Work", href: "/#work" },
+    // Points at the featured gallery: "Work" should land on the strongest
+    // projects, not on the section that holds everything else.
+    { label: "Work", href: "/#featured" },
     { label: "About", href: "/#about" },
     { label: "Contact", href: "/#contact" },
   ],
