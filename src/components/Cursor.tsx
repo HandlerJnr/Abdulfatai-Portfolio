@@ -63,7 +63,9 @@ export function Cursor() {
   return (
     <motion.div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[90] hidden items-center justify-center rounded-full mix-blend-normal [body.has-cursor_&]:flex"
+      // Above every overlay on the site (nav 70/80, lightboxes 95, skip-link
+      // 100) — the cursor is the pointer, so nothing may ever paint over it.
+      className="pointer-events-none fixed left-0 top-0 z-[120] hidden items-center justify-center rounded-full mix-blend-normal [body.has-cursor_&]:flex"
       style={{
         x: reduce ? x : sx,
         y: reduce ? y : sy,
