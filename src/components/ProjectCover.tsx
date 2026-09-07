@@ -92,20 +92,13 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
   // "flat" — the image is already a finished mockup with its own staging, so it
   // fills the frame edge to edge rather than sitting inside a second chrome.
   if (project.frame === "flat") {
-    // A full-page slide is set to "contain" so its type is never cropped by
-    // the 16:9 hero or the 4:3 card; `coverBg` matches the slide's own
-    // background so the letterboxing reads as part of the image.
-    const contain = project.coverFit === "contain";
     return (
-      <div
-        className="relative h-full w-full overflow-hidden"
-        style={{ backgroundColor: project.coverBg ?? "#05050C" }}
-      >
+      <div className="relative h-full w-full overflow-hidden bg-[#05050C]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           {...imgProps}
           alt={imgProps.alt}
-          className={`h-full w-full ${contain ? "object-contain" : "object-cover"}`}
+          className="h-full w-full object-cover"
         />
         <span className="display pointer-events-none absolute bottom-3 left-4 text-xs tracking-[0.22em] text-white/55 mix-blend-difference md:bottom-5 md:left-7 md:text-sm">
           {project.title.toUpperCase()} — {project.year}

@@ -12,14 +12,6 @@ export type Project = {
   cover?: string;
   /** How the cover should be framed in the mockup shell. */
   frame?: "browser" | "phone" | "flat" | "portrait";
-  /**
-   * "contain" shows the whole cover rather than filling the frame — for a
-   * full-page slide whose type would be cropped by the 16:9 hero or the 4:3
-   * card. Pair it with `coverBg` so the letterboxing is invisible.
-   */
-  coverFit?: "cover" | "contain";
-  /** Ground behind a contained cover. Match the image's own background. */
-  coverBg?: string;
   /** Extra imagery shown below the case-study body. */
   gallery?: { src: string; alt: string; portrait?: boolean }[];
   /** Direct link to the project elsewhere — a Behance deck, or a live product. */
@@ -544,11 +536,14 @@ export const projects: Project[] = [
     caseStudy: true,
     // Local asset. The Behance CDN URL that used to sit here hotlink-blocked
     // and failed intermittently in production.
-    cover: "/projects/arete-overview.jpg",
+    cover: "/projects/arete-cover.jpg",
     frame: "flat",
-    coverFit: "contain",
-    coverBg: "#000000",
     gallery: [
+      {
+        src: "/projects/arete-overview.jpg",
+        alt:
+          "The project framing: an end-to-end product design role across the patient, provider, HMO and pharmacy surfaces, focused on access, trust and continuity",
+      },
       {
         src: "/projects/arete-challenge.jpg",
         alt:
