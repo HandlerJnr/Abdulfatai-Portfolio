@@ -79,6 +79,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           {...imgProps}
+          alt={imgProps.alt}
           className="relative h-full w-auto max-w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,.7)]"
         />
         <span className="display pointer-events-none absolute bottom-3 left-4 text-xs tracking-[0.22em] text-white/45 md:bottom-5 md:left-7 md:text-sm">
@@ -96,6 +97,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           {...imgProps}
+          alt={imgProps.alt}
           className="h-full w-full object-cover"
         />
         <span className="display pointer-events-none absolute bottom-3 left-4 text-xs tracking-[0.22em] text-white/55 mix-blend-difference md:bottom-5 md:left-7 md:text-sm">
@@ -130,6 +132,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 {...imgProps}
+          alt={imgProps.alt}
                 className="h-full w-auto rounded-[7%/3.4%] object-cover"
               />
             </div>
@@ -152,6 +155,7 @@ export function ProjectCover({ project, size = "card", priority }: Props) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             {...imgProps}
+          alt={imgProps.alt}
             className="block w-full object-cover"
             style={{ aspectRatio: size === "hero" ? "16 / 9" : "16 / 10" }}
           />

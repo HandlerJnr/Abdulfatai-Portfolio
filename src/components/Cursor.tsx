@@ -17,7 +17,6 @@ type Mode = "default" | "view" | "link" | "hidden";
  * pointer-events: none guarantees it never blocks clicks.
  */
 export function Cursor() {
-  const [enabled, setEnabled] = useState(false);
   const [mode, setMode] = useState<Mode>("hidden");
   const reduce = useReducedMotion();
 
@@ -30,7 +29,6 @@ export function Cursor() {
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
     if (!fine.matches) return;
-    setEnabled(true);
     document.body.classList.add("has-cursor");
 
     const move = (e: PointerEvent) => {
@@ -60,14 +58,12 @@ export function Cursor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [x, y]);
 
-  if (!enabled) return null;
-
   const size = mode === "view" ? 96 : mode === "link" ? 44 : 14;
 
   return (
     <motion.div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[90] flex items-center justify-center rounded-full mix-blend-normal"
+      className="pointer-events-none fixed left-0 top-0 z-[90] hidden items-center justify-center rounded-full mix-blend-normal [body.has-cursor_&]:flex"
       style={{
         x: reduce ? x : sx,
         y: reduce ? y : sy,
