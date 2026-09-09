@@ -34,7 +34,8 @@ export const credentialGroups: CredentialGroup[] = [
   {
     id: "references",
     title: "References",
-    blurb: "Written by the people I reported to, and readable in full.",
+    blurb:
+      "The strongest evidence on this site: what the people I reported to say about the work, in their own words. Read them in full rather than taking a CV line on trust.",
     items: [
       {
         slug: "bizinc-ceo-reference",
@@ -75,7 +76,8 @@ export const credentialGroups: CredentialGroup[] = [
   {
     id: "awards",
     title: "Awards & recognition",
-    blurb: "Recognition from the organisations the work was done for.",
+    blurb:
+      "Recognition from the organisations the work was done for. The ITSS letter matters most — it names the Vista Bank project specifically, tying the recognition to a case study on this site.",
     items: [
       {
         slug: "itss-most-outstanding-intern",
@@ -113,7 +115,8 @@ export const credentialGroups: CredentialGroup[] = [
   {
     id: "design",
     title: "Design certifications",
-    blurb: "Formal training in the craft itself.",
+    blurb:
+      "Formal training in the craft. Useful context rather than the main evidence — the work itself is upstream of this.",
     items: [
       {
         slug: "zidio-uiux-internship",
@@ -164,7 +167,7 @@ export const credentialGroups: CredentialGroup[] = [
     id: "ai-product",
     title: "AI & product practice",
     blurb:
-      "Short applied courses behind the AI-assisted workflow and the AI product work. Length is stated as the certificate states it.",
+      "Short applied courses behind the AI product work and the AI-assisted workflow. Length is stated as the certificate states it, so their weight is clear.",
     items: [
       {
         slug: "udemy-ai-voice-agents",
@@ -214,7 +217,8 @@ export const credentialGroups: CredentialGroup[] = [
   {
     id: "language",
     title: "Language",
-    blurb: "",
+    blurb:
+      "Independently assessed, relevant for UK and European roles.",
     items: [
       {
         slug: "efset-english-c1",

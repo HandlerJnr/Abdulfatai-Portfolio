@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Credential } from "@/data/credentials";
 import { Reveal } from "./Reveal";
+import sizes from "@/data/imageSizes.json";
+
+const dim = (src: string) =>
+  (sizes as Record<string, { w: number; h: number }>)[src];
 
 const isPdf = (path: string) => path.toLowerCase().endsWith(".pdf");
 
@@ -51,6 +55,8 @@ export function CredentialGrid({ items }: { items: Credential[] }) {
                     alt=""
                     loading="lazy"
                     decoding="async"
+                    width={dim(c.preview)?.w}
+                    height={dim(c.preview)?.h}
                     className="max-h-full w-auto max-w-full object-contain shadow-[0_18px_40px_-18px_rgba(0,0,0,.9)] transition-transform duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.03]"
                   />
                 </div>

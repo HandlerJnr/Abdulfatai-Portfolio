@@ -1,4 +1,6 @@
 import { Hero } from "@/components/Hero";
+import { Credibility } from "@/components/Credibility";
+import { Outcomes } from "@/components/Outcomes";
 import { FeaturedGallery } from "@/components/FeaturedGallery";
 import { Approach } from "@/components/Approach";
 import { SelectedWorks } from "@/components/SelectedWorks";
@@ -10,7 +12,9 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Credibility />
       <FeaturedGallery />
+      <Outcomes />
       <Approach />
       <SelectedWorks />
       <Expertise />

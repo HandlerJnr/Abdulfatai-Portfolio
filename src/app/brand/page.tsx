@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: `Brand & identity — ${site.name}`,
   description:
     "Brand guidelines and branded collateral by Abdulfatai Jamiu — complete identity systems for Shortlet Lagos and Female Rise, and investor decks for Female Rise Capital, Coworthy Capital and Synqit. Every page readable in the browser.",
+  alternates: { canonical: "/brand" },
+  openGraph: {
+    title: "Brand & identity — Abdulfatai Jamiu",
+    description:
+      "Identity systems and branded collateral supporting a product design practice.",
+    type: "article",
+    url: "/brand",
+    images: [{ url: "/brand/pages/female-rise-brand-guide/p01.jpg", alt: "Brand guideline pages" }],
+  },
 };
 
 export default function BrandPage() {
@@ -31,9 +40,10 @@ export default function BrandPage() {
           </div>
           <Reveal delay={0.2} className="lg:col-span-4">
             <p className="text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/75">
-              The identity work behind some of the products on this site, and
-              the documents built on top of it. Every page is readable here —
-              open one and turn through it.
+              My brand and identity work supports my product design practice:
+              it helps me build clearer systems, stronger product narratives and
+              more consistent visual experiences. Product design is the centre
+              of this portfolio — this is the supporting evidence.
             </p>
           </Reveal>
         </div>
@@ -68,13 +78,20 @@ export default function BrandPage() {
       <section className="border-t border-line/60 px-5 py-16 md:px-10 md:py-24">
         <Reveal>
           <h2 className="display text-[clamp(2rem,4vw,3.6rem)] leading-none">
-            The products these belong to
+            Back to the product work
           </h2>
           <p className="mt-6 max-w-[60ch] leading-relaxed text-white/70">
             Shortlet Lagos and Synqit are both full product case studies here —
             the identity and the interface were designed by the same hand.
           </p>
           <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
+            <Link
+              href="/#featured"
+              data-cursor="link"
+              className="link-line display text-[clamp(1.6rem,3vw,2.6rem)] tracking-wide"
+            >
+              All product work →
+            </Link>
             <Link
               href="/work/shortlet-lagos"
               data-cursor="link"

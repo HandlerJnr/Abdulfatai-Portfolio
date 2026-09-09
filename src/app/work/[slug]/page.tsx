@@ -5,6 +5,7 @@ import { projects, getProject } from "@/data/projects";
 import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal, RevealLines } from "@/components/Reveal";
 import { site } from "@/data/site";
+import sizes from "@/data/imageSizes.json";
 
 type Params = Promise<{ slug: string }>;
 
@@ -15,9 +16,29 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const p = getProject((await params).slug);
   if (!p) return {};
+  const title = `${p.title} — ${p.category}`;
+  // The overview is the honest description of the work; fall back to the
+  // tagline for the two projects that lead with one.
+  const description = `${p.tagline} ${p.overview}`.slice(0, 300).trim();
+  const image = p.cover ?? "/og.jpg";
+  const url = `/work/${p.slug}`;
   return {
-    title: `${p.title} — ${p.category} | ${site.name}`,
-    description: p.tagline,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${site.name}`,
+      description,
+      type: "article",
+      url,
+      images: [{ url: image, alt: `${p.title} — ${p.category}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${site.name}`,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -61,7 +82,7 @@ export default async function CaseStudy({ params }: { params: Params }) {
           ["Role", project.role],
           ["Year", project.year],
           ["Focus", project.tags.join(", ")],
-          ["Status", project.status ?? "Case study"],
+          ["Status", project.productStatus ?? project.status ?? "Case study"],
         ].map(([k, v]) => (
           <div key={k} className="border-b border-line/60 px-5 py-6 last:border-b-0 sm:border-r sm:[&:nth-child(2n)]:border-r-0 lg:border-b-0 lg:[&:nth-child(2n)]:border-r lg:last:border-r-0 md:px-10">
             <dt className="eyebrow">{k}</dt>
@@ -106,11 +127,16 @@ export default async function CaseStudy({ params }: { params: Params }) {
               <dl className="mt-6 border-t border-line/60">
                 {(
                   [
+                    ["Role", project.role],
+                    ["Ownership", project.context.ownership],
+                    ["Timeline", project.context.timeline],
+                    ["Product status", project.productStatus],
+                    ["Platform", project.context.platform],
+                    ["Primary users", project.context.primaryUsers],
+                    ["Main focus", project.context.focus],
                     ["Product", project.context.product],
                     ["Team", project.context.team],
-                    ["Duration", project.context.duration],
                     ["Scope", project.context.scope],
-                    ["Platform", project.context.platform],
                     ["Constraints", project.context.constraints],
                   ] as const
                 )
@@ -118,7 +144,7 @@ export default async function CaseStudy({ params }: { params: Params }) {
                   .map(([k, v]) => (
                     <div
                       key={k}
-                      className="grid gap-1 border-b border-line/60 py-4 sm:grid-cols-[7rem_1fr] sm:gap-4"
+                      className="grid gap-1 border-b border-line/60 py-4 sm:grid-cols-[8rem_1fr] sm:gap-4"
                     >
                       <dt className="eyebrow pt-0.5">{k}</dt>
                       <dd className="text-sm leading-relaxed text-white/75">{v}</dd>
@@ -143,6 +169,17 @@ export default async function CaseStudy({ params }: { params: Params }) {
         <div className="lg:col-span-7 lg:col-start-6">
           {project.caseStudy ? (
             <>
+              {project.contribution && (
+                <Reveal className="mb-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    My contribution
+                  </h2>
+                  <p className="mt-6 rounded-sm border border-line/60 bg-white/[0.025] p-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/85">
+                    {project.contribution}
+                  </p>
+                </Reveal>
+              )}
+
               <Reveal>
                 <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
                   The problem
@@ -160,6 +197,39 @@ export default async function CaseStudy({ params }: { params: Params }) {
                   <p className="mt-6 border-l-2 border-accent/70 pl-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
                     {project.difficulty}
                   </p>
+                </Reveal>
+              )}
+
+              {project.research && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    Research &amp; discovery
+                  </h2>
+                  <p className="eyebrow mt-6 !text-accent/90">
+                    Research status — {project.research.status}
+                  </p>
+                  <dl className="mt-6 border-t border-line/60">
+                    {(
+                      [
+                        ["Who", project.research.considered],
+                        ["Investigated", project.research.investigated],
+                        ["Learned", project.research.learned],
+                        ["Changed", project.research.changed],
+                        ["Still open", project.research.uncertain],
+                        ["Next test", project.research.nextTest],
+                      ] as const
+                    )
+                      .filter(([, v]) => Boolean(v))
+                      .map(([k, v]) => (
+                        <div
+                          key={k}
+                          className="grid gap-1 border-b border-line/60 py-5 sm:grid-cols-[7rem_1fr] sm:gap-6"
+                        >
+                          <dt className="eyebrow pt-1">{k}</dt>
+                          <dd className="leading-relaxed text-white/75">{v}</dd>
+                        </div>
+                      ))}
+                  </dl>
                 </Reveal>
               )}
 
@@ -202,6 +272,54 @@ export default async function CaseStudy({ params }: { params: Params }) {
                 </p>
               </Reveal>
 
+              {project.metrics?.length ? (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    {project.metrics.every((m) => m.kind === "scope")
+                      ? "Product scope"
+                      : "Outcomes & scope"}
+                  </h2>
+                  {project.tractionNote && (
+                    <p className="mt-6 max-w-[70ch] text-sm leading-relaxed text-white/55">
+                      {project.tractionNote}
+                    </p>
+                  )}
+                  <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+                    {project.metrics.map((m) => (
+                      <li
+                        key={m.label}
+                        className="rounded-sm border border-line/60 bg-white/[0.02] p-5"
+                      >
+                        <span
+                          className={`text-[0.625rem] uppercase tracking-[0.16em] ${
+                            m.kind === "impact"
+                              ? "text-accent/90"
+                              : "text-white/40"
+                          }`}
+                        >
+                          {m.kind === "impact"
+                            ? "Design impact"
+                            : m.kind === "scope"
+                              ? "Product scope"
+                              : "Company-reported traction"}
+                        </span>
+                        <p className="display mt-3 text-[clamp(2rem,3.4vw,3rem)] leading-none text-white">
+                          {m.value}
+                        </p>
+                        <p className="mt-3 text-sm leading-relaxed text-white/70">
+                          {m.label}
+                        </p>
+                        {m.note && (
+                          <p className="mt-2 text-xs leading-relaxed text-white/45">
+                            {m.note}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              ) : null}
+
               {project.evidence && (
                 <Reveal delay={0.1} className="mt-16">
                   <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
@@ -220,6 +338,17 @@ export default async function CaseStudy({ params }: { params: Params }) {
                   </h2>
                   <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/75">
                     {project.improveNext}
+                  </p>
+                </Reveal>
+              )}
+
+              {project.improveWithTime && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    With more time
+                  </h2>
+                  <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/75">
+                    {project.improveWithTime}
                   </p>
                 </Reveal>
               )}
@@ -271,7 +400,9 @@ export default async function CaseStudy({ params }: { params: Params }) {
                       alt={img.alt}
                       loading="lazy"
                       decoding="async"
-                      className="block w-full"
+                      width={(sizes as Record<string, { w: number; h: number }>)[img.src]?.w}
+                      height={(sizes as Record<string, { w: number; h: number }>)[img.src]?.h}
+                      className="block h-auto w-full"
                     />
                   </div>
                   <figcaption className="mt-4 max-w-[70ch] text-sm leading-relaxed text-white/55">

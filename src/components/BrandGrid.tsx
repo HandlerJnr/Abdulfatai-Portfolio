@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { pageSrc, type BrandDoc } from "@/data/brand";
 import { Reveal } from "./Reveal";
+import sizes from "@/data/imageSizes.json";
+
+const dim = (src: string) =>
+  (sizes as Record<string, { w: number; h: number }>)[src];
 
 /**
  * Multi-page documents: a card per document, and a reader that pages through
@@ -70,6 +74,8 @@ export function BrandGrid({ items }: { items: BrandDoc[] }) {
                     alt=""
                     loading="lazy"
                     decoding="async"
+                    width={dim(pageSrc(d.slug, d.cover))?.w}
+                    height={dim(pageSrc(d.slug, d.cover))?.h}
                     className="h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.03]"
                   />
                 </div>

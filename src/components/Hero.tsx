@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Marquee } from "./Marquee";
-import { Reveal, RevealLines } from "./Reveal";
+import { Reveal } from "./Reveal";
 import { site } from "@/data/site";
 
 export function Hero() {
@@ -31,15 +31,27 @@ export function Hero() {
           id="hero-heading"
           className="display max-w-[31ch] text-[clamp(2.1rem,5.4vw,5.4rem)]"
         >
-          <RevealLines
-            lines={[
-              "I design clearer experiences",
-              "for complex digital products.",
-            ]}
-          />
+          {["I design clearer experiences", "for complex digital products."].map(
+            (line, i) => (
+              <span key={line} className="line-mask">
+                <span
+                  className="line-rise"
+                  style={{ animationDelay: `${0.08 + i * 0.09}s` }}
+                >
+                  {line}
+                </span>
+              </span>
+            ),
+          )}
         </h1>
 
-        <Reveal delay={0.45} className="mt-8 max-w-[62ch]">
+        <Reveal delay={0.4} className="mt-7 max-w-[56ch]">
+          <p className="text-[clamp(1.05rem,1.5vw,1.4rem)] leading-snug text-white">
+            Product Designer specialising in fintech, SaaS and AI products.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.45} className="mt-5 max-w-[62ch]">
           <p className="text-[clamp(1rem,1.25vw,1.2rem)] leading-relaxed text-white/75">
             I&rsquo;m Abdulfatai Jamiu, a UI/UX Product Designer and Researcher
             working across multi-market fintech, marketplace platforms, AI

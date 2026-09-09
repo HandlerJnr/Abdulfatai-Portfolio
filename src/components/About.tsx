@@ -87,7 +87,45 @@ export function About() {
           </Reveal>
         </div>
 
-        <dl className="lg:col-span-6 lg:col-start-7">
+        <div className="lg:col-span-6 lg:col-start-7">
+          <Reveal className="mb-10 grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                head: "Bizinc",
+                body: "Designed the platform from scratch; progressed intern → Product Designer → UI/UX Manager. +45% dashboard activation.",
+                href: "/work/bizinc",
+              },
+              {
+                head: "Vista",
+                body: "Multi-currency banking across four West African subsidiaries, with client recognition naming the project.",
+                href: "/work/vista-itss",
+              },
+              {
+                head: "Kremor AI",
+                body: "Three product surfaces, five operational roles, plus AI model evaluation across 96+ interaction tasks.",
+                href: "/work/kremor-ai",
+              },
+            ].map((p) => (
+              <Link
+                key={p.head}
+                href={p.href}
+                data-cursor="view"
+                className="group rounded-sm border border-line/60 bg-white/[0.015] p-5 transition-colors duration-500 hover:border-white/25 hover:bg-white/[0.04]"
+              >
+                <span className="text-[0.625rem] uppercase tracking-[0.16em] text-accent/90">
+                  Selected proof
+                </span>
+                <h3 className="display mt-3 text-[clamp(1.4rem,2vw,1.8rem)] leading-none">
+                  {p.head}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/65">
+                  {p.body}
+                </p>
+              </Link>
+            ))}
+          </Reveal>
+
+        <dl>
           {facts.map((f, i) => (
             <Reveal
               key={f.label}
@@ -100,6 +138,7 @@ export function About() {
           ))}
           <div className="border-t border-line/60" />
         </dl>
+        </div>
       </div>
     </section>
   );

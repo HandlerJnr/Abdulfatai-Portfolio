@@ -138,3 +138,19 @@ body {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Hero line reveal — CSS only, so the heading is in the server HTML and
+   animates without waiting for JavaScript. Fixes a hero that could appear
+   blank on a slow connection while the motion runtime loaded. */
+@keyframes line-rise {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+.line-mask { display: block; overflow: hidden; padding-bottom: 0.06em; }
+.line-rise {
+  display: block;
+  animation: line-rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .line-rise { animation: none; transform: none; }
+}

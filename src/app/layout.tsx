@@ -26,20 +26,20 @@ const body = localFont({
 });
 
 const description =
-  "UI/UX Product Designer and Researcher in Brighton, UK. I design clearer experiences for complex digital products across multi-market fintech, marketplace platforms, AI product operations and digital healthcare.";
+  "Abdulfatai Jamiu is a Product/UI/UX Designer specialising in fintech, SaaS, AI and complex digital products. He designs clearer, more trustworthy experiences from research through delivery.";
 
 export const metadata: Metadata = {
   // Required for absolute OG/Twitter image URLs — without it, link previews
   // resolve the image against a relative path and silently show nothing.
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.title}`,
+    default: `${site.name} — Product Designer for Fintech, SaaS and AI Products`,
     template: `%s | ${site.name}`,
   },
   description,
   alternates: { canonical: "/" },
   openGraph: {
-    title: `${site.name} — ${site.title}`,
+    title: `${site.name} — Product Designer for Fintech, SaaS and AI Products`,
     description,
     type: "website",
     url: site.url,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.title}`,
+    title: `${site.name} — Product Designer for Fintech, SaaS and AI Products`,
     description,
     images: ["/og.jpg"],
   },
@@ -80,6 +80,38 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <script
+          type="application/ld+json"
+          // Person schema: name, role, location and the profiles a recruiter
+          // would otherwise have to hunt for.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: site.name,
+              url: site.url,
+              jobTitle: "Product Designer",
+              description,
+              email: `mailto:${site.email}`,
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Brighton",
+                addressCountry: "GB",
+              },
+              knowsAbout: [
+                "Product Design",
+                "UX Design",
+                "UI Design",
+                "Fintech",
+                "SaaS",
+                "AI Products",
+                "Design Systems",
+                "User Research",
+              ],
+              sameAs: [site.linkedin, site.behance],
+            }),
+          }}
+        />
         <Cursor />
         <Nav />
         <main id="main">{children}</main>

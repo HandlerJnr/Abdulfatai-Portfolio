@@ -4,21 +4,37 @@ import { site } from "@/data/site";
 
 const columns = [
   {
-    title: "Product Design",
+    title: "Complex workflows",
     body:
-      "User flows, wireframes, high-fidelity UI, responsive interfaces, interaction design, design systems, accessibility, developer handoff.",
+      "Multi-step, multi-role journeys where the hard part is structure, not surface: approval chains, operational dashboards, and products where getting the order of steps wrong is the whole failure.",
   },
   {
-    title: "Research and Strategy",
+    title: "Fintech & trust",
     body:
-      "User research, usability testing, information architecture, quantitative analysis, problem framing, journey mapping, product discovery.",
+      "Money moving between people, currencies, entities and regulators. Disclosure before commitment, constraints surfaced early, and interfaces that stay clear without making risk feel smaller than it is.",
   },
   {
-    title: "Tools and Collaboration",
+    title: "AI product design",
     body:
-      "Figma, FigJam, Prototyping, Design Systems, Jira, Adobe tools, stakeholder communication, cross-functional collaboration.",
+      "Generative and agent-based products where the design problem is calibrated trust: confidence signals, human review checkpoints, and scaffolding for people who cannot yet describe what they want.",
+  },
+  {
+    title: "Multi-role & multi-market",
+    body:
+      "Permissions matrices, role-based operations, audit trails, and one design system holding across four subsidiaries with different languages, currencies and regulatory copy.",
+  },
+  {
+    title: "Research to design",
+    body:
+      "Interviews, personas, journey mapping and usability testing translated into structural decisions — and stated honestly when a project was product-design-led rather than research-led.",
+  },
+  {
+    title: "Design systems & handoff",
+    body:
+      "Auto Layout, components, variants and tokens; versioned files with a development-ready page; HTML and CSS literacy enough to review front-end builds against the designs.",
   },
 ];
+
 
 export function Expertise() {
   return (
@@ -32,7 +48,7 @@ export function Expertise() {
           id="expertise-heading"
           className="display max-w-[12ch] text-[clamp(3rem,9vw,10rem)]"
         >
-          <RevealLines lines={["What I bring", "to the table"]} />
+          <RevealLines lines={["What I bring"]} />
         </h2>
       </div>
 
@@ -41,7 +57,7 @@ export function Expertise() {
           <Reveal
             key={c.title}
             delay={i * 0.12}
-            className="border-b border-line/60 px-5 py-10 md:border-b-0 md:border-r md:px-10 md:py-14 md:last:border-r-0"
+            className="border-b border-line/60 px-5 py-10 md:border-r md:px-10 md:py-14 md:[&:nth-child(3n)]:border-r-0"
           >
             <span className="eyebrow">0{i + 1}</span>
             <h3 className="display mt-6 text-[clamp(2rem,3.2vw,3.2rem)] leading-none">

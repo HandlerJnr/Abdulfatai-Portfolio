@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: `Credentials — ${site.name}`,
   description:
     "References, awards and certifications for Abdulfatai Jamiu — including a written reference from the CEO of Bizinc and ITSS's Most Outstanding Intern of the Year for the Vista banking project. Every document can be opened and read in full.",
+  alternates: { canonical: "/credentials" },
+  openGraph: {
+    title: "Credentials — Abdulfatai Jamiu",
+    description:
+      "References, awards and certifications, each readable in full.",
+    type: "article",
+    url: "/credentials",
+    images: [{ url: "/credentials/previews/bizinc-ceo-reference.jpg", alt: "Reference letter" }],
+  },
 };
 
 export default function CredentialsPage() {
@@ -29,9 +38,10 @@ export default function CredentialsPage() {
           </div>
           <Reveal delay={0.2} className="lg:col-span-4">
             <p className="text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/75">
-              The references, awards and certifications behind the work — open
-              any of them and read the document yourself rather than taking a
-              line on a CV at face value.
+              Ordered by what a hiring manager should weigh first: references
+              from the people I reported to, then recognition tied to specific
+              projects, then training. Open any of them and read the document
+              yourself rather than taking a line on a CV at face value.
             </p>
           </Reveal>
         </div>
