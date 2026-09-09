@@ -31,6 +31,11 @@ export function Footer() {
             </Link>
           </li>
           <li>
+            <Link href="/brand" className="link-line eyebrow !text-white/80">
+              Brand
+            </Link>
+          </li>
+          <li>
             <a href={site.cv} download className="link-line eyebrow !text-white/80">
               Download CV
             </a>

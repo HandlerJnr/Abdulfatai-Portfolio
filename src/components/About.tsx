@@ -65,6 +65,9 @@ export function About() {
             <Link href="/credentials" className="display link-line text-2xl tracking-wide">
               Credentials
             </Link>
+            <Link href="/brand" className="display link-line text-2xl tracking-wide">
+              Brand work
+            </Link>
             <a
               href={site.linkedin}
               target="_blank"

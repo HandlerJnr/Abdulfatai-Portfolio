@@ -711,7 +711,7 @@ export const projects: Project[] = [
     outcome:
       "One platform serving two audiences with genuinely different decisions to make — a mobile booking journey reduced to the four questions a stay depends on, and a fractional investment marketplace that leads with its mechanics and its entry price rather than with projected returns. Both sit on a shared responsive component set. The product is live at shortlet-lagos.com.",
     evidence:
-      "The product is live at shortlet-lagos.com. The guest search is reduced to the four inputs a stay actually depends on, and the investment side leads with the buying mechanic and the minimum entry price before it discusses return — so someone can rule themselves in or out before they sign up rather than after. Both sides ship on one responsive component set.",
+      "The product is live at shortlet-lagos.com. The guest search is reduced to the four inputs a stay actually depends on, and the investment side leads with the buying mechanic and the minimum entry price before it discusses return — so someone can rule themselves in or out before they sign up rather than after. Both sides ship on one responsive component set, and the brand they sit inside is mine too: the 23-page Shortlet Lagos brand guideline is readable in full on the brand page.",
     improveNext:
       "The question I most want answered is whether people understand what they are buying. A share in a rental property is not an intuitive instrument, and comprehension rather than conversion is the right measure of whether that page works — a short comprehension test with first-time investors would settle it. I would also check whether guests who arrive to book ever discover the investment side at all, since the two entry points are deliberately separate.",
     deliverables: [
@@ -721,6 +721,97 @@ export const projects: Project[] = [
       "Property listing & detail design",
       "Responsive design system",
       "High-fidelity UI & prototype",
+    ],
+  },
+  {
+    slug: "synqit",
+    title: "Synqit",
+    category: "Web3 Partnership & Collaboration Platform",
+    tagline:
+      "Business partnerships that work like friend requests — sent, reviewed, accepted or declined, with the conversation unlocked only once both sides say yes.",
+    year: "2026",
+    status: "Full case study",
+    role: "Lead product designer, end to end",
+    tags: [
+      "Product Design",
+      "Matchmaking UX",
+      "Trust & Verification",
+      "Information Architecture",
+      "Responsive Design",
+    ],
+    caseStudy: true,
+    cover: "/projects/synqit-laptop.jpg",
+    frame: "flat",
+    gallery: [
+      {
+        src: "/projects/synqit-user-journey.jpg",
+        alt:
+          "The user journey and information architecture: from homepage into sign-up or login, then four destinations — the dashboard as the main hub with recent partnerships, explore search, match-make and send requests, approve requests and messages; first-time profile setup; account functionality; and partnership search for matchmaking",
+      },
+      {
+        src: "/projects/synqit-deck-problem.jpg",
+        alt:
+          "The problem and the solution side by side, as the company framed them: scattered outreach across Twitter, Discord, Telegram and LinkedIn, no verification, high entry barriers and missed partnerships — answered by smart matchmaking, verified requests, open ecosystem access, AI-powered discovery and one-click outreach",
+      },
+      {
+        src: "/projects/synqit-deck-mvp.jpg",
+        alt:
+          "The MVP release — AI-powered matching, verified requests, premium visibility and direct messaging — with the dashboard as shipped",
+      },
+      {
+        src: "/projects/synqit-desk.jpg",
+        alt:
+          "Synqit's mobile experience shown on a phone alongside a laptop on a desk",
+      },
+    ],
+    externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
+    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
+    overview:
+      "Synqit is a business-driven partnership platform for startups, investment platforms, Web3 projects and crypto companies — a structured way to find, vet and form strategic partnerships instead of cold-messaging across Twitter, Discord, Telegram and LinkedIn. I led the entire design process across three user roles: businesses and startups looking for partners, investors and project owners looking for opportunities, and the teams and executives who manage the resulting collaborations. The pitch deck the product was raised on is on the brand page.",
+    context: {
+      product:
+        "Synqit — a partnership and collaboration platform for the Web3 ecosystem",
+      team:
+        "Lead product designer, working with the founding team",
+      scope:
+        "User research and journey mapping, personas, information architecture, wireframes, high-fidelity UI, prototyping and usability testing",
+      platform:
+        "Responsive web, mobile-first — business owners manage deals on the go",
+      constraints:
+        "Three user roles with different intents in one product; a category where fake projects and rug pulls make trust the first problem, not the last",
+    },
+    challenge:
+      "Startups, Web3 projects and investment platforms struggle to find and connect with the right partners for three reasons that compound each other: there is no basis for trust in a partnership with an unknown company, communication is scattered across multiple channels, and negotiations drag because nothing is structured. Existing networking products treat a connection as a one-sided act — anyone can message anyone — which is precisely why they fill with noise and why credible teams stop answering. The product had to give businesses control over who they partner with, make credibility visible before a request is accepted, and move the conversation somewhere structured once it is.",
+    difficulty:
+      "The hard part was deciding what a partnership is, mechanically, before anything could be designed. A follow is too weak — it commits nobody. An open inbox is too weak in the other direction — it makes the credible party do the filtering. The model that held was the friend request: a partnership is proposed, the other side reviews the proposer's profile and history, and only an acceptance unlocks messaging. That one decision shaped the whole architecture, and it came with a cost: it adds a step and a wait to every connection, in a space where founders are used to firing off a DM. The tension was to keep that deliberate friction — because it is the product's entire answer to the trust problem — while making everything around it fast. The three roles pulled against each other too: a startup wants to be found, an investor wants to filter, and an executive wants to see the state of every partnership at once, and they all share one dashboard.",
+    process: [
+      "Interviewed startup founders, Web3 teams and investors to understand where business networking actually breaks, then built personas for the three roles the product had to serve — businesses seeking partners, investors scouting startups, and teams managing partnerships.",
+      "Defined the partner request as the core object. Users send, review, accept or reject partnership requests, and the dashboard is organised around that state — pending, accepted and declined — so the status of every relationship is legible at a glance.",
+      "Made messaging a consequence of acceptance rather than a starting point. The built-in chat activates only once a partnership request is approved, which keeps inboxes free of cold outreach and makes every conversation one both sides chose.",
+      "Designed the business profile as the thing a request is judged against: industry, expertise, past collaborations and key details, visible before anyone sends or accepts — so the review step has something real to review.",
+      "Designed the matchmaking layer to suggest partners on industry, interests and investment focus, so discovery is a recommendation rather than a search box, and the platform does the first pass of relevance.",
+      "Mapped the full user journey and information architecture — homepage into sign-up or login, then dashboard, profile setup, account functionality and partnership search — so every role lands somewhere useful on first login rather than in an empty state.",
+      "Built the interface mobile-first, because the people managing these deals are rarely at a desk when a request arrives.",
+      "Tested the request and messaging features with real businesses and iterated on what they needed to trust it — verified business profiles, transparent partnership histories, and notifications that keep both sides informed on requests, messages and milestones.",
+    ],
+    explored:
+      "The central alternative was an open model — anyone can message anyone, with filtering left to the recipient — which is how most networking products work and which the research pointed away from: it is the reason credible teams stop responding. The request-approval model was chosen over it deliberately, accepting the extra step in exchange for control. The pitch deck also records where the product was headed beyond the MVP — on-chain logging of partnerships, event sync, a job board — which shaped what the architecture had to leave room for.",
+    outcome:
+      "A partnership-driven platform rather than another networking feed: requests are reviewed against a real profile before anything is accepted, chat exists only between partners who both said yes, matchmaking does the first pass of relevance, and a structured dashboard keeps every active partnership visible. Trust signals — verified profiles and transparent partnership histories — became part of the product rather than something users had to establish for themselves on other channels.",
+    evidence:
+      "Testing the request and messaging flows with real businesses shaped the trust signals that shipped. Partnership discovery and onboarding improved threefold against the scattered, manual process the platform replaced. The MVP shipped with AI-powered matching, verified requests, premium visibility and direct messaging, and the full presentation is on Behance; the pitch deck it was raised on is readable on the brand page.",
+    improveNext:
+      "The request-approval model is the product's bet, so the number I would watch is the accept rate on requests and how it moves as profiles get richer — if credibility is visible, acceptance should rise. I would also test whether the three roles actually want one dashboard or three, since the shared layout was a decision made for coherence and it deserves to be checked against how an investor and a founder really use it.",
+    deliverables: [
+      "User research & personas",
+      "User journey & information architecture",
+      "Partnership request system",
+      "Business profile system",
+      "Matchmaking recommendations",
+      "Post-acceptance messaging",
+      "Partnership dashboard",
+      "Responsive mobile-first UI",
+      "Usability testing & iteration",
     ],
   },
   {
@@ -864,36 +955,6 @@ export const projects: Project[] = [
       "Transaction and payment design",
       "Empty & error states",
       "Mobile design system",
-    ],
-  },
-  {
-    slug: "synqit",
-    title: "Synqit",
-    category: "Web3 Collaboration Platform",
-    tagline:
-      "Helping teams discover and engage with the right partners, projects and communities across Web3.",
-    year: "2026",
-    status: "Deck on Behance",
-    role: "Product designer",
-    tags: ["Product Design", "Interaction Design", "High-Fidelity UI"],
-    caseStudy: false,
-    cover: "/projects/synqit-laptop.jpg",
-    frame: "flat",
-    gallery: [
-      {
-        src: "/projects/synqit-desk.jpg",
-        alt: "Synqit's mobile experience shown on a phone alongside a laptop on a desk",
-      },
-    ],
-    externalUrl: `${BEHANCE}/235692945/Web3-Platform`,
-    art: { hue: "#0e1f2e", accent: "#5ac8fa", kind: "web3" },
-    overview:
-      "Synqit is a Web3 collaboration platform built around discovering and engaging with the right partners, projects and communities. I designed the responsive product and marketing surfaces across desktop and mobile. The full presentation is published on Behance.",
-    deliverables: [
-      "Responsive web design",
-      "Interaction design",
-      "High-fidelity UI",
-      "Visual system",
     ],
   },
   {
