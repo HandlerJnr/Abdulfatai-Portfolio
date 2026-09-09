@@ -24,7 +24,7 @@ const items = [
   {
     title: "Leading and mentoring designers",
     body:
-      "I finished at Bizinc as UI/UX Manager, leading the designers and interns working in the same file — reviewing their work, setting the component standards they designed against, and being the person accountable for what shipped. Bizinc's CEO has written this down; the letter is on the credentials page.",
+      "I finished at Bizinc as UI/UX Manager, leading the junior design team — UI designers, UX designers, graphic designers and interns — and I led the design team at Kremor AI on the same terms. That meant assigning the work, reviewing it, setting the component standards everyone designed against, and being the person accountable for what shipped. Bizinc's CEO has written this down; the letter is on the credentials page.",
     proof: "Reference letter, Bizinc CEO",
     href: "/credentials#references",
   },
