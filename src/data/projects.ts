@@ -172,11 +172,6 @@ export const projects: Project[] = [
         "value": "+12%",
         "label": "Customer-to-customer service activity",
         "kind": "impact"
-      },
-      {
-        "value": "+30%",
-        "label": "Task completion on the redesigned flow",
-        "kind": "impact"
       }
     ],
     contribution:
@@ -1004,7 +999,7 @@ export const projects: Project[] = [
         "kind": "scope"
       },
       {
-        "value": "23pp",
+        "value": "23-page",
         "label": "Brand guideline designed alongside the product",
         "kind": "scope"
       }
