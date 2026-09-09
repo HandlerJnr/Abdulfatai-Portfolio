@@ -700,10 +700,10 @@ export const projects: Project[] = [
       }
     ],
     contribution:
-      "I designed all three surfaces end to end: the storefront selling AI-generated Ankara womenswear, menswear and bags; the generative workspace where a design is explored and iterated; and the role-based admin platform covering orders, measurements, artisans, design approvals, production, messages, inventory, permissions and audit history. Separately from the product design, I worked on AI model evaluation for the platform — forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative-image output, including 96+ complex AI interaction tasks.",
+      "I led the product design and the research on Kremor AI. I designed all three surfaces end to end: the storefront selling AI-generated Ankara womenswear, menswear and bags; the generative workspace where a design is explored and iterated; and the role-based admin platform covering orders, measurements, artisans, design approvals, production, messages, inventory, permissions and audit history. Separately from the product design, I worked on AI model evaluation for the platform — forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative-image output, including 96+ complex AI interaction tasks.",
     context: {
       ownership:
-        "End-to-end product design across three surfaces, plus AI model evaluation",
+        "Design and research lead — end-to-end across three surfaces, plus AI model evaluation",
       primaryUsers:
         "Customers generating and buying garments; artisans and five operational roles",
       focus:

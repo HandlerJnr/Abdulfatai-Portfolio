@@ -10,7 +10,7 @@ const items = [
   { value: "4 markets", label: "Multi-currency fintech at Vista", kind: "Product scope" },
   {
     value: "100K+",
-    label: "Students on Radius, the product I designed for",
+    label: "International students using Radius — company-reported product traction",
     kind: "Company-reported",
   },
 ];
