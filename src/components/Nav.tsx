@@ -97,13 +97,13 @@ export function Nav() {
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
-            className="fixed inset-0 z-[70] flex flex-col justify-between bg-ink px-5 pb-8 pt-28 md:px-10"
+            className="fixed inset-0 z-[70] flex flex-col justify-between gap-8 overflow-y-auto bg-ink px-5 pb-8 pt-24 md:px-10 md:pt-28"
             initial={{ opacity: 0, y: reduce ? 0 : "-4%" }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: reduce ? 0 : "-2%" }}
             transition={{ duration: reduce ? 0.2 : 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1 md:gap-2">
               {site.nav.map((item, i) => (
                 <li key={item.href} className="overflow-hidden">
                   <motion.div
@@ -118,7 +118,7 @@ export function Nav() {
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="display block text-[clamp(3.5rem,14vw,9rem)] leading-[0.9] text-white/90 transition-colors hover:text-accent"
+                      className="display block text-[clamp(2.75rem,min(15vw,7.6vh),7rem)] leading-[0.92] text-white/90 transition-colors hover:text-accent"
                     >
                       {item.label}
                     </Link>
