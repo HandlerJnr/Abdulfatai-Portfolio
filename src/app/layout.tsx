@@ -26,7 +26,7 @@ const body = localFont({
 });
 
 const description =
-  "Abdulfatai Jamiu is a Product/UI/UX Designer specialising in fintech, SaaS, AI and complex digital products. He designs clearer, more trustworthy experiences from research through delivery.";
+  "Abdulfatai Jamiu is a Product Designer specialising in fintech, SaaS, AI and complex digital products. He designs clearer, more trustworthy experiences from research through delivery.";
 
 export const metadata: Metadata = {
   // Required for absolute OG/Twitter image URLs — without it, link previews

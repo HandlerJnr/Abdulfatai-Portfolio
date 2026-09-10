@@ -6,7 +6,7 @@ const facts = [
   {
     label: "Experience",
     value:
-      "Product designer building responsive web and mobile products since 2023. At BIZINC I moved from intern to UI/UX Manager, leading the product design and research and the junior design team — UI designers, UX designers, graphic designers and interns; at Kremor AI I led the design team and owned design and research across the platform end to end on contract; at ITSS I joined the Vista banking programme as an intern and moved onto staff.",
+      "Product designer building responsive web and mobile products since 2023. At BIZINC I moved from intern to UI/UX Manager; at Kremor AI I led design and research across the platform end to end on contract; at ITSS I joined the Vista banking programme as an intern and moved onto staff.",
   },
   {
     label: "Sectors",
@@ -26,7 +26,7 @@ const facts = [
   {
     label: "Brighton",
     value:
-      "Based in Brighton, UK. MSc User Experience Design at the University of Brighton from September 2026, seeking a part-time UI/UX or product design role alongside study.",
+      "Based in Brighton, UK, studying MSc User Experience Design at the University of Brighton.",
   },
   {
     label: "Recognition",

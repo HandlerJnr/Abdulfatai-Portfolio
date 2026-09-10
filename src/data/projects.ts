@@ -157,7 +157,7 @@ export const projects: Project[] = [
     externalLabel: "bizinc.io",
     art: { hue: "#0d1c2e", accent: "#3f8cff", kind: "booking" },
     overview:
-      "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. I joined BIZINC — remote, from Atlanta, Georgia — in April 2024 and moved from intern to designer to UI/UX Manager, leading the junior design team — UI designers, UX designers, graphic designers and interns. My first project was rebuilding the platform's interface from scratch; from there I owned the UI across its booking, e-commerce and SaaS surfaces, along with the user journeys, sitemaps, wireframes and the component library the team designed against.",
+      "Bizinc is an all-in-one marketplace platform: customers discover local businesses and book services, and those businesses manage their operations and grow their brand from the same account. Two products, two audiences and one account between them. I joined remotely in April 2024, two years before the engagement ended, and moved from intern to designer to UI/UX Manager over that time.",
     metrics: [
       {
         "value": "+45%",
@@ -177,7 +177,7 @@ export const projects: Project[] = [
       }
     ],
     contribution:
-      "I designed Bizinc from scratch. I framed the problem with the founding team, mapped the sign-up, business-owner and client journeys, reconciled them into one site map, wrote the Business Profile 2.0 requirements, wireframed at desktop scale, and designed the marketplace, booking, deals, services, products and dashboard surfaces in high fidelity. I built the component library the rest of the team designed against — Auto Layout, variants and design tokens — versioned the file from v1.2 to v2.0 to a development-ready page, and progressed from UI/UX Intern to Product Designer to UI/UX Manager, leading the junior design team — UI designers, UX designers, graphic designers and interns — across the work.",
+      "I designed Bizinc from scratch. I framed the problem with the founding team, mapped the sign-up, business-owner and client journeys, reconciled them into one site map, wrote the Business Profile 2.0 requirements, wireframed at desktop scale, and designed the marketplace, booking, deals, services, products and dashboard surfaces in high fidelity. I built the component library the rest of the team designed against — Auto Layout, variants and design tokens — and versioned the file from v1.2 to v2.0 to a development-ready page.",
     context: {
       ownership:
         "End-to-end ownership",
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     explored:
       "The working file carries the exploration rather than describing it. The v1.2 desktop and mobile pages sit alongside v2.0 instead of being overwritten, separate landing-page and marketplace directions from the designers on the team are kept as parallel frames, and an AI-integration direction was explored as its own branch before the assistant took the form it shipped in. The redesign was chosen against the version it replaced rather than in a vacuum.",
     outcome:
-      "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. Onboarding was smoothed so fewer people fall out before they have an account, discovery became proximity-aware rather than a flat directory, and the operator dashboard gave owners a reason to return between bookings. I finished the engagement as UI/UX Manager, leading the junior design team — UI, UX and graphic designers alongside interns — working in the same file. The product is live at bizinc.io.",
+      "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. Onboarding was smoothed so fewer people fall out before they have an account, discovery became proximity-aware rather than a flat directory, and the operator dashboard gave owners a reason to return between bookings. The product is live at bizinc.io.",
     systemAnchor: "in-product",
     evidence:
       "The redesign moved the numbers the business tracks: a 23% increase in customers across the redesign period, a 12%+ increase in customer-to-customer service activity, and a 45% improvement in user activation on the dashboard and lead-generation experiences, alongside growth in profile creation and stronger retention. The product is live at bizinc.io, and Bizinc's CEO has written a reference describing the platform rebuild and the progression to UI/UX Manager, published in full on the credentials page.",
@@ -715,7 +715,7 @@ export const projects: Project[] = [
       product:
         "Kremor AI — AI-generated African fashion, and the operations that turn a design into a garment",
       team:
-        "Contract engagement reporting to the founder, leading the junior design team — UI, UX and graphic designers alongside interns",
+        "Contract engagement reporting to the founder, leading the design team",
       timeline:
         "June 2024 – July 2026",
       scope:

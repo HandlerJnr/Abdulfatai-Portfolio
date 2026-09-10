@@ -20,13 +20,13 @@ export function Hero() {
         <Reveal delay={0.1}>
           <p className="eyebrow mb-7 flex items-center gap-3">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
-            {site.title}
+            Fintech · SaaS · AI · Marketplaces
           </p>
         </Reveal>
 
         {/* The headline states the work, not a claim about the designer. Sized
-            so it holds two lines and leaves the proposition, the links and the
-            availability above the fold at 1440×900. */}
+            so it holds two lines and leaves the proposition and the links
+            above the fold at 1440×900. */}
         <h1
           id="hero-heading"
           className="display max-w-[31ch] text-[clamp(2.1rem,5.4vw,5.4rem)]"
@@ -53,10 +53,10 @@ export function Hero() {
 
         <Reveal delay={0.45} className="mt-5 max-w-[62ch]">
           <p className="text-[clamp(1rem,1.25vw,1.2rem)] leading-relaxed text-white/75">
-            I&rsquo;m Abdulfatai Jamiu, a UI/UX Product Designer and Researcher
-            working across multi-market fintech, marketplace platforms, AI
-            product operations, and digital healthcare. I turn complex workflows
-            into products people can understand, trust, and use.
+            I&rsquo;m Abdulfatai Jamiu. I work across multi-market fintech,
+            marketplace platforms, AI product operations and digital healthcare
+            &mdash; research through to shipped interface. I turn complex
+            workflows into products people can understand, trust, and use.
           </p>
         </Reveal>
 
@@ -96,15 +96,6 @@ export function Hero() {
           </a>
         </Reveal>
 
-        <Reveal delay={0.75} className="mt-8">
-          <p className="eyebrow flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60 motion-reduce:hidden" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            {site.availability}
-          </p>
-        </Reveal>
       </div>
 
       <div className="flex items-center justify-between border-t border-line/60 px-5 py-4 md:px-10">
