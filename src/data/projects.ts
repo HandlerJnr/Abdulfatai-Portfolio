@@ -102,6 +102,8 @@ export type Project = {
    * it measures and whether it was measured, reported or estimated.
    */
   evidence?: string;
+  /** Anchor on the design-systems page, where this project's system lives. */
+  systemAnchor?: string;
   /** What I would test or measure next. */
   improveNext?: string;
   /** What I would change in the product itself, given more time. */
@@ -224,6 +226,7 @@ export const projects: Project[] = [
       "The working file carries the exploration rather than describing it. The v1.2 desktop and mobile pages sit alongside v2.0 instead of being overwritten, separate landing-page and marketplace directions from the designers on the team are kept as parallel frames, and an AI-integration direction was explored as its own branch before the assistant took the form it shipped in. The redesign was chosen against the version it replaced rather than in a vacuum.",
     outcome:
       "A platform that works from both ends — customers discover and book services, businesses run those bookings and see where their customers came from — held together by one component library across booking, e-commerce and SaaS surfaces. Onboarding was smoothed so fewer people fall out before they have an account, discovery became proximity-aware rather than a flat directory, and the operator dashboard gave owners a reason to return between bookings. I finished the engagement as UI/UX Manager, leading the junior design team — UI, UX and graphic designers alongside interns — working in the same file. The product is live at bizinc.io.",
+    systemAnchor: "in-product",
     evidence:
       "The redesign moved the numbers the business tracks: a 23% increase in customers across the redesign period, a 12%+ increase in customer-to-customer service activity, and a 45% improvement in user activation on the dashboard and lead-generation experiences, alongside growth in profile creation and stronger retention. The product is live at bizinc.io, and Bizinc's CEO has written a reference describing the platform rebuild and the progression to UI/UX Manager, published in full on the credentials page.",
     improveNext:
@@ -605,6 +608,7 @@ export const projects: Project[] = [
     ],
     outcome:
       "A learning product where the curriculum is the work itself: agents to delegate to, confidence scores and SOPs to judge against, a review step that cannot be skipped structurally, and exports that turn practice into deliverables. Learner and operator share one design system, and the same principle runs through both — surface the evidence, name the confidence, and leave the judgement with the person.",
+    systemAnchor: "in-product",
     evidence:
       "The human checkpoint is structural rather than advisory: Needs Review is its own column, so work cannot reach Done without passing through a person. Quality is anchored to versioned SOPs rather than to taste, learner and operator share one design system instead of splitting into two disconnected apps, and the Export Centre turns a training exercise into artefacts a learner can actually use at work.",
     improveNext:
@@ -1046,6 +1050,7 @@ export const projects: Project[] = [
     ],
     outcome:
       "One platform serving two audiences with genuinely different decisions to make — a mobile booking journey reduced to the four questions a stay depends on, and a fractional investment marketplace that leads with its mechanics and its entry price rather than with projected returns. Both sit on a shared responsive component set. The product is live at shortlet-lagos.com.",
+    systemAnchor: "in-product",
     evidence:
       "The product is live at shortlet-lagos.com. The guest search is reduced to the four inputs a stay actually depends on, and the investment side leads with the buying mechanic and the minimum entry price before it discusses return — so someone can rule themselves in or out before they sign up rather than after. Both sides ship on one responsive component set, and the brand they sit inside is mine too: the 23-page Shortlet Lagos brand guideline is readable in full on the brand page.",
     improveNext:

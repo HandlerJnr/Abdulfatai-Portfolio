@@ -29,6 +29,7 @@ export const site = {
     // projects, not on the section that holds everything else.
     { label: "Work", href: "/#featured" },
     { label: "About", href: "/#about" },
+    { label: "Systems", href: "/system" },
     { label: "Credentials", href: "/credentials" },
     { label: "Brand", href: "/brand" },
     { label: "Contact", href: "/#contact" },

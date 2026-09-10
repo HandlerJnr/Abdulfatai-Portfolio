@@ -62,6 +62,9 @@ export function About() {
             <a href={site.cv} download className="display link-line text-2xl tracking-wide">
               Download CV
             </a>
+            <Link href="/system" className="display link-line text-2xl tracking-wide">
+              Design systems
+            </Link>
             <Link href="/credentials" className="display link-line text-2xl tracking-wide">
               Credentials
             </Link>

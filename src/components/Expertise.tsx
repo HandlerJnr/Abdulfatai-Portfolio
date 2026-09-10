@@ -31,7 +31,7 @@ const columns = [
   {
     title: "Design systems & handoff",
     body:
-      "Auto Layout, components, variants and tokens; versioned files with a development-ready page; HTML and CSS literacy enough to review front-end builds against the designs.",
+      "Auto Layout, components, variants and tokens; versioned files with a development-ready page; written handoff documentation so the build matches the design. The sheets themselves are on the design systems page.",
   },
 ];
 

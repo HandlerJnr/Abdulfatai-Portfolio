@@ -328,6 +328,15 @@ export default async function CaseStudy({ params }: { params: Params }) {
                   <p className="mt-6 rounded-sm border border-line/60 bg-white/[0.025] p-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
                     {project.evidence}
                   </p>
+                  {project.systemAnchor && (
+                    <Link
+                      href={`/system#${project.systemAnchor}`}
+                      data-cursor="link"
+                      className="link-line eyebrow mt-5 inline-block !text-white/70"
+                    >
+                      See the design system behind this →
+                    </Link>
+                  )}
                 </Reveal>
               )}
 
