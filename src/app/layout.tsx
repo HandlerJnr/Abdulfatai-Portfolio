@@ -5,6 +5,8 @@ import { Nav } from "@/components/Nav";
 import { Cursor } from "@/components/Cursor";
 import { Footer } from "@/components/Footer";
 import { site } from "@/data/site";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Self-hosted so the build never depends on a Google Fonts fetch.
 const display = localFont({
@@ -116,6 +118,10 @@ export default function RootLayout({
         <Nav />
         <main id="main">{children}</main>
         <Footer />
+        {/* Cookieless and no personal data, so no consent banner is required
+            and nothing follows a visitor across sites. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
