@@ -40,7 +40,8 @@ export type Project = {
     | "Live website"
     | "Internal product"
     | "Prototype"
-    | "Concept exploration";
+    | "Concept exploration"
+    | "Self-initiated — research in progress";
   overview: string;
   /**
    * Scannable facts for the "At a glance" panel. Every field is optional and
@@ -1065,6 +1066,117 @@ export const projects: Project[] = [
     ],
     improveWithTime:
       "I would show investors the operating reality behind a share — occupancy, maintenance, the actual months a property earned — because a fractional stake in a building people sleep in is only trustworthy if the performance behind it is visible.",
+  },
+  {
+    slug: "settle",
+    title: "Settle",
+    category: "Self-initiated — Civic / Onboarding UX",
+    tagline:
+      "The first 30 days in the UK, in the right order: turning a new international student's arrival admin into a dependency-aware checklist.",
+    year: "2026",
+    status: "Research in progress",
+    role: "Product designer — research, UX, UI, prototype",
+    tags: [
+      "User Research",
+      "Service Design",
+      "Information Architecture",
+      "Mobile UX",
+      "Self-initiated",
+    ],
+    featured: false,
+    caseStudy: true,
+    productStatus: "Self-initiated — research in progress",
+    cover: "/projects/settle-dependency.jpg",
+    frame: "flat",
+    art: { hue: "#0e1f2e", accent: "#4FB3A6", kind: "booking" },
+    overview:
+      "In 2024/25 there were 685,565 international students at UK higher education institutions \u2014 6.1% fewer than the year before, but still the size of a large city arriving every autumn. Almost all of them land with the same cluster of tasks: set up a UKVI eVisa account, enrol, get a proof-of-address letter, open a bank account, register with a GP, apply for a National Insurance number, claim council tax exemption. Universities, UKCISA and GOV.UK all publish accurate lists of these. None of them show which task unlocks which. Settle is my redesign of that first month. I am running it as a real research project rather than a concept piece, and this page is the working record \u2014 published while the research is still open rather than written up afterwards.",
+    metrics: [
+      {
+        "value": "7",
+        "label": "Core tasks in scope for v1",
+        "kind": "scope"
+      },
+      {
+        "value": "3",
+        "label": "Falsifiable hypotheses going into research",
+        "kind": "scope"
+      },
+      {
+        "value": "3",
+        "label": "Methods \u2014 survey, interviews, competitive review",
+        "kind": "scope"
+      },
+      {
+        "value": "685,565",
+        "label": "International students in UK higher education, 2024/25",
+        "kind": "traction",
+        "note": "HESA, published January 2026 \u2014 context for the problem, not a figure about this project"
+      }
+    ],
+    contribution:
+      "Everything on this project is mine: framing the problem, designing the study, writing the survey and interview guide, running the competitive review, and the design that follows. I start the MSc at Brighton on 18 September 2026, so the project runs alongside my own first 30 days rather than being written from memory. That is deliberate: I can log my own arrival prospectively, as one data point among several, instead of reconstructing it afterwards and mistaking recall for evidence.",
+    context: {
+      product:
+        "Settle \u2014 a mobile companion for a new international student's first 30 days in the UK",
+      ownership: "Self-initiated; sole designer and researcher",
+      primaryUsers:
+        "Full-time taught Master's students on a Student visa, arriving alone, first time in the UK",
+      focus:
+        "Service design, task dependency modelling, information architecture",
+      timeline: "4 weeks \u2014 from 12 September 2026",
+      platform: "Mobile-first, English only in v1",
+      scope:
+        "Seven core arrival tasks: eVisa account, enrolment and ID, proof-of-address letter, bank account, GP registration, NI number, council tax exemption",
+      constraints:
+        "Out of scope: finding accommodation, pre-arrival visa applications and IHS, dependants and families, and any automation of a government or bank system",
+    },
+    challenge:
+      "It is not a checklist problem. It is a dependency problem. The clearest case is the proof-of-address loop: a high-street bank asks for proof of a UK address; the usual proof is a university bank letter, which the university will only issue after enrolment and after a term-time address is on record; and some landlords want a UK bank account before they will sign a tenancy. Each counter is individually doing nothing wrong. A student who does not know the order can lose a week moving between the three.",
+    difficulty:
+      "The information is not missing \u2014 it is published, accurate and free. That rules out the obvious product, which would be another list. It also means the design has to earn trust against GOV.UK without impersonating it, and has to be useful to someone whose situation may not match the sequence I experienced. The hard part is establishing whether hidden ordering really is the cause of the pain, or whether the pain sits somewhere else entirely \u2014 appointment availability, language, or simply not knowing who to ask.",
+    research: {
+      status:
+        "Live. Survey open, interviews being recruited from it, competitive review underway. Findings will replace this section as they land.",
+      considered:
+        "Three methods, all with students who arrived within the last twelve months so the memories are still specific: a short survey distributed in an international-student group, targeting 20+ responses; five 15-minute interviews recruited from that survey, each reconstructing one person's actual day-by-day sequence and the moment they got stuck; and a competitive review of GOV.UK's post-arrival guidance, UKCISA, university welcome pages, Monzo and Starling onboarding, and Student Beans and UNiDAYS as student-specific products.",
+      investigated:
+        "Three hypotheses, each written so it can be proved wrong. H1: most students do not know the correct order of tasks on arrival \u2014 falsified if fewer than half score the order as unclear. H2: the bank account is the most painful task, and the cause is proof of address rather than the bank \u2014 tested against the stress ranking and the free-text reasons. H3: students trust peers over official sources, so the product has to read as advice rather than policy \u2014 tested by comparing where information actually comes from against how much it is trusted.",
+      uncertain:
+        "Whether the dependency map below survives contact with real arrivals. It is modelled from GOV.UK, UKCISA and university guidance rather than from anyone's lived sequence, which makes it a hypothesis and not a finding \u2014 halls residents, students with family already in the UK, and anyone arriving mid-year may have a completely different critical path.",
+      nextTest:
+        "Close the survey, run the five interviews, and either confirm the ordering hypothesis or follow the pain wherever the data actually puts it. If H1 fails, the product changes rather than the framing.",
+    },
+    process: [
+      "Model the tasks as a dependency graph rather than a list \u2014 the unit of design is the edge between two tasks, not the task itself.",
+      "Show the next unlocked step, not everything at once. A blocked step states what unlocks it, so a dead end becomes a direction.",
+      "Attach a 'take with you' list to every appointment. Nobody should be turned away from a counter for a document nobody told them to bring.",
+      "Explain GP, NI number and council tax once, in plain English, at the point they first appear \u2014 UK-specific vocabulary is a barrier before the admin is.",
+      "Write in the voice of a friend who has done it, with the official source linked underneath: trust without pretending to be GOV.UK.",
+    ],
+    explored:
+      "The provisional journey map runs seven stages across 30 days, each with what it requires, where it typically fails and a pain rating, drawn from published guidance ahead of arrival. The three rated highest \u2014 the proof-of-address letter, the bank account and the eVisa account \u2014 are the ones the dependency map marks as blockers, which is the pattern the research is designed to confirm or break.",
+    evidence:
+      "What exists today is the study design and the problem model: a dependency map, a seven-stage journey map with pain ratings, three falsifiable hypotheses with their measurement criteria, and a scope boundary. No outcomes are claimed because none have been measured yet. This page is deliberately published in that state \u2014 it shows how I work before I have answers, which is the part of the process a finished case study usually hides. It will be updated as findings land.",
+    improveNext:
+      "The honest risk is that I have modelled this problem from documentation rather than from anyone's experience, including my own. A dependency graph drawn from official guidance describes how the system is supposed to work, not how it fails. The study is built to attack that: the hypotheses are written to be falsifiable, the interviews reconstruct each participant's actual sequence rather than checking mine, and the survey asks what was hardest before it asks about ordering at all.",
+    improveWithTime:
+      "With longer than four weeks I would widen past the single persona \u2014 students arriving with dependants, mid-year arrivals and undergraduates all have different critical paths \u2014 and test whether the dependency model holds outside one university's processes. I would also want to know whether a product like this should exist at all, or whether the right intervention is the university sending the right thing at the right time.",
+    deliverables: [
+      "Dependency map of the first 30 days",
+      "Seven-stage journey map with pain ratings",
+      "Research plan: survey, interview guide, competitive review",
+      "Three falsifiable hypotheses with measurement criteria",
+      "Scope definition \u2014 in and out",
+      "Design principles",
+    ],
+    gallery: [
+      {
+        src: "/projects/settle-dependency.jpg",
+        alt:
+          "Dependency map of a new student's first 30 days: enrolment and a term-time address unlock the university bank letter, which unlocks the bank account; the eVisa account produces the share code needed for the bank and for the right to work",
+      },
+    ],
   },
   {
     slug: "synqit",

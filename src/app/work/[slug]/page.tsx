@@ -263,21 +263,23 @@ export default async function CaseStudy({ params }: { params: Params }) {
                 </Reveal>
               )}
 
-              <Reveal delay={0.1} className="mt-16">
-                <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
-                  What changed
-                </h2>
-                <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
-                  {project.outcome}
-                </p>
-              </Reveal>
+              {project.outcome && (
+                <Reveal delay={0.1} className="mt-16">
+                  <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
+                    What changed
+                  </h2>
+                  <p className="mt-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-white/80">
+                    {project.outcome}
+                  </p>
+                </Reveal>
+              )}
 
               {project.metrics?.length ? (
                 <Reveal delay={0.1} className="mt-16">
                   <h2 className="display text-[clamp(2rem,3.5vw,3.4rem)]">
-                    {project.metrics.every((m) => m.kind === "scope")
-                      ? "Product scope"
-                      : "Outcomes & scope"}
+                    {project.metrics.some((m) => m.kind === "impact")
+                      ? "Outcomes & scope"
+                      : "Scope & context"}
                   </h2>
                   {project.tractionNote && (
                     <p className="mt-6 max-w-[70ch] text-sm leading-relaxed text-white/55">
