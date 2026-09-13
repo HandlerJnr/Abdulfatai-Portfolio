@@ -8,6 +8,12 @@ export type Project = {
   role: string;
   tags: string[];
   featured?: boolean;
+  /**
+   * A project still being built. Shown in the "Now building" slot on the
+   * homepage with its own status, and kept out of Selected Work so an
+   * unfinished piece never sits beside finished ones without saying so.
+   */
+  inProgress?: boolean;
   /** Behance cover image. When absent, generated SVG artwork is used instead. */
   cover?: string;
   /** How the cover should be framed in the mockup shell. */
@@ -1084,6 +1090,7 @@ export const projects: Project[] = [
       "Self-initiated",
     ],
     featured: false,
+    inProgress: true,
     caseStudy: true,
     productStatus: "Self-initiated — research in progress",
     cover: "/projects/settle-dependency.jpg",
@@ -1630,6 +1637,10 @@ export const featuredProjects = projects.filter((p) => p.featured);
  * disjoint — repeating a featured project further down the page adds length
  * without adding information.
  */
-export const otherProjects = projects.filter((p) => !p.featured);
+export const otherProjects = projects.filter(
+  (p) => !p.featured && !p.inProgress,
+);
+/** Work in progress — surfaced on the homepage as "Now building". */
+export const inProgressProjects = projects.filter((p) => p.inProgress);
 export const getProject = (slug: string) =>
   projects.find((p) => p.slug === slug);

@@ -3,6 +3,7 @@ import { Credibility } from "@/components/Credibility";
 import { Outcomes } from "@/components/Outcomes";
 import { Leadership } from "@/components/Leadership";
 import { FeaturedGallery } from "@/components/FeaturedGallery";
+import { NowBuilding } from "@/components/NowBuilding";
 import { Approach } from "@/components/Approach";
 import { SelectedWorks } from "@/components/SelectedWorks";
 import { Expertise } from "@/components/Expertise";
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <Credibility />
       <FeaturedGallery />
+      <NowBuilding />
       <Outcomes />
       <Leadership />
       <Approach />
