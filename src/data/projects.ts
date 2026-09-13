@@ -123,7 +123,7 @@ export const projects: Project[] = [
       "One platform where a business is found, booked and run — discovery on one side, operations on the other.",
     year: "2024 — 2026",
     status: "Full case study · Live product",
-    role: "UI/UX Intern → Designer → Manager, BIZINC",
+    role: "UI/UX Intern → Product Designer → UI/UX Manager, BIZINC",
     tags: [
       "Marketplace UX",
       "Booking Flows",
@@ -252,7 +252,7 @@ export const projects: Project[] = [
     category: "Multi-Country Corporate Banking",
     tagline:
       "One banking app for businesses operating across four markets — entities, currencies and approval mandates included.",
-    year: "2023 — 2024",
+    year: "2022 — 2024",
     status: "Full case study",
     role: "UI/UX Designer & Front-End Developer, ITSS",
     tags: [
@@ -286,7 +286,7 @@ export const projects: Project[] = [
     externalLabel: "vistabankgroup.com",
     art: { hue: "#2b0f14", accent: "#c8102e", kind: "banking" },
     overview:
-      "Vista is a banking group operating across several West African markets. ITSS took on the Vista programme in 2023, and I worked on its digital banking product — corporate and retail — through to 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. I joined as an intern on the programme and moved onto staff during it, receiving the Best Intern Award for my contribution to Vista. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso.",
+      "Vista is a banking group operating across several West African markets. I joined ITSS in May 2022 as an intern on the programme and moved onto staff during it, working on the digital banking product — corporate and retail — through to April 2024, covering onboarding and identity verification, account dashboards, transfer and approval journeys. The work was recognised with ITSS's Most Outstanding Intern of the Year award for my contribution to Vista. The role spanned UI design, digital and graphic design for campaigns, and front-end work, delivered across four localised market subsidiaries — Gambia, Guinea, Sierra Leone and Burkina Faso.",
     metrics: [
       {
         "value": "4",
@@ -323,7 +323,7 @@ export const projects: Project[] = [
       team:
         "ITSS (Geneva) delivering for the Vista banking group; joined as an intern on the programme and moved onto staff during it",
       timeline:
-        "May 2023 – April 2024",
+        "May 2022 – April 2024",
       scope:
         "Onboarding and identity verification, account dashboards, transfer and approval journeys, campaign and graphic design, front-end review in HTML/CSS",
       platform:
@@ -355,7 +355,7 @@ export const projects: Project[] = [
       "Carried the same visual system into campaign and graphic design for the product, and used HTML/CSS to review front-end builds against the designs, keeping interfaces responsive and pixel-accurate through implementation.",
     ],
     outcome:
-      "A digital banking product that treats multi-entity, multi-currency, multi-market operation as the normal case rather than an edge case — with approvals designed as core workflow, account views that scale to real portfolios, and one design system serving four localised subsidiaries across Gambia, Guinea, Sierra Leone and Burkina Faso. The work was recognised with the Best Intern Award for contributions to Vista.",
+      "A digital banking product that treats multi-entity, multi-currency, multi-market operation as the normal case rather than an edge case — with approvals designed as core workflow, account views that scale to real portfolios, and one design system serving four localised subsidiaries across Gambia, Guinea, Sierra Leone and Burkina Faso. The work was recognised with ITSS's Most Outstanding Intern of the Year award for contributions to Vista.",
     evidence:
       "The work was recognised with ITSS's Most Outstanding Intern of the Year award, and the letter names the Vista Bank project UI/UX design specifically as what it was awarded for — client-side recognition tied to this project rather than a general commendation, readable in full on the credentials page. The design shipped across four localised subsidiaries on a single system, with entity, currency and language handled as first-class context rather than as settings.",
     improveNext:
@@ -635,7 +635,7 @@ export const projects: Project[] = [
       "African textiles as a design language, not a print — a generator, a storefront, and the workshop floor that turns a prompt into a garment.",
     year: "2024 — 2026",
     status: "Full case study",
-    role: "UI/UX Designer, Kremor AI (contract)",
+    role: "UI/UX Designer — Design & Research Lead, Kremor AI (contract, part-time)",
     tags: [
       "AI Product Design",
       "Conversational UI",

@@ -6,7 +6,7 @@ const facts = [
   {
     label: "Experience",
     value:
-      "Product designer building responsive web and mobile products since 2023. At BIZINC I moved from intern to UI/UX Manager; at Kremor AI I led design and research across the platform end to end on contract; at ITSS I joined the Vista banking programme as an intern and moved onto staff.",
+      "Product designer building responsive web and mobile products since 2022. At BIZINC I moved from intern to UI/UX Manager; at Kremor AI I led design and research across the platform end to end on contract; at ITSS I joined the Vista banking programme as an intern and moved onto staff.",
   },
   {
     label: "Sectors",

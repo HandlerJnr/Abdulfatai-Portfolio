@@ -5,7 +5,7 @@ import { Reveal } from "./Reveal";
  * so a company traction figure is never read as a personal design result.
  */
 const items = [
-  { value: "4+ years", label: "Designing digital products", kind: "Experience" },
+  { value: "3+ years", label: "Designing digital products", kind: "Experience" },
   { value: "+45%", label: "Dashboard activation at Bizinc", kind: "Design impact" },
   { value: "4 markets", label: "Multi-currency fintech at Vista", kind: "Product scope" },
   {
