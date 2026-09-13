@@ -26,7 +26,7 @@ const facts = [
   {
     label: "Brighton",
     value:
-      "Based in Brighton, UK, studying MSc User Experience Design at the University of Brighton.",
+      "Based in Brighton, UK. MSc User Experience Design at the University of Brighton, September 2026 to 2028.",
   },
   {
     label: "Recognition",
