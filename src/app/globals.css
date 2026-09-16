@@ -189,3 +189,8 @@ body {
 @media (hover: none) {
   .letter:hover { color: inherit; transform: none; }
 }
+
+/* Typewriter caret for the rotating headline word. */
+@keyframes caret-blink { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
+.caret { animation: caret-blink 1.05s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }

@@ -3,6 +3,8 @@ import { Marquee } from "./Marquee";
 import { Reveal } from "./Reveal";
 import { site } from "@/data/site";
 import { Fragment } from "react";
+import { NameField } from "./NameField";
+import { RotatingWord } from "./RotatingWord";
 
 export function Hero() {
   return (
@@ -11,13 +13,14 @@ export function Hero() {
       className="relative flex min-h-dvh flex-col justify-between pt-[72px]"
       aria-labelledby="hero-heading"
     >
+      <NameField />
       <Marquee
         items={[site.heroMarquee]}
         duration={38}
         className="display border-b border-line/60 py-3 text-[clamp(1.6rem,3.2vw,2.6rem)] text-white/90"
       />
 
-      <div className="flex flex-1 flex-col items-center justify-center px-5 py-10 text-center md:px-10">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 py-10 text-center md:px-10">
         <Reveal delay={0.1}>
           <p className="eyebrow mb-7 flex items-center gap-3">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
@@ -31,37 +34,53 @@ export function Hero() {
         <h1
           id="hero-heading"
           data-cursor="zoom"
+          aria-label="I design clearer experiences for complex digital products."
           className="display max-w-[31ch] text-[clamp(2.1rem,5.4vw,5.4rem)]"
         >
-          {["I design clearer experiences", "for complex digital products."].map(
-            (line, i) => (
-              <span key={line} className="line-mask">
-                <span
-                  className="line-rise"
-                  style={{ animationDelay: `${0.08 + i * 0.09}s` }}
-                >
-                  {/* Split per word, then per letter: each letter can take its
-                      own hover colour, while the word remains the unit that
-                      wraps, so nothing ever breaks mid-word. */}
-                  {line.split(" ").map((word, w, words) => (
-                    <Fragment key={`${word}-${w}`}>
-                      <span className="word">
-                        {[...word].map((ch, c) => (
-                          <span key={c} className="letter">
-                            {ch}
-                          </span>
-                        ))}
-                      </span>
-                      {/* The space sits between the words, not inside one — a
-                          trailing space inside an inline-block is trimmed, and
-                          the line would lose every gap. */}
-                      {w < words.length - 1 ? " " : null}
-                    </Fragment>
-                  ))}
-                </span>
+          {/* The accessible name stays fixed while the visible word rotates,
+              so a screen reader is never read a moving target. */}
+          {[
+            ["I design", "experiences"],
+            ["for complex digital products."],
+          ].map((parts, i) => (
+            <span key={i} className="line-mask">
+              <span
+                className="line-rise"
+                style={{ animationDelay: `${0.08 + i * 0.09}s` }}
+              >
+                {parts.map((part, pi) => (
+                  <Fragment key={pi}>
+                    {/* Split per word, then per letter: each letter can take
+                        its own hover colour, while the word remains the unit
+                        that wraps, so nothing ever breaks mid-word. */}
+                    {part.split(" ").map((word, w, words) => (
+                      <Fragment key={`${word}-${w}`}>
+                        <span className="word">
+                          {[...word].map((ch, c) => (
+                            <span key={c} className="letter">
+                              {ch}
+                            </span>
+                          ))}
+                        </span>
+                        {/* The space sits between the word spans, not inside
+                            one — a trailing space inside an inline-block is
+                            trimmed, and the line would lose every gap. */}
+                        {w < words.length - 1 ? " " : null}
+                      </Fragment>
+                    ))}
+                    {i === 0 && pi === 0 ? (
+                      <>
+                        {" "}
+                        <span className="word">
+                          <RotatingWord />
+                        </span>{" "}
+                      </>
+                    ) : null}
+                  </Fragment>
+                ))}
               </span>
-            ),
-          )}
+            </span>
+          ))}
         </h1>
 
         <Reveal delay={0.4} className="mt-7 max-w-[56ch]">
