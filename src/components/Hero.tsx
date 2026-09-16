@@ -30,6 +30,7 @@ export function Hero() {
             above the fold at 1440×900. */}
         <h1
           id="hero-heading"
+          data-cursor="zoom"
           className="display max-w-[31ch] text-[clamp(2.1rem,5.4vw,5.4rem)]"
         >
           {["I design clearer experiences", "for complex digital products."].map(

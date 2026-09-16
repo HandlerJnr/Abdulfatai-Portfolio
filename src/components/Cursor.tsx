@@ -8,12 +8,13 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
-type Mode = "default" | "view" | "link" | "hidden";
+type Mode = "default" | "view" | "link" | "zoom" | "hidden";
 
 /**
  * Desktop-only custom cursor. Elements opt in with:
  *   data-cursor="view"  → expands with "VIEW" label
  *   data-cursor="link"  → shows an arrow state
+ *   data-cursor="zoom"  → a glass lens, for type that magnifies on hover
  * pointer-events: none guarantees it never blocks clicks.
  */
 export function Cursor() {
@@ -41,6 +42,7 @@ export function Cursor() {
       if (!target) return setMode("default");
       const kind = target.dataset.cursor;
       if (kind === "view") return setMode("view");
+      if (kind === "zoom") return setMode("zoom");
       setMode("link");
     };
     const leave = () => setMode("hidden");
@@ -58,7 +60,15 @@ export function Cursor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [x, y]);
 
-  const size = mode === "view" ? 96 : mode === "link" ? 44 : 14;
+  const size =
+    mode === "view" ? 96 : mode === "zoom" ? 62 : mode === "link" ? 44 : 14;
+
+  // The lens reads as glass rather than as a solid dot: a ring over a blur,
+  // so the letter underneath stays visible through it.
+  const shell =
+    mode === "zoom"
+      ? "border border-white/80 bg-white/[0.06] text-white backdrop-blur-[1.5px]"
+      : "bg-accent text-white";
 
   return (
     <motion.div
@@ -74,7 +84,7 @@ export function Cursor() {
       }}
     >
       <motion.div
-        className="flex items-center justify-center rounded-full bg-accent text-white"
+        className={`flex items-center justify-center rounded-full ${shell}`}
         animate={{
           width: size,
           height: size,
@@ -84,6 +94,20 @@ export function Cursor() {
       >
         {mode === "view" && (
           <span className="display text-[13px] tracking-[0.2em]">View</span>
+        )}
+        {mode === "zoom" && (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          >
+            <circle cx="8.6" cy="8.6" r="5.4" />
+            <path d="M12.6 12.6 17 17M6.4 8.6h4.4M8.6 6.4v4.4" />
+          </svg>
         )}
         {mode === "link" && (
           <svg
