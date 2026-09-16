@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { CountUp } from "./CountUp";
 
 /**
  * Four facts, directly under the hero. Each states what kind of fact it is,
@@ -34,7 +35,7 @@ export function Credibility() {
               {it.kind}
             </span>
             <p className="display mt-3 text-[clamp(1.9rem,3vw,2.6rem)] leading-none">
-              {it.value}
+              <CountUp value={it.value} />
             </p>
             <p className="mt-2 text-sm leading-relaxed text-white/60">{it.label}</p>
           </Reveal>

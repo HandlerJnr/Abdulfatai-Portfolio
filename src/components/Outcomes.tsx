@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Reveal, RevealLines } from "./Reveal";
+import { CountUp } from "./CountUp";
 
 /**
  * The strongest four results on the site, each linking to the case study that
@@ -78,7 +79,7 @@ export function Outcomes() {
                   {o.kind}
                 </span>
                 <p className="display mt-3 text-[clamp(2.2rem,3.6vw,3.2rem)] leading-none">
-                  {o.value}
+                  <CountUp value={o.value} />
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-white/70">
                   {o.label}

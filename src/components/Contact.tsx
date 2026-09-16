@@ -1,6 +1,7 @@
 import { Marquee } from "./Marquee";
 import { Reveal, RevealLines } from "./Reveal";
 import { site } from "@/data/site";
+import { Magnetic } from "./Magnetic";
 
 export function Contact() {
   return (
@@ -25,13 +26,15 @@ export function Contact() {
           </p>
         </Reveal>
         <Reveal delay={0.3} className="mt-14 md:mt-20">
-          <a
-            href={`mailto:${site.email}?subject=Product%20design%20opportunity`}
-            data-cursor="link"
-            className="display link-line text-[clamp(2.6rem,9vw,9.5rem)] leading-none text-ink hover:text-accent transition-colors duration-500"
-          >
-            Get in touch
-          </a>
+          <Magnetic strength={0.18}>
+            <a
+              href={`mailto:${site.email}?subject=Product%20design%20opportunity`}
+              data-cursor="link"
+              className="display link-line text-[clamp(2.6rem,9vw,9.5rem)] leading-none text-ink hover:text-accent transition-colors duration-500"
+            >
+              Get in touch
+            </a>
+          </Magnetic>
           <p className="mt-6 text-sm text-ink/55">{site.email}</p>
         </Reveal>
       </div>

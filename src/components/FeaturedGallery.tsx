@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { featuredProjects } from "@/data/projects";
 import { ProjectCover } from "./ProjectCover";
 import { Reveal } from "./Reveal";
+import { Parallax } from "./Parallax";
 
 export function FeaturedGallery() {
   const reduce = useReducedMotion();
@@ -49,8 +50,10 @@ export function FeaturedGallery() {
               }`}
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-line/60 bg-[#0b0b14]">
-                <div className="h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04]">
-                  <ProjectCover project={p} priority={i === 0} />
+                <div className="h-full w-full scale-[1.06] transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.1]">
+                  <Parallax distance={26} className="h-full w-full">
+                    <ProjectCover project={p} priority={i === 0} />
+                  </Parallax>
                 </div>
                 <span className="display pointer-events-none absolute bottom-5 right-5 rounded-full border border-white/40 bg-ink/60 px-4 py-2 text-sm tracking-[0.2em] text-white opacity-0 backdrop-blur transition-all duration-500 group-hover:opacity-100 group-focus-visible:opacity-100 md:translate-y-2 md:group-hover:translate-y-0">
                   {p.caseStudy ? "View case study →" : "View project →"}

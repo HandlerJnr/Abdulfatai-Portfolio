@@ -6,6 +6,8 @@ import { ProjectCover } from "@/components/ProjectCover";
 import { Reveal, RevealLines } from "@/components/Reveal";
 import { site } from "@/data/site";
 import sizes from "@/data/imageSizes.json";
+import { CountUp } from "@/components/CountUp";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 type Params = Promise<{ slug: string }>;
 
@@ -51,7 +53,9 @@ export default async function CaseStudy({ params }: { params: Params }) {
   const next = projects[(index + 1) % projects.length];
 
   return (
-    <article className="pt-[72px]">
+    <>
+      <ScrollProgress />
+      <article className="pt-[72px]">
       {/* Header */}
       <header className="border-b border-line/60 px-5 pb-12 pt-16 md:px-10 md:pb-16 md:pt-24">
         <Reveal>
@@ -306,7 +310,7 @@ export default async function CaseStudy({ params }: { params: Params }) {
                               : "Company-reported traction"}
                         </span>
                         <p className="display mt-3 text-[clamp(2rem,3.4vw,3rem)] leading-none text-white">
-                          {m.value}
+                          <CountUp value={m.value} />
                         </p>
                         <p className="mt-3 text-sm leading-relaxed text-white/70">
                           {m.label}
@@ -439,5 +443,6 @@ export default async function CaseStudy({ params }: { params: Params }) {
         <span className="mt-3 block text-white/60">{next.category}</span>
       </Link>
     </article>
+    </>
   );
 }
