@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Marquee } from "./Marquee";
 import { Reveal } from "./Reveal";
 import { site } from "@/data/site";
+import { Fragment } from "react";
 
 export function Hero() {
   return (
@@ -38,7 +39,24 @@ export function Hero() {
                   className="line-rise"
                   style={{ animationDelay: `${0.08 + i * 0.09}s` }}
                 >
-                  {line}
+                  {/* Split per word, then per letter: each letter can take its
+                      own hover colour, while the word remains the unit that
+                      wraps, so nothing ever breaks mid-word. */}
+                  {line.split(" ").map((word, w, words) => (
+                    <Fragment key={`${word}-${w}`}>
+                      <span className="word">
+                        {[...word].map((ch, c) => (
+                          <span key={c} className="letter">
+                            {ch}
+                          </span>
+                        ))}
+                      </span>
+                      {/* The space sits between the words, not inside one — a
+                          trailing space inside an inline-block is trimmed, and
+                          the line would lose every gap. */}
+                      {w < words.length - 1 ? " " : null}
+                    </Fragment>
+                  ))}
                 </span>
               </span>
             ),

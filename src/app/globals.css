@@ -154,3 +154,23 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .line-rise { animation: none; transform: none; }
 }
+
+/* Per-letter hover on the hero headline. Colour only — no transform — so the
+   line never reflows and the mask animation above is untouched.
+   The slow transition lives on the resting state and the fast one on hover, so
+   a letter lights instantly under the cursor and fades back unhurried. */
+.letter {
+  transition: color 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.letter:hover {
+  color: var(--color-accent);
+  transition-duration: 40ms;
+}
+/* Words stay whole: the letter spans are inline, the word is the break unit. */
+.word { display: inline-block; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .letter { transition-duration: 0ms; }
+}
+@media (hover: none) {
+  .letter:hover { color: inherit; }
+}
