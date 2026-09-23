@@ -87,7 +87,7 @@ export default function RootLayout({
           // Person schema: name, role, location and the profiles a recruiter
           // would otherwise have to hunt for.
           dangerouslySetInnerHTML={{
-            __html: json.dumps({
+            __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
               name: site.name,
