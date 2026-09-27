@@ -1,9 +1,18 @@
-# Jamiu Abdulfatai — Portfolio
+# Abdulfatai Jamiu — Product Design Portfolio
 
-Alignerr-inspired single-page portfolio concept for Jamiu Abdulfatai.
+Recruiter-focused static portfolio for Abdulfatai Jamiu.
 
-This first pass intentionally uses no project photography/screenshots. Image zones are reserved so real project visuals can be introduced after the layout and visual system are approved.
+## What this version includes
+
+- Featured work with real project imagery and evidence
+- Recruiter-friendly project summaries and quick case-study dialogs
+- About, experience, process, capabilities and proof sections
+- Downloadable CV
+- Sticky navigation
+- Pull-cord light/dark theme interaction
+- Responsive layout and reduced-motion support
+- Vercel static deployment configuration
 
 ## Run locally
 
-Open `index.html` directly in a browser, or serve the folder with any static file server.
+Open `index.html` directly in a browser or serve the repository with any static file server.

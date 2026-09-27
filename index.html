@@ -3,211 +3,339 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Jamiu Abdulfatai — Product Designer creating clear, scalable digital products across fintech, SaaS and healthcare." />
-  <title>Jamiu Abdulfatai — Product Designer</title>
+  <meta name="description" content="Abdulfatai Jamiu — Product Designer in Brighton, UK. Fintech, SaaS, AI and healthcare products from research through shipped interface." />
+  <meta name="theme-color" content="#071827" />
+  <meta property="og:title" content="Abdulfatai Jamiu — Product Designer" />
+  <meta property="og:description" content="Product designer turning complex workflows into clear, trusted digital products across fintech, SaaS, AI and healthcare." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og.jpg" />
+  <title>Abdulfatai Jamiu — Product Designer</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Jamiu Abdulfatai home">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 34 34" role="img"><path d="M17 3.5 30 26H4L17 3.5Z"/><path d="M17 10.2 23.9 22H10.1L17 10.2Z"/></svg>
-      </span>
-      <span class="brand-name">Jamiu</span>
-      <span class="brand-divider"></span>
-      <span class="brand-role">Product Designer</span>
-    </a>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <nav class="desktop-nav" aria-label="Primary">
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="#top" aria-label="Abdulfatai Jamiu — home">
+      <span class="brand-monogram">AJ.</span>
+      <span class="brand-copy"><strong>Abdulfatai Jamiu</strong><small>Product Designer</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
       <a href="#work">Work</a>
-      <a href="#approach">Approach</a>
       <a href="#about">About</a>
+      <a href="#approach">Approach</a>
+      <a href="#proof">Proof</a>
       <a href="#contact">Contact</a>
     </nav>
-
     <div class="header-actions">
-      <a class="location-pill" href="#contact"><span class="status-dot"></span> Brighton, UK</a>
-      <a class="icon-button" href="https://www.linkedin.com/in/jamiudesign/" target="_blank" rel="noreferrer" aria-label="Open LinkedIn">
-        <svg viewBox="0 0 24 24"><path d="M7 10v7M7 7.2v.1M11 17v-4.1c0-1.7 1-2.9 2.6-2.9 1.7 0 2.4 1.1 2.4 3V17M4.5 3.5h15v17h-15z"/></svg>
-      </a>
-      <button class="menu-button" id="menuButton" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
-        <span></span><span></span>
-      </button>
+      <a class="cv-nav" href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV <span>↗</span></a>
+      <button class="menu-button" id="menuButton" type="button" aria-controls="mobileNav" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button>
     </div>
   </header>
 
   <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <a href="#work">Work</a><a href="#approach">Approach</a><a href="#about">About</a><a href="#contact">Contact</a>
+    <a href="#work">Work</a><a href="#about">About</a><a href="#approach">Approach</a><a href="#proof">Proof</a><a href="#contact">Contact</a>
+    <a href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV ↗</a>
   </nav>
 
-  <main>
-    <section class="hero section-dark">
-      <div class="hero-orb hero-orb-one"></div>
-      <div class="hero-orb hero-orb-two"></div>
-      <div class="hero-inner page-shell">
-        <div class="metrics-bar" aria-label="Highlights">
-          <div><strong>4+ yrs</strong><span>Product design</span></div>
-          <div><strong>0→1</strong><span>Startup products</span></div>
-          <div><strong>3+</strong><span>Core industries</span></div>
+  <div class="theme-pull" id="themePull">
+    <div class="pull-rope" id="pullRope"></div>
+    <button class="pull-handle" id="themeHandle" type="button" aria-label="Toggle light and dark theme" aria-pressed="false">
+      <span class="pull-grip"></span>
+    </button>
+    <span class="pull-label" id="pullLabel">pull for light</span>
+  </div>
+
+  <main id="main">
+    <section class="hero section-dark" id="top">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+      <div class="page-shell hero-shell">
+        <div class="hero-meta reveal">
+          <span class="availability"><i></i> Brighton, United Kingdom</span>
+          <span>MSc User Experience Design · University of Brighton</span>
         </div>
 
-        <div class="hero-copy">
-          <p class="eyebrow">PRODUCT DESIGN · UX/UI · DESIGN SYSTEMS</p>
-          <h1>Where complex products become clear experiences.</h1>
-          <p class="hero-lede">I’m Jamiu Abdulfatai, a product designer turning ambitious ideas into usable, trusted digital products across fintech, SaaS and healthcare.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#work">View selected work <span aria-hidden="true">↗</span></a>
-            <a class="button button-ghost" href="https://www.linkedin.com/in/jamiudesign/" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">PRODUCT DESIGN · FINTECH · SAAS · AI</p>
+            <h1>I design clearer experiences for complex digital products.</h1>
+            <p class="hero-lede">I’m Abdulfatai Jamiu. I work from research and product strategy through interaction design, systems, prototyping and implementation — turning complex workflows into products people can understand, trust and use.</p>
+            <div class="hero-actions">
+              <a class="button button-accent" href="#work">View selected work <span>↓</span></a>
+              <a class="button button-ghost" href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV <span>↗</span></a>
+            </div>
+            <p class="hero-skills">Research-led product design · UX strategy · Interaction design · Prototyping · Design systems</p>
+          </div>
+
+          <div class="hero-visual reveal" aria-label="Selected product work">
+            <figure class="visual-card visual-card-main">
+              <img src="/projects/pay4me-hero.jpg" alt="Radius cross-border payments product work" />
+              <figcaption><strong>Radius</strong><span>Cross-border payments</span></figcaption>
+            </figure>
+            <figure class="visual-card visual-card-top">
+              <img src="/projects/vista-devices.jpg" alt="Vista digital banking product work" />
+              <figcaption><strong>Vista</strong><span>4-market banking</span></figcaption>
+            </figure>
+            <figure class="visual-card visual-card-bottom">
+              <img src="/projects/kremor-hero.jpg" alt="Kremor AI fashion platform product work" />
+              <figcaption><strong>Kremor AI</strong><span>Generative product</span></figcaption>
+            </figure>
           </div>
         </div>
 
-        <div class="hero-stage" aria-label="Reserved project imagery area">
-          <div class="stage-grid"></div>
-          <div class="stage-card stage-card-left">
-            <span class="tiny-label">SELECTED PRODUCT</span>
-            <strong>Radius</strong>
-            <span>Fintech · Payments</span>
-          </div>
-          <div class="stage-card stage-card-right">
-            <span class="tiny-label">ROLE</span>
-            <strong>Product Design</strong>
-            <span>UX · UI · Systems</span>
-          </div>
-          <div class="stage-center-mark" aria-hidden="true"><span></span></div>
+        <div class="hero-stats reveal" aria-label="Selected experience and impact">
+          <div><span>Experience</span><strong>4+ years</strong><small>Designing digital products</small></div>
+          <div><span>Design impact</span><strong>+45%</strong><small>Dashboard activation at Bizinc</small></div>
+          <div><span>Product scope</span><strong>4 markets</strong><small>Multi-currency banking at Vista</small></div>
+          <div><span>AI product work</span><strong>96+</strong><small>Complex AI tasks evaluated</small></div>
         </div>
       </div>
     </section>
 
-    <section class="logo-strip" aria-label="Experience highlights">
-      <div class="logo-track">
-        <span>BIZINC</span><span>RADIUS</span><span>ARETE</span><span>ITSS</span><span>BIZINC</span><span>RADIUS</span><span>ARETE</span><span>ITSS</span>
+    <section class="experience-strip">
+      <div class="page-shell experience-inner">
+        <span>Experience across</span>
+        <div class="experience-names"><strong>BIZINC</strong><strong>VISTA / ITSS</strong><strong>RADIUS</strong><strong>KREMOR AI</strong><strong>CHALANT AI</strong></div>
       </div>
     </section>
 
     <section class="work-section section-light" id="work">
       <div class="page-shell">
-        <div class="section-heading-row">
+        <div class="section-intro reveal">
           <div>
             <p class="eyebrow eyebrow-dark">SELECTED WORK</p>
-            <h2>Designing across products, industries and stages.</h2>
-            <p class="section-subcopy">A focused selection of work spanning fintech, business platforms and healthcare — from early product definition to scalable systems.</p>
+            <h2>Real products, visible decisions, measurable context.</h2>
           </div>
-          <a class="text-link" href="https://jamiudesigns.vercel.app/" target="_blank" rel="noreferrer">View full portfolio <span>↗</span></a>
+          <p>Selected work across fintech, SaaS, AI and healthcare. Each project shows the problem, what I owned, the decisions I made, and what changed.</p>
         </div>
 
-        <div class="filter-tabs" role="tablist" aria-label="Project filters">
-          <button class="filter active" data-filter="all" role="tab" aria-selected="true">All</button>
-          <button class="filter" data-filter="fintech" role="tab" aria-selected="false">Fintech</button>
-          <button class="filter" data-filter="saas" role="tab" aria-selected="false">SaaS</button>
-          <button class="filter" data-filter="health" role="tab" aria-selected="false">Healthcare</button>
+        <div class="filter-tabs reveal" role="tablist" aria-label="Filter projects">
+          <button class="filter active" type="button" data-filter="all" aria-selected="true">All</button>
+          <button class="filter" type="button" data-filter="fintech" aria-selected="false">Fintech</button>
+          <button class="filter" type="button" data-filter="ai" aria-selected="false">AI</button>
+          <button class="filter" type="button" data-filter="healthcare" aria-selected="false">Healthcare</button>
         </div>
 
         <div class="project-list" id="projectList">
-          <article class="project-card" data-category="fintech">
-            <div class="project-content">
-              <div class="project-kicker"><span class="project-icon">R</span><span>FINTECH · PRODUCT DESIGN</span></div>
-              <h3>Radius</h3>
-              <p>Payment experiences designed around clarity, confidence and fewer points of friction — with flows that make cross-border financial tasks easier to understand.</p>
-              <div class="project-meta"><span>User flows</span><span>Interaction design</span><span>Design system</span></div>
+          <article class="project-card reveal" data-category="saas">
+            <div class="project-media tone-sand">
+              <img src="/projects/bizinc-home.jpg" alt="Bizinc marketplace and booking platform interface" loading="lazy" />
+              <span class="project-index">01</span>
             </div>
-            <div class="project-blank" aria-label="Project image intentionally left blank">
-              <span>PROJECT IMAGE<br/>COMING NEXT</span>
-            </div>
-            <a class="project-arrow" href="https://withradius.com/" target="_blank" rel="noreferrer" aria-label="Open Radius website">↗</a>
-          </article>
-
-          <article class="project-card" data-category="saas">
-            <div class="project-content">
-              <div class="project-kicker"><span class="project-icon">B</span><span>SAAS · BUSINESS PLATFORM</span></div>
+            <div class="project-body">
+              <div class="project-topline"><span>BIZINC · SAAS / MARKETPLACE</span><span>2024 — 2026</span></div>
               <h3>Bizinc</h3>
-              <p>Simplifying multi-step business journeys through clearer information architecture, stronger hierarchy and reusable product patterns for a growing platform.</p>
-              <div class="project-meta"><span>Research</span><span>Information architecture</span><span>Prototyping</span></div>
+              <p class="project-summary">One platform where a business is found, booked and run — discovery on one side, operations on the other.</p>
+              <div class="project-proof">
+                <div><strong>+45%</strong><span>dashboard activation</span></div>
+                <div><strong>+23%</strong><span>customer growth across redesign period</span></div>
+              </div>
+              <div class="project-role"><span>Role</span><strong>Product Designer → UI/UX Manager</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="bizinc-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://bizinc.io/" target="_blank" rel="noreferrer">Visit live product ↗</a>
+              </div>
             </div>
-            <div class="project-blank" aria-label="Project image intentionally left blank">
-              <span>PROJECT IMAGE<br/>COMING NEXT</span>
-            </div>
-            <a class="project-arrow" href="https://jamiudesigns.vercel.app/" target="_blank" rel="noreferrer" aria-label="Open portfolio">↗</a>
           </article>
 
-          <article class="project-card" data-category="health">
-            <div class="project-content">
-              <div class="project-kicker"><span class="project-icon">A</span><span>HEALTHCARE · UX/UI</span></div>
-              <h3>Arete Telemedicine</h3>
-              <p>A telemedicine experience shaped around accessibility, trust and calm decision-making across appointment, care and patient-facing journeys.</p>
-              <div class="project-meta"><span>UX strategy</span><span>Mobile UI</span><span>Usability</span></div>
+          <article class="project-card project-card-reverse reveal" data-category="fintech">
+            <div class="project-media tone-blue">
+              <img src="/projects/vista-devices.jpg" alt="Vista multi-country digital banking interface" loading="lazy" />
+              <span class="project-index">02</span>
             </div>
-            <div class="project-blank" aria-label="Project image intentionally left blank">
-              <span>PROJECT IMAGE<br/>COMING NEXT</span>
+            <div class="project-body">
+              <div class="project-topline"><span>VISTA · FINTECH / ENTERPRISE</span><span>2023 — 2024</span></div>
+              <h3>Vista Digital Banking</h3>
+              <p class="project-summary">One banking product for businesses operating across four West African markets — entities, currencies, languages and approval mandates included.</p>
+              <div class="project-proof">
+                <div><strong>4</strong><span>localised markets</span></div>
+                <div><strong>2</strong><span>languages in one design system</span></div>
+              </div>
+              <div class="project-role"><span>Role</span><strong>UI/UX Designer & Front-End Developer, ITSS</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="vista-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://vistabankgroup.com/" target="_blank" rel="noreferrer">Visit Vista ↗</a>
+              </div>
             </div>
-            <a class="project-arrow" href="https://www.behance.net/gallery/255070051/Arete-Telemedicine-UXUI-Case-Study" target="_blank" rel="noreferrer" aria-label="Open Arete case study">↗</a>
+          </article>
+
+          <article class="project-card reveal" data-category="fintech">
+            <div class="project-media tone-cyan">
+              <img src="/projects/pay4me-hero.jpg" alt="Radius cross-border payments product screens" loading="lazy" />
+              <span class="project-index">03</span>
+            </div>
+            <div class="project-body">
+              <div class="project-topline"><span>RADIUS · CROSS-BORDER PAYMENTS</span><span>2025</span></div>
+              <h3>Radius</h3>
+              <p class="project-summary">Paying tuition, SEVIS and visa fees across borders — designed around sponsored payments, trust before install and high-stakes deadlines.</p>
+              <div class="project-proof">
+                <div><strong>100K+</strong><span>international students*</span></div>
+                <div><strong>96+</strong><span>countries served*</span></div>
+              </div>
+              <div class="metric-note">*Company-reported product traction; shown as product context, not claimed as design impact.</div>
+              <div class="project-role"><span>Role</span><strong>Product Designer</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="radius-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://withradius.com/" target="_blank" rel="noreferrer">Visit Radius ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card project-card-reverse reveal" data-category="ai">
+            <div class="project-media tone-purple">
+              <img src="/projects/kremor-hero.jpg" alt="Kremor AI fashion platform interface" loading="lazy" />
+              <span class="project-index">04</span>
+            </div>
+            <div class="project-body">
+              <div class="project-topline"><span>KREMOR AI · AI / E-COMMERCE</span><span>2024 — 2026</span></div>
+              <h3>Kremor AI</h3>
+              <p class="project-summary">A generative fashion platform spanning storefront, AI workspace and the operational system that turns a prompt into a real garment.</p>
+              <div class="project-proof">
+                <div><strong>3</strong><span>connected product surfaces</span></div>
+                <div><strong>96+</strong><span>AI interaction tasks evaluated</span></div>
+              </div>
+              <div class="project-role"><span>Role</span><strong>Design & Research Lead · Contract</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="kremor-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://kremor-ai-clone.vercel.app/" target="_blank" rel="noreferrer">Visit live product ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="ai">
+            <div class="project-media tone-green">
+              <img src="/projects/chalant-workspace.jpg" alt="Chalant AI agent workspace" loading="lazy" />
+              <span class="project-index">05</span>
+            </div>
+            <div class="project-body">
+              <div class="project-topline"><span>CHALANT AI · AI LEARNING</span><span>2025</span></div>
+              <h3>Chalant AI</h3>
+              <p class="project-summary">Teaching people to manage AI by giving them a team to manage — with confidence signals, human review checkpoints and operational consequences.</p>
+              <div class="project-proof">
+                <div><strong>5</strong><span>AI agents in the learning workspace</span></div>
+                <div><strong>2</strong><span>roles: learner + administrator</span></div>
+              </div>
+              <div class="project-role"><span>Role</span><strong>Lead Product Designer</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="chalant-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://chalantwork.com/" target="_blank" rel="noreferrer">Visit Chalant ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card project-card-reverse reveal" data-category="healthcare">
+            <div class="project-media tone-mint">
+              <img src="/projects/arete-cover.jpg" alt="Arete connected healthcare product case study" loading="lazy" />
+              <span class="project-index">06</span>
+            </div>
+            <div class="project-body">
+              <div class="project-topline"><span>ARETE · DIGITAL HEALTHCARE</span><span>2026</span></div>
+              <h3>Arete</h3>
+              <p class="project-summary">A connected healthcare ecosystem designed beyond the doctor booking — through coverage, consultation, prescription and pharmacy fulfilment.</p>
+              <div class="project-proof">
+                <div><strong>7</strong><span>steps in the care journey</span></div>
+                <div><strong>4</strong><span>connected service surfaces</span></div>
+              </div>
+              <div class="project-role"><span>Role</span><strong>End-to-End Product Designer</strong></div>
+              <div class="project-actions">
+                <button class="text-button case-link" type="button" data-dialog="arete-dialog">View case study <span>→</span></button>
+                <a class="text-link" href="https://www.behance.net/gallery/255070051/Arete-Telemedicine-UXUI-Case-Study" target="_blank" rel="noreferrer">Open on Behance ↗</a>
+              </div>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="testimonial section-dark" id="about">
-      <div class="page-shell testimonial-inner">
-        <div class="quote-mark" aria-hidden="true">“</div>
-        <blockquote>Jamiu consistently turns complex requirements into intuitive, user-focused design — combining strong visual craft with practical product thinking.</blockquote>
-        <p class="quote-credit">— Recommendation from a product collaborator</p>
+    <section class="about-section section-dark" id="about">
+      <div class="page-shell about-grid">
+        <div class="about-heading reveal">
+          <p class="eyebrow">ABOUT</p>
+          <h2>Making complicated things feel simple.</h2>
+          <a class="button button-ghost" href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV <span>↗</span></a>
+        </div>
+        <div class="about-content reveal">
+          <p class="about-lede">I design digital products that sit between user needs, business goals, technology and visual clarity. I’m strongest where the workflow is complex: multi-step journeys, role-based systems, regulated products and interfaces where trust has to be earned.</p>
+          <div class="about-facts">
+            <div><span>Experience</span><p>Product designer building responsive web and mobile products since 2023. At Bizinc I progressed from intern to Product Designer to UI/UX Manager; at Kremor AI I led design and research across the platform end to end on contract.</p></div>
+            <div><span>Sectors</span><p>Fintech, SaaS, AI, healthcare, Web3, e-commerce and booking platforms — including complex dashboards and multi-step digital journeys.</p></div>
+            <div><span>Research</span><p>User interviews, usability testing, journey mapping, information architecture, UX benchmarking and research synthesis, with accessibility in mind.</p></div>
+            <div><span>Collaboration</span><p>Translating stakeholder requirements into practical product decisions and working closely with developers through implementation, with working knowledge of HTML/CSS.</p></div>
+            <div><span>Brighton</span><p>Based in Brighton, UK, studying MSc User Experience Design at the University of Brighton.</p></div>
+            <div><span>Recognition</span><p>Most Outstanding Intern of the Year on the Vista programme and finalist, Synergy Africa Design Quest 2023, with written references from product leaders.</p></div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="approach-section section-light" id="approach">
-      <div class="page-shell approach-grid">
-        <div class="approach-intro">
-          <p class="eyebrow eyebrow-dark">HOW I WORK</p>
-          <h2>Good design starts before the interface.</h2>
-          <p>I work from problem framing through research, flows, interface design, prototyping, testing and developer handoff — keeping user needs and business outcomes visible throughout.</p>
+      <div class="page-shell">
+        <div class="section-intro reveal">
+          <div><p class="eyebrow eyebrow-dark">HOW I WORK</p><h2>From problem to shipped.</h2></div>
+          <p>The process changes with the product, but the principle stays the same: reduce uncertainty before polishing the interface.</p>
         </div>
-        <div class="approach-steps">
-          <div class="step"><span>01</span><div><h3>Understand the problem</h3><p>Stakeholder goals, user needs, constraints, competitors and the real friction behind the request.</p></div></div>
-          <div class="step"><span>02</span><div><h3>Structure the experience</h3><p>Flows, information architecture and low-fidelity thinking before visual polish.</p></div></div>
-          <div class="step"><span>03</span><div><h3>Design and prototype</h3><p>High-fidelity responsive interfaces with reusable components, accessibility and interaction states.</p></div></div>
-          <div class="step"><span>04</span><div><h3>Test, refine and ship</h3><p>Feedback loops with users, stakeholders and engineers to reduce uncertainty before release.</p></div></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="faq-section section-dark">
-      <div class="page-shell faq-shell">
-        <div class="faq-title"><p class="eyebrow">QUICK QUESTIONS</p><h2>FAQs</h2></div>
-        <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false"><span>What kind of product work do you specialise in?</span><span class="plus">+</span></button>
-            <div class="faq-answer"><p>End-to-end product design for web and mobile products, especially fintech, SaaS, healthcare and complex multi-step services.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false"><span>Can you work from early ideas as well as existing products?</span><span class="plus">+</span></button>
-            <div class="faq-answer"><p>Yes. I work across 0→1 product definition, redesigns and optimisation of established experiences, including research, flows, prototyping and systemisation.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false"><span>What tools do you use?</span><span class="plus">+</span></button>
-            <div class="faq-answer"><p>Figma, FigJam, Miro, Framer and Adobe tools, alongside HTML/CSS, Git and analytics tools where they help design decisions and collaboration.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false"><span>Do you work with design systems?</span><span class="plus">+</span></button>
-            <div class="faq-answer"><p>Yes. I build reusable components, variants, variables, tokens and documentation so teams can move faster without losing consistency.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false"><span>Are you open to UK and remote opportunities?</span><span class="plus">+</span></button>
-            <div class="faq-answer"><p>Yes. I’m based in Brighton and open to product design opportunities in the UK as well as suitable remote collaborations.</p></div>
-          </div>
+        <div class="process-grid">
+          <article class="process-card reveal"><span>01</span><h3>Frame the real problem</h3><p>Before anything is drawn: what is actually going wrong, for whom, and why it matters.</p></article>
+          <article class="process-card reveal"><span>02</span><h3>Map roles & constraints</h3><p>Users, permissions, business rules, regulators, edge cases and the system around the screen.</p></article>
+          <article class="process-card reveal"><span>03</span><h3>Explore directions</h3><p>More than one answer held against the same product goal rather than defended on taste.</p></article>
+          <article class="process-card reveal"><span>04</span><h3>Prototype the risk</h3><p>Build the part most likely to be wrong first — not the part easiest to make beautiful.</p></article>
+          <article class="process-card reveal"><span>05</span><h3>Test clarity</h3><p>Can people understand the flow, predict what happens next and recover when something fails?</p></article>
+          <article class="process-card reveal"><span>06</span><h3>Build the system</h3><p>Components, variants, tokens and patterns so the tenth screen costs less than the first.</p></article>
+          <article class="process-card reveal"><span>07</span><h3>Ship with engineering</h3><p>Specs, front-end review and decisions that survive implementation instead of stopping at handoff.</p></article>
+          <article class="process-card reveal"><span>08</span><h3>Measure what changed</h3><p>Separate design impact from company traction and keep the evidence honest.</p></article>
         </div>
       </div>
     </section>
 
-    <section class="cta-section section-light" id="contact">
-      <div class="page-shell cta-card">
-        <div class="cta-noise"></div>
-        <p class="eyebrow eyebrow-dark">LET’S BUILD SOMETHING USEFUL</p>
-        <h2>Have a product problem worth solving?</h2>
-        <p>I’m open to product design opportunities, collaborations and thoughtful conversations about digital products.</p>
-        <div class="cta-actions">
-          <a class="button button-dark" href="mailto:hello@jamiudesign.com">Start a conversation <span>↗</span></a>
+    <section class="proof-section section-dark" id="proof">
+      <div class="page-shell">
+        <div class="section-intro section-intro-dark reveal">
+          <div><p class="eyebrow">SELECTED PROOF</p><h2>Work that can be verified.</h2></div>
+          <p>Credibility matters more than anonymous praise. These are concrete markers from the work and the people around it.</p>
+        </div>
+        <div class="proof-grid">
+          <article class="proof-card reveal"><span>Progression</span><h3>Intern → Product Designer → UI/UX Manager</h3><p>Progressed through three levels at Bizinc while leading product design direction across booking, e-commerce and SaaS surfaces.</p></article>
+          <article class="proof-card reveal"><span>Recognition</span><h3>Most Outstanding Intern of the Year</h3><p>ITSS recognition tied to contributions on the Vista digital banking programme.</p></article>
+          <article class="proof-card reveal"><span>Leadership</span><h3>Design & research lead at Kremor AI</h3><p>Owned three connected surfaces, role-based operations, the design system and AI model evaluation work.</p></article>
+          <article class="proof-card reveal"><span>References</span><h3>Founder-level written references</h3><p>Written references from Bizinc and Kremor AI leadership document ownership, collaboration and impact.</p></article>
+        </div>
+        <div class="proof-actions reveal">
+          <a class="button button-accent" href="https://jamiudesigns.vercel.app/credentials" target="_blank" rel="noreferrer">Open credentials <span>↗</span></a>
+          <a class="button button-ghost" href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="capabilities-section section-light">
+      <div class="page-shell capability-layout">
+        <div class="capability-title reveal">
+          <p class="eyebrow eyebrow-dark">WHAT I BRING</p>
+          <h2>Useful where products get complicated.</h2>
+        </div>
+        <div class="capability-list">
+          <article class="capability-row reveal"><span>01</span><h3>Complex workflows</h3><p>Multi-step, multi-role journeys where the hard part is structure, permissions and sequence — not surface decoration.</p></article>
+          <article class="capability-row reveal"><span>02</span><h3>Fintech & trust</h3><p>Money, currencies, entities, disclosures and approval chains where clarity has to coexist with real risk.</p></article>
+          <article class="capability-row reveal"><span>03</span><h3>AI product design</h3><p>Confidence signals, human review checkpoints and scaffolding for people who cannot yet describe what they want.</p></article>
+          <article class="capability-row reveal"><span>04</span><h3>Multi-role & multi-market</h3><p>Permissions matrices, audit trails, localisation and one system holding across different users, markets and rules.</p></article>
+          <article class="capability-row reveal"><span>05</span><h3>Research to design</h3><p>Interviews, journey mapping, usability testing and synthesis translated into concrete structural decisions.</p></article>
+          <article class="capability-row reveal"><span>06</span><h3>Design systems & handoff</h3><p>Reusable components, variants, tokens and development-ready documentation that helps the build stay consistent.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section section-light" id="contact">
+      <div class="page-shell contact-card reveal">
+        <div class="contact-grid"></div>
+        <p class="eyebrow eyebrow-dark">OPEN TO PRODUCT DESIGN OPPORTUNITIES</p>
+        <h2>Have a product, problem or opportunity worth discussing?</h2>
+        <p>I’m based in Brighton and open to UK product design roles, remote opportunities and thoughtful collaborations.</p>
+        <div class="contact-actions">
+          <a class="button button-dark" href="mailto:aabdulfataijamiu@gmail.com">aabdulfataijamiu@gmail.com <span>↗</span></a>
           <a class="button button-outline-dark" href="https://www.linkedin.com/in/jamiudesign/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
         </div>
       </div>
@@ -215,17 +343,104 @@
   </main>
 
   <footer class="footer section-dark">
-    <div class="page-shell footer-grid">
-      <div class="footer-brand">
-        <div class="brand footer-brand-lockup"><span class="brand-mark"><svg viewBox="0 0 34 34"><path d="M17 3.5 30 26H4L17 3.5Z"/><path d="M17 10.2 23.9 22H10.1L17 10.2Z"/></svg></span><span class="brand-name">Jamiu</span></div>
-        <p>Product Designer creating useful, scalable digital experiences.</p>
-      </div>
-      <div class="footer-links"><a href="#work">Work</a><a href="#approach">Approach</a><a href="#about">About</a><a href="#contact">Contact</a></div>
-      <div class="footer-links"><a href="https://www.linkedin.com/in/jamiudesign/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://www.behance.net/abdulfataijamiu" target="_blank" rel="noreferrer">Behance ↗</a><a href="https://jamiudesigns.vercel.app/" target="_blank" rel="noreferrer">Current portfolio ↗</a></div>
+    <div class="page-shell footer-top">
+      <div><strong class="footer-mark">AJ.</strong><p>Abdulfatai Jamiu · Product Designer<br>Brighton, United Kingdom</p></div>
+      <div class="footer-links"><a href="#work">Work</a><a href="#about">About</a><a href="#approach">Approach</a><a href="#proof">Proof</a></div>
+      <div class="footer-links"><a href="https://www.linkedin.com/in/jamiudesign/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://www.behance.net/abdulfataijamiu" target="_blank" rel="noreferrer">Behance ↗</a><a href="/Abdulfatai_Jamiu_CV.pdf" download>Download CV ↗</a></div>
     </div>
-    <div class="page-shell footer-bottom"><span>© 2026 Jamiu Abdulfatai.</span><a href="#top">Back to top ↑</a></div>
+    <div class="page-shell footer-bottom"><span>© 2026 Abdulfatai Jamiu.</span><a href="#top">Back to top ↑</a></div>
   </footer>
 
-  <script src="./script.js"></script>
+  <dialog class="case-dialog" id="bizinc-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/bizinc-home.jpg" alt="Bizinc marketplace product interface"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">BIZINC · 2024 — 2026</p><h2>Marketplace & Booking Platform</h2>
+        <div class="dialog-meta"><span><small>Role</small>Product Designer → UI/UX Manager</span><span><small>Impact</small>+45% dashboard activation</span><span><small>Scope</small>Booking · e-commerce · SaaS</span></div>
+        <section><h3>The problem</h3><p>Bizinc had to make business discovery, booking and operations feel like one product rather than separate tools. The work required product strategy, information architecture and a system that could hold multiple surfaces as the company grew.</p></section>
+        <section><h3>What I owned</h3><p>I set design direction with the founding team, led product design and research, sequenced what shipped first, maintained the system across teams and later led the junior design team as UI/UX Manager.</p></section>
+        <section><h3>What changed</h3><p>The redesign period delivered a measured +45% increase in dashboard activation and +23% customer growth, with post-launch measurement continuing beyond the release itself.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://bizinc.io/" target="_blank" rel="noreferrer">Visit Bizinc ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="case-dialog" id="vista-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/vista-screens.jpg" alt="Vista digital banking screens"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">VISTA · 2023 — 2024</p><h2>Multi-Country Corporate Banking</h2>
+        <div class="dialog-meta"><span><small>Role</small>UI/UX Designer & Front-End Developer</span><span><small>Scope</small>4 markets · 2 languages</span><span><small>Status</small>Shipped product</span></div>
+        <section><h3>The problem</h3><p>Corporate banking breaks the one-person-one-account assumption. One user may act for multiple legal entities, in different currencies, with different regulators and approval mandates.</p></section>
+        <section><h3>Key decisions</h3><p>I made entity a top-level context, designed approvals as a first-class destination, built account filtering for large portfolios and created one design system that could localise across Gambia, Guinea, Sierra Leone and Burkina Faso.</p></section>
+        <section><h3>Evidence</h3><p>The product shipped across four localised subsidiaries, and my contribution to the Vista programme was recognised with ITSS’s Most Outstanding Intern of the Year award.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://vistabankgroup.com/" target="_blank" rel="noreferrer">Visit Vista ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="case-dialog" id="radius-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/pay4me-features.jpg" alt="Radius payment product features"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">RADIUS · 2025</p><h2>Cross-Border Payments</h2>
+        <div class="dialog-meta"><span><small>Role</small>Product Designer</span><span><small>Platform</small>Mobile app + marketing site</span><span><small>Status</small>Live product</span></div>
+        <section><h3>The problem</h3><p>International education payments are deadlines, not ordinary transactions. The payer is often a parent or relative, while the beneficiary is the student — breaking the model most payment apps assume.</p></section>
+        <section><h3>Key decisions</h3><p>I made sponsored payment a first-class transfer type, surfaced verification and currency as everyday context, used the immigration journey’s own vocabulary and moved credibility work into the marketing site before the app install.</p></section>
+        <section><h3>Product context</h3><p>Radius reports 100K+ international students, 1,500+ five-star reviews, 96+ countries served and a six-hour average processing time. Those are company-reported product metrics, not claims of design impact.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://withradius.com/" target="_blank" rel="noreferrer">Visit Radius ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="case-dialog" id="kremor-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/kremor-mobile.jpg" alt="Kremor AI mobile product screens"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">KREMOR AI · 2024 — 2026</p><h2>AI Fashion Platform & Artisan Operations</h2>
+        <div class="dialog-meta"><span><small>Role</small>Design & Research Lead</span><span><small>Scope</small>3 connected surfaces</span><span><small>AI work</small>96+ interaction tasks evaluated</span></div>
+        <section><h3>The problem</h3><p>A generated image is not a garment. The product had to help people create without requiring fashion vocabulary, while connecting the creative surface to the real operational work of measurements, artisans, approvals and production.</p></section>
+        <section><h3>What I owned</h3><p>I designed the storefront, generative workspace and role-based operations platform end to end, maintained the design system and led research alongside forensic AI model evaluation.</p></section>
+        <section><h3>Key decisions</h3><p>I replaced a blank prompt with scaffolding, designed the prompt-to-production pipeline as one path, built a five-role permissions matrix and added an immutable audit trail for accountability.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://kremor-ai-clone.vercel.app/" target="_blank" rel="noreferrer">Visit live product ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="case-dialog" id="chalant-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/chalant-review.jpg" alt="Chalant AI review queue"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">CHALANT AI · 2025</p><h2>AI Learning Platform & Agent Workspace</h2>
+        <div class="dialog-meta"><span><small>Role</small>Lead Product Designer</span><span><small>Platform</small>Responsive web</span><span><small>Status</small>Prototype</span></div>
+        <section><h3>The problem</h3><p>The skill people need around AI is not only prompting — it is judgement: what to delegate, when to trust the output and when a confident answer should be rejected.</p></section>
+        <section><h3>Key decisions</h3><p>I turned the lesson into a realistic agent workspace, made human review structural, exposed confidence and SOP signals, and deliberately kept “Quick Approve” so the trade-off between speed and judgement stayed real.</p></section>
+        <section><h3>Scope</h3><p>I designed the learner workspace and administrator experience, including review queues, task management, SOPs, exports, analytics, progression and the shared design system.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://chalantwork.com/" target="_blank" rel="noreferrer">Visit Chalant ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="case-dialog" id="arete-dialog">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+      <div class="dialog-media"><img src="/projects/arete-journey.jpg" alt="Arete connected healthcare journey"></div>
+      <div class="dialog-content">
+        <p class="eyebrow eyebrow-dark">ARETE · 2026</p><h2>Connected Healthcare & Telemedicine</h2>
+        <div class="dialog-meta"><span><small>Role</small>End-to-End Product Designer</span><span><small>Scope</small>7-step care journey</span><span><small>Surfaces</small>Patient · Provider · HMO · Pharmacy</span></div>
+        <section><h3>The problem</h3><p>Most telemedicine products stop at the booking. The patient’s real journey continues through coverage, consultation, prescription, fulfilment and ongoing care — usually across services run by different organisations.</p></section>
+        <section><h3>What I owned</h3><p>UX strategy, information architecture, user flows, UX writing, UI design, the design system and interactive prototyping across the full experience.</p></section>
+        <section><h3>Key decisions</h3><p>I designed beyond the consultation, put coverage before commitment, treated pharmacy fulfilment as part of the care journey and made error, pending, unavailable and recovery states first-class UX.</p></section>
+        <div class="dialog-actions"><a class="button button-dark" href="https://www.behance.net/gallery/255070051/Arete-Telemedicine-UXUI-Case-Study" target="_blank" rel="noreferrer">Open full case study ↗</a></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="/script.js"></script>
 </body>
 </html>
