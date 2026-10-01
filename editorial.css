@@ -232,6 +232,9 @@
 .companion-dismiss-selection:hover:not(:disabled){background:#eee7de;color:#342c23}
 .companion-dismiss-selection:disabled{opacity:.38;cursor:not-allowed}
 
+.project-drawer>.summon-companion,.identity-drawer>.summon-companion,.cv-drawer>.summon-companion{z-index:12}
+.project-drawer>.companion-picker,.identity-drawer>.companion-picker,.cv-drawer>.companion-picker{z-index:13}
+.project-drawer>.pokemon-companion,.identity-drawer>.pokemon-companion,.cv-drawer>.pokemon-companion{z-index:11}
 .portfolio-companion.pokemon-companion{
   position:fixed;left:0;top:0;right:auto;bottom:auto;z-index:41;
   width:86px;height:86px;pointer-events:none;will-change:transform
@@ -251,15 +254,37 @@
 
 @media(max-width:760px){
   .summon-companion{right:16px;bottom:16px;min-width:164px;padding:9px 12px 10px}
-  .companion-picker{right:12px;bottom:78px;width:calc(100vw - 24px);padding:14px;border-radius:15px}
-  .companion-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-  .companion-option-art{height:68px}
-  .companion-option img{max-width:64px;max-height:64px}
+  .summon-companion.is-open{opacity:0;pointer-events:none;transform:translateY(10px)}
+  .companion-picker{
+    left:10px;right:10px;bottom:10px;width:auto;max-height:220px;
+    overflow:hidden;padding:11px 12px 10px;border-radius:17px;
+    background:#fffaf2f2;backdrop-filter:blur(12px);box-shadow:0 18px 55px #2f292329
+  }
+  .companion-picker-head{align-items:center;padding:0 1px 9px}
+  .companion-picker-head>div{gap:2px}
+  .companion-picker-head span{font-size:8px}
+  .companion-picker-head strong{font-size:18px}
+  .companion-picker-close{font-size:11px}
+  .companion-grid{
+    display:flex;grid-template-columns:none;gap:7px;padding:10px 0;
+    overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;scrollbar-width:none
+  }
+  .companion-grid::-webkit-scrollbar{display:none}
+  .companion-option{flex:0 0 76px;scroll-snap-align:start;padding:6px 5px 7px}
+  .companion-option-art{height:59px}
+  .companion-option img{max-width:57px;max-height:57px}
+  .companion-option>span:last-child{font-size:9px}
+  .companion-picker-foot{gap:10px;padding-top:9px;font-size:9px}
+  .companion-picker-actions{gap:6px}
+  .companion-random,.companion-dismiss-selection{padding:6px 8px;font-size:9px}
+  .portfolio-companion.pokemon-companion.picker-open.is-docked{bottom:226px}
 }
 @media(max-width:480px){
-  .companion-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .companion-picker-head strong{font-size:23px}
-  .companion-picker-foot{align-items:flex-start;flex-direction:column;gap:10px}.companion-picker-actions{width:100%;justify-content:space-between}
+  .companion-picker{max-height:214px}
+  .companion-picker-foot>span{display:none}
+  .companion-picker-actions{width:100%;justify-content:space-between}
+  .portfolio-companion.pokemon-companion.picker-open.is-docked{bottom:220px}
 }
 @media(pointer:coarse){
   .portfolio-companion.pokemon-companion{width:72px;height:72px}

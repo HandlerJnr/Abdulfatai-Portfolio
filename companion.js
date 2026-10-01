@@ -17,11 +17,26 @@ let targetX=innerWidth-110,targetY=innerHeight-110;
 let currentX=targetX,currentY=targetY;
 let lastX=targetX;
 let raf=0;
+const homeHost=document.body;
+let currentHost=homeHost;
+
+function syncFloatingHost(){
+  const openDialogs=[...document.querySelectorAll('dialog[open]')];
+  const nextHost=openDialogs.length?openDialogs[openDialogs.length-1]:homeHost;
+  if(nextHost===currentHost)return;
+  currentHost=nextHost;
+  nextHost.append(summon,picker,companion);
+}
+const dialogObserver=new MutationObserver(records=>{
+  if(records.some(record=>record.type==='attributes'&&record.attributeName==='open'))syncFloatingHost();
+});
+dialogObserver.observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['open']});
 
 function setPicker(open){
   picker.hidden=!open;
   summon.setAttribute('aria-expanded',String(open));
   summon.classList.toggle('is-open',open);
+  companion.classList.toggle('picker-open',open);
   if(open)requestAnimationFrame(()=>picker.querySelector('.companion-option')?.focus({preventScroll:true}));
 }
 function summonLabel(name){
@@ -120,8 +135,9 @@ addEventListener('pointermove',e=>{
   targetX=e.clientX+(right?-92:28);
   targetY=e.clientY+(bottom?-94:30);
 },{passive:true});
-addEventListener('resize',startFollowing,{passive:true});
+addEventListener('resize',()=>{syncFloatingHost();startFollowing()},{passive:true});
 
+syncFloatingHost();
 summonLabel(null);
 
 try{
