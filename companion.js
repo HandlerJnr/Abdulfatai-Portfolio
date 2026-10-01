@@ -162,7 +162,7 @@ function animate(){
     c=clamp(targetX,targetY);
   }
   if(!c)c=clamp(targetX,targetY);
-  const ease=perchTarget?.isConnected?.24:.15;
+  const ease=perchTarget?.isConnected ? .24 : .15;
   currentX+=(c.x-currentX)*ease;
   currentY+=(c.y-currentY)*ease;
   const dx=currentX-lastX;
