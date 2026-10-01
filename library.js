@@ -1,0 +1,1 @@
+const nav=document.querySelector('.navigation');nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.open=false));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.open){nav.open=false;nav.querySelector('summary').focus()}});document.addEventListener('click',e=>{if(nav.open&&!nav.contains(e.target))nav.open=false});
