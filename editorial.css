@@ -179,3 +179,67 @@
   .drawer-case-study .metric-row{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){.drawer-loading span{animation:none}}
+
+/* Summoned cursor companion */
+.summon-companion{
+  position:fixed;right:24px;bottom:22px;z-index:29;
+  border:0;border-bottom:1px solid #8b7a67;background:#fffaf2d9;
+  padding:7px 2px 5px;color:#5f5143;font:italic 12px/1.2 Georgia,serif;
+  backdrop-filter:blur(6px);transition:transform .25s ease,color .25s ease,border-color .25s ease
+}
+.summon-companion:hover,.summon-companion:focus-visible{transform:translateY(-2px);color:#2f2923;border-color:#2f2923}
+.summon-companion[hidden]{display:none}
+.portfolio-companion.is-summoned{
+  left:0;top:0;right:auto;bottom:auto;width:48px;height:52px;z-index:30;
+  pointer-events:none;will-change:transform
+}
+.portfolio-companion.is-summoned.is-docked{left:auto;top:auto;right:18px;bottom:18px;transform:none!important}
+.portfolio-companion.is-summoned .companion-message{
+  position:absolute;right:-2px;bottom:58px;width:210px;margin:0;
+  padding:11px 26px 11px 12px;border-radius:13px 13px 3px 13px;
+  font-size:11px;line-height:1.48;box-shadow:0 8px 24px #3f2c1414
+}
+.portfolio-companion.is-summoned .companion-dismiss{
+  position:absolute;z-index:2;right:1px;bottom:87px;top:auto;
+  width:24px;height:24px;font-size:17px
+}
+.portfolio-companion.is-summoned .pip{
+  width:48px;height:51px;margin:0;pointer-events:auto;cursor:pointer;transform:none
+}
+.portfolio-companion.is-summoned .pip-body{
+  top:10px;left:5px;width:38px;height:36px;border-width:1.5px;
+  gap:10px;padding-top:14px;box-shadow:inset -5px -3px #bd8b6855
+}
+.portfolio-companion.is-summoned .pip-body i{
+  width:4px;height:6px;transform:translate(var(--eye-x,0px),var(--eye-y,0px));
+  transition:transform .06s linear
+}
+.portfolio-companion.is-summoned .pip-smile{left:15px;top:22px;width:8px;height:5px;border-bottom-width:1.5px}
+.portfolio-companion.is-summoned .pip-ear{top:0;width:14px;height:21px;border-width:1.5px}
+.portfolio-companion.is-summoned .pip-ear.left{left:7px}
+.portfolio-companion.is-summoned .pip-ear.right{right:7px}
+.portfolio-companion.is-summoned .pip-foot{bottom:1px;width:14px;height:8px;border-width:1.5px}
+.portfolio-companion.is-summoned .pip-foot.left{left:5px}
+.portfolio-companion.is-summoned .pip-foot.right{right:5px}
+.portfolio-companion.is-summoned .pip-laugh{right:43px;top:1px;font-size:11px}
+.portfolio-companion.is-summoned.bubble-closed{width:48px}
+.portfolio-companion.is-summoned.bubble-closed .companion-message,
+.portfolio-companion.is-summoned.bubble-closed .companion-dismiss{display:none}
+.portfolio-companion.is-summoned.is-tickled .pip-body i{
+  transform:translate(var(--eye-x,0px),calc(var(--eye-y,0px) + 1px))
+}
+.portfolio-companion.is-summoned.is-tickled .pip-smile{
+  width:10px;height:8px;left:14px;top:21px;border-bottom-width:2px
+}
+@media(max-width:700px),(pointer:coarse){
+  .summon-companion{right:16px;bottom:16px}
+  .portfolio-companion.is-summoned{width:44px;height:48px;right:14px;bottom:14px}
+  .portfolio-companion.is-summoned .companion-message{width:min(190px,calc(100vw - 40px));bottom:54px;font-size:10.5px}
+  .portfolio-companion.is-summoned .companion-dismiss{bottom:80px}
+  .portfolio-companion.is-summoned .pip{transform:scale(.92);transform-origin:right bottom}
+}
+@media(prefers-reduced-motion:reduce){
+  .summon-companion{transition:none}
+  .portfolio-companion.is-summoned{will-change:auto}
+  .portfolio-companion.is-summoned .pip-body i{transition:none}
+}
