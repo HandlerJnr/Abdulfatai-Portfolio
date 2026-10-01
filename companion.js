@@ -46,17 +46,27 @@ function summonLabel(name){
 }
 function burst(){
   if(reduced.matches)return;
+  companion.querySelector('.companion-burst')?.remove();
   const fx=document.createElement('span');
   fx.className='companion-burst';
-  for(let i=0;i<7;i++){
+  const colors=['#f5c451','#ef6f6c','#5e8ff7','#6fc49a','#a979e9','#ff9a52'];
+  const count=18;
+  for(let i=0;i<count;i++){
+    const angle=(Math.PI*2/count)*i+(Math.random()-.5)*.22;
+    const distance=34+Math.random()*34;
     const bit=document.createElement('i');
-    bit.style.setProperty('--angle',(i*(360/7))+'deg');
-    bit.style.setProperty('--distance',(22+Math.random()*18)+'px');
-    bit.style.setProperty('--delay',(Math.random()*.08)+'s');
+    if(i%4===0)bit.classList.add('is-round');
+    const size=4+Math.random()*4;
+    bit.style.setProperty('--confetti-x',(Math.cos(angle)*distance).toFixed(1)+'px');
+    bit.style.setProperty('--confetti-y',(Math.sin(angle)*distance).toFixed(1)+'px');
+    bit.style.setProperty('--confetti-size',size.toFixed(1)+'px');
+    bit.style.setProperty('--confetti-color',colors[i%colors.length]);
+    bit.style.setProperty('--confetti-delay',(Math.random()*.07).toFixed(2)+'s');
+    bit.style.setProperty('--confetti-spin',((Math.random()>.5?1:-1)*(180+Math.random()*420)).toFixed(0)+'deg');
     fx.append(bit);
   }
   companion.append(fx);
-  setTimeout(()=>fx.remove(),850);
+  setTimeout(()=>fx.remove(),1050);
 }
 function dismissCompanion(){
   active=null;
@@ -71,7 +81,7 @@ function dismissCompanion(){
   setPicker(false);
   try{sessionStorage.removeItem('portfolio-companion')}catch{}
 }
-function choose(option){
+function choose(option,{celebrate=true}={}){
   if(!option)return;
   active={id:option.dataset.companion,name:option.dataset.name,src:option.dataset.src};
   image.src=active.src;
@@ -85,7 +95,7 @@ function choose(option){
   setPicker(false);
   try{sessionStorage.setItem('portfolio-companion',active.id)}catch{}
   startFollowing();
-  burst();
+  if(celebrate)burst();
 }
 function clamp(x,y){
   const w=86,h=86,pad=8;
@@ -144,7 +154,7 @@ try{
   const saved=sessionStorage.getItem('portfolio-companion');
   if(saved){
     const option=options.find(o=>o.dataset.companion===saved);
-    if(option)choose(option);
+    if(option)choose(option,{celebrate:false});
   }
 }catch{}
 })();
