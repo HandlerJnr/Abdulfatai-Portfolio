@@ -11,6 +11,41 @@ const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(pointer:fine)');
+const themeRoot=document.documentElement;
+const themes={
+  piplup:{accent:'#4f7fb8',accent2:'#d2a64c',soft:'#eaf2f8',ink:'#17324d',on:'#ffffff',confetti:['#4f7fb8','#78a8d1','#d2a64c','#e9c979','#dceaf5','#2d5d8e']},
+  clefairy:{accent:'#d985a5',accent2:'#a86486',soft:'#fae9f0',ink:'#5d3044',on:'#ffffff',confetti:['#d985a5','#efb2c9','#a86486','#f4d7e2','#c785aa','#7c5870']},
+  eevee:{accent:'#a56c43',accent2:'#d6b27f',soft:'#f5ebdf',ink:'#4b3020',on:'#ffffff',confetti:['#a56c43','#d6b27f','#f2dfc5','#7b4f33','#c89261','#ead2ae']},
+  charmander:{accent:'#d8672d',accent2:'#f1a04a',soft:'#fff0e3',ink:'#552312',on:'#ffffff',confetti:['#d8672d','#f1a04a','#f6c15d','#ef7741','#ffd39a','#9c3d1e']},
+  raichu:{accent:'#c77920',accent2:'#8a653a',soft:'#f8ecd8',ink:'#472b0d',on:'#ffffff',confetti:['#c77920','#e2a944','#8a653a','#f1ce7a','#b35f1d','#6f4b2c']},
+  psyduck:{accent:'#d8b52d',accent2:'#5c86aa',soft:'#faf3d7',ink:'#44390c',on:'#2f2917',confetti:['#d8b52d','#f2d765','#5c86aa','#8cb0cb','#f6e79b','#b08d18']},
+  jigglypuff:{accent:'#d783a5',accent2:'#ad6488',soft:'#fae9f1',ink:'#5c3145',on:'#ffffff',confetti:['#d783a5','#efb1c8','#ad6488','#f7d7e4','#c97aa0','#8e5572']},
+  cubone:{accent:'#886749',accent2:'#c19a6b',soft:'#f1e8de',ink:'#3c2c20',on:'#ffffff',confetti:['#886749','#c19a6b','#e2c6a3','#6c513b','#b48355','#d8b88e']},
+  mew:{accent:'#cf8faf',accent2:'#8875b0',soft:'#f8eaf3',ink:'#4f3043',on:'#ffffff',confetti:['#cf8faf','#eebbd1','#8875b0','#b8a6d5','#f5d8e6','#a66b91']},
+  pikachu:{accent:'#d5b21e',accent2:'#514a3a',soft:'#fff7d6',ink:'#3d3307',on:'#2e2917',confetti:['#d5b21e','#f1d64d','#514a3a','#f7e78d','#bd9412','#e5bf28']},
+  bulbasaur:{accent:'#4f9871',accent2:'#5a8db4',soft:'#e8f4ed',ink:'#244a35',on:'#ffffff',confetti:['#4f9871','#76b48f','#5a8db4','#8ab4d0','#b5d9c4','#397c59']},
+  meowth:{accent:'#b99a4e',accent2:'#78613a',soft:'#f7f0da',ink:'#40340f',on:'#2f2917',confetti:['#b99a4e','#e0c77f','#78613a','#f0dfaa','#9d7d32','#d3b565']},
+  squirtle:{accent:'#4e96b5',accent2:'#8c6747',soft:'#e7f4f7',ink:'#234450',on:'#ffffff',confetti:['#4e96b5','#7eb6cd','#8c6747','#c29a72','#b8dce7','#347b9a']},
+  gengar:{accent:'#7151a0',accent2:'#9e73b5',soft:'#eee8f5',ink:'#332348',on:'#ffffff',confetti:['#7151a0','#9e73b5','#b79acb','#5c3f8d','#d0bce0','#825daf']}
+};
+const themeProps=['--poke-accent','--poke-accent-2','--poke-soft','--poke-ink','--poke-on-accent'];
+
+function applyTheme(id){
+  const theme=themes[id];
+  if(!theme){
+    themeRoot.classList.remove('companion-themed');
+    themeRoot.removeAttribute('data-companion-theme');
+    themeProps.forEach(prop=>themeRoot.style.removeProperty(prop));
+    return;
+  }
+  themeRoot.classList.add('companion-themed');
+  themeRoot.dataset.companionTheme=id;
+  themeRoot.style.setProperty('--poke-accent',theme.accent);
+  themeRoot.style.setProperty('--poke-accent-2',theme.accent2);
+  themeRoot.style.setProperty('--poke-soft',theme.soft);
+  themeRoot.style.setProperty('--poke-ink',theme.ink);
+  themeRoot.style.setProperty('--poke-on-accent',theme.on);
+}
 
 let active=null;
 let targetX=innerWidth-110,targetY=innerHeight-110;
@@ -51,7 +86,7 @@ function burst(){
   companion.querySelector('.companion-burst')?.remove();
   const fx=document.createElement('span');
   fx.className='companion-burst';
-  const colors=['#f5c451','#ef6f6c','#5e8ff7','#6fc49a','#a979e9','#ff9a52'];
+  const colors=themes[active?.id]?.confetti||['#f5c451','#ef6f6c','#5e8ff7','#6fc49a','#a979e9','#ff9a52'];
   const count=18;
   for(let i=0;i<count;i++){
     const angle=(Math.PI*2/count)*i+(Math.random()-.5)*.22;
@@ -131,12 +166,14 @@ function dismissCompanion(){
   if(raf){cancelAnimationFrame(raf);raf=0}
   summonLabel(null);
   setPicker(false);
+  applyTheme(null);
   try{sessionStorage.removeItem('portfolio-companion')}catch{}
 }
 function choose(option,{celebrate=true}={}){
   if(!option)return;
   setPerch(null);
   active={id:option.dataset.companion,name:option.dataset.name,src:option.dataset.src};
+  applyTheme(active.id);
   image.src=active.src;
   image.alt='';
   options.forEach(o=>o.classList.toggle('is-selected',o===option));
@@ -213,6 +250,7 @@ addEventListener('resize',()=>{syncFloatingHost();setPerch(null);startFollowing(
 
 syncFloatingHost();
 summonLabel(null);
+applyTheme(null);
 
 try{
   const saved=sessionStorage.getItem('portfolio-companion');

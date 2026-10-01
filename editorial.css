@@ -629,3 +629,129 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 .identity-art{cursor:default}
 .identity-open{cursor:pointer}
 .identity-open:hover,.identity-open:focus-visible{background:#51473a;color:#fff}
+
+/* Pokémon companion accent themes */
+:root{
+  --poke-accent:#342c23;
+  --poke-accent-2:#71695e;
+  --poke-soft:#f1ede6;
+  --poke-ink:#342c23;
+  --poke-on-accent:#fff
+}
+.companion-themed body,
+.companion-themed .professional-intro,
+.companion-themed .value-framework,
+.companion-themed .button,
+.companion-themed .header-cv,
+.companion-themed .preview-button,
+.companion-themed .identity-open,
+.companion-themed .featured-control strong,
+.companion-themed .summon-companion,
+.companion-themed .companion-option,
+.companion-themed .footer-live-dot,
+.companion-themed .text-link{
+  transition:
+    background-color .58s cubic-bezier(.2,.8,.2,1),
+    border-color .58s cubic-bezier(.2,.8,.2,1),
+    color .58s cubic-bezier(.2,.8,.2,1),
+    box-shadow .58s cubic-bezier(.2,.8,.2,1)
+}
+.companion-themed .professional-intro{
+  background:linear-gradient(135deg,var(--poke-soft),#faf8f4 58%,#faf8f4)
+}
+.companion-themed .value-framework{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--poke-soft) 58%,#f1ede6),#f1ede6 72%)
+}
+.companion-themed .button.primary,
+.companion-themed .featured-control strong,
+.companion-themed .preview-button,
+.companion-themed .identity-open{
+  background:var(--poke-accent);
+  border-color:var(--poke-accent);
+  color:var(--poke-on-accent)
+}
+.companion-themed .button.primary:hover,
+.companion-themed .button.primary:focus-visible,
+.companion-themed .featured-control:hover strong,
+.companion-themed .featured-control:focus-visible strong,
+.companion-themed .preview-button:hover,
+.companion-themed .preview-button:focus-visible,
+.companion-themed .identity-open:hover,
+.companion-themed .identity-open:focus-visible{
+  background:var(--poke-ink);
+  border-color:var(--poke-ink);
+  color:#fff
+}
+.companion-themed .button:not(.primary),
+.companion-themed .header-cv,
+.companion-themed .companion-random{
+  border-color:color-mix(in srgb,var(--poke-accent) 62%,#58422d)
+}
+.companion-themed .button:not(.primary):hover,
+.companion-themed .header-cv:hover,
+.companion-themed .header-cv:focus-visible,
+.companion-themed .companion-random:hover,
+.companion-themed .companion-random:focus-visible{
+  background:var(--poke-soft);
+  color:var(--poke-ink)
+}
+.companion-themed .summon-companion{
+  border-color:var(--poke-accent);
+  box-shadow:0 12px 34px color-mix(in srgb,var(--poke-accent) 14%,transparent)
+}
+.companion-themed .summon-companion strong{color:var(--poke-accent)}
+.companion-themed .companion-option.is-selected{
+  border-color:var(--poke-accent);
+  background:var(--poke-soft);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--poke-accent) 16%,transparent)
+}
+.companion-themed .companion-option:hover,
+.companion-themed .companion-option:focus-visible{
+  border-color:var(--poke-accent)
+}
+.companion-themed .footer-live-dot{
+  background:var(--poke-accent);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--poke-accent) 13%,transparent)
+}
+.companion-themed .value-framework-grid span,
+.companion-themed .project-story-signals span,
+.companion-themed .professional-intro .eyebrow,
+.companion-themed .featured-copy-block .eyebrow{
+  color:var(--poke-accent)
+}
+.companion-themed .text-link{
+  text-decoration-color:color-mix(in srgb,var(--poke-accent) 72%,currentColor)
+}
+.companion-themed .featured-control{
+  border-color:color-mix(in srgb,var(--poke-accent) 48%,#d3cec5)
+}
+.companion-themed .featured-project:hover,
+.companion-themed .featured-project:focus-visible{
+  box-shadow:
+    0 0 0 1px color-mix(in srgb,var(--poke-accent) 48%,transparent),
+    0 12px 28px #3b302414
+}
+.companion-themed a:focus-visible,
+.companion-themed button:focus-visible,
+.companion-themed summary:focus-visible{
+  outline-color:var(--poke-accent)
+}
+.companion-themed .companion-perch-target{
+  box-shadow:
+    0 0 0 2px color-mix(in srgb,var(--poke-accent) 20%,transparent),
+    0 8px 22px color-mix(in srgb,var(--poke-accent) 10%,transparent)
+}
+@media(prefers-reduced-motion:reduce){
+  .companion-themed body,
+  .companion-themed .professional-intro,
+  .companion-themed .value-framework,
+  .companion-themed .button,
+  .companion-themed .header-cv,
+  .companion-themed .preview-button,
+  .companion-themed .identity-open,
+  .companion-themed .featured-control strong,
+  .companion-themed .summon-companion,
+  .companion-themed .companion-option,
+  .companion-themed .footer-live-dot,
+  .companion-themed .text-link{transition:none}
+}
