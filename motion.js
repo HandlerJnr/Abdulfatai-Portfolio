@@ -1,7 +1,7 @@
 (()=>{
 const nav=document.querySelector('.navigation');
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.open=false));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.project-drawer')?.open){nav.open=false;nav.querySelector('summary').focus()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')){nav.open=false;nav.querySelector('summary').focus()}});
 const magic=document.querySelector('.magic');
 magic.addEventListener('click',()=>{const enabled=document.querySelector('.biography').classList.toggle('magic-on');magic.setAttribute('aria-pressed',String(enabled));magic.textContent=enabled?'A little less magic':'Tap to see some magic'});
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){
