@@ -26,7 +26,13 @@ const themes={
   bulbasaur:{accent:'#4f9871',accent2:'#5a8db4',soft:'#e8f4ed',ink:'#244a35',on:'#ffffff',confetti:['#4f9871','#76b48f','#5a8db4','#8ab4d0','#b5d9c4','#397c59']},
   meowth:{accent:'#b99a4e',accent2:'#78613a',soft:'#f7f0da',ink:'#40340f',on:'#2f2917',confetti:['#b99a4e','#e0c77f','#78613a','#f0dfaa','#9d7d32','#d3b565']},
   squirtle:{accent:'#4e96b5',accent2:'#8c6747',soft:'#e7f4f7',ink:'#234450',on:'#ffffff',confetti:['#4e96b5','#7eb6cd','#8c6747','#c29a72','#b8dce7','#347b9a']},
-  gengar:{accent:'#7151a0',accent2:'#9e73b5',soft:'#eee8f5',ink:'#332348',on:'#ffffff',confetti:['#7151a0','#9e73b5','#b79acb','#5c3f8d','#d0bce0','#825daf']}
+  gengar:{accent:'#7151a0',accent2:'#9e73b5',soft:'#eee8f5',ink:'#332348',on:'#ffffff',confetti:['#7151a0','#9e73b5','#b79acb','#5c3f8d','#d0bce0','#825daf']},
+  espeon:{accent:'#8d6ab1',accent2:'#d179a2',soft:'#f1e9f7',ink:'#3f2c52',on:'#ffffff',confetti:['#8d6ab1','#b596cc','#d179a2','#edb5cb','#6f4f96','#d9cae7']},
+  lucario:{accent:'#2f79a8',accent2:'#d2a43a',soft:'#e6f1f7',ink:'#18394d',on:'#ffffff',confetti:['#2f79a8','#65a7cc','#d2a43a','#f0cb68','#1f536f','#a8cedf']},
+  sylveon:{accent:'#d77fa6',accent2:'#69a8c9',soft:'#faeaf3',ink:'#5b3047',on:'#ffffff',confetti:['#d77fa6','#efb3cc','#69a8c9','#a8d2e5','#f4d6e3','#4f8eae']},
+  charizard:{accent:'#df6a2d',accent2:'#2c98a9',soft:'#fff0e4',ink:'#572411',on:'#ffffff',confetti:['#df6a2d','#f39a50','#2c98a9','#67bec8','#f6c36c','#9e431f']},
+  rowlet:{accent:'#638d58',accent2:'#b88b4e',soft:'#edf4e9',ink:'#2e4829',on:'#ffffff',confetti:['#638d58','#8db183','#b88b4e','#d7b77f','#d9ead3','#496f42']},
+  yveltal:{accent:'#b73b48',accent2:'#302d34',soft:'#f8e8ea',ink:'#47191f',on:'#ffffff',confetti:['#b73b48','#e06b75','#302d34','#6a626e','#f0a1a8','#8e2833']}
 };
 const themeProps=['--poke-accent','--poke-accent-2','--poke-soft','--poke-ink','--poke-on-accent'];
 
