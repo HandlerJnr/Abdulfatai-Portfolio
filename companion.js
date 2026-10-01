@@ -6,6 +6,7 @@ if(!summon||!picker||!companion)return;
 
 const closeButton=picker.querySelector('.companion-picker-close');
 const randomButton=picker.querySelector('.companion-random');
+const dismissSelection=picker.querySelector('.companion-dismiss-selection');
 const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -26,6 +27,7 @@ function setPicker(open){
 function summonLabel(name){
   summon.querySelector('span').textContent=name?'Companion active':'Choose your sidekick';
   summon.querySelector('strong').textContent=name?'Change companion':'Summon a companion';
+  dismissSelection.disabled=!name;
 }
 function burst(){
   if(reduced.matches)return;
@@ -40,6 +42,19 @@ function burst(){
   }
   companion.append(fx);
   setTimeout(()=>fx.remove(),850);
+}
+function dismissCompanion(){
+  active=null;
+  companion.hidden=true;
+  companion.classList.remove('is-arriving','is-docked');
+  companion.style.transform='';
+  companion.style.removeProperty('--companion-tilt');
+  image.src='';
+  options.forEach(o=>o.classList.remove('is-selected'));
+  if(raf){cancelAnimationFrame(raf);raf=0}
+  summonLabel(null);
+  setPicker(false);
+  try{sessionStorage.removeItem('portfolio-companion')}catch{}
 }
 function choose(option){
   if(!option)return;
@@ -87,6 +102,7 @@ function startFollowing(){
 summon.addEventListener('click',()=>setPicker(picker.hidden));
 closeButton.addEventListener('click',()=>setPicker(false));
 options.forEach(option=>option.addEventListener('click',()=>choose(option)));
+dismissSelection.addEventListener('click',dismissCompanion);
 randomButton.addEventListener('click',()=>{
   const pool=options.filter(o=>o.dataset.companion!==active?.id);
   choose(pool[Math.floor(Math.random()*pool.length)]||options[0]);
@@ -105,6 +121,8 @@ addEventListener('pointermove',e=>{
   targetY=e.clientY+(bottom?-94:30);
 },{passive:true});
 addEventListener('resize',startFollowing,{passive:true});
+
+summonLabel(null);
 
 try{
   const saved=sessionStorage.getItem('portfolio-companion');
