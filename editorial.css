@@ -755,3 +755,115 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .companion-themed .footer-live-dot,
   .companion-themed .text-link{transition:none}
 }
+
+/* Pokémon companion section atmosphere */
+.companion-themed .work-accordion-section{
+  background:color-mix(in srgb,var(--poke-soft) 58%,#f8f6f1)
+}
+.companion-themed .logo-section{
+  background:color-mix(in srgb,var(--poke-soft) 52%,#f4f0e9)
+}
+.companion-themed .biography{
+  background:color-mix(in srgb,var(--poke-soft) 30%,#fff)
+}
+.companion-themed .library-teaser{
+  background:color-mix(in srgb,var(--poke-soft) 48%,#f7f5f1)
+}
+.companion-themed .testimonials{
+  background:color-mix(in srgb,var(--poke-soft) 24%,#fff)
+}
+.companion-themed .contact{
+  background:color-mix(in srgb,var(--poke-soft) 20%,#fff)
+}
+.companion-themed .site-footer{
+  background:color-mix(in srgb,var(--poke-soft) 16%,#fff)
+}
+.companion-themed .archive,
+.companion-themed .featured-experience .social-row,
+.companion-themed .identity-caption,
+.companion-themed .library-links>a,
+.companion-themed .reviews-label,
+.companion-themed .site-footer,
+.companion-themed .project-story-signals,
+.companion-themed .value-framework-grid{
+  border-color:color-mix(in srgb,var(--poke-accent) 22%,#c8c1b7)
+}
+.companion-themed .archive button,
+.companion-themed .archive a{
+  border-color:color-mix(in srgb,var(--poke-accent) 16%,var(--line))
+}
+.companion-themed .archive button:hover{
+  color:var(--poke-accent)
+}
+.companion-themed .identity-caption .eyebrow,
+.companion-themed .library-links span,
+.companion-themed .reviews-label span{
+  color:var(--poke-accent)
+}
+.companion-themed .quote{
+  border-color:color-mix(in srgb,var(--poke-accent) 36%,#888);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--poke-soft) 52%,#ecebe8)
+}
+.companion-themed .initials{
+  border-color:color-mix(in srgb,var(--poke-accent) 66%,#8d8274);
+  background:color-mix(in srgb,var(--poke-accent) 20%,#413c36)
+}
+.companion-themed .contact-banner{
+  background:color-mix(in srgb,var(--poke-accent) 10%,var(--charcoal));
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--poke-accent) 26%,transparent)
+}
+.companion-themed .contact-eyebrow>a:first-of-type,
+.companion-themed .footer-links a{
+  text-decoration-color:color-mix(in srgb,var(--poke-accent) 68%,currentColor)
+}
+.companion-themed .library-card{
+  background:color-mix(in srgb,var(--poke-soft) 20%,#fffcf7);
+  border-color:color-mix(in srgb,var(--poke-accent) 15%,#ded8ce)
+}
+.companion-themed .library-cover{
+  background:color-mix(in srgb,var(--poke-soft) 44%,#e5e0d7)
+}
+.companion-themed .library-tabs{
+  background:color-mix(in srgb,var(--poke-soft) 44%,#ede9e2);
+  border-color:color-mix(in srgb,var(--poke-accent) 18%,#d5cfc5)
+}
+.companion-themed .group-heading{
+  border-color:color-mix(in srgb,var(--poke-accent) 20%,#bcb5a9)
+}
+.companion-themed .wordmark{
+  box-shadow:inset 0 -3px 0 color-mix(in srgb,var(--poke-accent) 30%,transparent)
+}
+.companion-themed .work-accordion-section,
+.companion-themed .logo-section,
+.companion-themed .biography,
+.companion-themed .library-teaser,
+.companion-themed .testimonials,
+.companion-themed .contact,
+.companion-themed .site-footer,
+.companion-themed .quote,
+.companion-themed .initials,
+.companion-themed .library-card,
+.companion-themed .library-cover,
+.companion-themed .library-tabs,
+.companion-themed .contact-banner{
+  transition:
+    background-color .7s cubic-bezier(.2,.8,.2,1),
+    border-color .7s cubic-bezier(.2,.8,.2,1),
+    box-shadow .7s cubic-bezier(.2,.8,.2,1),
+    color .7s cubic-bezier(.2,.8,.2,1)
+}
+@media(prefers-reduced-motion:reduce){
+  .companion-themed .work-accordion-section,
+  .companion-themed .logo-section,
+  .companion-themed .biography,
+  .companion-themed .library-teaser,
+  .companion-themed .testimonials,
+  .companion-themed .contact,
+  .companion-themed .site-footer,
+  .companion-themed .quote,
+  .companion-themed .initials,
+  .companion-themed .library-card,
+  .companion-themed .library-cover,
+  .companion-themed .library-tabs,
+  .companion-themed .contact-banner{transition:none}
+}
