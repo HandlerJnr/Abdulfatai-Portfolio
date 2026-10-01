@@ -17,7 +17,7 @@ const dismissSelection=picker.querySelector('.companion-dismiss-selection');
 const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
 const character=companion.querySelector('.companion-character');
-character.addEventListener('click',()=>{if(active)burst()});
+character.addEventListener('click',()=>{if(active){wake();react('happy',850);burst()}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(pointer:fine)');
 const themeRoot=document.documentElement;
@@ -173,6 +173,7 @@ function perchPosition(){
   return clamp(x,y);
 }
 function dismissCompanion(){
+  clearTimeout(restTimer);clearTimeout(reactionTimer);reacting=false;delete companion.dataset.state;
   setPerch(null);
   active=null;
   companion.hidden=true;
@@ -193,6 +194,7 @@ function choose(option,{celebrate=true}={}){
   active={id:option.dataset.companion,name:option.dataset.name,src:option.dataset.src};
   applyTheme(active.id);
   image.src=active.src;
+  state('idle');wake();
   character.setAttribute('aria-label','Pop confetti with '+active.name);
   image.alt='';
   options.forEach(o=>o.classList.toggle('is-selected',o===option));
@@ -206,18 +208,44 @@ function choose(option,{celebrate=true}={}){
   startFollowing();
   if(celebrate)burst();
 }
+let restTimer=0,reactionTimer=0,reacting=false;
+function refreshArtwork(){
+  if(!active)return;
+  const animated=active.id==='piplup';
+  companion.classList.toggle('has-sprite',animated);
+  const src=animated?(reduced.matches||document.hidden||companion.dataset.state==='sleepy'?'/assets/companions/piplup-still.png':'/assets/companions/piplup.gif'):active.src;
+  if(image.getAttribute('src')!==src)image.src=src;
+}
+function state(value){companion.dataset.state=value;refreshArtwork()}
+function wake(){
+  if(!active)return;
+  clearTimeout(restTimer);
+  if(companion.dataset.state==='sleepy')state('idle');
+  restTimer=setTimeout(()=>{if(active&&!reacting)state('sleepy')},12000);
+}
+function react(value,duration){
+  if(!active||reduced.matches)return;
+  reacting=true;clearTimeout(reactionTimer);state(value);
+  reactionTimer=setTimeout(()=>{reacting=false;if(active)state('idle')},duration);
+}
+character.addEventListener('pointerenter',()=>{wake();react('curious',1000)});
+character.addEventListener('focus',()=>{wake();react('curious',1000)});
+reduced.addEventListener('change',()=>{if(raf){cancelAnimationFrame(raf);raf=0}reacting=false;clearTimeout(reactionTimer);if(active){state('idle');startFollowing()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=0}clearTimeout(restTimer)}else if(active){wake();startFollowing()}refreshArtwork()});
 function clamp(x,y){
   const w=86,h=86,pad=8;
   return {x:Math.max(pad,Math.min(innerWidth-w-pad,x)),y:Math.max(pad,Math.min(innerHeight-h-pad,y))};
 }
 function animate(){
-  if(!active||reduced.matches||!finePointer.matches){raf=0;return}
+  if(!active||document.hidden||reduced.matches||!finePointer.matches){raf=0;return}
   let c=perchPosition();
   if(perchTarget&&!c){
     setPerch(null);
     c=clamp(targetX,targetY);
   }
   if(!c)c=clamp(targetX,targetY);
+  const distance=Math.hypot(c.x-currentX,c.y-currentY);
+  if(!reacting&&companion.dataset.state!=='sleepy')state(distance>4?'moving':'idle');
   const ease=perchTarget?.isConnected ? .24 : .15;
   currentX+=(c.x-currentX)*ease;
   currentY+=(c.y-currentY)*ease;
@@ -226,7 +254,7 @@ function animate(){
   companion.style.setProperty('--companion-tilt',tilt.toFixed(2)+'deg');
   companion.style.transform='translate3d('+currentX+'px,'+currentY+'px,0)';
   lastX=currentX;
-  raf=requestAnimationFrame(animate);
+  if(distance>0.5)raf=requestAnimationFrame(animate);else raf=0;
 }
 function startFollowing(){
   if(!active)return;
@@ -257,6 +285,7 @@ document.addEventListener('keydown',e=>{
 addEventListener('pointermove',e=>{
   if(!active||reduced.matches||!finePointer.matches)return;
   if(companion.contains(e.target))return;
+  wake();startFollowing();
   const target=nearbyPerch(e.clientX,e.clientY,e.target);
   setPerch(target);
   if(target)return;
@@ -265,7 +294,7 @@ addEventListener('pointermove',e=>{
   targetX=e.clientX+(right?-92:28);
   targetY=e.clientY+(bottom?-94:30);
 },{passive:true});
-addEventListener('scroll',()=>{if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true});
+addEventListener('scroll',()=>{wake();if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true});
 addEventListener('resize',()=>{syncFloatingHost();setPerch(null);startFollowing()},{passive:true});
 
 syncFloatingHost();

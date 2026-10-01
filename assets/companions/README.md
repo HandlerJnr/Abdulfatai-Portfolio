@@ -1,0 +1,1 @@
+Piplup animation and still sprite sourced from https://github.com/PokeAPI/sprites (pokemon/versions/generation-v/black-white/animated/393.gif and pokemon/393.png). Pokémon artwork belongs to its respective rights holders. Reduced-motion and resting states use the still sprite. Other companions retain their existing artwork.
