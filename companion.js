@@ -18,7 +18,7 @@ let currentX=targetX,currentY=targetY;
 let lastX=targetX;
 let raf=0;
 let perchTarget=null;
-const perchSelector='a[href],button:not(:disabled),summary,[role="button"]';
+const perchSelector='button:not(:disabled)';
 const homeHost=document.body;
 let currentHost=homeHost;
 
