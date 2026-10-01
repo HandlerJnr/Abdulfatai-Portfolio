@@ -18,7 +18,7 @@ let currentX=targetX,currentY=targetY;
 let lastX=targetX;
 let raf=0;
 let perchTarget=null;
-const perchSelector='button:not(:disabled)';
+const perchSelector='button:not(:disabled),a.button';
 const homeHost=document.body;
 let currentHost=homeHost;
 
