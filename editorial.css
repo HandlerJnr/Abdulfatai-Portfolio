@@ -419,3 +419,83 @@
   .live-presence.has-visitors .live-presence-dot{animation:none}
   .presence-cursor{transition:none}
 }
+
+/* Sticky navigation and live footer clock */
+header#top{
+  position:sticky;top:0;z-index:38;
+  transition:height .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease;
+  border-bottom:1px solid transparent
+}
+header#top.is-scrolled{
+  background:#fffdf9eb;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:#ded8cf;
+  box-shadow:0 8px 28px #2d261d0a
+}
+header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
+
+.site-footer{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:end;
+  gap:34px;
+  padding:30px 36px 40px;
+  font-size:12px;
+  border-top:1px solid #d8d2ca
+}
+.footer-profile span{color:#756b60}
+.footer-local{
+  display:flex;align-items:center;justify-self:center;gap:10px;
+  min-width:190px
+}
+.footer-local>div{display:grid;gap:1px}
+.footer-local small{
+  font-size:8px;line-height:1.25;letter-spacing:1.35px;color:#81776d
+}
+.footer-clock-time{
+  display:block;
+  font:400 20px/1.1 Georgia,serif;
+  letter-spacing:.02em;
+  font-variant-numeric:tabular-nums
+}
+.footer-clock-date{
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  letter-spacing:.8px;
+  color:#756b60
+}
+.footer-live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#4d875d;
+  box-shadow:0 0 0 4px #4d875d12;
+  animation:footer-live-pulse 2.8s ease-in-out infinite
+}
+.footer-links{
+  display:flex;
+  justify-content:flex-end;
+  gap:20px;
+  flex-wrap:wrap
+}
+.site-footer a{text-decoration:underline;text-underline-offset:3px}
+@keyframes footer-live-pulse{
+  50%{box-shadow:0 0 0 7px #4d875d08}
+}
+@media(max-width:760px){
+  header#top{position:sticky;top:0}
+  .site-footer{
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:22px;
+    padding:25px 20px;
+    font-size:11px
+  }
+  .footer-local{justify-self:start;min-width:0}
+  .footer-clock-time{font-size:18px}
+  .footer-links{justify-content:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  header#top{transition:none}
+  .footer-live-dot{animation:none}
+}
