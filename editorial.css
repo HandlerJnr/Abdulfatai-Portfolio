@@ -98,3 +98,39 @@
 @media(prefers-reduced-motion:reduce){
   .featured-project,.featured-project>img,.featured-project-content,.featured-project-collapsed{transition:none!important}
 }
+
+/* Professional motion system */
+.js-motion .reveal{
+  opacity:0;
+  transition:
+    opacity .7s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms),
+    transform .82s cubic-bezier(.16,1,.3,1) var(--reveal-delay,0ms);
+  will-change:opacity,transform;
+}
+.js-motion .reveal.motion-rise{transform:translateY(18px)}
+.js-motion .reveal.motion-fade{transform:none}
+.js-motion .reveal.visible{opacity:1;transform:none}
+.motion-hover{transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s ease}
+.motion-hover:hover{transform:translateY(-4px)}
+.identity-card.motion-hover:hover{transform:translateY(-5px)}
+.quote.motion-hover:hover{box-shadow:0 12px 30px #2f281f14,0 0 0 3px #ecebe8}
+.featured-copy-block h2{transition:letter-spacing .45s ease}
+.featured-copy-block:hover h2{letter-spacing:-.045em}
+.featured-experience .social-row a{position:relative}
+.featured-experience .social-row a:after{content:'';position:absolute;left:0;right:100%;bottom:-3px;height:1px;background:currentColor;transition:right .28s ease}
+.featured-experience .social-row a:hover:after,.featured-experience .social-row a:focus-visible:after{right:0}
+.logo-heading h2,.biography h2,.library-teaser>h2,.testimonials h2{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.logo-section:hover .logo-heading h2{transform:translateY(-2px)}
+.contact-banner{transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease}
+.contact-banner:hover{transform:translateY(-3px);box-shadow:0 14px 32px #2d261d10}
+.navigation summary{transition:transform .25s ease}
+.navigation summary:hover{transform:translateY(-2px)}
+@media(max-width:700px){
+  .js-motion .reveal.motion-rise{transform:translateY(12px)}
+  .motion-hover:hover{transform:none}
+  .featured-copy-block:hover h2{letter-spacing:-.055em}
+}
+@media(prefers-reduced-motion:reduce){
+  .js-motion .reveal,.js-motion .reveal.motion-rise,.js-motion .reveal.motion-fade{opacity:1!important;transform:none!important;transition:none!important}
+  .motion-hover,.contact-banner,.navigation summary,.featured-copy-block h2,.logo-heading h2,.biography h2,.library-teaser>h2,.testimonials h2{transition:none!important;transform:none!important}
+}
