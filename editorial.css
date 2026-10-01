@@ -183,11 +183,20 @@
 /* Summoned cursor companion */
 .summon-companion{
   position:fixed;right:24px;bottom:22px;z-index:29;
-  border:0;border-bottom:1px solid #8b7a67;background:#fffaf2d9;
-  padding:7px 2px 5px;color:#5f5143;font:italic 12px/1.2 Georgia,serif;
-  backdrop-filter:blur(6px);transition:transform .25s ease,color .25s ease,border-color .25s ease
+  display:grid;gap:2px;min-width:178px;text-align:left;
+  border:1px solid #2f2923;border-radius:12px;background:#2f2923;
+  padding:10px 13px 11px;color:#f8f2e8;
+  box-shadow:0 10px 28px #2f29231f;
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease,color .25s ease
 }
-.summon-companion:hover,.summon-companion:focus-visible{transform:translateY(-2px);color:#2f2923;border-color:#2f2923}
+.summon-companion span{font:600 9px/1.2 Instrument,Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#cfc4b6}
+.summon-companion strong{font:500 13px/1.25 Instrument,Arial,sans-serif;letter-spacing:.05px}
+.summon-companion:hover,.summon-companion:focus-visible{
+  transform:translateY(-4px);background:#f8f2e8;color:#2f2923;
+  box-shadow:0 14px 34px #2f292329,0 0 0 3px #bca98f26
+}
+.summon-companion:hover span,.summon-companion:focus-visible span{color:#756757}
+.summon-companion:focus-visible{outline:2px solid #8f785f;outline-offset:3px}
 .summon-companion[hidden]{display:none}
 .portfolio-companion.is-summoned{
   left:0;top:0;right:auto;bottom:auto;width:48px;height:52px;z-index:30;
@@ -242,4 +251,26 @@
   .summon-companion{transition:none}
   .portfolio-companion.is-summoned{will-change:auto}
   .portfolio-companion.is-summoned .pip-body i{transition:none}
+}
+
+/* Extended page shell alignment */
+.logos-library{background:#f7f5f1}
+.logos-library .logo-section{padding:65px 7vw 15px;background:#f7f5f1;scroll-margin-top:25px}
+.logos-library .logo-heading{
+  display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:40px;
+  border-top:1px solid #bcb5a9;padding-top:27px;margin-bottom:32px
+}
+.logos-library .logo-heading h2{font-size:38px;margin:0}
+.logos-library .logo-heading .eyebrow{margin:0 0 14px}
+.logos-library .logo-heading>p{margin:0;max-width:580px;font-size:14px;line-height:1.75;color:#665d53}
+.logos-library .identity-grid{gap:32px}
+.logos-library .library-end{background:#f7f5f1}
+@media(max-width:700px){
+  .logos-library .logo-section{padding:45px 24px 10px}
+  .logos-library .logo-heading{grid-template-columns:1fr;gap:18px}
+  .logos-library .logo-heading h2{font-size:32px}
+  .summon-companion{right:16px;bottom:16px;min-width:164px;padding:9px 12px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .summon-companion{transition:none}
 }
