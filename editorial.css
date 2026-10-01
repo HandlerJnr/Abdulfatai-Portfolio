@@ -210,7 +210,17 @@
 .companion-picker-head>div{display:grid;gap:4px}
 .companion-picker-head span{font-size:9px;letter-spacing:1.7px;color:#817466}
 .companion-picker-head strong{font:400 27px/1.1 Georgia,serif}
-.companion-picker-close{border:0;background:transparent;padding:4px 0;font-size:12px;text-decoration:underline;text-underline-offset:4px}
+.companion-picker-close{
+  width:32px;height:32px;flex:0 0 32px;
+  display:grid;place-items:center;
+  border:1px solid #b9afa3;border-radius:0;
+  background:transparent;padding:0;color:#4e443a;
+  transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease
+}
+.companion-picker-close svg{width:17px;height:17px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.companion-picker-close:hover,.companion-picker-close:focus-visible{
+  background:#342c23;color:#fff;border-color:#342c23;transform:translateY(-1px)
+}
 .companion-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;padding:16px 0}
 .companion-option{
   min-width:0;border:1px solid transparent;border-radius:12px;background:#f2ede5;
