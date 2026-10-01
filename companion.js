@@ -17,7 +17,7 @@ const dismissSelection=picker.querySelector('.companion-dismiss-selection');
 const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
 const character=companion.querySelector('.companion-character');
-character.addEventListener('click',()=>{if(active){wake();react('happy',850);burst()}});
+character.addEventListener('click',()=>{if(active){wake();react('happy',850);signaturePower();burst()}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(pointer:fine)');
 const themeRoot=document.documentElement;
@@ -123,6 +123,67 @@ function burst(){
   companion.append(fx);
   setTimeout(()=>fx.remove(),1050);
 }
+// Stylised effects inspired by the characters, not simulated battle mechanics.
+const powers={
+ piplup:['water','Bubble shower'],squirtle:['water','Water splash'],psyduck:['psychic','Psychic ripple'],
+ pikachu:['electric','Cheek sparks'],raichu:['electric','Thunder sparks'],
+ charmander:['fire','Ember puff'],charizard:['fire','Flame burst'],
+ bulbasaur:['leaf','Leaf swirl'],rowlet:['leaf','Leaf flutter'],
+ gengar:['ghost','Ghostly mist'],mew:['psychic','Psychic glow'],espeon:['psychic','Psychic ripple'],
+ jigglypuff:['music','Sing'],clefairy:['fairy','Moonlit sparkle'],sylveon:['fairy','Fairy sparkle'],
+ lucario:['aura','Aura pulse'],meowth:['coin','Coin shower'],cubone:['bone','Bone twirl'],
+ eevee:['heart','Playful hearts'],yveltal:['dark','Dark feather swirl']
+};
+const powerShapes={
+ electric:'<path d="M14 1 4 13h7l-2 10L21 9h-8z"/>',
+ fire:'<path d="M12 1c2 7 10 9 8 16-2 9-18 8-17-1 0-4 3-7 5-9 0 4 2 4 3 5 2-3 2-6 1-11z"/>',
+ water:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 10q0-4 5-4" fill="none" stroke="white" stroke-width="2"/>',
+ leaf:'<path d="M2 21C-1 6 10 2 22 2c0 14-5 23-20 19z"/><path d="m3 20 14-13" stroke="white" stroke-opacity=".6" fill="none"/>',
+ ghost:'<path d="M3 21V11a9 9 0 0 1 18 0v10l-5-3-4 3-4-3z"/>',
+ psychic:'<ellipse cx="12" cy="12" rx="10" ry="6" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(-30 12 12)"/>',
+ aura:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4"/>',
+ music:'<path d="M10 4v13a4 4 0 1 1-2-3V4l13-3v13a4 4 0 1 1-2-3V5z"/>',
+ fairy:'<path d="m12 0 3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/>',
+ coin:'<circle cx="12" cy="12" r="10"/><path d="M12 5v14M8 8h8M8 16h8" stroke="white" fill="none" stroke-width="2"/>',
+ bone:'<path d="M5 3a3 3 0 0 1 5 3l8 8a3 3 0 1 1 3 5 3 3 0 1 1-5 0L7 10a3 3 0 1 1-2-7z"/>',
+ heart:'<path d="M12 21 3 12C-5 2 9-3 12 6c3-9 17-4 9 6z"/>',
+ dark:'<path d="M22 1C7 0 0 12 3 21L17 8 6 23c13-1 18-11 16-22z"/>'
+};
+function powerParticle(kind){
+ const bit=document.createElement('span');
+ bit.className='companion-power-bit';
+ bit.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+powerShapes[kind]+'</svg>';
+ return bit;
+}
+function clearPowers(){companion.querySelectorAll('.companion-power').forEach(el=>el.remove())}
+function preparePower(){
+ clearPowers();
+ const [kind,label]=powers[active.id];
+ companion.dataset.power=kind;
+ character.setAttribute('aria-label',active.name+': '+label+' and confetti');
+ character.title='Tap for '+label.toLowerCase();
+ const ambient=document.createElement('span');
+ ambient.className='companion-power companion-power-idle';ambient.setAttribute('aria-hidden','true');
+ for(let i=0;i<3;i++){const bit=powerParticle(kind);bit.style.setProperty('--i',i);ambient.append(bit)}
+ companion.append(ambient);
+}
+function signaturePower(hover=false){
+ if(!active||reduced.matches||document.hidden)return;
+ companion.querySelectorAll('.companion-power-burst').forEach(el=>el.remove());
+ const [kind]=powers[active.id];
+ const fx=document.createElement('span');fx.className='companion-power companion-power-burst';fx.setAttribute('aria-hidden','true');
+ const count=hover?5:12;
+ for(let i=0;i<count;i++){
+  const bit=powerParticle(kind),angle=i/count*Math.PI*2;
+  const radius=hover?32:50+Math.random()*24;
+  bit.style.setProperty('--px',Math.cos(angle)*radius+'px');
+  bit.style.setProperty('--py',Math.sin(angle)*radius-16+'px');
+  bit.style.setProperty('--turn',(i%2?1:-1)*120+'deg');
+  bit.style.setProperty('--delay',i*22+'ms');fx.append(bit);
+ }
+ companion.append(fx);setTimeout(()=>fx.remove(),1300);
+}
+
 function isPerchable(el){
   if(!(el instanceof Element))return false;
   const target=el.closest(perchSelector);
@@ -174,6 +235,7 @@ function perchPosition(){
   return clamp(x,y);
 }
 function dismissCompanion(){
+  clearPowers();delete companion.dataset.power;
   clearTimeout(restTimer);clearTimeout(reactionTimer);reacting=false;delete companion.dataset.state;
   setPerch(null);
   active=null;
@@ -196,7 +258,7 @@ function choose(option,{celebrate=true}={}){
   applyTheme(active.id);
   image.src=active.src;
   state('idle');wake();
-  character.setAttribute('aria-label','Pop confetti with '+active.name);
+  preparePower();
   image.alt='';
   options.forEach(o=>o.classList.toggle('is-selected',o===option));
   companion.hidden=false;
@@ -230,8 +292,8 @@ function react(value,duration){
   reacting=true;clearTimeout(reactionTimer);state(value);
   reactionTimer=setTimeout(()=>{reacting=false;if(active)state('idle')},duration);
 }
-character.addEventListener('pointerenter',()=>{wake();react('curious',1000)});
-character.addEventListener('focus',()=>{wake();react('curious',1000)});
+character.addEventListener('pointerenter',()=>{wake();react('curious',1000);signaturePower(true)});
+character.addEventListener('focus',()=>{wake();react('curious',1000);signaturePower(true)});
 reduced.addEventListener('change',()=>{if(raf){cancelAnimationFrame(raf);raf=0}reacting=false;clearTimeout(reactionTimer);if(active){state('idle');startFollowing()}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=0}clearTimeout(restTimer)}else if(active){wake();startFollowing()}refreshArtwork()});
 function clamp(x,y){
