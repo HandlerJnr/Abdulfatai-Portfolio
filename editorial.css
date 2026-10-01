@@ -657,10 +657,10 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
     box-shadow .58s cubic-bezier(.2,.8,.2,1)
 }
 .companion-themed .professional-intro{
-  background:linear-gradient(135deg,var(--poke-soft),#faf8f4 58%,#faf8f4)
+  background:linear-gradient(135deg,color-mix(in srgb,#fff 90%,var(--poke-soft) 10%),#fff 58%,#fff)
 }
 .companion-themed .value-framework{
-  background:linear-gradient(180deg,color-mix(in srgb,var(--poke-soft) 58%,#f1ede6),#f1ede6 72%)
+  background:linear-gradient(180deg,color-mix(in srgb,#fff 88%,var(--poke-soft) 12%),#fff 74%,#fff)
 }
 .companion-themed .button.primary,
 .companion-themed .featured-control strong,
@@ -758,25 +758,25 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 
 /* Pokémon companion section atmosphere */
 .companion-themed .work-accordion-section{
-  background:color-mix(in srgb,var(--poke-soft) 58%,#f8f6f1)
+  background:color-mix(in srgb,#fff 92%,var(--poke-soft) 8%)
 }
 .companion-themed .logo-section{
-  background:color-mix(in srgb,var(--poke-soft) 52%,#f4f0e9)
+  background:color-mix(in srgb,#fff 92%,var(--poke-soft) 8%)
 }
 .companion-themed .biography{
-  background:color-mix(in srgb,var(--poke-soft) 30%,#fff)
+  background:color-mix(in srgb,#fff 94%,var(--poke-soft) 6%)
 }
 .companion-themed .library-teaser{
-  background:color-mix(in srgb,var(--poke-soft) 48%,#f7f5f1)
+  background:color-mix(in srgb,#fff 92%,var(--poke-soft) 8%)
 }
 .companion-themed .testimonials{
-  background:color-mix(in srgb,var(--poke-soft) 24%,#fff)
+  background:color-mix(in srgb,#fff 94%,var(--poke-soft) 6%)
 }
 .companion-themed .contact{
-  background:color-mix(in srgb,var(--poke-soft) 20%,#fff)
+  background:color-mix(in srgb,#fff 95%,var(--poke-soft) 5%)
 }
 .companion-themed .site-footer{
-  background:color-mix(in srgb,var(--poke-soft) 16%,#fff)
+  background:color-mix(in srgb,#fff 96%,var(--poke-soft) 4%)
 }
 .companion-themed .archive,
 .companion-themed .featured-experience .social-row,
@@ -786,11 +786,11 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 .companion-themed .site-footer,
 .companion-themed .project-story-signals,
 .companion-themed .value-framework-grid{
-  border-color:color-mix(in srgb,var(--poke-accent) 22%,#c8c1b7)
+  border-color:color-mix(in srgb,#fff 55%,var(--poke-accent) 45%)
 }
 .companion-themed .archive button,
 .companion-themed .archive a{
-  border-color:color-mix(in srgb,var(--poke-accent) 16%,var(--line))
+  border-color:color-mix(in srgb,#fff 62%,var(--poke-accent) 38%)
 }
 .companion-themed .archive button:hover{
   color:var(--poke-accent)
@@ -802,33 +802,33 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 }
 .companion-themed .quote{
   border-color:color-mix(in srgb,var(--poke-accent) 36%,#888);
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--poke-soft) 52%,#ecebe8)
+  box-shadow:0 0 0 3px color-mix(in srgb,#fff 70%,var(--poke-soft) 30%)
 }
 .companion-themed .initials{
-  border-color:color-mix(in srgb,var(--poke-accent) 66%,#8d8274);
-  background:color-mix(in srgb,var(--poke-accent) 20%,#413c36)
+  border-color:color-mix(in srgb,#fff 40%,var(--poke-accent) 60%);
+  background:color-mix(in srgb,#fff 75%,var(--poke-accent) 25%)
 }
 .companion-themed .contact-banner{
-  background:color-mix(in srgb,var(--poke-accent) 10%,var(--charcoal));
-  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--poke-accent) 26%,transparent)
+  background:color-mix(in srgb,#272727 88%,var(--poke-accent) 12%);
+  box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 80%,var(--poke-accent) 20%)
 }
 .companion-themed .contact-eyebrow>a:first-of-type,
 .companion-themed .footer-links a{
   text-decoration-color:color-mix(in srgb,var(--poke-accent) 68%,currentColor)
 }
 .companion-themed .library-card{
-  background:color-mix(in srgb,var(--poke-soft) 20%,#fffcf7);
-  border-color:color-mix(in srgb,var(--poke-accent) 15%,#ded8ce)
+  background:color-mix(in srgb,#fff 95%,var(--poke-soft) 5%);
+  border-color:color-mix(in srgb,#fff 62%,var(--poke-accent) 38%)
 }
 .companion-themed .library-cover{
-  background:color-mix(in srgb,var(--poke-soft) 44%,#e5e0d7)
+  background:color-mix(in srgb,#fff 86%,var(--poke-soft) 14%)
 }
 .companion-themed .library-tabs{
-  background:color-mix(in srgb,var(--poke-soft) 44%,#ede9e2);
-  border-color:color-mix(in srgb,var(--poke-accent) 18%,#d5cfc5)
+  background:color-mix(in srgb,#fff 90%,var(--poke-soft) 10%);
+  border-color:color-mix(in srgb,#fff 62%,var(--poke-accent) 38%)
 }
 .companion-themed .group-heading{
-  border-color:color-mix(in srgb,var(--poke-accent) 20%,#bcb5a9)
+  border-color:color-mix(in srgb,#fff 58%,var(--poke-accent) 42%)
 }
 .companion-themed .wordmark{
   box-shadow:inset 0 -3px 0 color-mix(in srgb,var(--poke-accent) 30%,transparent)
@@ -866,4 +866,32 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .companion-themed .library-cover,
   .companion-themed .library-tabs,
   .companion-themed .contact-banner{transition:none}
+}
+
+/* Transparent biography portrait integration */
+.biography .portrait-wrap.portrait-transparent{
+  height:auto;
+  max-width:540px;
+  overflow:visible;
+  mask-image:none;
+  -webkit-mask-image:none;
+  background:transparent;
+}
+.biography .portrait-wrap.portrait-transparent .portrait{
+  width:min(100%,500px);
+  height:auto;
+  margin-inline:auto;
+  background:transparent;
+  object-fit:contain;
+  filter:none;
+}
+.companion-themed .biography .portrait-wrap.portrait-transparent,
+.companion-themed .biography .portrait-wrap.portrait-transparent .portrait{
+  background:transparent
+}
+@media(max-width:700px){
+  .biography .portrait-wrap.portrait-transparent{
+    max-width:360px;
+    height:auto
+  }
 }
