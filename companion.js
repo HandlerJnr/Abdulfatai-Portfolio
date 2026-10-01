@@ -17,6 +17,8 @@ let targetX=innerWidth-110,targetY=innerHeight-110;
 let currentX=targetX,currentY=targetY;
 let lastX=targetX;
 let raf=0;
+let perchTarget=null;
+const perchSelector='a[href],button:not(:disabled),summary,[role="button"]';
 const homeHost=document.body;
 let currentHost=homeHost;
 
@@ -68,10 +70,60 @@ function burst(){
   companion.append(fx);
   setTimeout(()=>fx.remove(),1050);
 }
+function isPerchable(el){
+  if(!(el instanceof Element))return false;
+  const target=el.closest(perchSelector);
+  if(!target||target.closest('.companion-picker'))return false;
+  if(target===companion||target.closest('#portfolio-companion'))return false;
+  if(target.matches('[aria-disabled="true"],[hidden]'))return false;
+  const rect=target.getBoundingClientRect();
+  if(rect.width<18||rect.height<18||rect.bottom<0||rect.top>innerHeight)return false;
+  const style=getComputedStyle(target);
+  if(style.display==='none'||style.visibility==='hidden'||style.pointerEvents==='none')return false;
+  return target;
+}
+function nearbyPerch(x,y,origin){
+  const direct=isPerchable(origin);
+  if(direct)return direct;
+  const probes=[
+    [0,-22],[22,0],[0,22],[-22,0],
+    [16,-16],[16,16],[-16,16],[-16,-16]
+  ];
+  for(const [dx,dy] of probes){
+    const px=Math.max(0,Math.min(innerWidth-1,x+dx));
+    const py=Math.max(0,Math.min(innerHeight-1,y+dy));
+    const found=isPerchable(document.elementFromPoint(px,py));
+    if(found)return found;
+  }
+  return null;
+}
+function setPerch(target){
+  if(target===perchTarget)return;
+  perchTarget?.classList.remove('companion-perch-target');
+  perchTarget=target;
+  if(perchTarget){
+    perchTarget.classList.add('companion-perch-target');
+    companion.classList.remove('is-perched');
+    void companion.offsetWidth;
+    companion.classList.add('is-perched');
+    companion.style.setProperty('--companion-tilt','0deg');
+  }else{
+    companion.classList.remove('is-perched');
+  }
+}
+function perchPosition(){
+  if(!perchTarget||!perchTarget.isConnected)return null;
+  const rect=perchTarget.getBoundingClientRect();
+  if(rect.bottom<0||rect.top>innerHeight||rect.right<0||rect.left>innerWidth)return null;
+  const x=rect.left+(rect.width/2)-43;
+  const y=rect.top-78;
+  return clamp(x,y);
+}
 function dismissCompanion(){
+  setPerch(null);
   active=null;
   companion.hidden=true;
-  companion.classList.remove('is-arriving','is-docked');
+  companion.classList.remove('is-arriving','is-docked','is-perched');
   companion.style.transform='';
   companion.style.removeProperty('--companion-tilt');
   image.src='';
@@ -83,6 +135,7 @@ function dismissCompanion(){
 }
 function choose(option,{celebrate=true}={}){
   if(!option)return;
+  setPerch(null);
   active={id:option.dataset.companion,name:option.dataset.name,src:option.dataset.src};
   image.src=active.src;
   image.alt='';
@@ -103,11 +156,17 @@ function clamp(x,y){
 }
 function animate(){
   if(!active||reduced.matches||!finePointer.matches){raf=0;return}
-  const c=clamp(targetX,targetY);
-  currentX+=(c.x-currentX)*.15;
-  currentY+=(c.y-currentY)*.15;
+  let c=perchPosition();
+  if(perchTarget&&!c){
+    setPerch(null);
+    c=clamp(targetX,targetY);
+  }
+  if(!c)c=clamp(targetX,targetY);
+  const ease=perchTarget?.isConnected?.24:.15;
+  currentX+=(c.x-currentX)*ease;
+  currentY+=(c.y-currentY)*ease;
   const dx=currentX-lastX;
-  const tilt=Math.max(-10,Math.min(10,dx*1.9));
+  const tilt=perchTarget?0:Math.max(-10,Math.min(10,dx*1.9));
   companion.style.setProperty('--companion-tilt',tilt.toFixed(2)+'deg');
   companion.style.transform='translate3d('+currentX+'px,'+currentY+'px,0)';
   lastX=currentX;
@@ -116,6 +175,7 @@ function animate(){
 function startFollowing(){
   if(!active)return;
   if(reduced.matches||!finePointer.matches){
+    setPerch(null);
     companion.classList.add('is-docked');
     companion.style.transform='';
     return;
@@ -140,12 +200,16 @@ document.addEventListener('keydown',e=>{
 });
 addEventListener('pointermove',e=>{
   if(!active||reduced.matches||!finePointer.matches)return;
+  const target=nearbyPerch(e.clientX,e.clientY,e.target);
+  setPerch(target);
+  if(target)return;
   const right=e.clientX>innerWidth-130;
   const bottom=e.clientY>innerHeight-130;
   targetX=e.clientX+(right?-92:28);
   targetY=e.clientY+(bottom?-94:30);
 },{passive:true});
-addEventListener('resize',()=>{syncFloatingHost();startFollowing()},{passive:true});
+addEventListener('scroll',()=>{if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true});
+addEventListener('resize',()=>{syncFloatingHost();setPerch(null);startFollowing()},{passive:true});
 
 syncFloatingHost();
 summonLabel(null);
