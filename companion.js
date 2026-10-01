@@ -1,150 +1,116 @@
 (()=>{
-const companion=document.querySelector('#portfolio-companion');
 const summon=document.querySelector('.summon-companion');
-if(!companion||!summon)return;
-const message=companion.querySelector('.companion-message');
-const dismiss=companion.querySelector('.companion-dismiss');
-const pip=companion.querySelector('.pip');
+const picker=document.querySelector('#companion-picker');
+const companion=document.querySelector('#portfolio-companion');
+if(!summon||!picker||!companion)return;
+
+const closeButton=picker.querySelector('.companion-picker-close');
+const randomButton=picker.querySelector('.companion-random');
+const options=[...picker.querySelectorAll('.companion-option')];
+const image=companion.querySelector('.companion-character-img');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(pointer:fine)');
-let summoned=false,bubbleOpen=false,bubbleTimer=0,tickleTimer=0,tickling=false;
-let currentTip='',previousMessage='',lastTipKey='';
-let pointerX=innerWidth-90,pointerY=innerHeight-90,targetX=innerWidth-90,targetY=innerHeight-90,currentX=targetX,currentY=targetY,raf=0;
-let lastPointerSeen=false;
 
-const tips={
-  work:'You’re in selected work. Hover a project to compare it, then Preview opens the complete case study without leaving this page.',
-  logos:'You’re in Logos & Marks — a quick look at identity systems and how the marks live across real applications.',
-  about:'You’re in About — a short overview of Jamiu’s product-design background across fintech, SaaS and AI.',
-  testimonials:'You’re at collaborator feedback — references that speak to delivery, communication and design quality.',
-  contact:'You’re at the contact section. Email is the quickest way to start a conversation.'
-};
-const classTips=[
-  ['professional-intro','You’re at the introduction — a quick summary of the kind of complex product work Jamiu takes on.'],
-  ['library-teaser','You’re in the wider portfolio — brand work, design systems, credentials and supporting evidence.']
-];
-const projectTips={
-  bizinc:'Bizinc is a two-sided marketplace: customer discovery and booking on one side, business operations on the other.',
-  'vista-itss':'Vista is multi-market digital banking, with entity context, approvals and localisation across four subsidiaries.',
-  'kremor-ai':'Kremor connects AI-assisted fashion creation to the real production workflow behind the garment.'
-};
+let active=null;
+let targetX=innerWidth-110,targetY=innerHeight-110;
+let currentX=targetX,currentY=targetY;
+let lastX=targetX;
+let raf=0;
 
-function clearBubbleTimer(){clearTimeout(bubbleTimer);bubbleTimer=0}
-function setBubble(open,autoClose=false){
-  bubbleOpen=open;
-  companion.classList.toggle('bubble-closed',!open);
-  dismiss.tabIndex=open?0:-1;
-  dismiss.setAttribute('aria-hidden',open?'false':'true');
-  clearBubbleTimer();
-  if(open&&autoClose)bubbleTimer=setTimeout(()=>setBubble(false),3800);
+function setPicker(open){
+  picker.hidden=!open;
+  summon.setAttribute('aria-expanded',String(open));
+  summon.classList.toggle('is-open',open);
+  if(open)requestAnimationFrame(()=>picker.querySelector('.companion-option')?.focus({preventScroll:true}));
 }
-function sectionContext(){
-  const node=document.elementFromPoint(Math.min(innerWidth-1,innerWidth*.5),Math.min(innerHeight-1,innerHeight*.43));
-  const section=node?.closest('main>section');
-  if(!section)return {key:'intro',text:'I’m Pip. I’ll keep the tour brief and point out what matters as you browse.'};
-  if(section.id&&tips[section.id])return {key:section.id,text:tips[section.id]};
-  for(const [cls,text] of classTips)if(section.classList.contains(cls))return {key:cls,text};
-  return {key:'browse',text:'I’m here if you want a quick read on what you’re looking at.'};
+function summonLabel(name){
+  summon.querySelector('span').textContent=name?'Companion active':'Choose your sidekick';
+  summon.querySelector('strong').textContent=name?'Change companion':'Summon a companion';
 }
-function setTip(key,text,show=false){
-  if(!text)return;
-  currentTip=text;lastTipKey=key;
-  if(!tickling){message.textContent=text;previousMessage=text}
-  if(show)setBubble(true,true);
+function burst(){
+  if(reduced.matches)return;
+  const fx=document.createElement('span');
+  fx.className='companion-burst';
+  for(let i=0;i<7;i++){
+    const bit=document.createElement('i');
+    bit.style.setProperty('--angle',(i*(360/7))+'deg');
+    bit.style.setProperty('--distance',(22+Math.random()*18)+'px');
+    bit.style.setProperty('--delay',(Math.random()*.08)+'s');
+    fx.append(bit);
+  }
+  companion.append(fx);
+  setTimeout(()=>fx.remove(),850);
 }
-function updateContext(show=false){
-  const ctx=sectionContext();
-  if(ctx.key!==lastTipKey||show)setTip(ctx.key,ctx.text,show);
+function choose(option){
+  if(!option)return;
+  active={id:option.dataset.companion,name:option.dataset.name,src:option.dataset.src};
+  image.src=active.src;
+  image.alt='';
+  options.forEach(o=>o.classList.toggle('is-selected',o===option));
+  companion.hidden=false;
+  companion.classList.remove('is-arriving');
+  void companion.offsetWidth;
+  companion.classList.add('is-arriving');
+  summonLabel(active.name);
+  setPicker(false);
+  try{sessionStorage.setItem('portfolio-companion',active.id)}catch{}
+  startFollowing();
+  burst();
 }
-function settle(){
-  tickling=false;
-  companion.classList.remove('is-tickled');
-  message.textContent=previousMessage||currentTip;
-}
-function tickle(){
-  if(!summoned)return;
-  if(!tickling)previousMessage=message.textContent||currentTip;
-  tickling=true;
-  companion.classList.add('is-tickled');
-  message.textContent='Hehe — still here.';
-  clearTimeout(tickleTimer);
-  tickleTimer=setTimeout(settle,700);
-}
-function clampTarget(x,y){
-  const bubbleAllowance=bubbleOpen?220:54;
-  const minX=bubbleOpen?Math.min(220,innerWidth-54):8;
-  const minY=bubbleOpen?104:8;
-  return {
-    x:Math.max(minX,Math.min(innerWidth-54,x)),
-    y:Math.max(minY,Math.min(innerHeight-58,y))
-  };
+function clamp(x,y){
+  const w=86,h=86,pad=8;
+  return {x:Math.max(pad,Math.min(innerWidth-w-pad,x)),y:Math.max(pad,Math.min(innerHeight-h-pad,y))};
 }
 function animate(){
-  if(!summoned||reduced.matches||!finePointer.matches){raf=0;return}
-  const clamped=clampTarget(targetX,targetY);
-  currentX+=(clamped.x-currentX)*.14;
-  currentY+=(clamped.y-currentY)*.14;
-  companion.style.transform=`translate3d(${currentX}px,${currentY}px,0)`;
-  const rect=pip.getBoundingClientRect();
-  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
-  const eyeX=Math.max(-2.2,Math.min(2.2,(pointerX-cx)/38));
-  const eyeY=Math.max(-1.8,Math.min(1.8,(pointerY-cy)/38));
-  pip.style.setProperty('--eye-x',eyeX.toFixed(2)+'px');
-  pip.style.setProperty('--eye-y',eyeY.toFixed(2)+'px');
+  if(!active||reduced.matches||!finePointer.matches){raf=0;return}
+  const c=clamp(targetX,targetY);
+  currentX+=(c.x-currentX)*.15;
+  currentY+=(c.y-currentY)*.15;
+  const dx=currentX-lastX;
+  const tilt=Math.max(-10,Math.min(10,dx*1.9));
+  companion.style.setProperty('--companion-tilt',tilt.toFixed(2)+'deg');
+  companion.style.transform='translate3d('+currentX+'px,'+currentY+'px,0)';
+  lastX=currentX;
   raf=requestAnimationFrame(animate);
 }
 function startFollowing(){
+  if(!active)return;
   if(reduced.matches||!finePointer.matches){
-    companion.style.transform='';
     companion.classList.add('is-docked');
+    companion.style.transform='';
     return;
   }
   companion.classList.remove('is-docked');
-  if(!lastPointerSeen){
-    pointerX=innerWidth-90;pointerY=innerHeight-90;
-    targetX=innerWidth-72;targetY=innerHeight-78;
-    currentX=targetX;currentY=targetY;
-  }
   if(!raf)raf=requestAnimationFrame(animate);
 }
-function summonPip(){
-  if(summoned)return;
-  summoned=true;
-  summon.hidden=true;
-  companion.hidden=false;
-  companion.classList.add('is-summoned');
-  updateContext(true);
-  startFollowing();
-}
-summon.addEventListener('click',summonPip);
-dismiss.addEventListener('click',e=>{e.stopPropagation();setBubble(false);pip.focus()});
-pip.addEventListener('click',()=>{updateContext(false);if(!bubbleOpen)setBubble(true,true);else tickle()});
-pip.addEventListener('pointerenter',()=>{if(summoned&&!bubbleOpen)tickle()});
-pip.addEventListener('pointerleave',()=>{clearTimeout(tickleTimer);tickleTimer=setTimeout(settle,350)});
 
-addEventListener('pointermove',e=>{
-  pointerX=e.clientX;pointerY=e.clientY;lastPointerSeen=true;
-  if(!summoned||reduced.matches||!finePointer.matches)return;
-  const offsetX=e.clientX>innerWidth-110?-58:22;
-  const offsetY=e.clientY>innerHeight-110?-64:26;
-  targetX=e.clientX+offsetX;
-  targetY=e.clientY+offsetY;
-},{passive:true});
-
-addEventListener('scroll',()=>{if(summoned)updateContext(false)},{passive:true});
-addEventListener('resize',()=>{if(summoned&&!reduced.matches&&finePointer.matches){targetX=Math.min(targetX,innerWidth-54);targetY=Math.min(targetY,innerHeight-58)}},{passive:true});
-
-document.querySelectorAll('[data-project]').forEach(button=>{
-  const show=()=>{
-    if(!summoned)return;
-    const text=projectTips[button.dataset.project];
-    if(text)setTip(button.dataset.project,text,bubbleOpen);
-  };
-  button.addEventListener('focus',show);
-  button.addEventListener('pointerenter',show);
+summon.addEventListener('click',()=>setPicker(picker.hidden));
+closeButton.addEventListener('click',()=>setPicker(false));
+options.forEach(option=>option.addEventListener('click',()=>choose(option)));
+randomButton.addEventListener('click',()=>{
+  const pool=options.filter(o=>o.dataset.companion!==active?.id);
+  choose(pool[Math.floor(Math.random()*pool.length)]||options[0]);
 });
-
+document.addEventListener('pointerdown',e=>{
+  if(!picker.hidden&&!picker.contains(e.target)&&!summon.contains(e.target))setPicker(false);
+});
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&summoned&&bubbleOpen&&!document.querySelector('dialog[open]'))setBubble(false);
+  if(e.key==='Escape'&&!picker.hidden){setPicker(false);summon.focus()}
 });
+addEventListener('pointermove',e=>{
+  if(!active||reduced.matches||!finePointer.matches)return;
+  const right=e.clientX>innerWidth-130;
+  const bottom=e.clientY>innerHeight-130;
+  targetX=e.clientX+(right?-92:28);
+  targetY=e.clientY+(bottom?-94:30);
+},{passive:true});
+addEventListener('resize',startFollowing,{passive:true});
+
+try{
+  const saved=sessionStorage.getItem('portfolio-companion');
+  if(saved){
+    const option=options.find(o=>o.dataset.companion===saved);
+    if(option)choose(option);
+  }
+}catch{}
 })();
