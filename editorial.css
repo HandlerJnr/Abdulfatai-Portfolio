@@ -319,3 +319,54 @@
 @media(prefers-reduced-motion:reduce){
   .summon-companion{transition:none}
 }
+
+/* Action consistency pass */
+:root{--action-radius:0px}
+.button,
+.header-cv,
+.preview-button,
+.panel-caption>a,
+.identity-open,
+.drawer-close,
+.identity-close,
+.cv-close,
+.summon-companion,
+.companion-random,
+.companion-dismiss-selection{
+  border-radius:var(--action-radius)
+}
+.identity-open{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid #272727;
+  transition:transform .3s ease,background .3s ease,color .3s ease
+}
+.identity-open:hover,.identity-open:focus-visible{
+  transform:translateY(-3px);background:#51473a;color:#fff
+}
+.preview-button{
+  border:1px solid #292727;
+  transition:transform .3s ease,background .3s ease,color .3s ease
+}
+.preview-button:hover,.preview-button:focus-visible{transform:translateY(-3px)}
+.panel-caption>a{
+  border:1px solid #bdb5aa;
+  transition:transform .3s ease,background .3s ease,color .3s ease
+}
+.panel-caption>a:hover,.panel-caption>a:focus-visible{
+  transform:translateY(-3px);background:#fff
+}
+.drawer-close,.identity-close,.cv-close{
+  transition:background .25s ease,color .25s ease,border-color .25s ease
+}
+.drawer-close:hover,.drawer-close:focus-visible,
+.identity-close:hover,.identity-close:focus-visible,
+.cv-close:hover,.cv-close:focus-visible{
+  background:#342c23;color:#fff;border-color:#342c23
+}
+.companion-random,.companion-dismiss-selection{
+  min-height:32px
+}
+@media(prefers-reduced-motion:reduce){
+  .identity-open,.preview-button,.panel-caption>a,.drawer-close,.identity-close,.cv-close{transition:none}
+  .identity-open:hover,.preview-button:hover,.panel-caption>a:hover{transform:none}
+}
