@@ -212,12 +212,13 @@ function choose(option,{celebrate=true}={}){
 let restTimer=0,reactionTimer=0,reacting=false;
 function refreshArtwork(){
   if(!active)return;
-  const animated=active.id==='piplup';
+  const animated=options.some(option=>option.dataset.companion===active.id);
   companion.classList.toggle('has-sprite',animated);
-  const src=animated?(reduced.matches||document.hidden||companion.dataset.state==='sleepy'?'/assets/companions/piplup-still.png':'/assets/companions/piplup.gif'):active.src;
+  const still=reduced.matches||document.hidden||companion.dataset.state==='sleepy';
+  const src=animated?'/assets/companions/'+active.id+(still?'-still.png':'.gif'):active.src;
   if(image.getAttribute('src')!==src)image.src=src;
 }
-function state(value){companion.dataset.state=value;refreshArtwork()}
+function state(value){if(companion.dataset.state!==value)companion.dataset.state=value;refreshArtwork()}
 function wake(){
   if(!active)return;
   clearTimeout(restTimer);

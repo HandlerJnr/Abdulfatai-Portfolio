@@ -1060,3 +1060,7 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 @keyframes companion-curious{0%,100%{transform:rotate(0)}35%,70%{transform:rotate(-12deg) translateY(-3px)}}
 @keyframes companion-happy{0%,100%{transform:translateY(0) rotate(0)}18%{transform:scale(1.12,.86)}50%{transform:translateY(-24px) rotate(16deg) scale(.96,1.06)}75%{transform:translateY(0) rotate(-7deg) scale(1.08,.92)}}
 @media(prefers-reduced-motion:reduce){.pokemon-companion[data-state] .companion-character,.pokemon-companion[data-state] .companion-shadow{animation:none!important;transform:none!important}}
+
+/* The artwork supplies the idle motion; keep its native proportions. */
+.pokemon-companion.has-sprite .companion-character-img{width:auto;height:auto;max-width:82px;max-height:82px}
+.pokemon-companion.has-sprite[data-state=idle] .companion-character{animation:none}
