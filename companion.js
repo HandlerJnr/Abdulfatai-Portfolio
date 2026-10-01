@@ -126,7 +126,7 @@ function burst(){
 function isPerchable(el){
   if(!(el instanceof Element))return false;
   const target=el.closest(perchSelector);
-  if(!target||target.closest('.companion-picker'))return false;
+  if(!target||target.closest('.companion-picker,header,.navigation,[role="navigation"]'))return false;
   if(target===companion||target.closest('#portfolio-companion'))return false;
   if(target.matches('[aria-disabled="true"],[hidden]'))return false;
   const rect=target.getBoundingClientRect();
@@ -136,6 +136,7 @@ function isPerchable(el){
   return target;
 }
 function nearbyPerch(x,y,origin){
+  if(origin instanceof Element&&origin.closest('header,.navigation,[role="navigation"]'))return null;
   const direct=isPerchable(origin);
   if(direct)return direct;
   const probes=[
@@ -165,7 +166,7 @@ function setPerch(target){
   }
 }
 function perchPosition(){
-  if(!perchTarget||!perchTarget.isConnected)return null;
+  if(!perchTarget||!perchTarget.isConnected||!isPerchable(perchTarget))return null;
   const rect=perchTarget.getBoundingClientRect();
   if(rect.bottom<0||rect.top>innerHeight||rect.right<0||rect.left>innerWidth)return null;
   const x=rect.left+(rect.width/2)-43;
