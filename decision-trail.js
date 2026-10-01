@@ -105,6 +105,7 @@ function bestSource(){
   let bestScore=Infinity;
   sources.forEach((source,index)=>{
     if(!source.el.isConnected)return;
+    if(currentHost!==homeHost&&!currentHost.contains(source.el))return;
     const r=source.el.getBoundingClientRect();
     if(r.bottom<110||r.top>innerHeight-70||r.width<20||r.height<20)return;
     const distance=r.top<=line&&r.bottom>=line?0:Math.min(Math.abs(r.top-line),Math.abs(r.bottom-line));
