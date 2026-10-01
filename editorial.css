@@ -867,31 +867,3 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .companion-themed .library-tabs,
   .companion-themed .contact-banner{transition:none}
 }
-
-/* Transparent biography portrait integration */
-.biography .portrait-wrap.portrait-transparent{
-  height:auto;
-  max-width:540px;
-  overflow:visible;
-  mask-image:none;
-  -webkit-mask-image:none;
-  background:transparent;
-}
-.biography .portrait-wrap.portrait-transparent .portrait{
-  width:min(100%,500px);
-  height:auto;
-  margin-inline:auto;
-  background:transparent;
-  object-fit:contain;
-  filter:none;
-}
-.companion-themed .biography .portrait-wrap.portrait-transparent,
-.companion-themed .biography .portrait-wrap.portrait-transparent .portrait{
-  background:transparent
-}
-@media(max-width:700px){
-  .biography .portrait-wrap.portrait-transparent{
-    max-width:360px;
-    height:auto
-  }
-}
