@@ -1,0 +1,45 @@
+/* Theme preference is shared across routes and resolved before the page paints. */
+.theme-control{display:inline-flex;align-items:center;gap:7px;font-size:11px;white-space:nowrap}
+.theme-control select{font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:0;padding:10px 7px;min-height:40px;cursor:pointer}
+.theme-control select:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@media(max-width:600px){.theme-control>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.theme-control select{max-width:80px;padding:8px 3px}.header-tools{gap:9px}}
+html[data-theme=dark]{--ink:#eee9e1;--paper:#252525;--line:#48443f;--charcoal:#222;--night-base:#181818;--night-surface:#222;--night-raised:#2c2b29;--night-muted:#bcb4aa;--night-accent:#dec39e;color-scheme:dark;background:var(--night-base)}
+html[data-theme=dark] body{background:var(--night-base);color:var(--ink)}
+html[data-theme=dark] body :is(header#top,header#top.is-scrolled){background:var(--night-base);color:var(--ink);border-color:var(--line);box-shadow:none}
+html[data-theme=dark] body :is(.professional-intro,.work-section,.work-accordion-section,.logo-section,.biography,.library-teaser,.testimonials,.contact,.site-footer,.library-page,.logos-library,.library-end,.case-body,footer){background:var(--night-base);color:var(--ink)}
+html[data-theme=dark] body :is(.value-framework,.brand-logo-callout,.library-tabs,.case-chapters,.library-cover,.identity-art,.drawer-brief-cover,.case-cover-stage,.case-image-link){background:var(--night-surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] body :is(.library-card,.project-card,.quote,.companion-picker,.companion-option){background:var(--night-surface);color:var(--ink);border-color:var(--line);box-shadow:none}
+html[data-theme=dark] body :is(.project-drawer,.project-drawer.brief-drawer,.project-drawer.case-study-drawer,.cv-drawer,.drawer-bar,.brief-drawer .drawer-bar){background:var(--night-surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] body .project-drawer::backdrop{background:#000a}
+html[data-theme=dark] body :is(.measurement-note,.drawer-case-study .measurement-note,.metric-row>div,.archive-story .metric-row>div,.initials){background:var(--night-raised);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] body :is(.featured-copy-block h2,.drawer-brief .drawer-facts dd,.project-evidence strong,.library-card-copy .issuer){color:var(--ink)}
+html[data-theme=dark] body :is(.lead,.subheading,.featured-intro-copy,.featured-footer>div,.library-links p,.library-card-copy>p:not(.eyebrow),.group-heading p,.logo-heading>p,.logos-library .logo-heading>p,.drawer-intro,.drawer-brief .drawer-intro,.drawer-brief-summary p,.drawer-facts dt,.drawer-brief .drawer-facts dt,.drawer-brief-actions>span,.drawer-loading,.research-limit,.metric-note,.metric-row small,figcaption,.identity-caption>span,.footer-profile span,.footer-local small,.footer-clock-date,.companion-picker-foot,.companion-picker-head span,.project-evidence .delivered,.value-framework-head>p,.value-framework-grid p){color:var(--night-muted)}
+html[data-theme=dark] body :is(.eyebrow,.identity-caption .eyebrow,.value-framework-grid span,.drawer-brief-summary>span,.project-story-signals span,.library-links span,.reviews-label span,.drawer-brief .drawer-kicker){color:var(--night-accent)}
+html[data-theme=dark] body :is(.project-story-signals,.case-page .project-story-signals){background:var(--night-surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] body .project-story-signals article p{color:var(--ink)}
+html[data-theme=dark] body :is(.archive,.archive button,.archive a,.social-row,.identity-caption,.library-links>a,.reviews-label,.site-footer,.value-framework-grid,.group-heading,.drawer-facts,.drawer-brief-summary,.drawer-bar,.drawer-image,.identity-pairs,.identity-variants,.document-pages,.case-section,.case-next,.case-facts,.metric-row,.project-story-signals article){border-color:var(--line)}
+html[data-theme=dark] body :is(.navigation nav,.library-hero,.case-head,.wordmark,.contact-banner,.case-next){background:#222;color:#f6f2e9;box-shadow:none}
+html[data-theme=dark] body :is(.library-hero>p:last-child,.case-head .lead){color:#d5cec4}
+html[data-theme=dark] body :is(.button,.header-cv,.featured-control,.drawer-close,.identity-close,.cv-close,.companion-picker-close,.companion-random,.companion-dismiss-selection){background:var(--night-surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] body :is(.button.primary,.preview-button,.identity-open,.featured-control strong,.drawer-brief-actions .button.primary){background:#e5d3ba;color:#211d18;border-color:#e5d3ba}
+html[data-theme=dark] body :is(.button.primary:hover,.preview-button:hover,.identity-open:hover,.featured-control:hover strong){background:#f3e4cf;color:#211d18;border-color:#f3e4cf}
+html[data-theme=dark] body :is(.button:not(.primary):hover,.header-cv:hover,.drawer-close:hover,.identity-close:hover,.cv-close:hover,.companion-picker-close:hover,.companion-random:hover,.companion-dismiss-selection:hover:not(:disabled),.archive button:hover,.companion-option:hover){background:var(--night-raised);color:var(--ink);border-color:var(--night-accent)}
+html[data-theme=dark] body .companion-option.is-selected{background:#3d352c;color:#f6f2e9;border-color:#dec39e;box-shadow:inset 0 0 0 1px #dec39e}
+html[data-theme=dark] body .summon-companion{background:#262422;color:#f6f2e9;border-color:var(--night-accent)}
+html[data-theme=dark] body .summon-companion span{color:var(--night-muted)}
+html[data-theme=dark] body .summon-companion strong{color:var(--night-accent)}
+html[data-theme=dark] body .companion-shadow{background:#0005}
+html[data-theme=dark] body .pokemon-companion[data-state=sleepy] .companion-character::after{color:var(--night-muted)}
+html[data-theme=dark] body :is(a,button,summary,select):focus-visible{outline-color:#ead2b1}
+html[data-theme=dark] body .text-link{text-decoration-color:currentColor}
+html[data-theme=dark] body .skip:focus{background:var(--night-raised);color:var(--ink)}
+html[data-theme=dark] body .cv-document{background:var(--night-raised);color-scheme:light}
+html[data-theme=dark] body .case-page{--case-surface:#181818;--case-muted:#bcb4aa}
+html[data-theme=dark] body.case-page{--case-surface:#181818;--case-muted:#bcb4aa}
+html[data-theme=dark] body .case-chapters{box-shadow:0 4px 12px #0003}
+/* Preserve the artwork and document colours; only the surrounding UI is themed. */
+html[data-theme=dark] body :is(.featured-project-content,.featured-project-collapsed){color:#fff}
+html[data-theme=dark] body .featured-card-actions>a{background:#eee6da;color:#28231e}
+html[data-theme=dark] body .panel-caption>a{background:#eee6da;color:#28231e}
+html[data-theme=dark] body .contact-banner span{color:#f6f2e9}
+@media print{html[data-theme=dark] body{background:white;color:#222}.theme-control{display:none}}
