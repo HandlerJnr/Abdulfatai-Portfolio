@@ -238,10 +238,15 @@ async function askAgent(question,found){
 }
 
 function localAnswer(found,q){
+  if(isBroadQuestion(q)){
+    return 'Based on the published portfolio, Jamiu has evidence of working across complex product areas rather than only visual UI. His published work includes progression from intern to UI/UX Manager at Bizinc, multi-market banking work on Vista that received ITSS recognition, end-to-end design across Kremor AI, and professional references from the Bizinc CEO and Kremor AI founder. The portfolio also shows work across fintech, SaaS, marketplaces and AI, with design-system and developer-handoff experience. Some outcome figures in the case studies are aggregate or not independently verified, so they should be read with that limitation.';
+  }
   if(!found.length)return 'I couldn’t find a clear match in the published portfolio. Try a project name, banking, branding, design systems, research, AI, or experience. For details that aren’t published, contact Jamiu directly.';
-  return excerpt(found[0],q);
+  const primary=found[0];
+  const second=found.find(record=>record.id!==primary.id&&record.id!=='about');
+  const first=excerpt(primary,q);
+  return second?first+' A related example is '+second.title+': '+second.summary:first;
 }
-
 async function ask(q){
   q=q.trim();
   if(!q)return;
