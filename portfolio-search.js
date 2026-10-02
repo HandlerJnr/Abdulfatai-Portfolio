@@ -27,71 +27,21 @@ function text(tag,value,className){
   return el;
 }
 
-const stop=new Set('a an the i you your me my what how did do does is are was were at in on to of and for about show tell can has have with it work project projects please he him his she her hers they them their theirs who whom jamiu abdulfatai'.split(' '));
-const groups=[
-  ['fintech','banking','bank','finance','financial','payments','payment','currency','currencies','loans','investment'],
-  ['branding','brand','logo','logos','identity','merchandise'],
-  ['skills','experience','career','background','education','about','cv','resume','strength','strengths','capability','capabilities'],
-  ['research','testing','test','usability','discovery','findings'],
-  ['systems','system','components','component','tokens','library'],
-  ['ai','generative','artificial','intelligence','agent','automation','llm','model','models'],
-  ['contact','email','hire','hiring','recruiter','availability','available','pricing','sponsorship'],
-  ['manager','management','lead','leadership','team','stakeholder','stakeholders','developer','developers','engineering']
-];
-
-const broadPatterns=[
-  /\bhow good\b/i,
-  /\bis (?:he|jamiu) (?:good|strong|experienced|senior|capable|worth hiring)\b/i,
-  /\bwhy (?:should (?:we|i|a team) )?(?:hire|choose|pick) (?:him|jamiu)\b/i,
-  /\bwould you hire (?:him|jamiu)\b/i,
-  /\bwhat (?:kind|type) of (?:designer|product designer)\b/i,
-  /\bwhat (?:are )?(?:his|jamiu'?s) strengths\b/i,
-  /\bwhat makes (?:him|jamiu)\b/i,
-  /\btell me about (?:him|jamiu)\b/i,
-  /\bwho is (?:he|jamiu)\b/i,
-  /\bhow experienced\b/i,
-  /\bhow strong\b/i,
-  /\bhow capable\b/i,
-  /\boverall\b/i
-];
+const stop=new Set('a an the i you your me my what how did do does is are was were at in on to of and for about show tell can could would should has have had with it this that these those please he him his she her hers they them their theirs who whom jamiu abdulfatai really very just'.split(' '));
 
 function tokens(q){
-  return q.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(t=>t.length>1&&!stop.has(t));
+  return String(q||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(t=>t.length>1&&!stop.has(t));
 }
 
-function hasSpecificSubject(q){
-  const clean=q.toLowerCase();
-  const named=Array.isArray(records)&&records.some(record=>{
-    if(['about','credentials','cv'].includes(record.id))return false;
-    const id=record.id.replace(/-/g,' ');
-    const title=record.title.toLowerCase();
-    return clean.includes(id)||clean.includes(title);
-  });
-  return named||/\b(?:fintech|banking|bank|payments?|branding|logos?|identity|research|testing|usability|design systems?|components?|tokens?|ai|generative|llm|automation|healthcare|marketplace|saas|dashboard|mobile|responsive|figma|prototype|prototyping)\b/i.test(clean);
-}
-
-function isBroadQuestion(q){
-  const clean=q.trim();
-  const words=tokens(clean);
-  const specific=hasSpecificSubject(clean);
-  return (!specific&&broadPatterns.some(pattern=>pattern.test(clean))) ||
-    (!specific&&/\b(?:he|him|his)\b/i.test(clean)&&words.length<=3) ||
-    (!specific&&words.length<=2&&/\b(?:good|strong|experienced|capable|hire|hiring|strengths?)\b/i.test(clean));
-}
-
-function isFollowUp(q){
-  const clean=q.trim();
-  const words=tokens(clean);
-  return history.length>0 && (
-    words.length<=3 ||
-    /^(and|also|what about|why|how so|how about|tell me more|more|really|which one|what else)\b/i.test(clean) ||
-    /\b(?:it|that|this|there|they|them|he|him|his)\b/i.test(clean)
-  );
-}
-
-function lastUserQuestion(){
-  for(let i=history.length-1;i>=0;i--) if(history[i].role==='user') return history[i].text||'';
-  return '';
+function recentUserContext(q){
+  const current=String(q||'').trim();
+  const currentWords=tokens(current);
+  if(currentWords.length>5||!history.length)return current;
+  const previous=[];
+  for(let i=history.length-1;i>=0&&previous.length<2;i--){
+    if(history[i].role==='user'&&history[i].text)previous.unshift(history[i].text);
+  }
+  return [...previous,current].join(' ');
 }
 
 function getRecord(id){
@@ -103,67 +53,62 @@ function uniqueRecords(items){
   return items.filter(record=>record&&!seen.has(record.id)&&(seen.add(record.id),true));
 }
 
-function broadEvidence(){
-  return uniqueRecords([
-    getRecord('about'),
-    getRecord('credentials'),
-    getRecord('bizinc'),
-    getRecord('vista-itss'),
-    getRecord('kremor-ai'),
-    getRecord('system')
-  ]).slice(0,6);
+function recordScore(record,q){
+  const query=recentUserContext(q);
+  const words=tokens(query);
+  if(!words.length)return 0;
+
+  const title=record.title.toLowerCase();
+  const summary=record.summary.toLowerCase();
+  const body=record.text.toLowerCase();
+  const id=record.id.replace(/-/g,' ');
+  let score=0;
+
+  words.forEach(word=>{
+    if(title.includes(word))score+=12;
+    if(id.includes(word))score+=10;
+    if(summary.includes(word))score+=5;
+    const hits=body.split(word).length-1;
+    score+=Math.min(hits,6);
+  });
+
+  const phrase=query.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+  if(phrase.length>3){
+    if(title.includes(phrase))score+=30;
+    if(summary.includes(phrase))score+=12;
+    if(body.includes(phrase))score+=8;
+  }
+
+  return score;
 }
 
 function rank(q){
-  if(isBroadQuestion(q)) return broadEvidence();
+  const scored=records.map(record=>({record,score:recordScore(record,q)}))
+    .sort((a,b)=>b.score-a.score);
 
-  const context=isFollowUp(q)?lastUserQuestion()+' '+q:q;
-  const words=tokens(context);
-  const expanded=new Set(words);
-  groups.forEach(group=>{
-    if(group.some(word=>words.includes(word)))group.forEach(word=>expanded.add(word));
-  });
+  const topScore=scored[0]?.score||0;
+  const useful=scored.filter(item=>item.score>0).slice(0,5).map(item=>item.record);
+  const context=tokens(recentUserContext(q));
 
-  let matches=records.map(record=>{
-    const title=record.title.toLowerCase();
-    const body=(record.summary+' '+record.text).toLowerCase();
-    let score=0;
+  if(topScore<5||context.length<=1){
+    return uniqueRecords([getRecord('about'),getRecord('credentials'),lastProject,...useful]).slice(0,6);
+  }
 
-    words.forEach(word=>{
-      if(title.includes(word))score+=18;
-      if(record.id===word)score+=25;
-    });
-
-    expanded.forEach(word=>{
-      if(new RegExp('\\b'+word+'\\b','i').test(body))score+=words.includes(word)?4:1;
-    });
-
-    if(words.some(word=>['cv','resume'].includes(word))&&record.id==='cv')score+=40;
-    if(words.some(word=>['contact','email','hire','hiring','recruiter','availability','available','pricing','sponsorship','experience','skills','education','strength','strengths'].includes(word))&&record.id==='about')score+=34;
-    if(words.some(word=>['hire','hiring','recruiter','strength','strengths','recognition','award','reference','references'].includes(word))&&record.id==='credentials')score+=32;
-    if(words.some(word=>['branding','logos','logo','identity'].includes(word))&&record.id==='logos')score+=30;
-    if(words.some(word=>['systems','system','components','tokens','library'].includes(word))&&record.id==='system')score+=30;
-
-    return {record,score};
-  }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score);
-
-  let found=matches.slice(0,5).map(item=>item.record);
-
-  if(!found.length&&lastProject) found=[lastProject,getRecord('about')];
-  if(!found.length) found=[getRecord('about'),getRecord('credentials')];
-
-  if(!found.some(record=>record?.id==='about')) found.push(getRecord('about'));
-
-  return uniqueRecords(found).slice(0,6);
+  return uniqueRecords([...useful,getRecord('about')]).slice(0,6);
 }
+
 function scoredChunks(record,q){
-  const words=tokens(q);
-  return record.text.split(/\n/).filter(Boolean).map((value,index)=>({
-    value,
-    index,
-    score:words.reduce((total,word)=>total+(value.toLowerCase().includes(word)?1:0),0)+
-      (/what did|contribut|role|own|responsib/i.test(q)&&/what i owned/i.test(value)?10:0)
-  })).sort((a,b)=>b.score-a.score||a.index-b.index);
+  const query=recentUserContext(q);
+  const words=tokens(query);
+  return record.text.split(/\n/).filter(Boolean).map((value,index)=>{
+    const lower=value.toLowerCase();
+    let score=0;
+    words.forEach(word=>{
+      const hits=lower.split(word).length-1;
+      score+=Math.min(hits,4);
+    });
+    return {value,index,score};
+  }).sort((a,b)=>b.score-a.score||a.index-b.index);
 }
 
 function excerpt(record,q){
@@ -175,13 +120,23 @@ function excerpt(record,q){
 }
 
 function evidence(record,q){
-  if(isBroadQuestion(q)){
-    return (record.text||record.summary).slice(0,3200);
-  }
-  const query=isFollowUp(q)?lastUserQuestion()+' '+q:q;
-  const chunks=scoredChunks(record,query).slice(0,4).sort((a,b)=>a.index-b.index).map(item=>item.value.replace(/^\d+\s+[^:]+:\s*/,''));
-  const combined=chunks.join('\n');
-  return (combined||record.summary).slice(0,3200);
+  const chunks=record.text.split(/\n/).filter(Boolean);
+  if(!chunks.length)return record.summary;
+
+  const selected=[];
+  const add=value=>{
+    if(value&&!selected.includes(value))selected.push(value);
+  };
+
+  // Every source contributes its short version and ownership/context.
+  add(chunks[0]);
+  add(chunks[1]);
+
+  // Then add whichever sections best match the actual conversation.
+  scoredChunks(record,q).slice(0,3).forEach(item=>add(item.value));
+
+  const compact=selected.map(value=>value.replace(/^\d+\s+[^:]+:\s*/,'')).join('\n');
+  return (record.summary+'\n'+compact).slice(0,2800);
 }
 async function getRecords(){
   if(records)return records;
@@ -219,24 +174,23 @@ function sourceCards(found){
   return cards;
 }
 
-async function askAgent(question,found){
+async function askAgent(question){
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),19000);
+  const timer=setTimeout(()=>controller.abort(),22000);
   try{
     const response=await fetch('/api/agent',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         question,
-        sources:found.map(record=>({
+        sources:records.map(record=>({
           id:record.id,
           title:record.title,
           summary:record.summary,
           evidence:evidence(record,question),
           url:record.url
         })),
-        history:history.slice(-8),
-        intent:isBroadQuestion(question)?'broad':'specific'
+        history:history.slice(-10)
       }),
       signal:controller.signal
     });
@@ -248,16 +202,26 @@ async function askAgent(question,found){
     clearTimeout(timer);
   }
 }
-
 function localAnswer(found,q){
-  if(isBroadQuestion(q)){
-    return 'Based on the published portfolio, Jamiu has evidence of working across complex product areas rather than only visual UI. His published work includes progression from intern to UI/UX Manager at Bizinc, multi-market banking work on Vista that received ITSS recognition, end-to-end design across Kremor AI, and professional references from the Bizinc CEO and Kremor AI founder. The portfolio also shows work across fintech, SaaS, marketplaces and AI, with design-system and developer-handoff experience. Some outcome figures in the case studies are aggregate or not independently verified, so they should be read with that limitation.';
-  }
-  if(!found.length)return 'I couldn’t find a clear match in the published portfolio. Try a project name, banking, branding, design systems, research, AI, or experience. For details that aren’t published, contact Jamiu directly.';
-  const primary=found[0];
-  const second=found.find(record=>record.id!==primary.id&&record.id!=='about');
+  const selected=found.length?found:uniqueRecords([getRecord('about'),getRecord('credentials'),lastProject]);
+  if(!selected.length)return 'I could not load enough published portfolio context to answer that well. Try again in a moment.';
+
+  const primary=selected[0];
+  const second=selected.find(record=>record.id!==primary.id);
   const first=excerpt(primary,q);
-  return second?first+' A related example is '+second.title+': '+second.summary:first;
+
+  if(tokens(recentUserContext(q)).length<=1){
+    const profile=getRecord('about');
+    const credentials=getRecord('credentials');
+    const parts=[
+      profile?.summary,
+      credentials?.summary,
+      lastProject?('A representative project is '+lastProject.title+': '+lastProject.summary):''
+    ].filter(Boolean);
+    return parts.join(' ');
+  }
+
+  return second?first+' Related evidence: '+second.title+' — '+second.summary:first;
 }
 async function ask(q){
   q=q.trim();
@@ -278,13 +242,11 @@ async function ask(q){
     let answer=fallback;
     let usedAgent=false;
 
-    if(found.length){
-      try{
-        answer=await askAgent(q,found);
-        usedAgent=true;
-      }catch{
-        answer=fallback;
-      }
+    try{
+      answer=await askAgent(q);
+      usedAgent=true;
+    }catch{
+      answer=fallback;
     }
 
     response.classList.remove('is-thinking');
