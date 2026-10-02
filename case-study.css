@@ -69,3 +69,12 @@
 .case-chapters a[aria-selected=true]{border-color:var(--ink);font-weight:600}
 @media(max-width:760px){.case-page .case-head{padding:40px 24px}.case-page .case-head h1{letter-spacing:-1px}.case-page .case-head .back{margin-bottom:40px}.case-page .case-tab-panel .case-section{grid-template-columns:1fr;gap:18px;padding:26px 0}}
 @media print{.case-tab-panel[hidden]{display:block!important}.case-chapters{display:none}}
+
+/* Full-bleed project facts, with dividers spanning the viewport. */
+.case-page .case-head{padding-bottom:0}
+.case-page .case-head .case-facts{max-width:none;width:calc(100% + 14vw);margin-inline:-7vw;padding:0;gap:0;border-bottom:1px solid #655f56;grid-template-columns:1.1fr .8fr 1.4fr}
+.case-page .case-head .case-facts>div{padding:25px 32px 30px;border-right:1px solid #655f56}
+.case-page .case-head .case-facts>div:last-child{border-right:0}
+.case-page .case-chapters{position:sticky;top:var(--case-header-height,105px);z-index:37;box-shadow:0 4px 12px #342c2308}
+.case-page .case-section{scroll-margin-top:calc(var(--case-header-height,105px) + 80px)}
+@media(max-width:760px){.case-page .case-head .case-facts{width:calc(100% + 48px);margin-inline:-24px;grid-template-columns:1fr}.case-page .case-head .case-facts>div{padding:18px 24px;border-right:0;border-bottom:1px solid #655f56}.case-page .case-head .case-facts>div:last-child{border-bottom:0}}
