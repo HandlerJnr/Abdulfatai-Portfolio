@@ -3,5 +3,12 @@
   "framework": null,
   "buildCommand": null,
   "installCommand": "",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "api/agent.py": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "excludeFiles": "{assets/**,projects/**,logos/images/**,**/*.pdf}"
+    }
+  }
 }

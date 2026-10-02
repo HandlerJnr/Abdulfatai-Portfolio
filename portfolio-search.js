@@ -8,7 +8,7 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Open-source Qwen agent · server-side · grounded in Jamiu’s published portfolio.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — vague, specific, comparative or follow-up questions all work. The agent decides which portfolio evidence matters.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="400" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>LlamaIndex + GPT-OSS agent · server-side · grounded in Jamiu’s published portfolio.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — vague, specific, comparative or follow-up questions all work. The agent decides which portfolio evidence matters.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -178,20 +178,13 @@ function sourceCards(found){
 
 async function askAgent(question){
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),22000);
+  const timer=setTimeout(()=>controller.abort(),28000);
   try{
     const response=await fetch('/api/agent',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         question,
-        sources:records.map(record=>({
-          id:record.id,
-          title:record.title,
-          summary:record.summary,
-          evidence:evidence(record,question),
-          url:record.url
-        })),
         history:history.slice(-10)
       }),
       signal:controller.signal
@@ -263,7 +256,7 @@ async function ask(q){
     response.replaceChildren();
     response.append(text('p',answer));
 
-    const meta=text('p',usedAgent?'Qwen agent · evidence selected from the published portfolio.':'Portfolio fallback · hosted agent temporarily unavailable.','search-answer-meta');
+    const meta=text('p',usedAgent?'GPT-OSS agent · LlamaIndex retrieval · evidence selected from the published portfolio.':'Portfolio fallback · hosted agent temporarily unavailable.','search-answer-meta');
     response.append(meta);
 
     if(evidenceCards.length){
