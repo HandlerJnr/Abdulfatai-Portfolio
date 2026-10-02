@@ -1098,5 +1098,5 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 @media(max-width:700px){.portrait-wrap.portrait-interactive{max-width:250px}}
 @media(prefers-reduced-motion:reduce){.portrait-interactive .portrait-head{transform:none!important}}
 
-/* Keep every modal control accessible; restore the selected companion on close. */
-.companion-overlay-open .pokemon-companion,.companion-overlay-open .summon-companion,.companion-overlay-open .companion-picker{display:none!important}
+/* A companion crossing a button never captures that button's click or tap. */
+.pokemon-companion.yields-to-control button.companion-character{pointer-events:none}

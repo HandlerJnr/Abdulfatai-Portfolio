@@ -75,12 +75,24 @@ const homeHost=document.body;
 let currentHost=homeHost;
 
 function syncFloatingHost(){
-  const overlayOpen=!!document.querySelector('dialog[open],[aria-modal="true"]:not([hidden])');
-  document.documentElement.classList.toggle('companion-overlay-open',overlayOpen);
-  if(overlayOpen){
-    setPicker(false);setPerch(null);
-    if(raf){cancelAnimationFrame(raf);raf=0}
-  }else if(active){startFollowing()}
+  const dialogs=[...document.querySelectorAll('dialog[open]')];
+  const host=dialogs.at(-1)||homeHost;
+  if(host!==currentHost){
+    setPicker(false);setPerch(null);currentHost=host;
+    host.append(summon,picker,companion);
+  }
+  if(active){startFollowing();requestAnimationFrame(protectControls)}
+}
+// While crossing a control, the character yields pointer events to that control.
+function protectControls(){
+  if(!active)return;
+  const box=character.getBoundingClientRect();
+  const overlaps=[...currentHost.querySelectorAll('button,a,input,select,textarea,[role="button"]')].some(el=>{
+    if(el===character||companion.contains(el)||picker.contains(el)||el===summon)return false;
+    const r=el.getBoundingClientRect();
+    return r.width>0&&r.height>0&&box.left<r.right+8&&box.right>r.left-8&&box.top<r.bottom+8&&box.bottom>r.top-8;
+  });
+  companion.classList.toggle('yields-to-control',overlaps);
 }
 const dialogObserver=new MutationObserver(records=>{
   if(records.some(record=>record.type==='attributes'&&record.attributeName==='open'))syncFloatingHost();
@@ -232,7 +244,8 @@ function perchPosition(){
   const rect=perchTarget.getBoundingClientRect();
   if(rect.bottom<0||rect.top>innerHeight||rect.right<0||rect.left>innerWidth)return null;
   const x=rect.left+(rect.width/2)-43;
-  const y=rect.top-78;
+  // The entire 86px hit target stays outside the button, including edge clamping.
+  const y=rect.top>=106?rect.top-102:rect.bottom+16;
   return clamp(x,y);
 }
 function dismissCompanion(){
@@ -302,7 +315,7 @@ function clamp(x,y){
   return {x:Math.max(pad,Math.min(innerWidth-w-pad,x)),y:Math.max(pad,Math.min(innerHeight-h-pad,y))};
 }
 function animate(){
-  if(!active||document.documentElement.classList.contains('companion-overlay-open')||document.hidden||reduced.matches||!finePointer.matches){raf=0;return}
+  if(!active||document.hidden||reduced.matches||!finePointer.matches){raf=0;return}
   let c=perchPosition();
   if(perchTarget&&!c){
     setPerch(null);
@@ -319,14 +332,16 @@ function animate(){
   companion.style.setProperty('--companion-tilt',tilt.toFixed(2)+'deg');
   companion.style.transform='translate3d('+currentX+'px,'+currentY+'px,0)';
   lastX=currentX;
+  protectControls();
   if(distance>0.5)raf=requestAnimationFrame(animate);else raf=0;
 }
 function startFollowing(){
-  if(!active||document.documentElement.classList.contains('companion-overlay-open'))return;
+  if(!active)return;
   if(reduced.matches||!finePointer.matches){
     setPerch(null);
     companion.classList.add('is-docked');
     companion.style.transform='';
+    requestAnimationFrame(protectControls);
     return;
   }
   companion.classList.remove('is-docked');
@@ -348,7 +363,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!picker.hidden){setPicker(false);summon.focus()}
 });
 addEventListener('pointermove',e=>{
-  if(!active||document.documentElement.classList.contains('companion-overlay-open')||reduced.matches||!finePointer.matches)return;
+  if(!active||reduced.matches||!finePointer.matches)return;
   if(companion.contains(e.target))return;
   wake();startFollowing();
   const target=nearbyPerch(e.clientX,e.clientY,e.target);
@@ -359,7 +374,7 @@ addEventListener('pointermove',e=>{
   targetX=e.clientX+(right?-92:28);
   targetY=e.clientY+(bottom?-94:30);
 },{passive:true});
-addEventListener('scroll',()=>{wake();if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true});
+addEventListener('scroll',()=>{wake();protectControls();if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true,capture:true});
 addEventListener('resize',()=>{syncFloatingHost();setPerch(null);startFollowing()},{passive:true});
 
 syncFloatingHost();
