@@ -42,7 +42,7 @@ const groups=[
 const broadPatterns=[
   /\bhow good\b/i,
   /\bis (?:he|jamiu) (?:good|strong|experienced|senior|capable|worth hiring)\b/i,
-  /\bwhy (?:hire|choose|pick) (?:him|jamiu)\b/i,
+  /\bwhy (?:should (?:we|i|a team) )?(?:hire|choose|pick) (?:him|jamiu)\b/i,
   /\bwould you hire (?:him|jamiu)\b/i,
   /\bwhat (?:kind|type) of (?:designer|product designer)\b/i,
   /\bwhat (?:are )?(?:his|jamiu'?s) strengths\b/i,
@@ -59,12 +59,24 @@ function tokens(q){
   return q.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(t=>t.length>1&&!stop.has(t));
 }
 
+function hasSpecificSubject(q){
+  const clean=q.toLowerCase();
+  const named=Array.isArray(records)&&records.some(record=>{
+    if(['about','credentials','cv'].includes(record.id))return false;
+    const id=record.id.replace(/-/g,' ');
+    const title=record.title.toLowerCase();
+    return clean.includes(id)||clean.includes(title);
+  });
+  return named||/\b(?:fintech|banking|bank|payments?|branding|logos?|identity|research|testing|usability|design systems?|components?|tokens?|ai|generative|llm|automation|healthcare|marketplace|saas|dashboard|mobile|responsive|figma|prototype|prototyping)\b/i.test(clean);
+}
+
 function isBroadQuestion(q){
   const clean=q.trim();
   const words=tokens(clean);
-  return broadPatterns.some(pattern=>pattern.test(clean)) ||
-    (/\b(?:he|him|his)\b/i.test(clean)&&words.length<=3) ||
-    (words.length<=2&&/\b(?:good|strong|experienced|capable|hire|hiring|strengths?)\b/i.test(clean));
+  const specific=hasSpecificSubject(clean);
+  return (!specific&&broadPatterns.some(pattern=>pattern.test(clean))) ||
+    (!specific&&/\b(?:he|him|his)\b/i.test(clean)&&words.length<=3) ||
+    (!specific&&words.length<=2&&/\b(?:good|strong|experienced|capable|hire|hiring|strengths?)\b/i.test(clean));
 }
 
 function isFollowUp(q){
