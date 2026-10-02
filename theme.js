@@ -6,14 +6,14 @@
   const resolved=preference==='system'?(system.matches?'dark':'light'):preference;
   root.dataset.theme=resolved;root.style.colorScheme=resolved;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',resolved==='dark'?'#181818':'#ffffff');
-  document.querySelectorAll('[data-theme-select]').forEach(select=>select.value=preference);
+  document.querySelectorAll('[data-theme-toggle]').forEach(button=>button.setAttribute('aria-checked',String(resolved==='dark')));
  }
  apply();
  function mount(){
-  document.querySelectorAll('[data-theme-select]').forEach(select=>{
-   select.value=preference;
-   select.addEventListener('change',()=>{preference=select.value;try{localStorage.setItem('portfolio-theme',preference)}catch{}apply()});
+  document.querySelectorAll('[data-theme-toggle]').forEach(button=>{
+   button.addEventListener('click',()=>{preference=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('portfolio-theme',preference)}catch{}apply()});
   });
+  apply();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
  system.addEventListener('change',()=>{if(preference==='system')apply()});
