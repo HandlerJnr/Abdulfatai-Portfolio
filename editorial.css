@@ -1100,3 +1100,167 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 
 /* A companion crossing a button never captures that button's click or tap. */
 .pokemon-companion.yields-to-control button.companion-character{pointer-events:none}
+
+
+/* Mobile drawer viewport containment */
+@media(max-width:700px){
+  .project-drawer,
+  .project-drawer.brief-drawer,
+  .project-drawer.case-study-drawer,
+  .identity-drawer,
+  .cv-drawer{
+    inset:0!important;
+    width:100dvw!important;
+    min-width:0!important;
+    max-width:100dvw!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    overflow-x:hidden!important;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+
+  .project-drawer *,
+  .identity-drawer *,
+  .cv-drawer *{
+    box-sizing:border-box;
+    min-width:0;
+  }
+
+  .project-drawer .drawer-bar,
+  .identity-drawer .drawer-bar,
+  .cv-drawer .drawer-bar{
+    width:100%;
+    max-width:100%;
+    gap:12px;
+    padding-left:max(18px,env(safe-area-inset-left));
+    padding-right:max(18px,env(safe-area-inset-right));
+  }
+
+  .drawer-bar>span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .drawer-close,
+  .identity-close,
+  .cv-close{
+    flex:0 0 auto;
+  }
+
+  .drawer-content,
+  .brief-drawer .drawer-content,
+  .identity-content,
+  .cv-intro,
+  .drawer-case-study .case-head,
+  .drawer-case-study .case-body{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    overflow-x:hidden;
+  }
+
+  .brief-drawer .drawer-content{
+    padding-left:max(20px,env(safe-area-inset-left));
+    padding-right:max(20px,env(safe-area-inset-right));
+  }
+
+  .drawer-brief-cover{
+    width:auto;
+    max-width:none;
+    margin-left:calc(-1 * max(20px,env(safe-area-inset-left)));
+    margin-right:calc(-1 * max(20px,env(safe-area-inset-right)));
+  }
+
+  .drawer-content h1,
+  .drawer-content h2,
+  .drawer-content h3,
+  .drawer-content p,
+  .drawer-content li,
+  .drawer-content dd,
+  .drawer-case-study h1,
+  .drawer-case-study h2,
+  .drawer-case-study p,
+  .drawer-case-study li,
+  .identity-content h2,
+  .identity-content h3,
+  .identity-content p{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+
+  .drawer-case-study .case-facts,
+  .drawer-case-study .case-section,
+  .drawer-case-study .metric-row,
+  .drawer-facts,
+  .drawer-brief .drawer-facts,
+  .identity-pairs,
+  .identity-swatches{
+    grid-template-columns:minmax(0,1fr)!important;
+    width:100%;
+    max-width:100%;
+  }
+
+  .drawer-case-study figure,
+  .drawer-case-study .case-gallery,
+  .drawer-image,
+  .identity-figure,
+  .document-pages,
+  .drawer-brief-summary{
+    max-width:100%;
+    min-width:0;
+  }
+
+  .project-drawer img,
+  .identity-drawer img,
+  .cv-drawer img,
+  .drawer-case-study img{
+    max-width:100%!important;
+    height:auto;
+  }
+
+  .drawer-links,
+  .drawer-brief-actions,
+  .document-actions{
+    width:100%;
+    max-width:100%;
+  }
+
+  .drawer-links .button,
+  .drawer-brief-actions .button,
+  .document-actions .button{
+    max-width:100%;
+    white-space:normal;
+    text-align:center;
+  }
+
+  .cv-document{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+}
+
+@media(max-width:390px){
+  .drawer-case-study .case-head,
+  .drawer-case-study .case-body{
+    padding-left:18px;
+    padding-right:18px;
+  }
+
+  .drawer-case-study .case-head h1,
+  .drawer-content h2,
+  .identity-content h2{
+    font-size:clamp(34px,11vw,42px);
+  }
+
+  .drawer-case-study .lead,
+  .drawer-intro{
+    font-size:15px;
+  }
+}
