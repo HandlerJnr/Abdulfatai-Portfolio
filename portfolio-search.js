@@ -27,23 +27,86 @@ function text(tag,value,className){
   return el;
 }
 
-const stop=new Set('a an the i you your me my what how did do does is are was were at in on to of and for about show tell can has have with it work project projects please'.split(' '));
+const stop=new Set('a an the i you your me my what how did do does is are was were at in on to of and for about show tell can has have with it work project projects please he him his she her hers they them their theirs who whom jamiu abdulfatai'.split(' '));
 const groups=[
   ['fintech','banking','bank','finance','financial','payments','payment','currency','currencies','loans','investment'],
   ['branding','brand','logo','logos','identity','merchandise'],
-  ['skills','experience','career','background','education','about','cv','resume'],
+  ['skills','experience','career','background','education','about','cv','resume','strength','strengths','capability','capabilities'],
   ['research','testing','test','usability','discovery','findings'],
   ['systems','system','components','component','tokens','library'],
-  ['ai','generative','artificial','intelligence','agent','automation'],
-  ['contact','email','hire','availability','available','pricing','sponsorship']
+  ['ai','generative','artificial','intelligence','agent','automation','llm','model','models'],
+  ['contact','email','hire','hiring','recruiter','availability','available','pricing','sponsorship'],
+  ['manager','management','lead','leadership','team','stakeholder','stakeholders','developer','developers','engineering']
+];
+
+const broadPatterns=[
+  /\bhow good\b/i,
+  /\bis (?:he|jamiu) (?:good|strong|experienced|senior|capable|worth hiring)\b/i,
+  /\bwhy (?:hire|choose|pick) (?:him|jamiu)\b/i,
+  /\bwould you hire (?:him|jamiu)\b/i,
+  /\bwhat (?:kind|type) of (?:designer|product designer)\b/i,
+  /\bwhat (?:are )?(?:his|jamiu'?s) strengths\b/i,
+  /\bwhat makes (?:him|jamiu)\b/i,
+  /\btell me about (?:him|jamiu)\b/i,
+  /\bwho is (?:he|jamiu)\b/i,
+  /\bhow experienced\b/i,
+  /\bhow strong\b/i,
+  /\bhow capable\b/i,
+  /\boverall\b/i
 ];
 
 function tokens(q){
   return q.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(t=>t.length>1&&!stop.has(t));
 }
 
+function isBroadQuestion(q){
+  const clean=q.trim();
+  const words=tokens(clean);
+  return broadPatterns.some(pattern=>pattern.test(clean)) ||
+    (/\b(?:he|him|his)\b/i.test(clean)&&words.length<=3) ||
+    (words.length<=2&&/\b(?:good|strong|experienced|capable|hire|hiring|strengths?)\b/i.test(clean));
+}
+
+function isFollowUp(q){
+  const clean=q.trim();
+  const words=tokens(clean);
+  return history.length>0 && (
+    words.length<=3 ||
+    /^(and|also|what about|why|how so|how about|tell me more|more|really|which one|what else)\b/i.test(clean) ||
+    /\b(?:it|that|this|there|they|them|he|him|his)\b/i.test(clean)
+  );
+}
+
+function lastUserQuestion(){
+  for(let i=history.length-1;i>=0;i--) if(history[i].role==='user') return history[i].text||'';
+  return '';
+}
+
+function getRecord(id){
+  return records.find(record=>record.id===id);
+}
+
+function uniqueRecords(items){
+  const seen=new Set();
+  return items.filter(record=>record&&!seen.has(record.id)&&(seen.add(record.id),true));
+}
+
+function broadEvidence(){
+  return uniqueRecords([
+    getRecord('about'),
+    getRecord('credentials'),
+    getRecord('bizinc'),
+    getRecord('vista-itss'),
+    getRecord('kremor-ai'),
+    getRecord('system')
+  ]).slice(0,6);
+}
+
 function rank(q){
-  const words=tokens(q);
+  if(isBroadQuestion(q)) return broadEvidence();
+
+  const context=isFollowUp(q)?lastUserQuestion()+' '+q:q;
+  const words=tokens(context);
   const expanded=new Set(words);
   groups.forEach(group=>{
     if(group.some(word=>words.includes(word)))group.forEach(word=>expanded.add(word));
@@ -53,20 +116,34 @@ function rank(q){
     const title=record.title.toLowerCase();
     const body=(record.summary+' '+record.text).toLowerCase();
     let score=0;
-    words.forEach(word=>{if(title.includes(word))score+=15});
-    expanded.forEach(word=>{
-      if(new RegExp('\\b'+word+'\\b','i').test(body))score+=words.includes(word)?3:1;
+
+    words.forEach(word=>{
+      if(title.includes(word))score+=18;
+      if(record.id===word)score+=25;
     });
-    if(words.some(word=>['cv','resume'].includes(word))&&record.id==='cv')score+=35;
-    if(words.some(word=>['contact','email','hire','availability','available','pricing','sponsorship','experience','skills','education'].includes(word))&&record.id==='about')score+=25;
-    if(words.some(word=>['branding','logos','logo','identity'].includes(word))&&record.id==='logos')score+=25;
+
+    expanded.forEach(word=>{
+      if(new RegExp('\\b'+word+'\\b','i').test(body))score+=words.includes(word)?4:1;
+    });
+
+    if(words.some(word=>['cv','resume'].includes(word))&&record.id==='cv')score+=40;
+    if(words.some(word=>['contact','email','hire','hiring','recruiter','availability','available','pricing','sponsorship','experience','skills','education','strength','strengths'].includes(word))&&record.id==='about')score+=34;
+    if(words.some(word=>['hire','hiring','recruiter','strength','strengths','recognition','award','reference','references'].includes(word))&&record.id==='credentials')score+=32;
+    if(words.some(word=>['branding','logos','logo','identity'].includes(word))&&record.id==='logos')score+=30;
+    if(words.some(word=>['systems','system','components','tokens','library'].includes(word))&&record.id==='system')score+=30;
+
     return {record,score};
   }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score);
 
-  if(!words.length&&lastProject)matches=[{record:lastProject,score:1}];
-  return matches.slice(0,3).map(item=>item.record);
-}
+  let found=matches.slice(0,5).map(item=>item.record);
 
+  if(!found.length&&lastProject) found=[lastProject,getRecord('about')];
+  if(!found.length) found=[getRecord('about'),getRecord('credentials')];
+
+  if(!found.some(record=>record?.id==='about')) found.push(getRecord('about'));
+
+  return uniqueRecords(found).slice(0,6);
+}
 function scoredChunks(record,q){
   const words=tokens(q);
   return record.text.split(/\n/).filter(Boolean).map((value,index)=>({
@@ -86,11 +163,14 @@ function excerpt(record,q){
 }
 
 function evidence(record,q){
-  const chunks=scoredChunks(record,q).slice(0,4).sort((a,b)=>a.index-b.index).map(item=>item.value.replace(/^\d+\s+[^:]+:\s*/,''));
+  if(isBroadQuestion(q)){
+    return (record.text||record.summary).slice(0,3200);
+  }
+  const query=isFollowUp(q)?lastUserQuestion()+' '+q:q;
+  const chunks=scoredChunks(record,query).slice(0,4).sort((a,b)=>a.index-b.index).map(item=>item.value.replace(/^\d+\s+[^:]+:\s*/,''));
   const combined=chunks.join('\n');
-  return (combined||record.summary).slice(0,3000);
+  return (combined||record.summary).slice(0,3200);
 }
-
 async function getRecords(){
   if(records)return records;
   if(!loading){
@@ -143,7 +223,8 @@ async function askAgent(question,found){
           evidence:evidence(record,question),
           url:record.url
         })),
-        history:history.slice(-6)
+        history:history.slice(-8),
+        intent:isBroadQuestion(question)?'broad':'specific'
       }),
       signal:controller.signal
     });
@@ -197,9 +278,9 @@ async function ask(q){
     response.append(meta);
 
     if(found.length){
-      lastProject=found[0];
+      lastProject=found.find(record=>!['about','credentials','cv'].includes(record.id))||found[0];
       response.append(text('span','Explore the evidence','search-kicker'));
-      response.append(sourceCards(found));
+      response.append(sourceCards(found.slice(0,3)));
     }
 
     history.push({role:'user',text:q},{role:'assistant',text:answer});
