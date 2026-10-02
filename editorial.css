@@ -1091,6 +1091,3 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 @keyframes power-release{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}16%{opacity:.9}100%{opacity:0;transform:translate(calc(-50% + var(--px)),calc(-50% + var(--py))) rotate(var(--turn)) scale(.65)}}
 @media(prefers-reduced-motion:reduce){.companion-power{display:none!important}.companion-power-bit{animation:none!important}}
 
-/* Keep the floating portrait and chain visible at every biography breakpoint. */
-.portrait-3d-wrap{mask-image:none}
-.portrait-3d-wrap .portrait{height:100%;object-fit:contain}
