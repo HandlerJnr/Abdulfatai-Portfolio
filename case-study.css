@@ -49,3 +49,23 @@
 .case-page .case-next:after{content:'↗';position:absolute;right:28px;top:24px;font-size:23px}
 .case-page footer{border-top:1px solid var(--line);background:var(--case-surface)}
 @media(max-width:760px){.case-page .case-head{padding:30px 24px}.case-page .back{margin-bottom:30px}.case-page .case-facts{grid-template-columns:1fr;gap:20px}.case-page .case-facts strong{margin-bottom:5px}.case-cover-stage{padding:24px 16px}.case-chapters{padding:10px 20px;gap:0}.case-chapters>span,.case-chapters .case-top{display:none}.case-chapters>div{gap:22px;width:100%}.case-page .case-body{padding:10px 24px 48px}.case-page .case-section{grid-template-columns:1fr;gap:24px;padding:36px 0}.case-page .case-section h2{max-width:none}.chapter-number{margin-bottom:8px}.case-page .project-story-signals{grid-template-columns:1fr;padding:8px 22px}.case-page .project-story-signals article{padding:22px 0}.case-page .project-story-signals article:nth-child(2){border-top:1px solid #ffffff30}.case-page .metric-row{grid-template-columns:1fr}.case-page .metric-row>div{padding:22px 0;border-right:0;border-bottom:1px solid var(--line)}.case-page .metric-row>div:last-child{border-bottom:0}.case-page .case-next{padding:30px 24px}.case-page .case-gallery{gap:30px}}
+
+/* Match the Brand & Identity hero's dark editorial treatment. */
+.case-page .case-head{max-width:none;padding:65px 7vw 55px;background:var(--charcoal);color:#f6f2e9}
+.case-page .case-head .back{font-size:13px;margin:0 0 60px;border-color:#817c73;color:#f6f2e9}
+.case-page .case-head .eyebrow{color:#c6bdb0;margin:0 0 20px}
+.case-page .case-head h1{font:400 clamp(46px,7vw,100px)/1.05 Georgia,serif;letter-spacing:-2px;max-width:1100px;margin:20px 0 28px;color:#f6f2e9}
+.case-page .case-head .lead{font-size:18px;max-width:660px;color:#d5cec4;margin-bottom:36px}
+.case-page .case-head .case-facts{border-color:#655f56;color:#f6f2e9;max-width:1160px}
+.case-page .case-head .case-facts strong{color:#c6bdb0}
+/* Explicit text colours prevent inherited project/theme rules losing contrast. */
+.case-page .project-story-signals article p,.companion-themed .case-page .project-story-signals article p{color:#f6f2e9}
+.case-page .project-story-signals article span{color:#d5cec4}
+.case-tab-panel[hidden]{display:none!important}
+.case-tab-panel{min-height:220px;outline-offset:6px}
+.case-tab-panel>.case-section:first-child{border-top:0}
+.case-page .case-tab-panel .case-section{padding:32px 0;gap:36px;grid-template-columns:minmax(160px,.65fr) minmax(0,1.8fr)}
+.case-page .case-tab-panel .case-section h2{font-size:28px}
+.case-chapters a[aria-selected=true]{border-color:var(--ink);font-weight:600}
+@media(max-width:760px){.case-page .case-head{padding:40px 24px}.case-page .case-head h1{letter-spacing:-1px}.case-page .case-head .back{margin-bottom:40px}.case-page .case-tab-panel .case-section{grid-template-columns:1fr;gap:18px;padding:26px 0}}
+@media print{.case-tab-panel[hidden]{display:block!important}.case-chapters{display:none}}

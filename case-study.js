@@ -1,12 +1,47 @@
 (()=>{
- const links=[...document.querySelectorAll('.case-chapters a[href^="#chapter-"]')];
- const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
- if(!sections.length)return;
- let queued=false;
- function update(){
-  queued=false;let active=sections[0];
-  for(const section of sections){if(section.getBoundingClientRect().top<=150)active=section}
-  for(const link of links){if(link.hash==='#'+active.id)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current')}
+ const nav=document.querySelector('.case-chapters'),body=document.querySelector('.case-body');
+ if(!nav||!body)return;
+ const list=nav.querySelector('div'),tabs=[...list.querySelectorAll('a')];
+ if(!tabs.length)return;
+ const panels=tabs.map((tab,i)=>{
+  const panel=document.createElement('div');panel.className='case-tab-panel';panel.id='case-panel-'+i;
+  panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','case-tab-'+i);panel.tabIndex=0;
+  tab.id='case-tab-'+i;tab.setAttribute('role','tab');tab.setAttribute('aria-controls',panel.id);
+  return panel;
+ });
+ const starts=new Map(tabs.map((tab,i)=>[tab.hash.slice(1),i]));
+ const indexFor=label=>tabs.findIndex(tab=>tab.textContent.trim()===label);
+ const design=indexFor('Design'),outcome=indexFor('Outcome');
+ let current=0;
+ for(const child of [...body.children]){
+  if(child.matches('.case-next')||child.matches('p[style]'))continue;
+  if(starts.has(child.id))current=starts.get(child.id);
+  let target=current;
+  if(child.matches('.case-gallery')&&design>=0)target=design;
+  if(child.matches('.metric-row,.metric-note,.measurement-note')&&outcome>=0)target=outcome;
+  panels[target].append(child);
  }
- addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update)}},{passive:true});update();
+ body.prepend(...panels);list.setAttribute('role','tablist');list.setAttribute('aria-label','Case study topics');
+ function select(index,updateURL=false){
+  tabs.forEach((tab,i)=>{const active=i===index;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;tab.removeAttribute('aria-current');panels[i].hidden=!active});
+  if(updateURL)history.replaceState(null,'',tabs[index].hash);
+ }
+ function fromHash(){
+  const id=location.hash.slice(1),target=document.getElementById(id);
+  const index=panels.findIndex(panel=>panel===target||panel.contains(target));
+  select(index>=0?index:0);
+ }
+ tabs.forEach((tab,i)=>{
+  tab.addEventListener('click',event=>{event.preventDefault();select(i,true)});
+  tab.addEventListener('keydown',event=>{
+   let next=i;
+   if(event.key==='ArrowRight')next=(i+1)%tabs.length;
+   else if(event.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;
+   else if(event.key==='Home')next=0;
+   else if(event.key==='End')next=tabs.length-1;
+   else return;
+   event.preventDefault();select(next,true);tabs[next].focus();
+  });
+ });
+ addEventListener('hashchange',fromHash);fromHash();
 })();
