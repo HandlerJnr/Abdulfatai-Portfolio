@@ -213,22 +213,44 @@ async function ask(q){
   }
 }
 
+const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
+
+function closeAgent(){
+  if(document.activeElement&&dialog.contains(document.activeElement)&&typeof document.activeElement.blur==='function'){
+    document.activeElement.blur();
+  }
+  input.blur();
+  requestAnimationFrame(()=>{
+    if(dialog.open)dialog.close();
+  });
+}
+
 launcher.addEventListener('click',()=>{
   dialog.showModal();
   getRecords().catch(()=>{});
-  input.focus();
+  // Desktop gets immediate keyboard focus. On phones, wait for an intentional tap
+  // so Safari never changes the visual viewport just from opening the drawer.
+  if(!mobileAgent.matches)input.focus({preventScroll:true});
 });
 
-dialog.querySelector('.search-close').addEventListener('click',()=>dialog.close());
+dialog.querySelector('.search-close').addEventListener('click',closeAgent);
 
 dialog.addEventListener('click',event=>{
   if(event.target===dialog){
     const rect=dialog.getBoundingClientRect();
-    if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();
+    if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeAgent();
   }
 });
 
-dialog.addEventListener('close',()=>launcher.focus());
+dialog.addEventListener('cancel',event=>{
+  event.preventDefault();
+  closeAgent();
+});
+
+dialog.addEventListener('close',()=>{
+  input.blur();
+  requestAnimationFrame(()=>launcher.focus({preventScroll:true}));
+});
 
 form.addEventListener('submit',event=>{
   event.preventDefault();
