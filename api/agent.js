@@ -74,7 +74,7 @@ async function gatewayChat({token,model,messages,maxTokens=600,temperature=0.2,t
       model,
       messages,
       temperature,
-      max_completion_tokens:maxTokens
+      max_tokens:maxTokens
     }),
     signal:AbortSignal.timeout(timeout)
   });
