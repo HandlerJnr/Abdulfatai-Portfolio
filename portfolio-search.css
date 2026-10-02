@@ -12,3 +12,11 @@ html[data-theme=dark] .portfolio-search{--search-bg:#202020;--search-card:#302e2
 @media(max-width:600px){.portfolio-search .search-heading{top:-20px}.portfolio-search .search-form{bottom:70px}}
 .portfolio-search[open]{display:flex;flex-direction:column;overflow:hidden;padding-bottom:92px;gap:0}.portfolio-search .search-heading{position:static;flex-shrink:0;padding-top:0}.search-heading h2{font-size:28px}.search-mode{margin:0 0 10px;padding-bottom:12px}.search-conversation{flex:1;min-height:80px;overflow:auto;overscroll-behavior:contain;padding-right:4px}.search-suggestions{flex-shrink:0;margin:12px 0}.portfolio-search .search-form{position:static;flex-shrink:0;margin:0;padding:10px 0 0}.search-answer{padding-bottom:12px}.search-question{margin-top:10px}
 @media(max-width:600px){.search-heading h2{font-size:24px}.search-suggestions{gap:5px}.search-suggestions button{font-size:10px;padding:5px 8px}.portfolio-search[open]{padding-bottom:84px}}
+
+.search-mode{display:flex;align-items:center;gap:8px}
+.agent-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.72;flex:0 0 auto;box-shadow:0 0 0 4px color-mix(in srgb,currentColor 10%,transparent)}
+.search-answer-meta{margin:10px 0 14px!important;font-size:10px;color:var(--search-muted);letter-spacing:.02em}
+.search-answer.is-thinking>p{color:var(--search-muted)}
+.search-answer.is-thinking>p::after{content:' ';display:inline-block;width:1.25em;height:.9em;margin-left:5px;vertical-align:-.1em;background:radial-gradient(circle,currentColor 2px,transparent 3px) 0 50%/6px 6px repeat-x;animation:portfolio-agent-pulse 1s steps(2,end) infinite}
+@keyframes portfolio-agent-pulse{50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.search-answer.is-thinking>p::after{animation:none}}
