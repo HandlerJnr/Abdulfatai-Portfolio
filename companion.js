@@ -75,11 +75,12 @@ const homeHost=document.body;
 let currentHost=homeHost;
 
 function syncFloatingHost(){
-  const openDialogs=[...document.querySelectorAll('dialog[open]')];
-  const nextHost=openDialogs.length?openDialogs[openDialogs.length-1]:homeHost;
-  if(nextHost===currentHost)return;
-  currentHost=nextHost;
-  nextHost.append(summon,picker,companion);
+  const overlayOpen=!!document.querySelector('dialog[open],[aria-modal="true"]:not([hidden])');
+  document.documentElement.classList.toggle('companion-overlay-open',overlayOpen);
+  if(overlayOpen){
+    setPicker(false);setPerch(null);
+    if(raf){cancelAnimationFrame(raf);raf=0}
+  }else if(active){startFollowing()}
 }
 const dialogObserver=new MutationObserver(records=>{
   if(records.some(record=>record.type==='attributes'&&record.attributeName==='open'))syncFloatingHost();
@@ -301,7 +302,7 @@ function clamp(x,y){
   return {x:Math.max(pad,Math.min(innerWidth-w-pad,x)),y:Math.max(pad,Math.min(innerHeight-h-pad,y))};
 }
 function animate(){
-  if(!active||document.hidden||reduced.matches||!finePointer.matches){raf=0;return}
+  if(!active||document.documentElement.classList.contains('companion-overlay-open')||document.hidden||reduced.matches||!finePointer.matches){raf=0;return}
   let c=perchPosition();
   if(perchTarget&&!c){
     setPerch(null);
@@ -321,7 +322,7 @@ function animate(){
   if(distance>0.5)raf=requestAnimationFrame(animate);else raf=0;
 }
 function startFollowing(){
-  if(!active)return;
+  if(!active||document.documentElement.classList.contains('companion-overlay-open'))return;
   if(reduced.matches||!finePointer.matches){
     setPerch(null);
     companion.classList.add('is-docked');
@@ -347,7 +348,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!picker.hidden){setPicker(false);summon.focus()}
 });
 addEventListener('pointermove',e=>{
-  if(!active||reduced.matches||!finePointer.matches)return;
+  if(!active||document.documentElement.classList.contains('companion-overlay-open')||reduced.matches||!finePointer.matches)return;
   if(companion.contains(e.target))return;
   wake();startFollowing();
   const target=nearbyPerch(e.clientX,e.clientY,e.target);
