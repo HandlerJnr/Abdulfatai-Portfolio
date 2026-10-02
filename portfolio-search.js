@@ -8,7 +8,7 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Portfolio agent · grounded in published work · instant fallback built in.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask about Jamiu’s experience, projects, design decisions, skills or background. The agent answers from the work published on this portfolio and points you to the strongest evidence.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="400" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Ask naturally · grounded in Jamiu’s published portfolio · no special wording needed.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — vague, specific, comparative or follow-up questions all work. The agent decides which portfolio evidence matters.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="400" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -128,12 +128,14 @@ function evidence(record,q){
     if(value&&!selected.includes(value))selected.push(value);
   };
 
-  // Every source contributes its short version and ownership/context.
+  // Give the model a representative slice of every case study, regardless of wording.
   add(chunks[0]);
   add(chunks[1]);
+  add(chunks.find(value=>/impact|outcome|evidence|limits/i.test(value)));
+  add(chunks.find(value=>/validate next|test next|would validate/i.test(value)));
 
-  // Then add whichever sections best match the actual conversation.
-  scoredChunks(record,q).slice(0,3).forEach(item=>add(item.value));
+  // Add the sections whose language is closest to the current conversation.
+  scoredChunks(record,q).slice(0,2).forEach(item=>add(item.value));
 
   const compact=selected.map(value=>value.replace(/^\d+\s+[^:]+:\s*/,'')).join('\n');
   return (record.summary+'\n'+compact).slice(0,2800);
