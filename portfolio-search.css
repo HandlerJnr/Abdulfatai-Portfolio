@@ -82,3 +82,26 @@ html[data-theme=dark] .portfolio-search{--search-bg:#202020;--search-card:#302e2
     min-width:0;
   }
 }
+
+
+/* Prevent iOS Safari form-focus zoom and sticky visual viewport scaling */
+@media(max-width:600px){
+  .portfolio-search .search-form input,
+  .portfolio-search input[type="search"],
+  .portfolio-search input,
+  .portfolio-search textarea,
+  .portfolio-search select{
+    font-size:16px!important;
+    line-height:1.35;
+  }
+
+  .portfolio-search .search-form input{
+    min-height:48px;
+    -webkit-text-size-adjust:100%;
+  }
+
+  .portfolio-search .search-form button{
+    min-height:48px;
+    touch-action:manipulation;
+  }
+}
