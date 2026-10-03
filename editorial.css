@@ -1264,3 +1264,85 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
     font-size:15px;
   }
 }
+/* Project filtering + flexible featured accordion.
+   The active card now fills remaining space regardless of how many cards are visible. */
+.featured-project{flex:0 0 var(--collapsed);transition:flex-grow .62s cubic-bezier(.22,.61,.36,1),filter .35s ease,transform .28s ease,box-shadow .28s ease}
+.featured-project.is-active{flex:1 1 0}
+.featured-project[hidden]{display:none!important}
+
+.project-filter{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:18px;
+  padding:18px 0 2px;
+  border-bottom:1px solid #d3cec5
+}
+.project-filter-label{
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.16em;
+  color:#71695e;
+  white-space:nowrap
+}
+.project-filter-options{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  min-width:0
+}
+.project-filter-options button{
+  border:1px solid #c9c3ba;
+  border-radius:999px;
+  background:transparent;
+  color:#5f584f;
+  padding:8px 12px;
+  font:500 10px/1 Instrument,Arial,sans-serif;
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease
+}
+.project-filter-options button:hover,
+.project-filter-options button:focus-visible{
+  border-color:#756b60;
+  color:#2d2925;
+  transform:translateY(-1px)
+}
+.project-filter-options button.is-active,
+.project-filter-options button[aria-pressed=true]{
+  border-color:#342c23;
+  background:#342c23;
+  color:#fff
+}
+.project-filter-status{
+  font-size:10px;
+  color:#81796f;
+  white-space:nowrap
+}
+.work-accordion-section>.archive[hidden]{display:none!important}
+.work-accordion-section>.archive button[hidden]{display:none!important}
+
+@media(max-width:980px){
+  .featured-project.is-active{flex:1 1 0}
+  .project-filter{grid-template-columns:auto 1fr}
+  .project-filter-status{grid-column:2}
+}
+@media(max-width:700px){
+  .featured-project.is-active{flex:1 1 0}
+  .project-filter{
+    display:block;
+    padding:16px 0 8px;
+    overflow:hidden
+  }
+  .project-filter-label{display:block;margin-bottom:11px}
+  .project-filter-options{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding:0 0 8px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch
+  }
+  .project-filter-options::-webkit-scrollbar{display:none}
+  .project-filter-options button{flex:0 0 auto;padding:9px 12px}
+  .project-filter-status{display:block;margin-top:2px}
+}
+
