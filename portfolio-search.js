@@ -20,14 +20,24 @@ let loading;
 let lastProject;
 let history=[];
 let busy=false;
+let inputVocabulary;
 
 // Keep this conservative rule aligned with api/agent.py and the shared test cases.
 const INPUT_CLARIFICATION="Keep typing — ask me anything about Jamiu’s work, experience, skills, or this page.";
 const FRAGMENT_WORDS=new Set(["a", "an", "the", "i", "me", "my", "you", "your", "he", "his", "she", "her", "it", "its", "we", "our", "they", "their", "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did", "can", "could", "would", "should", "will", "shall", "may", "might", "must", "of", "to", "for", "from", "in", "on", "at", "by", "with", "and", "or", "but", "if", "as", "about", "what", "which", "who", "whom", "whose", "when", "where", "how", "tell", "ask", "show", "please"]);
+function portfolioVocabulary(items){
+  const vocabulary=new Set(["hi", "hello", "hey", "thanks", "thank", "cheers", "yes", "no", "okay", "ok", "more", "why", "explain", "help", "cv", "ux", "ui", "ai", "js", "go", "pricing", "price", "salary", "availability", "available", "contact", "email", "phone", "remote", "freelance", "hiring", "hire", "resume", "r\u00e9sum\u00e9", "portfolio", "work", "skills", "experience", "projects", "process", "rates", "rate", "cost"]);
+  items.forEach(record=>{
+    const words=['id','title','summary','text'].map(field=>String(record[field]||'')).join(' ').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
+    words.forEach(word=>vocabulary.add(word));
+  });
+  return vocabulary;
+}
 function needsClarification(value){
+  if(/^(?:who is he|what does he do|what is (?:this|it))\s*[?!.]*$/i.test(String(value||'').trim()))return false;
   if(/\bc(?:\+\+|#)/i.test(String(value||'')))return false;
   const tokens=String(value||'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
-  return !tokens.some(token=>Array.from(token).length>1&&!FRAGMENT_WORDS.has(token));
+  return !tokens.some(token=>Array.from(token).length>1&&!FRAGMENT_WORDS.has(token)&&(!inputVocabulary||inputVocabulary.has(token)));
 }
 
 function text(tag,value,className){
@@ -184,12 +194,12 @@ function tokens(q){
 
 function recentUserContext(q){
   const current=String(q||'').trim();
-  const currentWords=tokens(current);
-  if(currentWords.length>5||!history.length||!(/\b(it|that|this|those|their|more|why)\b/i.test(current)))return current;
-  const previous=[];
-  for(let i=history.length-1;i>=0&&previous.length<2;i--){
-    if(history[i].role==='user'&&history[i].text)previous.unshift(history[i].text);
-  }
+  if(asksAboutCurrentPage(current)||!history.length)return current;
+  const followup=/^(?:more|why|(?:tell me |explain |show me )?more(?: about (?:it|that|this))?|(?:what|how|why|can|does|did|is|are|was|were)\b.{0,100}\b(?:it|that|this|those|them|their)\b.*)[?!.]*$/i;
+  if(!followup.test(current))return current;
+  const words=new Set(current.toLowerCase().match(/[\p{L}\p{N}]+/gu)||[]);
+  if(records?.some(record=>words.has(record.id)))return current;
+  const previous=history.filter(item=>item.role==='user'&&item.text).slice(-2).map(item=>item.text);
   return [...previous,current].join(' ');
 }
 
@@ -450,16 +460,19 @@ function localAnswer(found,q){
   if(pageRecord&&asksAboutCurrentPage(q))return pageRecord.title+': '+pageRecord.summary;
   return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
+function showInputClarification(q){
+  if(q)conversation.append(text('p',q,'search-question'));
+  const response=text('div','','search-answer');
+  response.append(renderAgentAnswer(INPUT_CLARIFICATION));
+  conversation.append(response);
+  conversation.scrollTop=response.offsetTop-conversation.offsetTop;
+  input.focus({preventScroll:true});
+}
 async function ask(q){
   q=q.trim();
   if(busy)return;
   if(needsClarification(q)){
-    if(q)conversation.append(text('p',q,'search-question'));
-    const response=text('div','','search-answer');
-    response.append(renderAgentAnswer(INPUT_CLARIFICATION));
-    conversation.append(response);
-    conversation.scrollTop=response.offsetTop-conversation.offsetTop;
-    input.focus({preventScroll:true});
+    showInputClarification(q);
     return;
   }
   busy=true;
@@ -473,11 +486,20 @@ async function ask(q){
 
   try{
     await getRecords();
+    if(!inputVocabulary)inputVocabulary=portfolioVocabulary(records);
+    if(needsClarification(q)){
+      input.value=q;
+      response.classList.remove('is-thinking');
+      response.replaceChildren(renderAgentAnswer(INPUT_CLARIFICATION));
+      input.focus({preventScroll:true});
+      return;
+    }
     const found=rank(q);
-    const fallback=localAnswer(found,q);
+    const fallbackRecords=asksAboutCurrentPage(q)?found:found.filter(record=>recordScore(record,q)>0);
+    const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=found.slice(0,2);
+    let evidenceCards=fallbackRecords.slice(0,2);
 
     try{
       const result=await askAgent(q);
@@ -512,8 +534,11 @@ async function ask(q){
       response.append(sourceCards(evidenceCards));
     }
 
-    history.push({role:'user',text:q},{role:'assistant',text:answer});
-    history=history.slice(-8);
+    // Search excerpts are not model replies and must not steer later conversation.
+    if(usedAgent){
+      history.push({role:'user',text:q},{role:'assistant',text:answer});
+      history=history.slice(-8);
+    }
   }catch{
     response.classList.remove('is-thinking');
     response.replaceChildren(text('p','The portfolio index could not load. Please try again, or browse selected work from the menu.'));

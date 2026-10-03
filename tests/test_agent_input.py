@@ -9,18 +9,19 @@ from unittest.mock import Mock
 ROOT = Path(__file__).resolve().parents[1]
 # Load the actual handler and routing functions without heavyweight retrieval imports.
 tree = ast.parse((ROOT / 'api/agent.py').read_text())
-names = {'INPUT_CLARIFICATION', 'FRAGMENT_WORDS', 'MODEL', 'MAX_HISTORY', 'DOMAIN_PROOF_ROUTES'}
+names = {'INPUT_CLARIFICATION', 'FRAGMENT_WORDS', 'MODEL', 'MAX_HISTORY', 'DOMAIN_PROOF_ROUTES', 'INPUT_VOCABULARY'}
 tree.body = [node for node in tree.body if isinstance(node, (ast.FunctionDef, ast.ClassDef))
+             or isinstance(node, ast.Expr) and isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute) and isinstance(node.value.func.value, ast.Name) and node.value.func.value.id == 'INPUT_VOCABULARY'
              or isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in names for t in node.targets)]
 import os
 import re
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 agent = dict(json=json, os=os, re=re, urllib=__import__('urllib'), BaseHTTPRequestHandler=BaseHTTPRequestHandler)
-exec(compile(tree, str(ROOT / 'api/agent.py'), 'exec'), agent)
 agent['RECORD_LIST'] = json.loads((ROOT / 'portfolio-knowledge.json').read_text())
 agent['RECORD_LIST'].append(json.loads((ROOT / 'technical-capabilities.json').read_text()))
 agent['RECORDS'] = {r['id']: r for r in agent['RECORD_LIST']}
+exec(compile(tree, str(ROOT / 'api/agent.py'), 'exec'), agent)
 agent['PATH_RECORDS'] = {'/work/horal': 'horal'}
 
 
@@ -51,6 +52,13 @@ class InputTests(unittest.TestCase):
                     model.assert_called_once()
                     self.assertEqual(payload['answer'], 'A grounded answer.')
                     self.assertEqual(payload['page_id'], 'horal')
+
+    def test_topic_changes(self):
+        history = [{'role': 'user', 'content': 'logo design'}, {'role': 'assistant', 'content': 'Logo answer'}]
+        self.assertEqual(agent['conversation_query']('React', history), 'React')
+        self.assertNotIn('logos', agent['domain_proof_ids']('React', history))
+        self.assertEqual(agent['conversation_query']('What am I looking at on this page?', history), 'What am I looking at on this page?')
+        self.assertIn('logo design', agent['conversation_query']('more', history))
 
     def test_existing_routes(self):
         page = {'page_id': 'horal'}

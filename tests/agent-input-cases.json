@@ -190,5 +190,45 @@
   {
     "question": "What am I looking at on this page?",
     "clarify": false
+  },
+  {
+    "question": "asdf",
+    "clarify": true
+  },
+  {
+    "question": "qwerty",
+    "clarify": true
+  },
+  {
+    "question": "zzzz",
+    "clarify": true
+  },
+  {
+    "question": "sdjfksdj",
+    "clarify": true
+  },
+  {
+    "question": "abcxyz",
+    "clarify": true
+  },
+  {
+    "question": "asdf qwer zxcv",
+    "clarify": true
+  },
+  {
+    "question": "tell me about asdf",
+    "clarify": true
+  },
+  {
+    "question": "Who is he?",
+    "clarify": false
+  },
+  {
+    "question": "What does he do?",
+    "clarify": false
+  },
+  {
+    "question": "What is this?",
+    "clarify": false
   }
 ]

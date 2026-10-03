@@ -74,11 +74,21 @@ INPUT_CLARIFICATION = "Keep typing — ask me anything about Jamiu’s work, exp
 FRAGMENT_WORDS = frozenset(['a', 'an', 'the', 'i', 'me', 'my', 'you', 'your', 'he', 'his', 'she', 'her', 'it', 'its', 'we', 'our', 'they', 'their', 'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'am', 'do', 'does', 'did', 'can', 'could', 'would', 'should', 'will', 'shall', 'may', 'might', 'must', 'of', 'to', 'for', 'from', 'in', 'on', 'at', 'by', 'with', 'and', 'or', 'but', 'if', 'as', 'about', 'what', 'which', 'who', 'whom', 'whose', 'when', 'where', 'how', 'tell', 'ask', 'show', 'please'])
 
 
+INPUT_VOCABULARY = set(['hi', 'hello', 'hey', 'thanks', 'thank', 'cheers', 'yes', 'no', 'okay', 'ok', 'more', 'why', 'explain', 'help', 'cv', 'ux', 'ui', 'ai', 'js', 'go', 'pricing', 'price', 'salary', 'availability', 'available', 'contact', 'email', 'phone', 'remote', 'freelance', 'hiring', 'hire', 'resume', 'résumé', 'portfolio', 'work', 'skills', 'experience', 'projects', 'process', 'rates', 'rate', 'cost'])
+INPUT_VOCABULARY.update(
+    token
+    for record in RECORD_LIST
+    for token in re.findall(r"[^\W_]+", " ".join(str(record.get(field, "")) for field in ("id", "title", "summary", "text")).lower(), re.UNICODE)
+)
+
+
 def needs_clarification(value):
+    if re.fullmatch(r"(?:who is he|what does he do|what is (?:this|it))\s*[?!.]*", str(value or "").strip(), re.IGNORECASE):
+        return False
     if re.search(r"\bc(?:\+\+|#)", str(value or ""), re.IGNORECASE):
         return False
     tokens = re.findall(r"[^\W_]+", str(value or "").lower(), re.UNICODE)
-    return not any(len(token) > 1 and token not in FRAGMENT_WORDS for token in tokens)
+    return not any(len(token) > 1 and token not in FRAGMENT_WORDS and token in INPUT_VOCABULARY for token in tokens)
 
 
 def clean_section(value):
@@ -110,8 +120,20 @@ def normalise_history(value):
 
 
 def conversation_query(question, history):
+    # Carry a topic forward only for a referential follow-up, never every new query.
+    current = str(question or "").strip()
+    if asks_about_current_page(current) or not re.fullmatch(
+        r"(?:more|why|(?:tell me |explain |show me )?more(?: about (?:it|that|this))?|"
+        r"(?:what|how|why|can|does|did|is|are|was|were)\b.{0,100}\b(?:it|that|this|those|them|their)\b.*)",
+        current.rstrip("?!."), re.IGNORECASE,
+    ):
+        return current
     recent_users = [item["content"] for item in history if item["role"] == "user"][-2:]
-    return " ".join(recent_users + [question]).strip()
+    # An explicitly named topic wins over a pronoun in the same message.
+    words = set(re.findall(r"[^\W_]+", current.lower()))
+    if any(record_id in words for record_id in RECORDS):
+        return current
+    return " ".join(recent_users + [current]).strip()
 
 
 def record_overview(record):
@@ -505,6 +527,8 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "CURRENT RESPONSE MODE: " + intent + "\n\n"
 
         "HOW TO CONVERSE\n"
+        "- If a message is unclear or appears to be random text, ask the visitor to clarify it. Never infer a topic from unrelated earlier turns or give a generic portfolio introduction.\n"
+        "- When the visitor names a new topic, switch to that topic even if earlier turns discussed something else.\n"
         "- Answer the person's actual message first. Sound like a knowledgeable human guide to the portfolio, not a search engine.\n"
         "- Use the recent conversation to resolve pronouns, shorthand and follow-ups. Do not reset the conversation on every turn.\n"
         "- Do not automatically name projects. If the question can be answered directly from Jamiu's profile, role, process or the conversation, answer it directly.\n"
