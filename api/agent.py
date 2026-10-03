@@ -125,7 +125,7 @@ PORTFOLIO_MAP = "\n\n---\n\n".join(
 
 
 def model_endpoint():
-    groq_key = os.environ.get("GROQ_API_KEY")
+    groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
         return "https://api.groq.com/openai/v1/chat/completions", groq_key, "groq"
 
@@ -150,6 +150,8 @@ def call_model(prompt):
         headers={
             "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "JamiuPortfolio/1.0",
         },
         method="POST",
     )
@@ -157,7 +159,27 @@ def call_model(prompt):
         with urllib.request.urlopen(request, timeout=30) as response:
             data = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
-        raise RuntimeError("model_http_" + str(error.code)) from error
+        # Return only classified diagnostics, never provider bodies or credentials.
+        raw = error.read(16384).decode("utf-8", errors="replace")
+        detail = "unspecified"
+        try:
+            payload = json.loads(raw)
+            issue = payload.get("error", {})
+            if isinstance(issue, dict):
+                known = {
+                    "model_permission_blocked_org", "model_permission_blocked_project",
+                    "permissions_error", "invalid_api_key", "insufficient_quota",
+                    "rate_limit_exceeded", "model_not_found", "organization_restricted",
+                }
+                code = issue.get("code") or issue.get("type")
+                if code in known:
+                    detail = code
+        except (ValueError, AttributeError):
+            if "1010" in raw or "cloudflare" in raw.lower():
+                detail = "provider_request_blocked"
+            elif "<html" in raw.lower():
+                detail = "provider_http_page"
+        raise RuntimeError(provider + "_http_" + str(error.code) + "_" + detail) from error
     except Exception as error:
         raise RuntimeError("model_network") from error
 
