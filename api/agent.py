@@ -190,6 +190,84 @@ def call_model(prompt):
     return content, provider
 
 
+DOMAIN_PROOF_ROUTES = (
+    (("branding", "brand identity", "brand design", "graphic design", "graphics design",
+      "graphic designer", "visual identity", "visual design", "pitch deck", "pitch decks",
+      "collateral", "brand guideline", "brand guidelines"),
+     ("brand", "logos", "credentials")),
+
+    (("logo", "logos", "logo design", "logomark", "wordmark", "mark design"),
+     ("logos", "brand", "credentials")),
+
+    (("design system", "design systems", "component library", "component libraries",
+      "design tokens", "tokens", "ui kit", "ui kits", "style guide", "style guides",
+      "design foundation", "design foundations", "component", "components"),
+     ("system", "vista-itss", "bizinc", "shortlet-lagos")),
+
+    (("ui design", "interface design", "user interface", "visual ui", "ui designer"),
+     ("system", "horal", "bizinc", "vista-itss", "credentials")),
+
+    (("ux design", "user experience", "ux designer", "product design", "product designer",
+      "user journey", "user journeys", "wireframe", "wireframes", "prototype", "prototyping",
+      "usability", "user research", "research"),
+     ("settle", "synqit", "horal", "kremor-ai", "credentials")),
+
+    (("fintech", "banking", "bank", "payment", "payments", "financial product",
+      "financial products", "cross-border payment", "cross border payment", "lending",
+      "loan", "investment"),
+     ("pay4me", "vista-itss", "loan-investment-app")),
+
+    (("marketplace", "b2b2c", "ecommerce", "e-commerce", "commerce", "seller",
+      "buyer", "booking platform", "two-sided", "two sided"),
+     ("horal", "bizinc", "shortlet-lagos", "synqit")),
+
+    (("artificial intelligence", "generative ai", "gen ai", "ai product", "ai products",
+      "ai design", "ai tool", "ai tools", "llm", "agentic", "ai agent", "ai agents"),
+     ("kremor-ai", "chalant-ai", "synqit", "archi-tek", "credentials")),
+
+    (("healthcare", "healthtech", "health tech", "medical", "care platform"),
+     ("arete",)),
+
+    (("service design", "service platform", "service platforms", "student experience",
+      "relocation", "onboarding journey"),
+     ("settle", "arete", "pay4me")),
+
+    (("responsive design", "responsive", "mobile design", "web design", "mobile app",
+      "web app", "front end", "frontend"),
+     ("system", "horal", "shortlet-lagos", "pay4me")),
+
+    (("leadership", "design leadership", "manager", "management", "team leadership",
+      "mentoring", "mentor"),
+     ("bizinc", "credentials")),
+
+    (("developer collaboration", "engineering collaboration", "handoff", "developer handoff",
+      "working with developers", "work with developers"),
+     ("credentials", "bizinc", "vista-itss", "system")),
+
+    (("accessibility", "accessible", "inclusive design"),
+     ("system", "credentials", "arete")),
+
+    (("typography", "hierarchy", "navigation design"),
+     ("system", "credentials", "brand")),
+
+    (("award", "awards", "certification", "certifications", "credential", "credentials",
+      "recommendation", "recommendations", "reference", "references", "testimonial",
+      "testimonials", "recognition"),
+     ("credentials",))
+)
+
+
+def domain_proof_ids(question, history):
+    context = conversation_query(question, history).lower()
+    matched = []
+    for terms, record_ids in DOMAIN_PROOF_ROUTES:
+        if any(term in context for term in terms):
+            for record_id in record_ids:
+                if record_id in RECORDS and record_id not in matched:
+                    matched.append(record_id)
+    return matched
+
+
 def response_intent(question, history):
     current = str(question or "").lower()
     context = conversation_query(question, history).lower()
@@ -218,16 +296,19 @@ def response_intent(question, history):
         return "navigation"
     if any(term in context for term in evidence_terms):
         return "critical-evidence" if any(term in context for term in critical_terms) else "evidence"
+    if domain_proof_ids(question, history):
+        return "domain-evidence"
     return "conversation"
 
 
 def should_show_sources(intent):
-    return intent in ("evidence", "critical-evidence", "navigation")
+    return intent in ("domain-evidence", "evidence", "critical-evidence", "navigation")
 
 
 def retrieve(question, history, intent):
     query = conversation_query(question, history)
     ranked = GLOBAL_RETRIEVER.retrieve(query)
+    domain_ids = domain_proof_ids(question, history)
 
     ranked_nodes = []
     record_scores = {}
@@ -254,50 +335,54 @@ def retrieve(question, history, intent):
         seen.add(key)
         selected.append(node)
 
-    # Literal passages that best match the current conversation.
+    # Domain records come first when a visitor asks about a specific discipline/capability.
+    for record_id in domain_ids[:5]:
+        for node in RECORD_NODES.get(record_id, [])[:10]:
+            add_node(node)
+
+    # Then add the strongest literal passages for the actual wording of the question.
     for node in ranked_nodes[:16]:
         add_node(node)
 
-    # Keep profile context available without forcing it into every visible answer.
-    for node in RECORD_NODES.get("about", [])[:8]:
+    # Keep profile context available internally without forcing visible proof cards.
+    for node in RECORD_NODES.get("about", [])[:6]:
         add_node(node)
 
-    # Give the top matching records enough local context for natural follow-ups.
+    # Give top matches enough local context for follow-up questions.
     for record_id in ranked_ids[:3]:
         for node in RECORD_NODES.get(record_id, [])[:3]:
             add_node(node)
 
-    # Escalate references/outcomes/limits only when the question warrants evidence.
-    if intent in ("evidence", "critical-evidence", "navigation"):
-        for node in RECORD_NODES.get("credentials", [])[:12]:
-            add_node(node)
+    # Evidence modes add references/outcomes/limits as needed.
+    if intent in ("domain-evidence", "evidence", "critical-evidence", "navigation"):
+        if "credentials" in domain_ids or intent in ("evidence", "critical-evidence"):
+            for node in RECORD_NODES.get("credentials", [])[:12]:
+                add_node(node)
 
         evidence_keys = (
             "impact", "outcome", "evidence", "reference", "recommendation",
-            "award", "recognition", "certification", "traction", "proof"
+            "award", "recognition", "certification", "traction", "proof",
+            "system", "component", "brand", "identity", "logo", "research"
         )
         critical_keys = ("limit", "validate", "test next", "risk", "research")
 
-        for record_id in ranked_ids[:5]:
+        for record_id in list(dict.fromkeys(domain_ids + ranked_ids[:5])):
             for node in RECORD_NODES.get(record_id, []):
                 label = str(node.metadata.get("label", "")).lower()
                 body = str(node.text or "").lower()
-                if any(key in label or key in body[:220] for key in evidence_keys):
+                if any(key in label or key in body[:260] for key in evidence_keys):
                     add_node(node)
                 if intent == "critical-evidence" and any(
-                    key in label or key in body[:220] for key in critical_keys
+                    key in label or key in body[:260] for key in critical_keys
                 ):
                     add_node(node)
 
     evidence = []
-    used_ids = []
-    for node in selected[:30]:
+    for node in selected[:34]:
         record_id = node.metadata.get("record_id")
         record = RECORDS.get(record_id)
         if not record:
             continue
-        if record_id not in used_ids:
-            used_ids.append(record_id)
         evidence.append(
             "SOURCE ID: " + record_id
             + "\nTITLE: " + record.get("title", "")
@@ -306,16 +391,16 @@ def retrieve(question, history, intent):
             + "\nTEXT: " + clean_section(node.text)
         )
 
-    # Visible cards are a separate decision from internal knowledge retrieval.
+    # Visible proof cards deliberately mirror the portfolio area being discussed.
     card_ids = []
     if should_show_sources(intent):
-        for record_id in ranked_ids + ["credentials"]:
+        for record_id in domain_ids + ranked_ids + (["credentials"] if intent in ("evidence", "critical-evidence") else []):
             if record_id in RECORDS and record_id not in ("about", "cv") and record_id not in card_ids:
                 card_ids.append(record_id)
             if len(card_ids) >= 4:
                 break
 
-    return "\n\n---\n\n".join(evidence)[:36000], card_ids
+    return "\n\n---\n\n".join(evidence)[:38000], card_ids
 
 def build_prompt(question, history, retrieved, intent):
     history_text = "\n".join(
@@ -344,8 +429,9 @@ def build_prompt(question, history, retrieved, intent):
         "- Bold text sparingly for short labels only.\n\n"
 
         "WHEN CLAIMS NEED BACKUP\n"
-        "- In evidence or critical-evidence mode, support the claim with the most relevant published proof: shipped work, responsibilities, metrics, references, LinkedIn recommendations, awards, certifications or live links.\n"
-        "- Prefer one or two decisive examples. Do not dump every relevant project into the answer.\n"
+        "- In domain-evidence, evidence or critical-evidence mode, support the answer with the most relevant published proof: the dedicated portfolio library/page for that discipline, shipped work, responsibilities, metrics, references, LinkedIn recommendations, awards, certifications or live links.\n"
+        "- When someone asks about branding/graphic design, use Brand & identity and Logos & marks as first-class proof. When they ask about design systems, use the Design systems library first, then shipped examples such as Vista, Bizinc or Shortlet where useful. Apply the same principle to every recognised portfolio discipline.\n"
+        "- Prefer one or two decisive examples in prose. The interface can show additional proof cards separately.\n"
         "- Distinguish company/product traction from a claim that design alone caused it.\n"
         "- The portfolio contains employer/founder/academic references, five LinkedIn recommendations, work-linked awards and certifications. Never claim those are absent when the credentials record establishes them.\n"
         "- In critical-evidence mode, mention genuine gaps or unvalidated assumptions only when they directly answer the concern.\n"

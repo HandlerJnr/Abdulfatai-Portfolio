@@ -222,7 +222,40 @@ function recordScore(record,q){
   return score;
 }
 
+const domainProofRoutes=[
+  {terms:['branding','brand identity','brand design','graphic design','graphics design','graphic designer','visual identity','visual design','pitch deck','pitch decks','collateral','brand guideline','brand guidelines'],ids:['brand','logos','credentials']},
+  {terms:['logo','logos','logo design','logomark','wordmark','mark design'],ids:['logos','brand','credentials']},
+  {terms:['design system','design systems','component library','component libraries','design tokens','tokens','ui kit','ui kits','style guide','style guides','design foundation','design foundations','component','components'],ids:['system','vista-itss','bizinc','shortlet-lagos']},
+  {terms:['ui design','interface design','user interface','visual ui','ui designer'],ids:['system','horal','bizinc','vista-itss','credentials']},
+  {terms:['ux design','user experience','ux designer','product design','product designer','user journey','user journeys','wireframe','wireframes','prototype','prototyping','usability','user research','research'],ids:['settle','synqit','horal','kremor-ai','credentials']},
+  {terms:['fintech','banking','bank','payment','payments','financial product','financial products','cross-border payment','cross border payment','lending','loan','investment'],ids:['pay4me','vista-itss','loan-investment-app']},
+  {terms:['marketplace','b2b2c','ecommerce','e-commerce','commerce','seller','buyer','booking platform','two-sided','two sided'],ids:['horal','bizinc','shortlet-lagos','synqit']},
+  {terms:['artificial intelligence','generative ai','gen ai','ai product','ai products','ai design','ai tool','ai tools','llm','agentic','ai agent','ai agents'],ids:['kremor-ai','chalant-ai','synqit','archi-tek','credentials']},
+  {terms:['healthcare','healthtech','health tech','medical','care platform'],ids:['arete']},
+  {terms:['service design','service platform','service platforms','student experience','relocation','onboarding journey'],ids:['settle','arete','pay4me']},
+  {terms:['responsive design','responsive','mobile design','web design','mobile app','web app','front end','frontend'],ids:['system','horal','shortlet-lagos','pay4me']},
+  {terms:['leadership','design leadership','manager','management','team leadership','mentoring','mentor'],ids:['bizinc','credentials']},
+  {terms:['developer collaboration','engineering collaboration','handoff','developer handoff','working with developers','work with developers'],ids:['credentials','bizinc','vista-itss','system']},
+  {terms:['accessibility','accessible','inclusive design'],ids:['system','credentials','arete']},
+  {terms:['typography','hierarchy','navigation design'],ids:['system','credentials','brand']},
+  {terms:['award','awards','certification','certifications','credential','credentials','recommendation','recommendations','reference','references','testimonial','testimonials','recognition'],ids:['credentials']}
+];
+
+function domainProofRecords(q){
+  const context=recentUserContext(q).toLowerCase();
+  const ids=[];
+  domainProofRoutes.forEach(route=>{
+    if(route.terms.some(term=>context.includes(term))){
+      route.ids.forEach(id=>{if(!ids.includes(id))ids.push(id)});
+    }
+  });
+  return ids.map(id=>getRecord(id)).filter(Boolean);
+}
+
 function rank(q){
+  const domain=domainProofRecords(q);
+  if(domain.length)return uniqueRecords(domain).slice(0,6);
+
   const named=records.filter(r=>q.toLowerCase().includes(r.title.toLowerCase())||q.toLowerCase().includes(r.id.replace(/-/g,' ')));
   if(named.length)return uniqueRecords(named).slice(0,3);
   if(/experience|skills|background|career|education|what kind of|who is|about jamiu/i.test(q))return uniqueRecords([getRecord('about'),getRecord('credentials'),getRecord('bizinc')]);
@@ -286,7 +319,7 @@ function evidence(record,q){
 async function getRecords(){
   if(records)return records;
   if(!loading){
-    loading=fetch('/portfolio-knowledge.json?v=1')
+    loading=fetch('/portfolio-knowledge.json?v=20261003-domain-proof')
       .then(response=>{if(!response.ok)throw Error();return response.json()})
       .then(data=>records=data)
       .catch(error=>{loading=null;throw error});
@@ -401,7 +434,7 @@ async function ask(q){
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
-      response.append(text('span',usedAgent?'Supporting evidence':'Read these projects','search-kicker'));
+      response.append(text('span',usedAgent?'Portfolio proof':'Read these projects','search-kicker'));
       response.append(sourceCards(evidenceCards));
     }
 
