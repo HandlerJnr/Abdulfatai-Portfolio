@@ -181,4 +181,35 @@ html[data-theme=dark] body .value-framework-grid h3{
 html[data-theme=dark] body .value-framework-grid .text-link{
   color:var(--night-accent)
 }
+/* Boxed editorial families — dark mode */
+html[data-theme=dark] body .library-teaser,
+html[data-theme=dark] body .testimonials{
+  background:var(--night-base);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .library-links,
+html[data-theme=dark] body .testimonials .quotes{
+  border-color:var(--line)
+}
+html[data-theme=dark] body .library-links>a,
+html[data-theme=dark] body .testimonials .quote{
+  background:var(--night-surface);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .library-links>a:hover{
+  background:var(--night-raised)
+}
+html[data-theme=dark] body .library-links h3,
+html[data-theme=dark] body .testimonials .quote h3,
+html[data-theme=dark] body .testimonials .quote blockquote{
+  color:var(--ink)
+}
+html[data-theme=dark] body .library-links span,
+html[data-theme=dark] body .library-links>a::after,
+html[data-theme=dark] body .testimonials .reviews-label,
+html[data-theme=dark] body .testimonials .reviews-label span{
+  color:var(--night-accent)
+}
 
