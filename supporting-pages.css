@@ -1,0 +1,64 @@
+/* Brand & Identity is the typography and spacing reference for supporting pages.
+   Loaded only by supporting routes, leaving the homepage independent. */
+.library-page,
+.case-page{
+  --support-title:clamp(46px,7vw,100px);
+  --support-section:38px;
+  --support-card:clamp(23px,2vw,28px);
+  --support-gutter:7vw;
+  --support-section-gap:65px
+}
+.library-page .library-hero h1,
+.case-page .case-head h1{
+  font:400 var(--support-title)/1.05 Georgia,serif;
+  letter-spacing:-2px;
+  max-width:1100px;
+  margin:20px 0 28px
+}
+.library-page .group-heading h2,
+.logos-library .logo-heading h2,
+.case-page .case-section h2,
+.case-page .case-tab-panel .case-section h2{
+  font:400 var(--support-section)/1.2 Georgia,serif;
+  letter-spacing:normal;
+  margin:0;
+  max-width:none
+}
+.library-page .library-card h3,
+.logos-library .identity-caption h3{
+  font:400 var(--support-card)/1.25 Georgia,serif;
+  letter-spacing:normal
+}
+.library-page .eyebrow,
+.case-page .case-head .eyebrow,
+.case-page .chapter-number{
+  font-size:11px;
+  line-height:1.6;
+  letter-spacing:1.8px;
+  text-transform:uppercase
+}
+.library-page .group-heading,
+.logos-library .logo-heading{gap:40px;padding-top:27px;margin-bottom:32px}
+.library-page .group-heading p,
+.logos-library .logo-heading>p{font-size:14px;line-height:1.7;margin:0}
+.library-page .library-group,
+.logos-library .logo-section{padding:var(--support-section-gap) var(--support-gutter) 15px}
+.case-page .case-body{max-width:none;padding:var(--support-section-gap) var(--support-gutter) 80px}
+.case-page .case-section,
+.case-page .case-tab-panel .case-section{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);
+  gap:40px;
+  padding:27px 0 55px
+}
+@media(max-width:760px){
+  .case-page{--support-section:32px;--support-gutter:24px;--support-section-gap:45px}
+  .case-page .case-section,
+  .case-page .case-tab-panel .case-section{grid-template-columns:minmax(0,1fr);gap:18px;padding:27px 0 35px}
+  .case-page .case-head h1{letter-spacing:-1px}
+}
+@media(max-width:700px){
+  .library-page{--support-section:32px;--support-gutter:24px;--support-section-gap:45px}
+  .library-page .library-hero h1{letter-spacing:-1px}
+  .library-page .group-heading,
+  .logos-library .logo-heading{gap:18px}
+}
