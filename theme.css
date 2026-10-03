@@ -54,3 +54,88 @@ html[data-theme=dark].companion-themed body :is(.companion-option.is-selected,.s
 html[data-theme=dark].companion-themed .portfolio-search{--search-bg:var(--night-surface);--search-card:var(--night-raised)}
 html[data-theme=dark].companion-themed .portfolio-search-launch{background:var(--night-accent);color:#211d18;border-color:var(--night-accent)}
 html[data-theme=dark] .theme-control[aria-checked=true]{border-color:var(--night-accent);color:var(--night-accent)}
+
+/* Selected Work dark mode, including Companion-adapted night tokens. */
+html[data-theme=dark] body .selected-work-section{
+  background:var(--night-base);
+  color:var(--ink)
+}
+html[data-theme=dark] body :is(
+  .selected-work-section .project-catalogue-heading h3,
+  .selected-work-section .project-index-copy h3,
+  .selected-work-section .social-row a
+){
+  color:var(--ink)
+}
+html[data-theme=dark] body :is(
+  .selected-work-section .project-catalogue-heading>p,
+  .selected-work-section .project-index-copy>p:not(.eyebrow),
+  .selected-work-section .project-filter-status
+){
+  color:var(--night-muted)
+}
+html[data-theme=dark] body :is(
+  .selected-work-section [data-project-eyebrow],
+  .selected-work-section .project-index-copy .eyebrow,
+  .selected-work-section .project-filter-label
+){
+  color:var(--night-accent)
+}
+html[data-theme=dark] body :is(
+  .selected-work-section .social-row,
+  .selected-work-section .project-filter,
+  .selected-work-section .project-index-card
+){
+  border-color:var(--line)
+}
+html[data-theme=dark] body .selected-work-section .project-filter-options button{
+  background:var(--night-surface);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .selected-work-section .project-filter-options button:hover,
+html[data-theme=dark] body .selected-work-section .project-filter-options button:focus-visible{
+  background:var(--night-raised);
+  color:var(--ink);
+  border-color:var(--night-accent)
+}
+html[data-theme=dark] body .selected-work-section .project-filter-options button.is-active,
+html[data-theme=dark] body .selected-work-section .project-filter-options button[aria-pressed=true]{
+  background:var(--night-accent);
+  color:#211d18;
+  border-color:var(--night-accent)
+}
+html[data-theme=dark] body .selected-work-section .project-index-media{
+  background:var(--night-surface)
+}
+html[data-theme=dark] body .selected-work-section .project-index-media--portrait{
+  background:color-mix(in srgb,var(--night-surface) 72%,#0d4b76 28%)
+}
+html[data-theme=dark] body .selected-work-section .project-index-media>span{
+  background:var(--night-raised);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .selected-work-section .project-index-actions button{
+  background:var(--night-accent);
+  border-color:var(--night-accent);
+  color:#211d18
+}
+html[data-theme=dark] body .selected-work-section .project-index-actions button:hover,
+html[data-theme=dark] body .selected-work-section .project-index-actions button:focus-visible{
+  background:color-mix(in srgb,var(--night-accent) 80%,white);
+  border-color:var(--night-accent);
+  color:#211d18
+}
+html[data-theme=dark] body .selected-work-section .project-index-actions a{
+  background:var(--night-surface);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .selected-work-section .project-index-actions a:hover,
+html[data-theme=dark] body .selected-work-section .project-index-actions a:focus-visible{
+  background:var(--night-raised);
+  border-color:var(--night-accent);
+  color:var(--ink)
+}
+
