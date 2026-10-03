@@ -138,4 +138,27 @@ html[data-theme=dark] body .selected-work-section .project-index-actions a:focus
   border-color:var(--night-accent);
   color:var(--ink)
 }
+/* Technical capabilities — dark mode */
+html[data-theme=dark] body .technical-capabilities{
+  background:var(--night-base);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .technical-capabilities-head .eyebrow,
+html[data-theme=dark] body .technical-capabilities-grid article>span,
+html[data-theme=dark] body .technical-capabilities-grid small{
+  color:var(--night-accent)
+}
+html[data-theme=dark] body .technical-capabilities-head>p,
+html[data-theme=dark] body .technical-capabilities-grid p{
+  color:var(--night-muted)
+}
+html[data-theme=dark] body .technical-capabilities-grid{
+  border-color:var(--line)
+}
+html[data-theme=dark] body .technical-capabilities-grid article{
+  background:var(--night-surface);
+  color:var(--ink);
+  border-color:var(--line)
+}
 

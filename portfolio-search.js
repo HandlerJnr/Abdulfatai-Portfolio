@@ -33,7 +33,7 @@ function cleanAgentOutput(value){
     .replace(/<br\s*\/?\s*>/gi,'\n')
     .replace(/<[^>]+>/g,' ')
     .replace(/【[^】]{1,80}】/g,'')
-    .replace(/\[\s*(?:about|credentials|cv|horal|pay4me|radius|bizinc|vista(?:-itss)?|kremor(?:-ai)?|chalant(?:-ai)?|synqit|archi-tek|arete|settle|shortlet-lagos|loan-investment-app|project-management-dashboard|brand|logos|system)\s*\]/gi,'')
+    .replace(/\[\s*(?:about|credentials|cv|horal|pay4me|radius|bizinc|vista(?:-itss)?|kremor(?:-ai)?|chalant(?:-ai)?|synqit|archi-tek|arete|settle|shortlet-lagos|loan-investment-app|project-management-dashboard|brand|logos|system|technical-skills)\s*\]/gi,'')
     .replace(/[ \t]+\n/g,'\n')
     .replace(/\n{3,}/g,'\n\n')
     .trim();
@@ -230,10 +230,11 @@ const domainProofRoutes=[
   {terms:['ux design','user experience','ux designer','product design','product designer','user journey','user journeys','wireframe','wireframes','prototype','prototyping','usability','user research','research'],ids:['settle','synqit','horal','kremor-ai','credentials']},
   {terms:['fintech','banking','bank','payment','payments','financial product','financial products','cross-border payment','cross border payment','lending','loan','investment'],ids:['pay4me','vista-itss','loan-investment-app']},
   {terms:['marketplace','b2b2c','ecommerce','e-commerce','commerce','seller','buyer','booking platform','two-sided','two sided'],ids:['horal','bizinc','shortlet-lagos','synqit']},
-  {terms:['artificial intelligence','generative ai','gen ai','ai product','ai products','ai design','ai tool','ai tools','llm','agentic','ai agent','ai agents'],ids:['kremor-ai','chalant-ai','synqit','archi-tek','credentials']},
+  {terms:['artificial intelligence','generative ai','gen ai','ai product','ai products','ai design','ai tool','ai tools','llm','agentic','ai agent','ai agents','langgraph','lang graph','huggingface','hugging face'],ids:['technical-skills','kremor-ai','chalant-ai','synqit','archi-tek','credentials']},
+  {terms:['coding','code','front-end development','frontend development','html','css','javascript','react','react js','react.js','c sharp','c#','python','programming'],ids:['technical-skills','system','credentials']},
   {terms:['healthcare','healthtech','health tech','medical','care platform'],ids:['arete']},
   {terms:['service design','service platform','service platforms','student experience','relocation','onboarding journey'],ids:['settle','arete','pay4me']},
-  {terms:['responsive design','responsive','mobile design','web design','mobile app','web app','front end','frontend'],ids:['system','horal','shortlet-lagos','pay4me']},
+  {terms:['responsive design','responsive','mobile design','web design','mobile app','web app','front end','frontend'],ids:['technical-skills','system','horal','shortlet-lagos','pay4me']},
   {terms:['leadership','design leadership','manager','management','team leadership','mentoring','mentor'],ids:['bizinc','credentials']},
   {terms:['developer collaboration','engineering collaboration','handoff','developer handoff','working with developers','work with developers'],ids:['credentials','bizinc','vista-itss','system']},
   {terms:['accessibility','accessible','inclusive design'],ids:['system','credentials','arete']},
@@ -322,9 +323,11 @@ function evidence(record,q){
 async function getRecords(){
   if(records)return records;
   if(!loading){
-    loading=fetch('/portfolio-knowledge.json?v=20261003-domain-proof')
-      .then(response=>{if(!response.ok)throw Error();return response.json()})
-      .then(data=>records=data)
+    loading=Promise.all([
+      fetch('/portfolio-knowledge.json?v=20261003-domain-proof').then(response=>{if(!response.ok)throw Error();return response.json()}),
+      fetch('/technical-capabilities.json?v=20261003').then(response=>{if(!response.ok)throw Error();return response.json()})
+    ])
+      .then(([portfolio,technical])=>records=[...portfolio.filter(record=>record.id!==technical.id),technical])
       .catch(error=>{loading=null;throw error});
   }
   return loading;
@@ -363,14 +366,27 @@ function normaliseCurrentPath(value){
 function currentPageRecord(){
   if(!records)return null;
   const current=normaliseCurrentPath(window.location.pathname);
+  const currentHash=window.location.hash||'';
+  const exactHash=records.find(record=>{
+    try{
+      const url=new URL(record.url,window.location.origin);
+      return currentHash&&url.hash===currentHash&&normaliseCurrentPath(url.pathname)===current;
+    }catch{return false}
+  });
+  if(exactHash)return exactHash;
   return records.find(record=>{
     try{
       const url=new URL(record.url,window.location.origin);
       if(/\.pdf$/i.test(url.pathname))return false;
-      return normaliseCurrentPath(url.pathname)===current;
+      return !url.hash&&normaliseCurrentPath(url.pathname)===current;
     }catch{
       return false;
     }
+  })||records.find(record=>{
+    try{
+      const url=new URL(record.url,window.location.origin);
+      return normaliseCurrentPath(url.pathname)===current;
+    }catch{return false}
   })||null;
 }
 
