@@ -77,3 +77,48 @@
 .case-page .case-chapters{position:sticky;top:var(--case-header-height,105px);z-index:37;box-shadow:0 4px 12px #342c2308}
 .case-page .case-section{scroll-margin-top:calc(var(--case-header-height,105px) + 80px)}
 @media(max-width:760px){.case-page .case-head .case-facts{width:calc(100% + 48px);margin-inline:-24px;grid-template-columns:1fr}.case-page .case-head .case-facts>div{padding:18px 24px;border-right:0;border-bottom:1px solid #655f56}.case-page .case-head .case-facts>div:last-child{border-bottom:0}}
+
+/* Horal supplied mockups */
+.horal-cover-stage{padding-block:54px}
+.horal-cover-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:start;
+  gap:28px;
+  width:min(100%,820px);
+  margin:0 auto
+}
+.horal-cover-grid img{
+  display:block;
+  width:100%;
+  height:auto;
+  box-shadow:0 18px 40px #16384c18
+}
+.horal-case .horal-gallery{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:38px 24px;
+  align-items:start
+}
+.horal-case .horal-gallery .case-image-link{
+  padding:0;
+  background:transparent;
+  border:0
+}
+.horal-case .horal-gallery .case-image-link img{
+  width:100%;
+  height:auto;
+  box-shadow:0 14px 32px #342c2312
+}
+.horal-case .horal-gallery .case-image-link>span{
+  margin-top:10px
+}
+@media(max-width:900px){
+  .horal-case .horal-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .horal-cover-stage{padding-block:30px}
+  .horal-cover-grid{gap:12px}
+  .horal-case .horal-gallery{grid-template-columns:1fr;gap:32px}
+  .horal-case .horal-gallery figure{width:min(100%,360px);margin-inline:auto}
+}
+
