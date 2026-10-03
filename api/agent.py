@@ -14,11 +14,19 @@ from llama_index.retrievers.bm25 import BM25Retriever
 
 ROOT = Path(__file__).resolve().parent.parent
 KNOWLEDGE_PATH = ROOT / "portfolio-knowledge.json"
+TECHNICAL_PATH = ROOT / "technical-capabilities.json"
 MODEL = os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
 MAX_HISTORY = 10
 
 with KNOWLEDGE_PATH.open("r", encoding="utf-8") as handle:
     RECORD_LIST = json.load(handle)
+
+if TECHNICAL_PATH.exists():
+    with TECHNICAL_PATH.open("r", encoding="utf-8") as handle:
+        technical_record = json.load(handle)
+    if technical_record.get("id"):
+        RECORD_LIST = [record for record in RECORD_LIST if record.get("id") != technical_record["id"]]
+        RECORD_LIST.append(technical_record)
 
 RECORDS = {record["id"]: record for record in RECORD_LIST}
 NODES = []
@@ -278,8 +286,9 @@ DOMAIN_PROOF_ROUTES = (
      ("horal", "bizinc", "shortlet-lagos", "synqit")),
 
     (("artificial intelligence", "generative ai", "gen ai", "ai product", "ai products",
-      "ai design", "ai tool", "ai tools", "llm", "agentic", "ai agent", "ai agents"),
-     ("kremor-ai", "chalant-ai", "synqit", "archi-tek", "credentials")),
+      "ai design", "ai tool", "ai tools", "llm", "agentic", "ai agent", "ai agents",
+      "langgraph", "lang graph", "huggingface", "hugging face"),
+     ("technical-skills", "kremor-ai", "chalant-ai", "synqit", "archi-tek", "credentials")),
 
     (("healthcare", "healthtech", "health tech", "medical", "care platform"),
      ("arete",)),
@@ -288,9 +297,13 @@ DOMAIN_PROOF_ROUTES = (
       "relocation", "onboarding journey"),
      ("settle", "arete", "pay4me")),
 
+    (("coding", "code", "front-end development", "frontend development", "html", "css",
+      "javascript", "react", "react js", "react.js", "c sharp", "python", "programming"),
+     ("technical-skills", "system", "credentials")),
+
     (("responsive design", "responsive", "mobile design", "web design", "mobile app",
       "web app", "front end", "frontend"),
-     ("system", "horal", "shortlet-lagos", "pay4me")),
+     ("technical-skills", "system", "horal", "shortlet-lagos", "pay4me")),
 
     (("leadership", "design leadership", "manager", "management", "team leadership",
       "mentoring", "mentor"),
