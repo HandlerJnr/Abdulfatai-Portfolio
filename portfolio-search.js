@@ -253,6 +253,9 @@ function domainProofRecords(q){
 }
 
 function rank(q){
+  const pageRecord=currentPageRecord();
+  if(pageRecord&&asksAboutCurrentPage(q))return [pageRecord];
+
   const domain=domainProofRecords(q);
   if(domain.length)return uniqueRecords(domain).slice(0,6);
 
@@ -352,6 +355,40 @@ function sourceCards(found){
   return cards;
 }
 
+function normaliseCurrentPath(value){
+  const path=String(value||'/').split('?')[0].replace(/\/+$/,'');
+  return path||'/';
+}
+
+function currentPageRecord(){
+  if(!records)return null;
+  const current=normaliseCurrentPath(window.location.pathname);
+  return records.find(record=>{
+    try{
+      const url=new URL(record.url,window.location.origin);
+      if(/\.pdf$/i.test(url.pathname))return false;
+      return normaliseCurrentPath(url.pathname)===current;
+    }catch{
+      return false;
+    }
+  })||null;
+}
+
+function currentPageContext(){
+  const record=currentPageRecord();
+  return {
+    page_id:record?.id||'',
+    pathname:window.location.pathname,
+    hash:window.location.hash||'',
+    title:document.title||record?.title||'',
+    record_title:record?.title||''
+  };
+}
+
+function asksAboutCurrentPage(q){
+  return /\b(this page|this screen|this section|current page|what am i looking at|what is this page|what's this page|tell me about this|explain this page|explain this screen|what does this mean|what is this about|what's this about)\b/i.test(String(q||''));
+}
+
 async function askAgent(question){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),55000);
@@ -361,7 +398,8 @@ async function askAgent(question){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         question,
-        history:history.slice(-10)
+        history:history.slice(-10),
+        page_context:currentPageContext()
       }),
       signal:controller.signal
     });
@@ -383,6 +421,8 @@ async function askAgent(question){
 }
 function localAnswer(found,q){
   if(!found.length)return 'I couldn’t find matching published information. Try a project name or ask about Jamiu’s experience.';
+  const pageRecord=currentPageRecord();
+  if(pageRecord&&asksAboutCurrentPage(q))return pageRecord.title+': '+pageRecord.summary;
   return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
 async function ask(q){
