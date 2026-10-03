@@ -2001,3 +2001,77 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .testimonials .quote{min-height:0}
 }
 
+
+/* Supporting libraries share the homepage's editorial card rhythm. */
+.library-page .library-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:32px;
+  align-items:stretch
+}
+.library-page .library-card{
+  display:flex;
+  flex-direction:column
+}
+.library-page .library-cover{
+  flex:none;
+  aspect-ratio:4/3
+}
+.library-page .library-cover img{
+  object-fit:contain;
+  object-position:center;
+  transform:none
+}
+.library-page .library-cover:hover img{transform:scale(1.025)}
+.library-page .library-card-copy{
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  padding:24px;
+  border-top:1px solid;
+  border-top-color:inherit
+}
+.library-page .library-card-copy>.eyebrow{margin:0 0 8px}
+.library-page .library-card h3{
+  font-size:clamp(23px,2vw,28px);
+  line-height:1.25;
+  margin:0 0 14px;
+  overflow-wrap:anywhere
+}
+.library-page .library-card-copy>p:not(.eyebrow){margin:0 0 18px}
+.library-page .library-card-copy>.text-link,
+.library-page .document-actions{
+  margin-top:auto;
+  padding-top:14px
+}
+.library-page .document-actions{gap:12px 20px}
+.library-page .document-pages{margin-top:20px}
+.library-page .library-card-copy .text-link{line-height:1.6}
+
+/* Two identity showcases need room for the artwork and captions. */
+.logos-library .identity-grid{align-items:stretch}
+.logos-library .identity-card{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  border:1px solid #c8bfb2
+}
+.logos-library .identity-card:nth-child(2){padding-top:0}
+.logos-library .identity-caption{
+  flex:1;
+  align-items:start;
+  padding:22px 24px;
+  border-bottom:0;
+  border-top:1px solid;
+  border-top-color:inherit
+}
+.companion-themed .logos-library .identity-card{
+  border-color:color-mix(in srgb,#fff 55%,var(--poke-accent) 45%)
+}
+@media(max-width:1100px){
+  .library-page .library-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+}
+@media(max-width:700px){
+  .library-page .library-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+  .library-page .library-card-copy{padding:22px}
+  .logos-library .identity-caption{padding:20px;gap:16px}
+}

@@ -213,3 +213,5 @@ html[data-theme=dark] body .testimonials .reviews-label span{
   color:var(--night-accent)
 }
 
+
+html[data-theme=dark] body .logos-library .identity-card{border-color:var(--line)}
