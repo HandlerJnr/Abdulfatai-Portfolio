@@ -2,5 +2,7 @@
   "id": "technical-skills",
   "title": "Technical capabilities",
   "url": "/#technical-capabilities",
-  "summary": "HTML, CSS, JavaScript and React.js; beginner-level C# and Python; LangGraph and Hugging Face integration experience."
+  "image": "/system/figma-tokens.jpg",
+  "summary": "Working skills in HTML, CSS, JavaScript and React.js; beginner-level C# and Python; LangGraph experience; and open-source AI agent integration with Hugging Face.",
+  "text": "Front-end: HTML, CSS, JavaScript and React.js.\nBeginner level: C# and Python.\nAI orchestration: LangGraph experience.\nAI integration: open-source AI agent integration with Hugging Face.\nThese technical capabilities complement Jamiu's product design, design-system, developer-handoff and implementation-review work."
 }
