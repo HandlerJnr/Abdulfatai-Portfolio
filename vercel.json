@@ -8,7 +8,7 @@
     "api/agent.py": {
       "maxDuration": 60,
       "memory": 1024,
-      "excludeFiles": "{assets/**,projects/**,logos/images/**,**/*.pdf}"
+      "excludeFiles": "{assets/**,projects/**,logos/**,brand/**,credentials/**,system/**,work/**,**/*.pdf,**/*.jpg,**/*.jpeg,**/*.png,**/*.gif,**/*.svg,**/*.woff2,*.html,*.css,*.js,README.md,MOCKUP-NOTES.md,PORTFOLIO-SEARCH.md}"
     }
   }
 }
