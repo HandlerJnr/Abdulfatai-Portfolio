@@ -46,7 +46,7 @@
 .case-page .case-body{max-width:none;padding:var(--support-section-gap) var(--support-gutter) 80px}
 .case-page .case-section,
 .case-page .case-tab-panel .case-section{
-  grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:40px;
   padding:27px 0 55px
 }
@@ -61,4 +61,15 @@
   .library-page .library-hero h1{letter-spacing:-1px}
   .library-page .group-heading,
   .logos-library .logo-heading{gap:18px}
+}
+
+/* Shared page sequence: hero, related work, section navigation, collections. */
+.library-page .brand-logo-callout{padding:45px var(--support-gutter)}
+.case-page .case-chapters{padding:23px var(--support-gutter);font-size:13px}
+.case-page .case-tab-panel .case-section{border-top:1px solid var(--line)}
+@media(max-width:700px){
+  .library-page .brand-logo-callout{padding:35px var(--support-gutter)}
+}
+@media(max-width:760px){
+  .case-page .case-chapters{padding:20px 24px}
 }
