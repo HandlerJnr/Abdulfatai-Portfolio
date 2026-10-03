@@ -142,7 +142,7 @@ def call_model(prompt):
         "model": MODEL,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.35,
-        "max_completion_tokens": 950,
+        "max_completion_tokens": 650,
     }
     request = urllib.request.Request(
         endpoint,
@@ -263,8 +263,8 @@ def retrieve(question, history):
 
 def build_prompt(question, history, retrieved):
     history_text = "\n".join(
-        ("Agent: " if item["role"] == "assistant" else "Visitor: ") + item["content"]
-        for item in history
+        ("Agent: " if item["role"] == "assistant" else "Visitor: ") + item["content"][:400]
+        for item in history[-4:]
     )
     return (
         "You are Jamiu Abdulfatai's portfolio research agent for recruiters, hiring managers, collaborators and visitors.\n\n"
@@ -284,9 +284,9 @@ def build_prompt(question, history, retrieved):
         "RECENT CONVERSATION\n"
         + (history_text or "(none)")
         + "\n\nFULL PORTFOLIO MAP\n"
-        + PORTFOLIO_MAP
+        + "\n".join(record["id"] + ": " + record.get("title", "") + " — " + record.get("summary", "")[:180] for record in RECORD_LIST)
         + "\n\nLLAMAINDEX RETRIEVED EVIDENCE\n"
-        + (retrieved or "(none)")
+        + (retrieved[:9000] or "(none)")
         + "\n\nCURRENT VISITOR QUESTION\n"
         + question
         + "\n\nAnswer now."
