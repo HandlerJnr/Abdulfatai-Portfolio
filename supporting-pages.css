@@ -73,3 +73,46 @@
 @media(max-width:760px){
   .case-page .case-chapters{padding:20px 24px}
 }
+
+/* Separate editorial surfaces, with readable accents for every companion hue. */
+html:root body:is(:has(.library-page),.case-page){
+  --support-accent:color-mix(in srgb,var(--poke-accent,#98764f) 35%,var(--poke-ink,#382a1d) 65%);
+  --support-highlight:color-mix(in srgb,var(--poke-accent,#dec39e) 45%,white 55%);
+  --support-hero:#202020;
+  --support-callout:color-mix(in srgb,var(--poke-soft,#e8e0d4) 65%,#e8e0d4);
+  --support-nav:#f7f5f1;
+  --support-border:#bcb5a9
+}
+html[data-theme=dark] body:is(:has(.library-page),.case-page){
+  --support-accent:var(--night-accent);
+  --support-hero:color-mix(in srgb,#141619 94%,var(--poke-accent,#98764f));
+  --support-callout:color-mix(in srgb,#34383d 88%,var(--poke-accent,#98764f));
+  --support-nav:color-mix(in srgb,#202327 94%,var(--poke-accent,#98764f));
+  --support-border:color-mix(in srgb,#717579 85%,var(--poke-accent,#98764f))
+}
+html:root body:is(:has(.library-page),.case-page) :is(section.library-hero,div.case-head){background:var(--support-hero)}
+html:root body:is(:has(.library-page),.case-page) :is(section.library-hero,div.case-head) .eyebrow{color:var(--support-highlight)}
+html:root body:is(:has(.library-page),.case-page) .brand-logo-callout{
+  background:var(--support-callout);
+  border-block:1px solid var(--support-border)
+}
+html:root body:is(:has(.library-page),.case-page) :is(.library-tabs,.case-chapters){
+  background:var(--support-nav);
+  border-bottom:1px solid var(--support-border)
+}
+html:root body:is(:has(.library-page),.case-page) :is(.brand-logo-callout,.library-card-copy,.identity-caption) .eyebrow{color:var(--support-accent)}
+html:root body:is(:has(.library-page),.case-page) :is(.library-card,.identity-card,.library-card-copy,.identity-caption,.group-heading,.case-section){border-color:var(--support-border)}
+html[data-theme=dark] body:is(:has(.library-page),.case-page) .brand-logo-callout p:not(.eyebrow){color:#d3d7dc}
+html[data-theme=dark] body:is(:has(.library-page),.case-page) .library-cover{background:var(--night-raised)}
+html:root body:is(:has(.library-page),.case-page) :is(.button.primary,.preview-button,.identity-open){
+  background:var(--support-accent);border-color:var(--support-accent);color:#fff
+}
+html[data-theme=dark] body:is(:has(.library-page),.case-page) :is(.button.primary,.preview-button,.identity-open){color:#181818}
+html:root body:is(:has(.library-page),.case-page) :is(.button.primary,.preview-button,.identity-open):is(:hover,:focus-visible){
+  background:var(--poke-ink,#382a1d);border-color:var(--poke-ink,#382a1d);color:#fff
+}
+html[data-theme=dark] body:is(:has(.library-page),.case-page) :is(.button.primary,.preview-button,.identity-open):is(:hover,:focus-visible){
+  background:var(--support-highlight);border-color:var(--support-highlight);color:#181818
+}
+html:root body:is(:has(.library-page),.case-page) .summon-companion strong{color:var(--support-accent)}
+html:root body:is(:has(.library-page),.case-page) :is(a,button,summary):focus-visible{outline-color:var(--support-accent)}
