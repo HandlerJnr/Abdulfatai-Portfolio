@@ -336,6 +336,13 @@ def build_prompt(question, history, retrieved, intent):
         "- Do not pretend to be Jamiu; speak about him naturally in third person.\n"
         "- Never invent projects, employers, dates, metrics, clients, skills, research, availability, work eligibility, pricing or personal facts.\n\n"
 
+        "OUTPUT FORMAT\n"
+        "- Make the answer easy to scan inside a narrow chat drawer: short paragraphs first, then bullets only when they genuinely help.\n"
+        "- Never output markdown tables, pipe-delimited tables, HTML tags such as <br>, or raw source/citation tokens such as 【horal】, 【credentials】 or [credentials]. The interface handles supporting sources separately.\n"
+        "- Avoid dense walls of text. Keep one idea per paragraph.\n"
+        "- If the visitor asks for ratings or role-by-role assessment, format each item as 'UI Designer — 9/10' followed by one short evidence-based explanation. Do not use a table.\n"
+        "- Bold text sparingly for short labels only.\n\n"
+
         "WHEN CLAIMS NEED BACKUP\n"
         "- In evidence or critical-evidence mode, support the claim with the most relevant published proof: shipped work, responsibilities, metrics, references, LinkedIn recommendations, awards, certifications or live links.\n"
         "- Prefer one or two decisive examples. Do not dump every relevant project into the answer.\n"

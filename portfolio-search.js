@@ -28,6 +28,145 @@ function text(tag,value,className){
   return el;
 }
 
+function cleanAgentOutput(value){
+  return String(value||'')
+    .replace(/<br\s*\/?\s*>/gi,'\n')
+    .replace(/<[^>]+>/g,' ')
+    .replace(/【[^】]{1,80}】/g,'')
+    .replace(/\[\s*(?:about|credentials|cv|horal|pay4me|radius|bizinc|vista(?:-itss)?|kremor(?:-ai)?|chalant(?:-ai)?|synqit|archi-tek|arete|settle|shortlet-lagos|loan-investment-app|project-management-dashboard|brand|logos|system)\s*\]/gi,'')
+    .replace(/[ \t]+\n/g,'\n')
+    .replace(/\n{3,}/g,'\n\n')
+    .trim();
+}
+
+function appendInline(parent,value){
+  const input=String(value||'').replace(/\*\*\s*\*\*/g,'');
+  const pattern=/\*\*([^*]+)\*\*|\[([^\]]+)\]\((https?:\/\/[^)]+)\)|(https?:\/\/[^\s]+)/g;
+  let cursor=0;
+  let match;
+  while((match=pattern.exec(input))){
+    if(match.index>cursor)parent.append(document.createTextNode(input.slice(cursor,match.index)));
+    if(match[1]){
+      const strong=document.createElement('strong');
+      strong.textContent=match[1].trim();
+      parent.append(strong);
+    }else{
+      const anchor=document.createElement('a');
+      anchor.href=match[3]||match[4];
+      anchor.target='_blank';
+      anchor.rel='noopener';
+      anchor.textContent=match[2]||match[4];
+      parent.append(anchor);
+    }
+    cursor=pattern.lastIndex;
+  }
+  if(cursor<input.length)parent.append(document.createTextNode(input.slice(cursor)));
+}
+
+function renderAgentAnswer(value){
+  const body=text('div','','search-answer-body');
+  const source=cleanAgentOutput(value);
+  if(!source){
+    body.append(text('p','I couldn’t produce a readable answer. Please try asking that another way.'));
+    return body;
+  }
+
+  const lines=source.split('\n');
+  const isTableLine=line=>/^\s*\|.*\|\s*$/.test(line);
+  const isTableDivider=line=>/^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+  const cells=line=>line.trim().replace(/^\||\|$/g,'').split('|').map(cell=>cell.trim());
+  let i=0;
+
+  while(i<lines.length){
+    const line=lines[i].trim();
+    if(!line){i++;continue;}
+
+    // Gracefully render a markdown table if a model ever returns one,
+    // even though the prompt now asks it not to.
+    if(isTableLine(lines[i])&&i+1<lines.length&&isTableDivider(lines[i+1])){
+      const wrap=text('div','','agent-table-wrap');
+      const table=document.createElement('table');
+      const thead=document.createElement('thead');
+      const tr=document.createElement('tr');
+      cells(lines[i]).forEach(cell=>{
+        const th=document.createElement('th');
+        appendInline(th,cell);
+        tr.append(th);
+      });
+      thead.append(tr);
+      table.append(thead);
+      i+=2;
+      const tbody=document.createElement('tbody');
+      while(i<lines.length&&isTableLine(lines[i])){
+        const row=document.createElement('tr');
+        cells(lines[i]).forEach(cell=>{
+          const td=document.createElement('td');
+          appendInline(td,cell);
+          row.append(td);
+        });
+        tbody.append(row);
+        i++;
+      }
+      table.append(tbody);
+      wrap.append(table);
+      body.append(wrap);
+      continue;
+    }
+
+    const heading=line.match(/^(#{1,4})\s+(.+)$/);
+    if(heading){
+      const h=document.createElement(heading[1].length<=2?'h3':'h4');
+      appendInline(h,heading[2]);
+      body.append(h);
+      i++;
+      continue;
+    }
+
+    if(/^[-*•]\s+/.test(line)){
+      const ul=document.createElement('ul');
+      while(i<lines.length&&/^[-*•]\s+/.test(lines[i].trim())){
+        const li=document.createElement('li');
+        appendInline(li,lines[i].trim().replace(/^[-*•]\s+/,''));
+        ul.append(li);
+        i++;
+      }
+      body.append(ul);
+      continue;
+    }
+
+    if(/^\d+[.)]\s+/.test(line)){
+      const ol=document.createElement('ol');
+      while(i<lines.length&&/^\d+[.)]\s+/.test(lines[i].trim())){
+        const li=document.createElement('li');
+        appendInline(li,lines[i].trim().replace(/^\d+[.)]\s+/,''));
+        ol.append(li);
+        i++;
+      }
+      body.append(ol);
+      continue;
+    }
+
+    const paragraph=[];
+    while(i<lines.length){
+      const current=lines[i].trim();
+      if(!current){i++;break;}
+      if(paragraph.length&&(
+        /^#{1,4}\s+/.test(current)||
+        /^[-*•]\s+/.test(current)||
+        /^\d+[.)]\s+/.test(current)||
+        (isTableLine(lines[i])&&i+1<lines.length&&isTableDivider(lines[i+1]))
+      ))break;
+      paragraph.push(current.replace(/^\|\s*|\s*\|$/g,''));
+      i++;
+    }
+    const p=document.createElement('p');
+    appendInline(p,paragraph.join(' '));
+    body.append(p);
+  }
+
+  return body;
+}
+
 const stop=new Set('a an the i you your me my what how did do does is are was were at in on to of and for about show tell can could would should has have had with it this that these those please he him his she her hers they them their theirs who whom jamiu abdulfatai really very just'.split(' '));
 
 function tokens(q){
@@ -245,7 +384,7 @@ async function ask(q){
 
     response.classList.remove('is-thinking');
     response.replaceChildren();
-    response.append(text('p',answer));
+    response.append(renderAgentAnswer(answer));
 
     const hasEvidence=usedAgent&&evidenceCards.length>0;
     const meta=text(
