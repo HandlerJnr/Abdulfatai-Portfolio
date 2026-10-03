@@ -1,6 +1,6 @@
 (()=>{
  const root=document.documentElement,system=matchMedia('(prefers-color-scheme: dark)');
- let preference='system';
+ let preference='light';
  try{const saved=localStorage.getItem('portfolio-theme');if(['light','dark','system'].includes(saved))preference=saved}catch{}
  function apply(){
   const resolved=preference==='system'?(system.matches?'dark':'light'):preference;
@@ -17,5 +17,5 @@
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
  system.addEventListener('change',()=>{if(preference==='system')apply()});
- addEventListener('storage',event=>{if(event.key==='portfolio-theme'){preference=['light','dark','system'].includes(event.newValue)?event.newValue:'system';apply()}});
+ addEventListener('storage',event=>{if(event.key==='portfolio-theme'){preference=['light','dark','system'].includes(event.newValue)?event.newValue:'light';apply()}});
 })();

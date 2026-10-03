@@ -8,7 +8,7 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>LlamaIndex + GPT-OSS · one-pass server Agent · grounded in Jamiu’s published portfolio.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — vague, specific, comparative or follow-up questions all work. The agent decides which portfolio evidence matters.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -19,6 +19,7 @@ let records;
 let loading;
 let lastProject;
 let history=[];
+let busy=false;
 
 function text(tag,value,className){
   const el=document.createElement(tag);
@@ -36,7 +37,7 @@ function tokens(q){
 function recentUserContext(q){
   const current=String(q||'').trim();
   const currentWords=tokens(current);
-  if(currentWords.length>5||!history.length)return current;
+  if(currentWords.length>5||!history.length||!(/\b(it|that|this|those|their|more|why)\b/i.test(current)))return current;
   const previous=[];
   for(let i=history.length-1;i>=0&&previous.length<2;i--){
     if(history[i].role==='user'&&history[i].text)previous.unshift(history[i].text);
@@ -83,6 +84,9 @@ function recordScore(record,q){
 }
 
 function rank(q){
+  const named=records.filter(r=>q.toLowerCase().includes(r.title.toLowerCase())||q.toLowerCase().includes(r.id.replace(/-/g,' ')));
+  if(named.length)return uniqueRecords(named).slice(0,3);
+  if(/experience|skills|background|career|education|what kind of|who is|about jamiu/i.test(q))return uniqueRecords([getRecord('about'),getRecord('credentials'),getRecord('bizinc')]);
   const scored=records.map(record=>({record,score:recordScore(record,q)}))
     .sort((a,b)=>b.score-a.score);
 
@@ -206,30 +210,13 @@ async function askAgent(question){
   }
 }
 function localAnswer(found,q){
-  const selected=found.length?found:uniqueRecords([getRecord('about'),getRecord('credentials'),lastProject]);
-  if(!selected.length)return 'I could not load enough published portfolio context to answer that well. Try again in a moment.';
-
-  const primary=selected[0];
-  const second=selected.find(record=>record.id!==primary.id);
-  const first=excerpt(primary,q);
-
-  if(tokens(recentUserContext(q)).length<=1){
-    const profile=getRecord('about');
-    const credentials=getRecord('credentials');
-    const parts=[
-      profile?.summary,
-      credentials?.summary,
-      lastProject?('A representative project is '+lastProject.title+': '+lastProject.summary):''
-    ].filter(Boolean);
-    return parts.join(' ');
-  }
-
-  return second?first+' Related evidence: '+second.title+' — '+second.summary:first;
+  if(!found.length)return 'I couldn’t find matching published information. Try a project name or ask about Jamiu’s experience.';
+  return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
 async function ask(q){
   q=q.trim();
-  if(!q)return;
-
+  if(!q||busy)return;
+  busy=true;
   submit.disabled=true;
   conversation.append(text('p',q,'search-question'));
 
@@ -244,7 +231,7 @@ async function ask(q){
     const fallback=localAnswer(found,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=found.slice(0,3);
+    let evidenceCards=found.slice(0,2);
 
     try{
       const result=await askAgent(q);
@@ -262,12 +249,13 @@ async function ask(q){
     response.append(text('p',answer));
 
     const failure=response.dataset.agentError;
-    const meta=text('p',usedAgent?'GPT-OSS agent · LlamaIndex retrieval · grounded in the published portfolio.':('Portfolio fallback · Agent connection issue'+(failure?' · '+failure:'')+'.'),'search-answer-meta');
+    const meta=text('p',usedAgent?'Answer based on the linked portfolio sources.':'Live chat is unavailable right now. These are matching excerpts from the portfolio.','search-answer-meta');
+    dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent?'Portfolio conversation · Sources linked below.':'Portfolio search · Live chat temporarily unavailable.';
     response.append(meta);
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
-      response.append(text('span','Evidence used','search-kicker'));
+      response.append(text('span',usedAgent?'Related sources':'Read these projects','search-kicker'));
       response.append(sourceCards(evidenceCards));
     }
 
@@ -277,6 +265,7 @@ async function ask(q){
     response.classList.remove('is-thinking');
     response.replaceChildren(text('p','The portfolio index could not load. Please try again, or browse selected work from the menu.'));
   }finally{
+    busy=false;
     submit.disabled=false;
     conversation.scrollTop=response.offsetTop-conversation.offsetTop;
   }
