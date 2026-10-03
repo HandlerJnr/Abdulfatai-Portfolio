@@ -237,8 +237,7 @@ async function ask(q){
       const result=await askAgent(q);
       answer=result.answer;
       usedAgent=true;
-      const selected=result.sourceIds.map(id=>getRecord(id)).filter(Boolean);
-      if(selected.length)evidenceCards=selected.slice(0,3);
+      evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,3);
     }catch(error){
       answer=fallback;
       response.dataset.agentError=error?.code||'agent-unavailable';
@@ -248,14 +247,22 @@ async function ask(q){
     response.replaceChildren();
     response.append(text('p',answer));
 
-    const failure=response.dataset.agentError;
-    const meta=text('p',usedAgent?'Answer based on the linked portfolio sources.':'Live chat is unavailable right now. These are matching excerpts from the portfolio.','search-answer-meta');
-    dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent?'Portfolio conversation · Sources linked below.':'Portfolio search · Live chat temporarily unavailable.';
+    const hasEvidence=usedAgent&&evidenceCards.length>0;
+    const meta=text(
+      'p',
+      usedAgent
+        ? (hasEvidence?'Supporting portfolio evidence is linked below.':'Portfolio conversation.')
+        : 'Live chat is unavailable right now. These are matching excerpts from the portfolio.',
+      'search-answer-meta'
+    );
+    dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent
+      ? (hasEvidence?'Portfolio conversation · Supporting evidence below.':'Portfolio conversation')
+      : 'Portfolio search · Live chat temporarily unavailable.';
     response.append(meta);
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
-      response.append(text('span',usedAgent?'Related sources':'Read these projects','search-kicker'));
+      response.append(text('span',usedAgent?'Supporting evidence':'Read these projects','search-kicker'));
       response.append(sourceCards(evidenceCards));
     }
 
