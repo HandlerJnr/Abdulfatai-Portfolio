@@ -1093,7 +1093,6 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 @keyframes power-release{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}16%{opacity:.9}100%{opacity:0;transform:translate(calc(-50% + var(--px)),calc(-50% + var(--py))) rotate(var(--turn)) scale(.65)}}
 @media(prefers-reduced-motion:reduce){.companion-power{display:none!important}.companion-power-bit{animation:none!important}}
 
-
 /* Transparent portrait with restrained local head and gaze tracking. */
 .portrait-wrap.portrait-interactive{height:auto;max-width:330px;aspect-ratio:1122/1402;mask-image:none;overflow:visible}
 .portrait-interactive .portrait-head{display:block;width:100%;height:100%;transform-origin:50% 65%;transition:none}
@@ -1102,7 +1101,6 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 
 /* A companion crossing a button never captures that button's click or tap. */
 .pokemon-companion.yields-to-control button.companion-character{pointer-events:none}
-
 
 /* Mobile drawer viewport containment */
 @media(max-width:700px){
@@ -1899,72 +1897,15 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   text-transform:uppercase
 }
 
-.testimonials{
-  padding:78px 36px 86px;
-  background:#f4f0e9;
-  border-top:1px solid #c9c2b8;
-  border-bottom:1px solid #c9c2b8
-}
-.testimonials>h2{
-  max-width:820px;
-  font:400 clamp(38px,5vw,62px)/1.03 Georgia,serif;
-  letter-spacing:-.04em
-}
-.testimonials>.subheading{
-  max-width:520px;
-  margin:18px 0 34px;
-  font-size:14px;
-  line-height:1.75
-}
-.testimonials .reviews-label{
-  margin:0 0 14px;
-  padding:0;
-  border:0;
-  font-size:9px;
-  letter-spacing:1.3px;
-  text-transform:uppercase
-}
-.testimonials .quotes{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:0;
-  border-top:1px solid #bdb7ae;
-  border-left:1px solid #bdb7ae
-}
-.testimonials .quote{
-  min-height:330px;
-  display:flex;
-  flex-direction:column;
-  margin:0;
-  padding:24px 22px 22px;
-  background:#f8f6f1;
-  border:0;
-  border-right:1px solid #bdb7ae;
-  border-bottom:1px solid #bdb7ae;
-  box-shadow:none
-}
-.testimonials .quote figcaption{
-  margin:0 0 28px;
-  padding:0
-}
-.testimonials .quote blockquote{
-  margin:auto 0 0;
-  font-size:14px;
-  line-height:1.75
-}
-
-.companion-themed .library-teaser,
-.companion-themed .testimonials{
+.companion-themed .library-teaser{
   background:color-mix(in srgb,#fff 91%,var(--poke-soft) 9%);
   color:var(--poke-ink);
   border-color:color-mix(in srgb,#c9c2b8 52%,var(--poke-accent) 48%)
 }
-.companion-themed .library-links,
-.companion-themed .testimonials .quotes{
+.companion-themed .library-links{
   border-color:color-mix(in srgb,#bdb7ae 52%,var(--poke-accent) 48%)
 }
-.companion-themed .library-links>a,
-.companion-themed .testimonials .quote{
+.companion-themed .library-links>a{
   background:color-mix(in srgb,#fff 95%,var(--poke-soft) 5%);
   border-color:color-mix(in srgb,#bdb7ae 52%,var(--poke-accent) 48%);
   color:var(--poke-ink)
@@ -1973,34 +1914,26 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   background:color-mix(in srgb,#fff 82%,var(--poke-soft) 18%)
 }
 .companion-themed .library-links span,
-.companion-themed .library-links>a::after,
-.companion-themed .testimonials .reviews-label,
-.companion-themed .testimonials .reviews-label span{
+.companion-themed .library-links>a::after{
   color:var(--poke-accent)
 }
-.companion-themed .library-links p,
-.companion-themed .testimonials>.subheading,
-.companion-themed .testimonials .quote figcaption p{
+.companion-themed .library-links p{
   color:color-mix(in srgb,var(--poke-ink) 72%,#756f68 28%)
 }
 
 @media(max-width:980px){
   .library-links{grid-template-columns:repeat(2,minmax(0,1fr))}
   .library-links>a:last-child{grid-column:1/-1;min-height:220px}
-  .testimonials .quotes{grid-template-columns:1fr}
-  .testimonials .quote{min-height:250px}
+
 }
 @media(max-width:700px){
-  .library-teaser,
-  .testimonials{padding:55px 20px 60px}
-  .library-teaser>h2,
-  .testimonials>h2{font-size:38px}
+  .library-teaser{padding:55px 20px 60px}
+  .library-teaser>h2{font-size:38px}
   .library-links{grid-template-columns:1fr}
   .library-links>a,
   .library-links>a:last-child{grid-column:auto;min-height:225px}
-  .testimonials .quote{min-height:0}
-}
 
+}
 
 /* Supporting libraries share the homepage's editorial card rhythm. */
 .library-page .library-grid{
