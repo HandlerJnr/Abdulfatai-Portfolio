@@ -161,4 +161,24 @@ html[data-theme=dark] body .technical-capabilities-grid article{
   color:var(--ink);
   border-color:var(--line)
 }
+/* Boxed value framework — dark mode */
+html[data-theme=dark] body .value-framework{
+  background:var(--night-base);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .value-framework-grid{
+  border-color:var(--line)
+}
+html[data-theme=dark] body .value-framework-grid article{
+  background:var(--night-surface);
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .value-framework-grid h3{
+  color:var(--ink)
+}
+html[data-theme=dark] body .value-framework-grid .text-link{
+  color:var(--night-accent)
+}
 
