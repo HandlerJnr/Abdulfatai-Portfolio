@@ -8,7 +8,7 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off" required><button type="submit">Ask</button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off"><button type="submit">Ask</button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -20,6 +20,15 @@ let loading;
 let lastProject;
 let history=[];
 let busy=false;
+
+// Keep this conservative rule aligned with api/agent.py and the shared test cases.
+const INPUT_CLARIFICATION="Keep typing — ask me anything about Jamiu’s work, experience, skills, or this page.";
+const FRAGMENT_WORDS=new Set(["a", "an", "the", "i", "me", "my", "you", "your", "he", "his", "she", "her", "it", "its", "we", "our", "they", "their", "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did", "can", "could", "would", "should", "will", "shall", "may", "might", "must", "of", "to", "for", "from", "in", "on", "at", "by", "with", "and", "or", "but", "if", "as", "about", "what", "which", "who", "whom", "whose", "when", "where", "how", "tell", "ask", "show", "please"]);
+function needsClarification(value){
+  if(/\bc(?:\+\+|#)/i.test(String(value||'')))return false;
+  const tokens=String(value||'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
+  return !tokens.some(token=>Array.from(token).length>1&&!FRAGMENT_WORDS.has(token));
+}
 
 function text(tag,value,className){
   const el=document.createElement(tag);
@@ -443,7 +452,16 @@ function localAnswer(found,q){
 }
 async function ask(q){
   q=q.trim();
-  if(!q||busy)return;
+  if(busy)return;
+  if(needsClarification(q)){
+    if(q)conversation.append(text('p',q,'search-question'));
+    const response=text('div','','search-answer');
+    response.append(renderAgentAnswer(INPUT_CLARIFICATION));
+    conversation.append(response);
+    conversation.scrollTop=response.offsetTop-conversation.offsetTop;
+    input.focus({preventScroll:true});
+    return;
+  }
   busy=true;
   submit.disabled=true;
   conversation.append(text('p',q,'search-question'));

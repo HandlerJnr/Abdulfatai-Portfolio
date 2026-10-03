@@ -69,6 +69,18 @@ def clip(value, limit):
     return str(value or "").strip()[:limit]
 
 
+# Keep this conservative rule aligned with portfolio-search.js and the shared test cases.
+INPUT_CLARIFICATION = "Keep typing — ask me anything about Jamiu’s work, experience, skills, or this page."
+FRAGMENT_WORDS = frozenset(['a', 'an', 'the', 'i', 'me', 'my', 'you', 'your', 'he', 'his', 'she', 'her', 'it', 'its', 'we', 'our', 'they', 'their', 'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'am', 'do', 'does', 'did', 'can', 'could', 'would', 'should', 'will', 'shall', 'may', 'might', 'must', 'of', 'to', 'for', 'from', 'in', 'on', 'at', 'by', 'with', 'and', 'or', 'but', 'if', 'as', 'about', 'what', 'which', 'who', 'whom', 'whose', 'when', 'where', 'how', 'tell', 'ask', 'show', 'please'])
+
+
+def needs_clarification(value):
+    if re.search(r"\bc(?:\+\+|#)", str(value or ""), re.IGNORECASE):
+        return False
+    tokens = re.findall(r"[^\W_]+", str(value or "").lower(), re.UNICODE)
+    return not any(len(token) > 1 and token not in FRAGMENT_WORDS for token in tokens)
+
+
 def clean_section(value):
     return re.sub(r"^\d+\s+[^:]+:\s*", "", str(value or "")).strip()
 
@@ -587,8 +599,13 @@ class handler(BaseHTTPRequestHandler):
         question = clip(body.get("question"), 700)
         history = normalise_history(body.get("history"))
         page_context = normalise_page_context(body.get("page_context"))
-        if not question:
-            return json_response(self, 400, {"error": "Ask a question first.", "code": "question"})
+        if needs_clarification(question):
+            return json_response(self, 200, {
+                "answer": INPUT_CLARIFICATION,
+                "source_ids": [],
+                "intent": "clarification",
+                "page_id": page_context.get("page_id", ""),
+            })
 
         intent = response_intent(question, history, page_context)
         try:

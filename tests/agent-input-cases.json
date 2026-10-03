@@ -1,0 +1,194 @@
+[
+  {
+    "question": "",
+    "clarify": true
+  },
+  {
+    "question": "   ",
+    "clarify": true
+  },
+  {
+    "question": "\t\n",
+    "clarify": true
+  },
+  {
+    "question": "a",
+    "clarify": true
+  },
+  {
+    "question": "Z",
+    "clarify": true
+  },
+  {
+    "question": "é",
+    "clarify": true
+  },
+  {
+    "question": "?",
+    "clarify": true
+  },
+  {
+    "question": "!!!",
+    "clarify": true
+  },
+  {
+    "question": "...",
+    "clarify": true
+  },
+  {
+    "question": "—",
+    "clarify": true
+  },
+  {
+    "question": "🙂",
+    "clarify": true
+  },
+  {
+    "question": "a b c",
+    "clarify": true
+  },
+  {
+    "question": "I",
+    "clarify": true
+  },
+  {
+    "question": "tell me",
+    "clarify": true
+  },
+  {
+    "question": "tell me about",
+    "clarify": true
+  },
+  {
+    "question": "what is",
+    "clarify": true
+  },
+  {
+    "question": "can you",
+    "clarify": true
+  },
+  {
+    "question": "how do I",
+    "clarify": true
+  },
+  {
+    "question": "please",
+    "clarify": true
+  },
+  {
+    "question": "and the",
+    "clarify": true
+  },
+  {
+    "question": "CV",
+    "clarify": false
+  },
+  {
+    "question": "AI",
+    "clarify": false
+  },
+  {
+    "question": "UX",
+    "clarify": false
+  },
+  {
+    "question": "UI",
+    "clarify": false
+  },
+  {
+    "question": "React",
+    "clarify": false
+  },
+  {
+    "question": "Horal",
+    "clarify": false
+  },
+  {
+    "question": "Bizinc",
+    "clarify": false
+  },
+  {
+    "question": "Vista",
+    "clarify": false
+  },
+  {
+    "question": "Radius",
+    "clarify": false
+  },
+  {
+    "question": "Branding",
+    "clarify": false
+  },
+  {
+    "question": "C++",
+    "clarify": false
+  },
+  {
+    "question": "C#",
+    "clarify": false
+  },
+  {
+    "question": "JS",
+    "clarify": false
+  },
+  {
+    "question": "Go",
+    "clarify": false
+  },
+  {
+    "question": "hi",
+    "clarify": false
+  },
+  {
+    "question": "yes",
+    "clarify": false
+  },
+  {
+    "question": "no",
+    "clarify": false
+  },
+  {
+    "question": "more",
+    "clarify": false
+  },
+  {
+    "question": "why?",
+    "clarify": false
+  },
+  {
+    "question": "explain this",
+    "clarify": false
+  },
+  {
+    "question": "this page",
+    "clarify": false
+  },
+  {
+    "question": "skills",
+    "clarify": false
+  },
+  {
+    "question": "2024",
+    "clarify": false
+  },
+  {
+    "question": "Tell me about Horal",
+    "clarify": false
+  },
+  {
+    "question": "What did Jamiu do at Bizinc?",
+    "clarify": false
+  },
+  {
+    "question": "Can he build React apps?",
+    "clarify": false
+  },
+  {
+    "question": "Show me proof of his branding work.",
+    "clarify": false
+  },
+  {
+    "question": "What am I looking at on this page?",
+    "clarify": false
+  }
+]
