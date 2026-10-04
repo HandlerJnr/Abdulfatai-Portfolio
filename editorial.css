@@ -2009,32 +2009,6 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .logos-library .identity-caption{padding:20px;gap:16px}
 }
 
-/* A deliberate four-project homepage, with the broader catalogue on request. */
-.portfolio-home .wordmark{padding-block:18px}
-.portfolio-home .wordmark img{max-width:920px}
-.portfolio-home .professional-intro{padding:28px 6vw 32px}
-.portfolio-home .professional-intro h2{font-size:clamp(32px,3.6vw,50px);margin:8px 0 12px}
-.portfolio-home .professional-intro p:not(.eyebrow){margin:0;max-width:610px}
-.portfolio-home .selected-work-section .project-catalogue{margin-top:25px}
-.portfolio-home .project-catalogue-heading{margin-bottom:28px}
-.featured-selection{grid-template-columns:repeat(2,minmax(0,1fr));gap:44px 30px}
-.featured-selection .project-index-media{aspect-ratio:16/10}
-.featured-selection .project-index-media img{object-fit:cover;object-position:center}
-.featured-selection .project-index-media .preview-note{inset:auto auto 14px 14px;max-width:calc(100% - 28px);font-size:11px;padding:8px 12px;text-align:left}
-.featured-selection .project-index-copy>p:not(.eyebrow){min-height:0;font-size:14px}
-.project-contribution{margin:18px 0 0;display:grid;gap:12px}
-.project-contribution>div{padding-top:12px;border-top:1px solid var(--line)}
-.project-contribution dt{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink);font-weight:600}
-.project-contribution dd{font-size:13px;line-height:1.7;margin:5px 0 0;color:var(--ink)}
-.more-work{margin-top:44px;border-block:1px solid var(--line)}
-.more-work>summary{padding:22px 0;cursor:pointer;font-size:16px;list-style-position:inside}
-.more-work>summary span{float:right;font-size:11px;color:var(--ink);padding-top:4px}
-.more-work-content{padding:0 0 30px}
-.portfolio-home .value-framework-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.portfolio-home .value-framework-head{grid-template-columns:1fr;margin-bottom:26px}
-.portfolio-home .value-framework-head h2{font-size:clamp(30px,3vw,42px)}
-.portfolio-home .value-framework{padding-block:45px}
-.portfolio-home .bio-copy{max-width:660px}
 /* Optional controls occupy their own space instead of floating over the work. */
 .personality-dock{display:flex;align-items:center;justify-content:flex-end;gap:22px;padding:8px 36px 24px;min-height:98px;border-top:1px solid var(--line);background:var(--case-surface,#faf8f4)}
 .personality-dock .summon-companion{position:static;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink);box-shadow:none;transform:none}
@@ -2046,10 +2020,8 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
 .header-tools .portfolio-search-launch{position:static;inset:auto;padding:8px 10px;min-height:38px;white-space:nowrap;background:transparent;color:var(--ink);border:1px solid var(--line);font:500 11px/1.3 Instrument,Arial,sans-serif;box-shadow:none}
 html[data-theme=dark] .personality-dock{background:var(--night-base);color:var(--ink)}
 html[data-theme=dark] .project-contribution dt,html[data-theme=dark] .project-contribution dd,html[data-theme=dark] .more-work>summary{color:var(--ink)}
-@media(max-width:700px){.featured-selection{grid-template-columns:1fr;gap:35px}.portfolio-home .wordmark{padding:16px 24px}.portfolio-home .professional-intro{padding:24px 20px}.portfolio-home .intro-actions{margin-top:18px}.portfolio-home .project-catalogue-heading{gap:12px}.portfolio-home .project-catalogue-heading h3{font-size:32px}.portfolio-home .value-framework-grid{grid-template-columns:1fr}.more-work>summary{font-size:14px}.personality-dock{padding:10px 20px 20px;gap:15px}.header-tools .portfolio-search-launch{padding:7px 8px;font-size:10px}.personality-dock .summon-companion.is-open{opacity:1;pointer-events:auto;transform:none}}
+@media(max-width:700px){.personality-dock{padding:10px 20px 20px;gap:15px}.header-tools .portfolio-search-launch{padding:7px 8px;font-size:10px}.personality-dock .summon-companion.is-open{opacity:1;pointer-events:auto;transform:none}}
 
-.portfolio-home .professional-intro h2{font-size:clamp(32px,3.3vw,44px)}
-.portfolio-home .project-catalogue-heading h3{font-size:clamp(30px,3.2vw,42px)}
 @media(max-width:700px){
  header#top{display:grid;grid-template-columns:1fr;gap:8px;height:auto;min-height:98px;padding:12px 20px}
  header#top .masthead{max-width:none;font-size:13.5px;white-space:nowrap;justify-self:start}
@@ -2059,8 +2031,4 @@ html[data-theme=dark] .project-contribution dt,html[data-theme=dark] .project-co
  .portfolio-home .professional-intro .intro-actions{padding-bottom:0;margin-bottom:0}
 }
 
-.featured-selection .horal-preview{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;height:100%;padding:32px 20px 50px;background:transparent}
-.featured-selection .horal-preview img{width:min(29%,185px);height:auto;max-height:100%;object-fit:contain;filter:none}
-.featured-selection [data-preview="vista"] img{object-position:50% 22%}
 html[data-theme=dark] header#top,html[data-theme=dark] header#top.is-scrolled{background:var(--night-base);border-bottom-color:var(--line)}
-@media(max-width:700px){.featured-selection .horal-preview{gap:10px;padding:16px 12px 40px}}
