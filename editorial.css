@@ -2008,27 +2008,3 @@ header#top.is-scrolled .navigation nav{top:calc(100% - 10px)}
   .library-page .library-card-copy{padding:22px}
   .logos-library .identity-caption{padding:20px;gap:16px}
 }
-
-/* Optional controls occupy their own space instead of floating over the work. */
-.personality-dock{display:flex;align-items:center;justify-content:flex-end;gap:22px;padding:8px 36px 24px;min-height:98px;border-top:1px solid var(--line);background:var(--case-surface,#faf8f4)}
-.personality-dock .summon-companion{position:static;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink);box-shadow:none;transform:none}
-.personality-dock .summon-companion span{display:none}
-.personality-dock .summon-companion strong{color:var(--ink);font-size:11px}
-.personality-dock .companion-stage{width:96px;height:96px;flex:0 0 96px;position:relative;overflow:hidden;contain:paint}
-.personality-dock .portfolio-companion.pokemon-companion,.personality-dock .portfolio-companion.pokemon-companion.is-docked{position:absolute;inset:5px;width:86px;height:86px;transform:none!important;will-change:auto}
-.personality-dock .companion-stage:has(.portfolio-companion[hidden]){display:none}
-.header-tools .portfolio-search-launch{position:static;inset:auto;padding:8px 10px;min-height:38px;white-space:nowrap;background:transparent;color:var(--ink);border:1px solid var(--line);font:500 11px/1.3 Instrument,Arial,sans-serif;box-shadow:none}
-html[data-theme=dark] .personality-dock{background:var(--night-base);color:var(--ink)}
-html[data-theme=dark] .project-contribution dt,html[data-theme=dark] .project-contribution dd,html[data-theme=dark] .more-work>summary{color:var(--ink)}
-@media(max-width:700px){.personality-dock{padding:10px 20px 20px;gap:15px}.header-tools .portfolio-search-launch{padding:7px 8px;font-size:10px}.personality-dock .summon-companion.is-open{opacity:1;pointer-events:auto;transform:none}}
-
-@media(max-width:700px){
- header#top{display:grid;grid-template-columns:1fr;gap:8px;height:auto;min-height:98px;padding:12px 20px}
- header#top .masthead{max-width:none;font-size:13.5px;white-space:nowrap;justify-self:start}
- header#top .header-tools{width:100%;justify-content:flex-end;gap:8px}
- header#top .header-cv{padding:8px 10px;min-height:36px}
- header#top .theme-control{width:36px;height:36px;min-height:36px;padding:6px}
- .portfolio-home .professional-intro .intro-actions{padding-bottom:0;margin-bottom:0}
-}
-
-html[data-theme=dark] header#top,html[data-theme=dark] header#top.is-scrolled{background:var(--night-base);border-bottom-color:var(--line)}

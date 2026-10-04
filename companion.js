@@ -10,13 +10,6 @@ const summon=document.querySelector('.summon-companion');
 const picker=document.querySelector('#companion-picker');
 const companion=document.querySelector('#portfolio-companion');
 if(!summon||!picker||!companion)return;
-// Reserve an inline home for the character; it never travels over project content.
-const dock=document.createElement('div');dock.className='personality-dock';
-const stage=document.createElement('div');stage.className='companion-stage';
-dock.append(summon,stage);stage.append(companion);
-const footer=document.querySelector('footer');
-if(footer)footer.after(dock);else document.body.append(dock);
-
 
 const closeButton=picker.querySelector('.companion-picker-close');
 const randomButton=picker.querySelector('.companion-random');
@@ -82,9 +75,13 @@ const homeHost=document.body;
 let currentHost=homeHost;
 
 function syncFloatingHost(){
-  const modal=document.querySelector('dialog[open]');
-  if(modal){setPicker(false);companion.hidden=true}
-  else if(active)companion.hidden=false;
+  const dialogs=[...document.querySelectorAll('dialog[open]')];
+  const host=dialogs.at(-1)||homeHost;
+  if(host!==currentHost){
+    setPicker(false);setPerch(null);currentHost=host;
+    host.append(summon,picker,companion);
+  }
+  if(active){startFollowing();requestAnimationFrame(protectControls)}
 }
 // While crossing a control, the character yields pointer events to that control.
 function protectControls(){
@@ -110,8 +107,8 @@ function setPicker(open){
   if(open)requestAnimationFrame(()=>picker.querySelector('.companion-option')?.focus({preventScroll:true}));
 }
 function summonLabel(name){
-  summon.querySelector('span').textContent=name?'Companion active':'Optional companion';
-  summon.querySelector('strong').textContent=name?'Change companion':'Choose a companion';
+  summon.querySelector('span').textContent=name?'Companion active':'Choose your sidekick';
+  summon.querySelector('strong').textContent=name?'Change companion':'Summon a companion';
   dismissSelection.disabled=!name;
 }
 function burst(){
@@ -340,9 +337,15 @@ function animate(){
 }
 function startFollowing(){
   if(!active)return;
-  setPerch(null);
-  companion.classList.add('is-docked');
-  companion.style.transform='';
+  if(reduced.matches||!finePointer.matches){
+    setPerch(null);
+    companion.classList.add('is-docked');
+    companion.style.transform='';
+    requestAnimationFrame(protectControls);
+    return;
+  }
+  companion.classList.remove('is-docked');
+  if(!raf)raf=requestAnimationFrame(animate);
 }
 
 summon.addEventListener('click',()=>setPicker(picker.hidden));
@@ -359,6 +362,18 @@ document.addEventListener('pointerdown',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!picker.hidden){setPicker(false);summon.focus()}
 });
+addEventListener('pointermove',e=>{
+  if(!active||reduced.matches||!finePointer.matches)return;
+  if(companion.contains(e.target))return;
+  wake();startFollowing();
+  const target=nearbyPerch(e.clientX,e.clientY,e.target);
+  setPerch(target);
+  if(target)return;
+  const right=e.clientX>innerWidth-130;
+  const bottom=e.clientY>innerHeight-130;
+  targetX=e.clientX+(right?-92:28);
+  targetY=e.clientY+(bottom?-94:30);
+},{passive:true});
 addEventListener('scroll',()=>{wake();protectControls();if(perchTarget&&!raf)raf=requestAnimationFrame(animate)},{passive:true,capture:true});
 addEventListener('resize',()=>{syncFloatingHost();setPerch(null);startFollowing()},{passive:true});
 
