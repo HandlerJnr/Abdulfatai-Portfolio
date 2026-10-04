@@ -1,9 +1,11 @@
 (()=>{
 const launcher=document.createElement('button');
 launcher.className='portfolio-search-launch';
-launcher.textContent="Ask Jamiu's agent";
+launcher.textContent="Ask about my work";
 launcher.setAttribute('aria-haspopup','dialog');
-document.body.append(launcher);
+const agentHost=document.querySelector('.header-tools');
+if(agentHost)agentHost.insertBefore(launcher,agentHost.querySelector('.navigation'));
+else document.body.append(launcher);
 
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
