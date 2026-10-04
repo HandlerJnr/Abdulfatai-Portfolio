@@ -6,6 +6,22 @@ if(header){
   addEventListener('scroll',syncHeader,{passive:true});
 }
 
+// Keep section navigation below the live header, including wrapped mobile bars.
+const sectionNav=document.querySelector('.library-tabs');
+if(sectionNav){
+  const syncSectionOffsets=()=>{
+    document.documentElement.style.setProperty('--section-header-height',(header?.getBoundingClientRect().height||0)+'px');
+    document.documentElement.style.setProperty('--section-nav-height',sectionNav.getBoundingClientRect().height+'px');
+  };
+  syncSectionOffsets();
+  if('ResizeObserver' in window){
+    const observer=new ResizeObserver(syncSectionOffsets);
+    if(header)observer.observe(header);
+    observer.observe(sectionNav);
+  }
+  addEventListener('resize',syncSectionOffsets,{passive:true});
+}
+
 const timeNodes=[...document.querySelectorAll('.footer-clock-time')];
 const dateNodes=[...document.querySelectorAll('.footer-clock-date')];
 if(!timeNodes.length&&!dateNodes.length)return;

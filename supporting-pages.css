@@ -116,3 +116,14 @@ html[data-theme=dark] body:is(:has(.library-page),.case-page) :is(.button.primar
 }
 html:root body:is(:has(.library-page),.case-page) .summon-companion strong{color:var(--support-accent)}
 html:root body:is(:has(.library-page),.case-page) :is(a,button,summary):focus-visible{outline-color:var(--support-accent)}
+
+/* Section links remain available while reading the supporting collections. */
+.library-page .library-tabs{
+  position:sticky;
+  top:var(--section-header-height,105px);
+  z-index:37
+}
+.library-page :is(.library-group,.logo-section){
+  scroll-margin-top:calc(var(--section-header-height,105px) + var(--section-nav-height,68px) + 24px)
+}
+@media print{.library-page .library-tabs{position:static}}
