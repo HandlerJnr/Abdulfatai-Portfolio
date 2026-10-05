@@ -1,0 +1,27 @@
+/* Shared outer grid and section rhythm; nested cards retain their own padding. */
+:root{--page-gutter:max(24px,6vw,calc((100vw - 1320px)/2));--section-space:88px;--section-inner:40px;--hero-space:72px}
+.library-page,.case-page{--support-gutter:var(--page-gutter);--support-section-gap:var(--section-space)}
+body header#top{padding-inline:var(--page-gutter)}
+main#main>:is(.professional-intro,.selected-work-section,.value-framework,.logo-section,.biography,.technical-capabilities,.library-teaser,.testimonials,.contact,.work-map-section){padding-inline:var(--page-gutter);padding-block:var(--section-space)}
+main#main>.wordmark{padding-inline:var(--page-gutter)}
+main#main>.professional-intro{padding-block:var(--hero-space)}
+main#main>.work-map-section{padding-bottom:var(--hero-space)}
+.work-map-section .home-chat-simple{padding-top:var(--section-inner)}
+.selected-work-section .social-row{margin-bottom:var(--section-inner)}
+.library-page :is(.library-hero,.brand-logo-callout,.library-tabs,.library-group,.logo-section,.library-end){padding-inline:var(--page-gutter)}
+.library-page .library-hero{padding-block:var(--hero-space)}
+.library-page :is(.library-group,.logo-section){padding-block:var(--section-space)}
+.library-page .brand-logo-callout{padding-block:48px}
+.library-page .library-end{padding-block:var(--section-space)}
+.library-page :is(.group-heading,.logo-heading){padding-top:0;margin-bottom:var(--section-inner)}
+body.case-page :is(.case-head,.case-body,.case-chapters,.bizinc-hero){padding-inline:var(--page-gutter);max-width:none}
+body.case-page .case-head{padding-block:var(--hero-space)}
+body.case-page .case-body{padding-top:56px;padding-bottom:var(--section-space)}
+body.case-page .case-section,body.case-page .case-tab-panel .case-section{padding-block:48px}
+body.bizinc-case .case-body{padding-top:0}
+body.bizinc-case .story-section{padding-block:64px}
+body :is(footer.site-footer,body>footer){padding-inline:var(--page-gutter);padding-block:32px}
+@media(max-width:900px){:root{--section-space:64px;--hero-space:56px;--section-inner:32px}.library-page,.case-page{--support-gutter:var(--page-gutter);--support-section-gap:var(--section-space)}}
+@media(max-width:700px){:root{--page-gutter:24px;--section-space:48px;--hero-space:48px;--section-inner:28px}.library-page,.case-page{--support-gutter:var(--page-gutter);--support-section-gap:var(--section-space)}body.case-page .case-body{padding-top:32px}body.case-page .case-section,body.case-page .case-tab-panel .case-section{padding-block:32px}body.bizinc-case .story-section{padding-block:40px}.library-page .brand-logo-callout{padding-block:32px}}
+@media(max-width:420px){:root{--page-gutter:20px}}
+body.case-page .case-head .case-facts{width:calc(100% + var(--page-gutter) * 2);margin-inline:calc(-1 * var(--page-gutter))}
