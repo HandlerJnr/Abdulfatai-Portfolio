@@ -252,7 +252,6 @@ function dismissCompanion(){
   clearPowers();delete companion.dataset.power;
   clearTimeout(restTimer);clearTimeout(reactionTimer);reacting=false;delete companion.dataset.state;
   setPerch(null);
-  hideMapBubble();
   active=null;
   companion.hidden=true;
   companion.classList.remove('is-arriving','is-docked','is-perched');
@@ -389,10 +388,4 @@ try{
     if(option)choose(option,{celebrate:false});
   }
 }catch{}
-const mapBubble=document.createElement('aside');mapBubble.className='map-companion-bubble';mapBubble.hidden=true;mapBubble.setAttribute('aria-live','polite');mapBubble.innerHTML='<button type="button" aria-label="Close location note">×</button><strong></strong><p></p>';document.body.append(mapBubble);
-let mapBubbleFrame=0;
-function hideMapBubble(){mapBubble.hidden=true;if(mapBubbleFrame)cancelAnimationFrame(mapBubbleFrame);mapBubbleFrame=0;}
-mapBubble.querySelector('button').addEventListener('click',hideMapBubble);
-function placeMapBubble(){if(mapBubble.hidden)return;if(!active||!matchMedia('(min-width:900px) and (pointer:fine)').matches){hideMapBubble();return;}mapBubble.querySelector('strong').textContent=active.name+' · Around the map';const r=companion.getBoundingClientRect(),h=mapBubble.offsetHeight;mapBubble.style.left=Math.max(12,Math.min(innerWidth-292,r.left-194))+'px';mapBubble.style.top=Math.max(112,Math.min(innerHeight-h-12,r.top-h-18))+'px';mapBubbleFrame=requestAnimationFrame(placeMapBubble);}
-document.addEventListener('portfolio-map-location',event=>{hideMapBubble();if(!active||!event.detail?.text||!matchMedia('(min-width:900px) and (pointer:fine)').matches)return;mapBubble.querySelector('strong').textContent=active.name+' · Around the map';mapBubble.querySelector('p').textContent=event.detail.text;mapBubble.hidden=false;placeMapBubble();});
 })();
