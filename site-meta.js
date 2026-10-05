@@ -1,9 +1,11 @@
 (()=>{
 const header=document.querySelector('header#top');
 if(header){
-  const syncHeader=()=>header.classList.toggle('is-scrolled',scrollY>8);
+  const syncHeader=()=>{header.classList.toggle('is-scrolled',scrollY>8);document.documentElement.style.setProperty('--section-header-height',header.getBoundingClientRect().height+'px');};
   syncHeader();
   addEventListener('scroll',syncHeader,{passive:true});
+  addEventListener('resize',syncHeader,{passive:true});
+  if('ResizeObserver' in window)new ResizeObserver(syncHeader).observe(header);
 }
 
 // Keep section navigation below the live header, including wrapped mobile bars.

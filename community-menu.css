@@ -17,3 +17,5 @@ header#top .navigation nav::before{content:"";position:absolute;width:32px;heigh
 .community-menu-content{max-height:calc(100dvh - var(--section-header-height,105px) - 16px);overflow:auto;padding:18px 24px 24px;border-radius:0 0 0 32px;overscroll-behavior:contain}
 html[data-theme=dark] header#top .navigation nav{--menu-surface:var(--night-base,#211f1b);background:var(--menu-surface)}
 @media(max-width:600px){header#top .navigation nav{top:var(--section-header-height,80px);right:0;width:330px}.community-menu-content{padding:12px 16px 20px}}
+
+header#top.is-scrolled .navigation nav{top:var(--section-header-height,105px)}
