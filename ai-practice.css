@@ -1,0 +1,5 @@
+.ai-practice-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}.ai-practice-grid article{display:flex;flex-direction:column;align-items:flex-start;border:1px solid var(--support-border);padding:28px;background:color-mix(in srgb,#fffcf7 95%,var(--poke-soft,#e8e0d4) 5%)}.ai-practice-grid h3{font:400 var(--support-card)/1.25 Georgia,serif}.ai-practice-grid p{font-size:15px;line-height:1.8}.ai-practice-grid .eyebrow{color:var(--support-accent)}
+.ai-practice-grid .button{margin-top:auto;border-radius:0;text-decoration:none;padding:12px 18px;line-height:1.5;white-space:normal}
+.ai-practice .library-hero .button{border-radius:0;text-decoration:none;margin-top:12px}
+html[data-theme=dark] .ai-practice-grid article{background:var(--night-raised)}
+@media(max-width:760px){.ai-practice-grid{grid-template-columns:1fr;gap:24px}.ai-practice-grid article{padding:22px}}

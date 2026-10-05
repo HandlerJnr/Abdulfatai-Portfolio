@@ -157,14 +157,6 @@
     "url": "/ai/",
     "image": null,
     "summary": "AI product design, model evaluation and evidence-led research assistance, with human review.",
-    "text": "Kremor AI: 96+ evaluated AI interaction tasks; scaffolded prompting; five operational roles, confirmation gates and audit-log interfaces. Settle: research in progress, official-source dependency model and testable hypotheses; not validated participant findings. Bizinc map and AI search-to-booking are proposal/prototype; availability integration needs validation. Portfolio guide: typed questions, optional browser voice input and spoken replies, source cards and session continuity. AI-assisted research standard: retain sources, verify summaries, preserve conflicting evidence, label hypotheses. Jamiu’s CV lists Claude, ChatGPT, Codex and Google Antigravity for research synthesis, design exploration, functional prototyping and workflow automation with human review. These statements do not claim AI completed participant research or that a tool caused a measured outcome."
-  },
-  {
-    "id": "ask-jamiu",
-    "title": "Ask Jamiu — AI portfolio guide",
-    "url": "/ask/",
-    "image": null,
-    "summary": "A dedicated typed and voice conversation grounded in Jamiu’s published portfolio.",
-    "text": "Ask Jamiu is the portfolio conversation page. Its fresh state has a centred welcome orb, introduction and question composer. Visitors can type or switch to Talk, explicitly start the microphone, review or edit the transcript and submit a question. Written answers remain visible alongside optional spoken replies and supporting source cards. The homepage quick chat beneath the name treatment opens this page and sends the submitted question automatically once. The floating bubble still opens a side panel, whose Open full conversation link preserves its existing thread and original page context. New conversation clears the saved thread. Voice depends on browser support; microphone access requires an explicit action. This is an AI guide, not Jamiu speaking live."
+    "text": "Kremor AI: 96+ evaluated AI interaction tasks; scaffolded prompting; five operational roles, confirmation gates and audit-log interfaces. Settle: research in progress, official-source dependency model and testable hypotheses; not validated participant findings. Bizinc map and AI search-to-booking are proposal/prototype; availability integration needs validation. Portfolio guide: typed questions in the side modal, source cards and session continuity. AI-assisted research standard: retain sources, verify summaries, preserve conflicting evidence, label hypotheses. Jamiu’s CV lists Claude, ChatGPT, Codex and Google Antigravity for research synthesis, design exploration, functional prototyping and workflow automation with human review. These statements do not claim AI completed participant research or that a tool caused a measured outcome."
   }
 ]
