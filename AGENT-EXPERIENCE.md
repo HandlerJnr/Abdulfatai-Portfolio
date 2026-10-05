@@ -12,3 +12,9 @@
 `python3 -m unittest discover -s tests` and `node tests/test-agent-input.cjs` cover input guards and routing.
 
 Serve the repository on localhost:4187, then run `tests/test-agent-experience.cjs` with Playwright available. `PLAYWRIGHT_PATH` can point to a bundled package; `CHROME_PATH` optionally selects an installed browser. Integration fixtures simulate model replies and speech, checking handoff, drafts, source cards, original-page context, voice modes/transcripts/mute/permission denial, unsupported-browser fallback, reset and desktop/mobile light/dark layout. They do not verify physical microphone capture or a browser's remote recognition service.
+
+## Homepage introduction and centred welcome
+
+The homepage form beneath the wordmark stores a short-lived pending prompt and opens `/ask/`. The full page consumes it once, removes the navigation parameters and sends it through the same guarded agent flow. Reloads restore the answer without resending. When session storage is unavailable, a query-string fallback is consumed and immediately removed. Existing side-panel expansion continues its prior thread; a homepage introduction starts a fresh exchange with homepage context. A fresh page displays the centred welcome and composer; conversation and reset update both states.
+
+`tests/test-home-agent.cjs` verifies prompt handoff, exactly-once submission, reload safety, storage-blocked fallback, input guards and light/dark layouts at desktop, 390px and 320px.

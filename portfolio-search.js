@@ -11,7 +11,7 @@ const dialog=document.createElement(fullPage?'section':'dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
 dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off"><button type="submit">Ask</button></div></form>';
-if(fullPage){dialog.classList.add('agent-page-panel');document.querySelector('[data-agent-page]').append(dialog);dialog.querySelector('.search-close').remove();dialog.querySelector('h2').textContent='Let’s talk about the work.';}else document.body.append(dialog);
+if(fullPage){dialog.classList.add('agent-page-panel');document.querySelector('[data-agent-page]').append(dialog);dialog.querySelector('.search-close').remove();dialog.querySelector('h2').textContent='Your conversation';}else document.body.append(dialog);
 const expand=document.createElement('a');expand.className='search-expand';expand.href='/ask/';expand.textContent='Open full conversation ↗';if(!fullPage)dialog.querySelector('.search-mode').after(expand);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -28,6 +28,11 @@ const SESSION_KEY='jamiu-agent-session-v1';
 let turns=[];
 let originContext=null;
 let originUrl='';
+function renderWelcome(){
+  if(!fullPage){conversation.replaceChildren(text('p','Ask about Jamiu’s work, experience or design decisions.','search-welcome'));return;}
+  conversation.replaceChildren();const welcome=text('div','','agent-empty');const orb=text('span','','agent-orb');orb.setAttribute('aria-hidden','true');welcome.append(orb,text('h2','Hi, I’m Jamiu’s AI guide.'),text('p','Want to know more about Jamiu? Ask about his work, experience or how he approaches design.'));conversation.append(welcome);dialog.classList.remove('has-conversation');
+}
+if(fullPage)renderWelcome();
 function saveConversation(){
   try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:1,updated:Date.now(),history,turns:turns.slice(-24),draft:input.value.slice(0,700),originContext,originUrl}));}catch{}
 }
@@ -40,7 +45,7 @@ function restoreConversation(){
     originContext=saved.originContext&&typeof saved.originContext.pathname==='string'?saved.originContext:null;
     originUrl=typeof saved.originUrl==='string'&&saved.originUrl.startsWith('/')&&!saved.originUrl.startsWith('//')?saved.originUrl:'';
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';
-    if(turns.length){conversation.replaceChildren();turns.forEach(turn=>{
+    if(turns.length){dialog.classList.add('has-conversation');conversation.replaceChildren();turns.forEach(turn=>{
       if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
       else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;if(fullPage)requestAnimationFrame(()=>dialog.scrollIntoView({block:"start"}));}
@@ -371,7 +376,7 @@ async function getRecords(){
   if(records)return records;
   if(!loading){
     loading=Promise.all([
-      fetch('/portfolio-knowledge.json?v=20261005-ai-practice').then(response=>{if(!response.ok)throw Error();return response.json()}),
+      fetch('/portfolio-knowledge.json?v=20261005-quick-chat').then(response=>{if(!response.ok)throw Error();return response.json()}),
       fetch('/technical-capabilities.json?v=20261003').then(response=>{if(!response.ok)throw Error();return response.json()})
     ])
       .then(([portfolio,technical])=>records=[...portfolio.filter(record=>record.id!==technical.id),technical])
@@ -489,6 +494,8 @@ function localAnswer(found,q){
   return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
 function showInputClarification(q){
+  if(fullPage&&!dialog.classList.contains('has-conversation'))conversation.replaceChildren();
+  dialog.classList.add('has-conversation');
   if(q){conversation.append(text('p',q,'search-question'));turns.push({role:'user',text:q});}
   const response=text('div','','search-answer');
   response.append(renderAgentAnswer(INPUT_CLARIFICATION));
@@ -505,6 +512,8 @@ async function ask(q){
     showInputClarification(q);
     return;
   }
+  if(fullPage&&!dialog.classList.contains('has-conversation'))conversation.replaceChildren();
+  dialog.classList.add('has-conversation');
   busy=true;
   expand.setAttribute('aria-disabled','true');
   submit.disabled=true;
@@ -638,7 +647,19 @@ dialog.querySelectorAll('.search-suggestions button').forEach(button=>{
   button.addEventListener('click',()=>ask(button.textContent));
 });
 const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';dialog.querySelector('.search-suggestions').after(clear);
-clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';conversation.replaceChildren(text('p','Ask about Jamiu’s work, experience or design decisions.','search-welcome'));dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
-getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
+clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+async function consumeHomepagePrompt(){
+  if(!fullPage)return;
+  const params=new URLSearchParams(location.search);let pending=null;
+  const token=params.get('start');
+  try{const saved=JSON.parse(sessionStorage.getItem('jamiu-agent-pending-v1')||'null');if(token&&saved?.token===token&&Date.now()-saved.created<600000){pending=saved;sessionStorage.removeItem('jamiu-agent-pending-v1');}}catch{}
+  if(!pending&&params.has('q'))pending={question:params.get('q')};
+  if(token||params.has('q')){params.delete('start');params.delete('q');window.history.replaceState(null,'',location.pathname+(params.size?'?'+params:'')+location.hash);}
+  if(pending&&typeof pending.question==='string'){
+    // A homepage introduction starts a fresh exchange; panel expansion still restores its thread.
+    history=[];turns=[];lastProject=null;originContext={page_id:'about',pathname:'/',hash:'',title:'Jamiu Abdulfatai — Product Designer',record_title:'Meet Jamiu'};originUrl='/';dialog.querySelector('.search-context-link')?.remove();renderWelcome();input.value=pending.question.slice(0,700);saveConversation();dialog.scrollIntoView({block:'start'});await ask(input.value);
+  }
+}
+getRecords().then(async()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();await consumeHomepagePrompt();}).catch(()=>{});
 if(fullPage&&window.initAgentVoice)window.initAgentVoice(dialog);
 })();

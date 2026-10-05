@@ -3,7 +3,8 @@ window.initAgentVoice=function(panel){
  const input=panel.querySelector('input'),form=panel.querySelector('form');
  const controls=document.createElement('div');controls.className='agent-voice-controls';
  controls.innerHTML='<div class="agent-input-modes" role="group" aria-label="Conversation input"><button type="button" data-mode="type" aria-pressed="true">Type</button><button type="button" data-mode="talk" aria-pressed="false">Talk</button></div><div class="agent-talk-tools" hidden><button type="button" class="agent-mic" aria-pressed="false">Start microphone</button><button type="button" class="agent-mute" aria-pressed="false">Mute replies</button><button type="button" class="agent-stop">Stop speaking</button></div><p class="agent-voice-status" role="status">Type a question to begin.</p><p class="agent-voice-note" hidden>Microphone starts only when you choose it. Your browser may send audio to its speech service. Review the transcript before sending; only the question text goes to the portfolio agent.</p>';
- form.before(controls);
+ form.append(controls);
+ controls.querySelector('.agent-input-modes').append(form.querySelector('button[type="submit"]'));
  const type=controls.querySelector('[data-mode="type"]'),talk=controls.querySelector('[data-mode="talk"]'),tools=controls.querySelector('.agent-talk-tools'),mic=controls.querySelector('.agent-mic'),mute=controls.querySelector('.agent-mute'),stop=controls.querySelector('.agent-stop'),status=controls.querySelector('[role="status"]'),note=controls.querySelector('.agent-voice-note');
  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
  const synth=window.speechSynthesis;
