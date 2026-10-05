@@ -11,8 +11,8 @@ const cases=JSON.parse(fs.readFileSync('tests/agent-input-cases.json','utf8'));
  for(const {question,clarify} of cases){
   let loads=0,calls=0;
   const node=()=>({children:[],append(...items){this.children.push(...items)},replaceChildren(...items){this.children=items},classList:{remove(){}},dataset:{},offsetTop:0});
-  const context={records,inputVocabulary:null,busy:false,submit:{disabled:false},input:{value:question,focus(){}},conversation:node(),history:[],
-    dialog:{querySelector:()=>({})},text:(tag,value)=>({...node(),value}),renderAgentAnswer:answer=>({answer}),
+  const context={expand:{setAttribute(){},removeAttribute(){}},turns:[],saveConversation(){},CustomEvent:class{constructor(type,options){this.type=type;this.detail=options?.detail}},records,inputVocabulary:null,busy:false,submit:{disabled:false},input:{value:question,focus(){}},conversation:node(),history:[],
+    dialog:{querySelector:()=>({}),dispatchEvent(){}},text:(tag,value)=>({...node(),value}),renderAgentAnswer:answer=>({answer}),
     getRecords:async()=>{loads++},rank:()=>[],asksAboutCurrentPage:()=>false,recordScore:()=>0,localAnswer:()=>'',askAgent:async()=>{calls++;return {answer:'Grounded answer',sourceIds:[]}},getRecord:()=>null};
   vm.createContext(context);
   vm.runInContext(rule+ask+';globalThis.run=ask;',context);

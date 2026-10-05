@@ -1,0 +1,27 @@
+.ask-hero.library-hero{padding-bottom:45px}.ask-hero.library-hero h1{font-size:clamp(42px,5vw,72px)}
+.ask-layout{display:grid;grid-template-columns:minmax(220px,.65fr) minmax(0,1.8fr);gap:48px;padding:50px var(--support-gutter,7vw) 65px}
+.ask-intro h2{font:400 32px/1.2 Georgia,serif}.ask-intro p{font-size:14px;line-height:1.8}.ask-intro .ask-privacy{margin-top:32px;font-size:12px;opacity:.8}
+.portfolio-search.agent-page-panel{position:static;inset:auto;display:flex;flex-direction:column;width:100%;height:760px;max-height:none;max-width:none;min-width:0;margin:0;padding:28px;border:1px solid var(--support-border,var(--line));overflow:hidden;box-shadow:none}
+.agent-page-panel .search-conversation{min-height:150px}.agent-page-panel .search-form{position:static;margin:0;padding:10px 0 0;flex-shrink:0}.agent-page-panel .search-suggestions{margin:12px 0}.agent-page-panel .search-heading{position:static;padding:0}.agent-page-panel .search-clear{align-self:flex-start}
+.agent-voice-controls{flex-shrink:0;border-top:1px solid var(--line);padding:12px 0 0;font-size:12px}.agent-input-modes,.agent-talk-tools{display:flex;flex-wrap:wrap;gap:8px}.agent-talk-tools{margin-top:10px}.agent-talk-tools[hidden],.agent-voice-note[hidden]{display:none}
+.agent-voice-controls button{border:1px solid var(--line);background:transparent;padding:7px 12px}.agent-input-modes [aria-pressed=true],.agent-mic[aria-pressed=true]{background:var(--search-text);color:var(--search-bg)}
+.agent-voice-status{margin:9px 0;font-size:12px}.agent-voice-note{font-size:10px;line-height:1.5;color:var(--search-muted);margin:6px 0}.agent-voice-controls button:disabled{opacity:.5;cursor:default}
+.ai-practice-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}.ai-practice-grid article{border:1px solid var(--support-border);padding:28px;background:var(--paper)}.ai-practice-grid h3{font:400 var(--support-card)/1.25 Georgia,serif}.ai-practice-grid p{font-size:15px;line-height:1.8}.ai-practice-grid .eyebrow{color:var(--support-accent)}
+@media(max-width:760px){.ask-layout{grid-template-columns:1fr;padding:28px 24px 45px;gap:24px}.ask-intro{display:none}.portfolio-search.agent-page-panel{height:calc(100svh - 100px);min-height:620px;padding:20px;position:static!important;inset:auto!important;width:100%!important;max-width:100%!important;max-height:none!important;margin:0!important}.ai-practice-grid{grid-template-columns:1fr;gap:24px}.ai-practice-grid article{padding:22px}}
+@media print{.agent-voice-controls,.search-clear,.search-form,.search-suggestions{display:none}.portfolio-search.agent-page-panel{display:block!important;height:auto!important}.agent-page-panel .search-conversation{overflow:visible}}
+.ask-layout>[data-agent-page]{min-width:0}
+@media(max-width:760px){.ask-layout{grid-template-columns:minmax(0,1fr)}}
+.ask-companion-space{position:relative;display:flex;align-items:center;justify-content:flex-end;gap:18px;min-height:130px;padding:20px 130px 20px 24px;border-top:1px solid var(--line);background:var(--paper)}
+.ask-companion-space .summon-companion{position:static!important;inset:auto!important;transform:none!important}
+.ask-companion-space .portfolio-companion.pokemon-companion{position:absolute!important;inset:20px 24px auto auto!important;transform:none!important;width:86px;height:86px}
+/* Preserve readable shared dark surfaces on the new supporting routes. */
+html[data-theme=dark] body:is(.ask-route,.ai-route) header#top{background:var(--night-base);color:var(--ink);border-color:var(--line)}
+.ask-companion-space .summon-companion{color:#f6f2e9;background:#292825}
+.ask-companion-space .summon-companion strong{color:inherit}
+@media(max-width:600px){.agent-page-panel .search-suggestions{flex-wrap:wrap;overflow:visible}.agent-page-panel .search-suggestions button{white-space:normal;text-align:left;min-height:32px}}
+/* The dedicated page leads into the conversation sooner than a case-study hero. */
+.ask-hero.library-hero{padding-top:30px;padding-bottom:30px}
+.ask-hero.library-hero>.eyebrow{margin-top:0}
+.ask-hero.library-hero h1{font-size:clamp(34px,3.5vw,50px);margin-block:14px 20px}
+.ask-layout{padding-top:30px}
+.agent-page-panel{scroll-margin-top:125px}

@@ -1,15 +1,18 @@
 (()=>{
+const fullPage=!!document.querySelector('[data-agent-page]');
 const launcher=document.createElement('button');
 launcher.className='portfolio-search-launch';
-launcher.textContent="Ask Jamiu's agent";
+launcher.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg><span>Ask about my work</span>';
+launcher.setAttribute('aria-label','Ask about Jamiu’s work');
 launcher.setAttribute('aria-haspopup','dialog');
-document.body.append(launcher);
+if(!fullPage)document.body.append(launcher);
 
-const dialog=document.createElement('dialog');
+const dialog=document.createElement(fullPage?'section':'dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
 dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off"><button type="submit">Ask</button></div></form>';
-document.body.append(dialog);
+if(fullPage){dialog.classList.add('agent-page-panel');document.querySelector('[data-agent-page]').append(dialog);dialog.querySelector('.search-close').remove();dialog.querySelector('h2').textContent='Let’s talk about the work.';}else document.body.append(dialog);
+const expand=document.createElement('a');expand.className='search-expand';expand.href='/ask/';expand.textContent='Open full conversation ↗';if(!fullPage)dialog.querySelector('.search-mode').after(expand);
 
 const conversation=dialog.querySelector('.search-conversation');
 const input=dialog.querySelector('input');
@@ -21,6 +24,31 @@ let lastProject;
 let history=[];
 let busy=false;
 let inputVocabulary;
+const SESSION_KEY='jamiu-agent-session-v1';
+let turns=[];
+let originContext=null;
+let originUrl='';
+function saveConversation(){
+  try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:1,updated:Date.now(),history,turns:turns.slice(-24),draft:input.value.slice(0,700),originContext,originUrl}));}catch{}
+}
+function restoreConversation(){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');
+    if(!saved||saved.version!==1||Date.now()-saved.updated>86400000)return;
+    history=Array.isArray(saved.history)?saved.history.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-8):[];
+    turns=Array.isArray(saved.turns)?saved.turns.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-24):[];
+    originContext=saved.originContext&&typeof saved.originContext.pathname==='string'?saved.originContext:null;
+    originUrl=typeof saved.originUrl==='string'&&saved.originUrl.startsWith('/')&&!saved.originUrl.startsWith('//')?saved.originUrl:'';
+    input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';
+    if(turns.length){conversation.replaceChildren();turns.forEach(turn=>{
+      if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));conversation.append(response);}
+    });conversation.scrollTop=conversation.scrollHeight;if(fullPage)requestAnimationFrame(()=>dialog.scrollIntoView({block:"start"}));}
+    if(fullPage&&originUrl){const contextLink=text('a','Continuing from '+(originContext?.record_title||originContext?.title||'your portfolio page'),'search-context-link');contextLink.href=originUrl;dialog.querySelector('.search-mode').after(contextLink);}
+  }catch{}
+}
+input.addEventListener('input',saveConversation);
+if(!fullPage)expand.addEventListener('click',event=>{if(busy){event.preventDefault();return;}originContext=currentPageContext();originUrl=location.pathname+location.hash;saveConversation();});
 
 // Keep this conservative rule aligned with api/agent.py and the shared test cases.
 const INPUT_CLARIFICATION="Keep typing — ask me anything about Jamiu’s work, experience, skills, or this page.";
@@ -343,7 +371,7 @@ async function getRecords(){
   if(records)return records;
   if(!loading){
     loading=Promise.all([
-      fetch('/portfolio-knowledge.json?v=20261003-domain-proof').then(response=>{if(!response.ok)throw Error();return response.json()}),
+      fetch('/portfolio-knowledge.json?v=20261005-ai-practice').then(response=>{if(!response.ok)throw Error();return response.json()}),
       fetch('/technical-capabilities.json?v=20261003').then(response=>{if(!response.ok)throw Error();return response.json()})
     ])
       .then(([portfolio,technical])=>records=[...portfolio.filter(record=>record.id!==technical.id),technical])
@@ -384,8 +412,8 @@ function normaliseCurrentPath(value){
 
 function currentPageRecord(){
   if(!records)return null;
-  const current=normaliseCurrentPath(window.location.pathname);
-  const currentHash=window.location.hash||'';
+  const current=normaliseCurrentPath(fullPage&&originContext?originContext.pathname:window.location.pathname);
+  const currentHash=fullPage&&originContext?originContext.hash||'':window.location.hash||'';
   const exactHash=records.find(record=>{
     try{
       const url=new URL(record.url,window.location.origin);
@@ -434,7 +462,7 @@ async function askAgent(question){
       body:JSON.stringify({
         question,
         history:history.slice(-10),
-        page_context:currentPageContext()
+        page_context:fullPage&&originContext?originContext:currentPageContext()
       }),
       signal:controller.signal
     });
@@ -461,23 +489,27 @@ function localAnswer(found,q){
   return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
 function showInputClarification(q){
-  if(q)conversation.append(text('p',q,'search-question'));
+  if(q){conversation.append(text('p',q,'search-question'));turns.push({role:'user',text:q});}
   const response=text('div','','search-answer');
   response.append(renderAgentAnswer(INPUT_CLARIFICATION));
   conversation.append(response);
+  turns.push({role:'assistant',text:INPUT_CLARIFICATION});saveConversation();
   conversation.scrollTop=response.offsetTop-conversation.offsetTop;
   input.focus({preventScroll:true});
 }
 async function ask(q){
   q=q.trim();
+  dialog.dispatchEvent(new CustomEvent('agent-question'));
   if(busy)return;
   if(needsClarification(q)){
     showInputClarification(q);
     return;
   }
   busy=true;
+  expand.setAttribute('aria-disabled','true');
   submit.disabled=true;
   conversation.append(text('p',q,'search-question'));
+  turns.push({role:'user',text:q});
 
   const response=text('div','','search-answer is-thinking');
   response.append(text('p','Looking through the portfolio…'));
@@ -491,6 +523,7 @@ async function ask(q){
       input.value=q;
       response.classList.remove('is-thinking');
       response.replaceChildren(renderAgentAnswer(INPUT_CLARIFICATION));
+      turns.push({role:'assistant',text:INPUT_CLARIFICATION});saveConversation();
       input.focus({preventScroll:true});
       return;
     }
@@ -534,6 +567,9 @@ async function ask(q){
       response.append(sourceCards(evidenceCards));
     }
 
+    turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent});
+    dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));
+
     // Search excerpts are not model replies and must not steer later conversation.
     if(usedAgent){
       history.push({role:'user',text:q},{role:'assistant',text:answer});
@@ -544,7 +580,9 @@ async function ask(q){
     response.replaceChildren(text('p','The portfolio index could not load. Please try again, or browse selected work from the menu.'));
   }finally{
     busy=false;
+    expand.removeAttribute('aria-disabled');
     submit.disabled=false;
+    saveConversation();
     conversation.scrollTop=response.offsetTop-conversation.offsetTop;
   }
 }
@@ -563,13 +601,14 @@ function closeAgent(){
 
 launcher.addEventListener('click',()=>{
   dialog.showModal();
+  launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // Desktop gets immediate keyboard focus. On phones, wait for an intentional tap
   // so Safari never changes the visual viewport just from opening the drawer.
   if(!mobileAgent.matches)input.focus({preventScroll:true});
 });
 
-dialog.querySelector('.search-close').addEventListener('click',closeAgent);
+dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
 
 dialog.addEventListener('click',event=>{
   if(event.target===dialog){
@@ -584,7 +623,9 @@ dialog.addEventListener('cancel',event=>{
 });
 
 dialog.addEventListener('close',()=>{
+  saveConversation();
   input.blur();
+  launcher.setAttribute('aria-expanded','false');
   requestAnimationFrame(()=>launcher.focus({preventScroll:true}));
 });
 
@@ -596,4 +637,8 @@ form.addEventListener('submit',event=>{
 dialog.querySelectorAll('.search-suggestions button').forEach(button=>{
   button.addEventListener('click',()=>ask(button.textContent));
 });
+const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';dialog.querySelector('.search-suggestions').after(clear);
+clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';conversation.replaceChildren(text('p','Ask about Jamiu’s work, experience or design decisions.','search-welcome'));dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
+if(fullPage&&window.initAgentVoice)window.initAgentVoice(dialog);
 })();

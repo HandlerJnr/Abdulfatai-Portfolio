@@ -186,3 +186,8 @@ html[data-theme=dark] .portfolio-search{--search-bg:#202020;--search-card:#302e2
   .agent-table-wrap table{min-width:480px}
 }
 
+/* A quiet bubble opens the quick conversation; expansion remains optional. */
+.portfolio-search-launch{display:flex;align-items:center;gap:10px;border-radius:28px;padding:12px 17px;box-shadow:0 4px 18px #0002}
+.portfolio-search-launch svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;flex:none}
+.search-expand,.search-context-link{display:block;flex-shrink:0;font-size:12px;padding:9px 0 12px;text-decoration:underline;text-underline-offset:4px;color:inherit}
+.search-clear{border:0;background:transparent;font:inherit;font-size:11px!important;text-decoration:underline;text-underline-offset:3px;padding:0 0 8px;align-self:flex-start;flex-shrink:0;color:var(--search-muted)!important}
