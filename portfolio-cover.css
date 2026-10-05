@@ -1,0 +1,13 @@
+/* Homepage cover: the reference's quiet metadata and oversized grotesque title. */
+.portfolio-cover{background:#fff;color:#1c1c1c;min-height:clamp(520px,72vw,820px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;padding:40px 0 0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+.portfolio-cover-profile{padding:0 clamp(24px,4.5vw,72px)}
+.portfolio-cover-globe{display:block;width:38px;height:20px;margin-bottom:12px}
+.portfolio-cover-profile p,.portfolio-cover-meta p{margin:0;font-size:11px;line-height:1.45;letter-spacing:-.25px}
+.portfolio-cover-profile h2{font:700 15px/1.25 Arial,Helvetica,sans-serif;letter-spacing:-.6px;margin:2px 0}
+.portfolio-cover-meta{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:0 clamp(24px,4.5vw,72px);margin-bottom:14px}
+.portfolio-cover-meta span{margin:0 9px}
+.portfolio-cover h1{font-family:Arial,Helvetica,sans-serif;font-weight:900;font-size:29.5vw;line-height:.75;letter-spacing:-.085em;margin:0 0 0 -.018em;padding:0;text-transform:none;white-space:nowrap}
+html[data-theme=dark] .portfolio-cover{background:var(--night-base);color:var(--ink)}
+html[data-companion-theme] .portfolio-cover{background:var(--paper);color:var(--ink)}
+@media(min-width:1800px){.portfolio-cover{min-height:900px}}
+@media(max-width:600px){.portfolio-cover{min-height:480px;padding-top:32px}.portfolio-cover-profile p,.portfolio-cover-meta p{font-size:10px}.portfolio-cover-meta{align-items:start;flex-direction:column;gap:6px;margin-bottom:18px}.portfolio-cover-meta span{margin:0 5px}}

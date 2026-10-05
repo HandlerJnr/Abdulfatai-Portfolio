@@ -1,0 +1,47 @@
+/* Shared UI follows the portfolio cover's monochrome grotesque composition. */
+:root{--ink:#1c1c1c;--paper:#fff;--line:#d7d7d7;--charcoal:#1c1c1c;--section-header-height:0px;--page-gutter:clamp(24px,4.5vw,72px);--section-space:100px}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink)}
+.page-top-anchor{height:0;scroll-margin-top:0}
+body :is(h1,h2,h3,h4,.masthead,.library-hero h1,.case-head h1,.case-section h2,.story-section h2,.biography h2,.contact a){font-family:Arial,Helvetica,sans-serif;font-style:normal;letter-spacing:-.065em;font-weight:700}
+body :is(h2,.library-group h2){line-height:1.02}
+body :is(p,li){font-family:Arial,Helvetica,sans-serif}
+body :is(.eyebrow,.project-meta,.community-group){font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.03em}
+body :is(.button,button,input,textarea,select){font-family:Arial,Helvetica,sans-serif}
+body :is(.button,button,.project-card,.project-drawer,.testimonial-card,.value-card,.library-card,.technical-card){border-radius:0}
+body :is(.work-map-section,.value-framework,.logo-section,.biography,.technical-capabilities,.library-teaser,.testimonials,.contact,.selected-work-section,.case-body,.library-page,.library-group,.library-hero,.site-footer){background:var(--paper);color:var(--ink)}
+body :is(.value-card,.technical-card,.testimonial-card){box-shadow:none;border-color:var(--line)}
+body :is(.button.primary,.button.primary:hover){background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body :is(.group-heading,.logo-heading,.catalogue-heading){margin-bottom:40px}
+body .portfolio-cover{min-height:clamp(520px,78vw,900px)}
+body .portfolio-cover h1{font-size:29.5vw;font-weight:900;letter-spacing:-.085em;line-height:.75}
+body .portfolio-cover-profile h2{font-size:15px;letter-spacing:-.6px}
+body .portfolio-cover-meta{margin-bottom:18px}
+body :is(.library-tabs,.case-chapters){top:0}
+.portfolio-utilities{display:flex;align-items:center;flex-wrap:wrap;gap:24px;padding:32px var(--page-gutter) 100px;border-top:1px solid var(--line);font-size:12px;background:var(--paper);color:var(--ink)}
+.portfolio-utilities>a{margin-right:auto;color:inherit;text-decoration:none;font-weight:700}
+.portfolio-utilities>button{background:transparent;color:inherit;border:1px solid var(--line);padding:12px 16px;min-height:44px;cursor:pointer;font-size:12px}
+.portfolio-utilities :is(a,button):focus-visible{outline:2px solid currentColor;outline-offset:4px}
+html[data-theme=dark] body :is(.portfolio-cover,.portfolio-utilities){background:var(--night-base);color:var(--ink)}
+html.companion-themed body .portfolio-cover{background:var(--paper);color:var(--ink)}
+@media(max-width:700px){:root{--section-space:64px}body .portfolio-cover{min-height:480px}.portfolio-utilities{gap:12px}.portfolio-utilities>a{width:100%}body :is(.library-hero h1,.case-head h1){font-size:clamp(40px,10vw,64px)}}
+
+/* Route styles use deeply scoped serif declarations; keep the shared type definitive. */
+body :is(h1,h2,h3,h4){font-family:Arial,Helvetica,sans-serif!important;font-style:normal!important}
+html[data-theme=light]:not(.companion-themed) body :is(.bizinc-hero,.case-head,.library-hero,.library-cover,.case-cover-stage){background:#fff;color:#1c1c1c}
+html[data-theme=light]:not(.companion-themed) body :is(.bizinc-hero,.case-head,.library-hero) :is(p,a,.eyebrow){color:#1c1c1c}
+
+body .button.primary{background:var(--ink)!important;color:var(--paper)!important;border-color:var(--ink)!important}
+
+.portfolio-cover{position:relative}
+.cover-page-list{position:absolute;top:40px;right:calc(var(--page-gutter) + 70px);display:flex;flex-direction:column;gap:5px;font:11px/1.4 Arial,Helvetica,sans-serif}
+.cover-page-list p{margin:0 0 6px;font-size:11px;font-weight:700}
+.cover-page-list a{color:inherit;text-decoration:none}.cover-page-list a:hover{text-decoration:underline}
+.cover-navigation{position:absolute;top:36px;right:var(--page-gutter);z-index:40;color:var(--ink)}
+.cover-menu-toggle{border:0;background:transparent;color:inherit;padding:10px;width:44px;height:44px;display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer}
+.cover-menu-toggle span{height:2px;width:24px;background:currentColor;display:block}
+.cover-menu{position:absolute;right:0;top:52px;width:220px;padding:20px;background:var(--paper);color:var(--ink);border:1px solid var(--line);box-shadow:0 8px 24px #00000012}
+.cover-menu[hidden]{display:none}.cover-menu a{display:block;padding:10px 0;font:13px/1.4 Arial,Helvetica,sans-serif;text-decoration:none;color:inherit}.cover-menu a:hover{text-decoration:underline}
+.cover-navigation :is(button,a):focus-visible,.cover-page-list a:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+@media(max-width:600px){.cover-page-list{top:155px;left:var(--page-gutter);right:auto}.cover-navigation{top:28px}}
+
+.cover-menu-toggle:focus-visible{outline:0;box-shadow:none}.cover-menu-toggle:focus-visible span{height:3px}
