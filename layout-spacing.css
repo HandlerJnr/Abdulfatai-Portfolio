@@ -1,5 +1,5 @@
 /* Shared outer grid and section rhythm; nested cards retain their own padding. */
-:root{--page-gutter:max(24px,6vw,calc((100vw - 1320px)/2));--section-space:88px;--section-inner:40px;--hero-space:72px}
+:root{--page-gutter:clamp(24px,3vw,64px);--section-space:88px;--section-inner:40px;--hero-space:72px}
 .library-page,.case-page{--support-gutter:var(--page-gutter);--support-section-gap:var(--section-space)}
 body header#top{padding-inline:var(--page-gutter)}
 main#main>:is(.professional-intro,.selected-work-section,.value-framework,.logo-section,.biography,.technical-capabilities,.library-teaser,.testimonials,.contact,.work-map-section){padding-inline:var(--page-gutter);padding-block:var(--section-space)}
