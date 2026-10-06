@@ -69,7 +69,8 @@
 .ai-evidence-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:32px
+  gap:32px;
+  align-items:start
 }
 .ai-product-grid{
   display:grid;
@@ -115,7 +116,7 @@
 .ai-product-card:hover .ai-card-media img{transform:scale(1.02)}
 
 .ai-card-body{
-  min-height:100%;
+  flex:1;
   display:flex;
   flex-direction:column;
   padding:24px
