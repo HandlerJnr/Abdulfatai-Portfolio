@@ -208,3 +208,29 @@ html[data-theme=dark] body .library-links>a::after{
 }
 
 html[data-theme=dark] body .logos-library .identity-card{border-color:var(--line)}
+/* Recruiter-focused work hierarchy — dark mode */
+html[data-theme=dark] body .featured-project-grid .project-index-card{
+  background:var(--night-surface);
+  border-color:var(--line)
+}
+html[data-theme=dark] body .project-proof{
+  border-color:var(--line)
+}
+html[data-theme=dark] body .project-proof strong{
+  color:var(--night-accent)
+}
+html[data-theme=dark] body .project-proof span{
+  color:var(--night-muted)
+}
+html[data-theme=dark] body .more-work,
+html[data-theme=dark] body .more-work[open]>summary{
+  border-color:var(--line)
+}
+html[data-theme=dark] body .more-work>summary strong,
+html[data-theme=dark] body .more-work>summary b{
+  color:var(--ink)
+}
+html[data-theme=dark] body .more-work>summary small{
+  color:var(--night-accent)
+}
+
