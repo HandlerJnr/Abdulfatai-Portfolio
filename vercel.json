@@ -4,13 +4,6 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/agent.py": {
-      "maxDuration": 60,
-      "memory": 1024,
-      "excludeFiles": "{dist/**,archive/**,scripts/**,*.html,*.css,*.js,README.md}"
-    }
-  },
   "git": {
     "deploymentEnabled": false
   }
