@@ -4302,3 +4302,94 @@ html[data-theme] body .case-featured-head :is(.mockup-case-stage,.case-cover-sta
   }
 }
 
+
+
+/* Contrast and companion-theme corrections: source-of-truth semantic palette */
+html.companion-themed[data-theme="light"]{
+  --ds-bg:color-mix(in srgb,var(--poke-accent) 14%,#f5f6f5);
+  --ds-surface:color-mix(in srgb,var(--poke-accent) 5%,#ffffff);
+  --ds-surface-raised:color-mix(in srgb,var(--poke-accent) 10%,#e9eef2);
+  --ds-border:color-mix(in srgb,var(--poke-accent) 19%,#c5cdd4);
+  --ds-accent:color-mix(in srgb,var(--poke-accent) 48%,#173958);
+  --companion-portrait-bg:color-mix(in srgb,var(--poke-accent) 68%,#223e54);
+}
+html.companion-themed[data-theme="dark"]{
+  --ds-bg:color-mix(in srgb,var(--poke-accent) 19%,#1a1c1e);
+  --ds-surface:color-mix(in srgb,var(--poke-accent) 11%,#262b2e);
+  --ds-surface-raised:color-mix(in srgb,var(--poke-accent) 13%,#30383d);
+  --ds-border:color-mix(in srgb,var(--poke-accent) 23%,#4b575f);
+  --ds-accent:color-mix(in srgb,var(--poke-accent) 58%,#e1efff);
+  --companion-portrait-bg:color-mix(in srgb,var(--poke-accent) 68%,#223e54);
+}
+html.companion-themed[data-theme] body main#main .x-portrait{
+  background:var(--companion-portrait-bg)!important;
+  transition:background-color .5s ease;
+}
+html.companion-themed[data-theme] body main#main .x-portrait>span{
+  color:#fff!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.24);
+}
+/* Recover readable copy left white by hard-coded legacy rules. */
+html[data-theme="light"] body :is(.quote,.review-card,.library-card,.identity-card,.project-index-card,.project-gallery-track>.x-project,.x-offers article){
+  color:var(--ds-text)!important;
+}
+html[data-theme="light"] body :is(.quote,.review-card) :is(blockquote,h3,h4,strong,cite){
+  color:var(--ds-text)!important;
+}
+html[data-theme="light"] body :is(.quote,.review-card) :is(p,small,figcaption,figcaption *){
+  color:var(--ds-muted)!important;
+}
+html[data-theme="light"] body :is(.testimonials .reviews-label,.testimonials .reviews-label *, .testimonials .subheading){
+  color:var(--ds-muted)!important;
+}
+html[data-theme="light"] body :is(.site-footer,.reference-footer-main,.reference-footer-bottom,.footer-profile,.footer-local,.footer-contact,.footer-bottom){
+  color:var(--ds-text)!important;
+}
+html[data-theme="light"] body :is(.site-footer,.reference-footer-main,.reference-footer-bottom,.footer-profile,.footer-local,.footer-contact,.footer-bottom) :is(p,small,span,div,b,em,li,dt,dd,time,address){
+  color:var(--ds-muted)!important;
+}
+html[data-theme="light"] body :is(.site-footer,.reference-footer-main,.reference-footer-bottom) :is(h2,h3,h4,strong,a:not(.button):not(.x-button),button:not(.button):not(.x-button)){
+  color:var(--ds-text)!important;
+}
+html[data-theme] body .summon-companion{
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-control-radius)!important;
+  box-shadow:0 8px 30px rgba(0,0,0,.1)!important;
+}
+html[data-theme] body .summon-companion :is(span,strong){
+  color:var(--ds-text)!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+html[data-theme] body .summon-companion span{
+  color:var(--ds-muted)!important;
+}
+html[data-theme] body .portfolio-search-launch :is(span,svg){
+  color:var(--ds-text)!important;
+}
+html[data-theme="light"] body .project-gallery-track>.x-project .x-project-copy :is(.project-proof span,.x-description,p:not(.x-accent)){
+  color:var(--ds-muted)!important;
+}
+html[data-theme="light"] body .project-gallery-track>.x-project .x-project-copy :is(h2,.x-tag,.project-proof strong){
+  color:var(--ds-text)!important;
+}
+html[data-theme] body :is(.x-offers article,.library-card,.identity-card,.quote,.review-card,.project-gallery-track>.x-project) {
+  border-color:var(--ds-border)!important;
+}
+html[data-theme="light"] body :is(.x-offers article,.identity-card,.library-card,.ai-evidence-card,.ai-product-card,.ai-delivery-card,.project-gallery-track>.x-project) :is(h2,h3,h4,strong){
+  color:var(--ds-text)!important;
+}
+html[data-theme="light"] body :is(.x-offers article,.identity-card,.library-card,.ai-evidence-card,.ai-product-card,.ai-delivery-card,.project-gallery-track>.x-project) :is(p,small,figcaption){
+  color:var(--ds-muted)!important;
+}
+html[data-theme] body .x-info :is(h2,h3){color:var(--ds-text)!important}
+html[data-theme] body .x-info p{color:var(--ds-muted)!important}
+html[data-theme] body :is(.project-proof,.project-gallery-toolbar,.x-offers,.case-facts,.library-tabs,.reviews-label){
+  border-color:var(--ds-border)!important;
+}
+@media(prefers-reduced-motion:reduce){
+  html.companion-themed[data-theme] body main#main .x-portrait{transition:none!important}
+}
+
