@@ -3923,3 +3923,37 @@ body .library-page .library-card .library-card-copy > .text-link:last-child{
  body .library-page .library-grid{grid-template-columns:minmax(0,1fr)!important}
  body .library-page .library-card > .library-cover{aspect-ratio:4/3!important}
 }
+
+/* Bizinc uses a linked evidence figure; keep it intact inside the same case-study stage. */
+body.case-page main#main > .case-head.case-featured-head > .bizinc-hero{
+ grid-area:media!important;align-self:stretch!important;
+ margin:0!important;padding:clamp(14px,2.5vw,34px)!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;
+ height:clamp(380px,42vw,630px)!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ background:var(--ds-surface)!important;
+ border:1px solid var(--ds-border)!important;border-radius:var(--ds-radius)!important;
+ overflow:hidden!important;
+}
+body.case-page main#main > .case-head.case-featured-head > .bizinc-hero .story-figure{
+ width:100%!important;max-width:100%!important;margin:0!important;
+ display:flex!important;flex-direction:column!important;
+}
+body.case-page main#main > .case-head.case-featured-head > .bizinc-hero .story-figure a{
+ width:100%!important;overflow:hidden!important;
+}
+body.case-page main#main > .case-head.case-featured-head > .bizinc-hero .interface-crop{
+ width:100%!important;max-width:100%!important;
+ max-height:clamp(240px,34vw,470px)!important;
+ overflow:hidden!important;
+}
+@media(max-width:900px){
+ body.case-page main#main > .case-head.case-featured-head > .bizinc-hero{
+ height:min(75svh,570px)!important;
+ }
+}
+@media(max-width:650px){
+ body.case-page main#main > .case-head.case-featured-head > .bizinc-hero{
+ height:auto!important;aspect-ratio:5/5!important;padding:14px!important;
+ }
+}
