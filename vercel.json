@@ -1,10 +1,37 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": null,
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "api/agent.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "portfolio-knowledge.json",
+          "technical-capabilities.json"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/agent/?",
+      "dest": "/api/agent.py"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/([^.]*)",
+      "dest": "/$1/index.html"
+    }
+  ],
   "cleanUrls": true,
-  "trailingSlash": false,
-  "git": {
-    "deploymentEnabled": false
-  }
+  "trailingSlash": false
 }
