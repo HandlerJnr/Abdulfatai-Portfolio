@@ -33,7 +33,7 @@ class BM25Retriever:
     @staticmethod
     def tokenize(value):
         stop = {"the","and","for","are","was","from","with","this","that","they","their","into","about","have","has","but","not","you","your"}
-        return [word for word in re.findall(r"[^\\W_]+", str(value).lower()) if word not in stop and len(word)>1]
+        return [word for word in re.findall(r"[^\W_]+", str(value).lower()) if word not in stop and len(word)>1]
     @classmethod
     def from_defaults(cls, nodes, similarity_top_k=18, stemmer=None, language="english"):
         return cls(nodes, similarity_top_k)
