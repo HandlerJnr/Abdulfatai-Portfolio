@@ -9,20 +9,17 @@
       }
     },
     {
-      "src": "api/agent.py",
-      "use": "@vercel/python",
+      "src": "api/agent.js",
+      "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "portfolio-knowledge.json",
-          "technical-capabilities.json"
-        ]
+        "includeFiles": "{portfolio-knowledge.json,technical-capabilities.json}"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/agent/?",
-      "dest": "/api/agent.py"
+      "dest": "/api/agent.js"
     },
     {
       "handle": "filesystem"
