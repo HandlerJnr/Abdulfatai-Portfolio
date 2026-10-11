@@ -3957,3 +3957,39 @@ body.case-page main#main > .case-head.case-featured-head > .bizinc-hero .interfa
  height:auto!important;aspect-ratio:5/5!important;padding:14px!important;
  }
 }
+
+/* Unified page canvas — one background token for all portfolio page shells.
+   Intentional raised UI (cards, artwork, drawers, companion and chat) remains distinct. */
+:root{--page-canvas:var(--ds-bg)}
+html,
+html[data-theme="dark"],
+html[data-theme="light"],
+body,
+body.reference-page,
+body.reference-about-page,
+body.case-page,
+body:has(> main.library-page),
+body main#main,
+body main#main.library-page,
+body header#top,
+body header#top.is-scrolled,
+body > footer,
+body .site-footer{
+  background-color:var(--page-canvas)!important;
+}
+body :is(
+ .biography,.testimonials,.technical-capabilities,.logo-section,
+ .professional-intro,.work-section,.work-accordion-section,
+ .selected-work-section,.library-teaser,.contact,.reference-contact,
+ .library-page,.logos-library,.library-end,.case-body,.case-next,
+ .library-hero,.case-head
+),
+html[data-theme="dark"] body :is(
+ .biography,.testimonials,.technical-capabilities,.logo-section,
+ .professional-intro,.work-section,.work-accordion-section,
+ .selected-work-section,.library-teaser,.contact,.reference-contact,
+ .library-page,.logos-library,.library-end,.case-body,.case-next,
+ .library-hero,.case-head
+){
+  background-color:var(--page-canvas)!important;
+}
