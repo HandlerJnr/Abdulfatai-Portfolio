@@ -240,3 +240,31 @@ body .x-info.x-more-work{grid-template-columns:minmax(0,1fr) auto;gap:24px}
  body main#main>.x-project{padding-block:64px}
  body main#main>.x-more-work{padding-block:56px}
 }
+
+/* Header, hero and content alignment — final shared pass */
+body header#top{position:relative;z-index:150;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important}
+body header#top .masthead{margin-right:0!important;flex:0 1 auto}
+body header#top .site-primary-nav{display:flex!important;align-items:center;justify-content:center;gap:clamp(13px,1.7vw,28px);margin-left:auto}
+body header#top .site-primary-nav a{display:inline-flex;align-items:center;min-height:44px;font:600 15px/1.2 'Saira Semi Condensed',Arial,sans-serif!important;color:#f4f4f4!important;text-decoration:none;white-space:nowrap}
+body header#top .site-primary-nav a:hover,body header#top .site-primary-nav a[aria-current=page]{color:var(--x-blue)!important}
+body header#top .reference-desktop-links{display:none!important}
+body header#top .header-tools{margin-left:8px}
+body main#main>.x-hero{margin-top:0!important;padding-top:24px!important;padding-bottom:clamp(56px,5vw,88px)!important;min-height:0!important}
+body main#main>.x-hero>div:first-child{align-self:center}
+body main#main>.x-hero .x-portrait{align-self:start}
+body main#main{padding-top:0!important;margin-top:0!important}
+body header#top+main#main{margin-top:0!important}
+body.reference-page main#main>.x-info:first-child{padding-top:52px!important}
+@media(max-width:1050px){
+ body header#top .site-primary-nav{gap:12px}
+ body header#top .site-primary-nav a{font-size:13px!important}
+}
+@media(max-width:900px){
+ body header#top .site-primary-nav{display:none!important}
+ body header#top .navigation-toggle{display:flex!important}
+ body header#top .header-tools{margin-left:auto}
+}
+@media(max-width:650px){
+ body main#main>.x-hero{padding-top:18px!important;padding-bottom:52px!important}
+ body header#top .masthead{min-width:0}
+}
