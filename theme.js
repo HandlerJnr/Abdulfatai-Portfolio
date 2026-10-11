@@ -5,8 +5,8 @@
  function apply(){
   const resolved=preference==='system'?(system.matches?'dark':'light'):preference;
   root.dataset.theme=resolved;root.style.colorScheme=resolved;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',resolved==='dark'?'#181818':'#ffffff');
-  document.querySelectorAll('[data-theme-toggle]').forEach(button=>button.setAttribute('aria-checked',String(resolved==='dark')));
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',resolved==='dark'?'#1a1c1e':'#f5f6f5');
+  document.querySelectorAll('[data-theme-toggle]').forEach(button=>{button.setAttribute('aria-checked',String(resolved==='dark'));button.setAttribute('aria-label',resolved==='dark'?'Switch to light mode':'Switch to dark mode')});
  }
  apply();
  function mount(){
