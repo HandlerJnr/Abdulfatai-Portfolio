@@ -3,7 +3,7 @@ document.querySelectorAll('.x-carousel').forEach(carousel=>{const slides=[...car
 const panel=document.querySelector('#site-navigation'),toggle=document.querySelector('.navigation-toggle');if(panel&&toggle){panel.classList.add('reference-menu');const links=document.createElement('div');links.className='reference-menu-primary';links.innerHTML='<a href="/">Home</a><a href="/work/">Work</a><a href="/about/">About</a><a href="/contact/">Contact</a>';panel.prepend(links);const close=document.createElement('button');close.className='reference-menu-close';close.type='button';close.textContent='Close ×';close.addEventListener('click',()=>{toggle.click();toggle.focus()});panel.append(close);new MutationObserver(()=>document.body.classList.toggle('reference-menu-open',!panel.hidden)).observe(panel,{attributes:true,attributeFilter:['hidden']});}
 // Desktop navigation uses the same destinations as the mobile menu.
 const header=document.querySelector('header#top');
-if(header && !header.querySelector('.reference-desktop-links')){
+if(header && !header.querySelector('.reference-desktop-links') && !header.querySelector('.site-primary-nav')){
  const nav=document.createElement('nav');
  nav.className='reference-desktop-links';
  nav.setAttribute('aria-label','Primary desktop navigation');
@@ -18,7 +18,7 @@ document.querySelectorAll('[data-project-archive],.more-work').forEach(root=>{
  root.querySelectorAll('[data-project-item]').forEach(card=>{
   const href=card.querySelector('a[href^="/work/"]')?.getAttribute('href');
   if(!href)return;
-  const key=href.replace(/\\/g,'/').replace(/\\?.*$/,'').replace(/\\/$/,'');
+  const key=new URL(href,location.origin).pathname.replace(/\/$/,'');
   if(seen.has(key))card.remove();else seen.add(key);
  });
 });
