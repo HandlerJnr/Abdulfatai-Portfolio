@@ -95,7 +95,7 @@ picker.addEventListener('cancel',event=>{event.preventDefault();setPicker(false)
 picker.addEventListener('close',()=>{picker.hidden=true;document.body.classList.remove('companion-picker-open');summon.setAttribute('aria-expanded','false');summon.classList.remove('is-open');syncFloatingHost();summon.focus()});
 function summonLabel(name){
   summon.querySelector('span').textContent=name?'Companion active':'Choose your sidekick';
-  summon.querySelector('strong').textContent=name?'Change companion':'Summon a companion';
+  summon.querySelector('strong').textContent=innerWidth<=760?(name?'Change sidekick':'Pick a sidekick'):(name?'Change companion':'Summon a companion');
   dismissSelection.disabled=!name;
 }
 function burst(){

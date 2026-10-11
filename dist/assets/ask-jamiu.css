@@ -93,3 +93,23 @@
 .aj-more:hover{background:#e6f3ca;border-color:#b6d184}
 .aj-more:disabled{opacity:.5;cursor:wait}
 .aj-more:focus-visible{outline:3px solid #7d66dd;outline-offset:3px}
+
+/* Make the two experiences a quiet matching pair on small screens. */
+@media(max-width:767px){
+  body{padding-bottom:max(80px,env(safe-area-inset-bottom))}
+  .aj-launch,.summon-companion{bottom:max(12px,env(safe-area-inset-bottom));width:calc((100vw - 38px)/2);max-width:185px;min-width:0;min-height:51px;height:51px;margin:0;box-shadow:0 8px 22px #051a2f1a;border:1px solid #cad7e5;border-radius:14px;opacity:1}
+  .aj-launch{left:12px;right:auto;gap:8px;padding:7px 9px;justify-content:flex-start}
+  .aj-launch-copy small{display:none}
+  .aj-launch-copy strong{font-size:12px;line-height:1.2}
+  .summon-companion{position:fixed;left:auto;right:12px;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;background:#fff;color:#051a2f}
+  .summon-companion::before{content:"✦";display:inline-flex;justify-content:center;align-items:center;flex:0 0 25px;width:25px;height:30px;border-radius:9px;background:#e9fa49;color:#051a2f;font-size:18px}
+  .summon-companion>strong{font:700 12px/1.25 'DM Sans',Arial,sans-serif;color:#051a2f;white-space:normal}
+  .summon-companion:hover,.summon-companion:focus-visible{background:#edf5e1;color:#051a2f}
+  .summon-companion:not(:focus-visible):not(.is-open){opacity:1}
+  .summon-companion.companion-obscured{display:none!important}
+  .aj-dialog-open .aj-launch{visibility:hidden}
+}
+@media(max-width:340px){
+  .aj-launch-copy strong,.summon-companion>strong{font-size:11px}
+  .aj-launch-icon{width:29px;height:29px;flex-basis:29px}
+}

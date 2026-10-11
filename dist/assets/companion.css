@@ -270,3 +270,9 @@
 .portfolio-companion.pokemon-companion{filter:drop-shadow(0 3px 4px #051a2f1b)}
 .pokemon-companion.is-dragging{filter:none}
 }
+
+/* Accessibility: don't animate Pokémon when the visitor requests reduced motion. */
+@media(prefers-reduced-motion:reduce){
+  .companion-character,.companion-power,.companion-screen-power,.companion-power-burst,.companion-power-idle,.companion-burst{animation:none!important;transition:none!important}
+  .summon-companion{transition:none!important}
+}
