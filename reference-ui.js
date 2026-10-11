@@ -40,7 +40,7 @@ document.querySelectorAll('.project-gallery').forEach(gallery=>{
 document.querySelectorAll('body.case-page').forEach(()=>{
  const main=document.querySelector('main#main');
  const head=main?.querySelector(':scope > .case-head');
- const cover=main?.querySelector(':scope > .case-cover-stage');
+ const cover=main?.querySelector(':scope > .case-cover-stage, :scope > .bizinc-hero');
  const facts=head?.querySelector(':scope > .case-facts');
  if(!head||!cover||!facts||head.classList.contains('case-featured-head'))return;
  const copy=document.createElement('div');
