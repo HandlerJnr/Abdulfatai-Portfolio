@@ -43,7 +43,8 @@
 .aj-message-user{align-items:flex-end}
 .aj-message-name{display:block;margin:0 0 7px;font-size:10px;font-weight:800;letter-spacing:.075em;text-transform:uppercase;color:#667489}
 .aj-message-body{max-width:93%;padding:15px 17px;border:1px solid #e0e5ee;border-radius:5px 18px 18px 18px;background:#fff;color:#243649;box-shadow:0 5px 16px #06172f09}
-.aj-message-user .aj-message-body{border-color:#051a2f;background:#051a2f;color:#fff;border-radius:18px 5px 18px 18px}
+.aj-message-user .aj-message-body{border-color:#d2e1a5;background:#eff8d7;color:#051a2f;border-radius:18px 5px 18px 18px}
+.aj-dialog .aj-message-user .aj-message-body p{color:#051a2f!important;-webkit-text-fill-color:#051a2f!important;opacity:1!important;visibility:visible;font-weight:500}
 .aj-message-body p{font-family:inherit;font-size:14px;line-height:1.7;font-weight:400;letter-spacing:normal;margin:0;white-space:pre-line;overflow-wrap:anywhere}
 .aj-message-body p+p{margin-top:11px}
 .aj-sources{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:10px;max-width:93%}
