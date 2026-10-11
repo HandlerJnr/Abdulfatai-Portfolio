@@ -35,5 +35,23 @@ document.querySelectorAll('.project-gallery').forEach(gallery=>{
  const update=()=>{prev.disabled=track.scrollLeft<8;next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-8};
  track.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);update();
 });
+
+/* Shared case-study hero: mirror the homepage's split editorial layout. */
+document.querySelectorAll('body.case-page').forEach(()=>{
+ const main=document.querySelector('main#main');
+ const head=main?.querySelector(':scope > .case-head');
+ const cover=main?.querySelector(':scope > .case-cover-stage');
+ const facts=head?.querySelector(':scope > .case-facts');
+ if(!head||!cover||!facts||head.classList.contains('case-featured-head'))return;
+ const copy=document.createElement('div');
+ copy.className='case-intro-copy';
+ ['.eyebrow','h1','.lead'].forEach(selector=>{
+  const node=head.querySelector(':scope > '+selector);
+  if(node)copy.append(node);
+ });
+ head.insertBefore(copy,facts);
+ head.insertBefore(cover,facts);
+ head.classList.add('case-featured-head');
+});
 const footer=document.querySelector('footer');if(footer){const button=document.createElement('button');button.className='reference-copy';button.textContent='Copy email';button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('aabdulfataijamiu@gmail.com');button.textContent='Copied';setTimeout(()=>button.textContent='Copy email',2000)}catch{button.textContent='aabdulfataijamiu@gmail.com'}});footer.append(button);}
 })();
