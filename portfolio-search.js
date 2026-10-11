@@ -14,7 +14,8 @@ const workspaceHost=document.querySelector('[data-workspace-agent-host]');
 if(workspaceHost){
   workspaceHost.append(dialog);
   dialog.classList.add('search-embedded');
-  dialog.show();
+  // Inline open prevents the browser from autofocus-scrolling past the name-led hero.
+  dialog.setAttribute('open','');
 }else{
   document.body.append(dialog);
 }
