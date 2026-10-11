@@ -3610,7 +3610,7 @@ body main#main>.x-offers{margin-bottom:clamp(72px,7vw,120px)}
 @media(max-width:650px){body main#main>.x-hero h1{font-size:clamp(39px,10vw,55px)!important}body .x-project .project-proof span{font-size:16px!important}}
 
 /* Unified editorial system for every supporting route (overrides old library theme). */
-:root{--portfolio-display:'Saira Semi Condensed',Impact,'Arial Narrow',sans-serif;--portfolio-body:'Saira Semi Condensed',Arial,sans-serif;--ui-gutter:clamp(22px,3.5vw,58px)}
+:root{--portfolio-display:'Saira Extra Condensed',Impact,'Arial Narrow',sans-serif;--portfolio-body:'Saira Semi Condensed',Arial,sans-serif;--ui-gutter:clamp(22px,3.5vw,58px)}
 body:has(.library-page),body:has(.case-page){background:var(--x-bg)!important;color:var(--x-fg)!important}
 body .library-page,body .case-page{--support-gutter:var(--ui-gutter)!important;--support-section-gap:clamp(72px,7vw,118px)!important;--support-title:clamp(50px,7vw,104px);--support-section:clamp(32px,3.5vw,56px);--support-card:clamp(23px,2.3vw,34px);background:transparent!important;color:var(--x-fg)!important;font-family:var(--portfolio-body)!important}
 body .library-page :is(.library-hero h1,.group-heading h2,.logo-heading h2,.library-card h3,.identity-caption h3),body .case-page :is(.case-head h1,.case-section h2,.case-tab-panel h2){font-family:var(--portfolio-display)!important;font-weight:800!important;letter-spacing:-.025em!important;text-transform:none;line-height:1.08!important;color:var(--x-fg)!important}
@@ -3638,7 +3638,7 @@ body :is(.project-drawer,.cv-drawer,.portfolio-search,.companion-picker){border-
  --ds-text:#f7f8f9;--ds-muted:#d0d3d6;--ds-border:#565b60;
  --ds-accent:#4ca2ed;--ds-gutter:clamp(20px,3.5vw,58px);
  --ds-space-section:clamp(72px,7vw,118px);--ds-radius:8px;
- --ds-display:'Saira Semi Condensed',Impact,'Arial Narrow',sans-serif;
+ --ds-display:'Saira Extra Condensed',Impact,'Arial Narrow',sans-serif;
  --ds-body:'Saira Semi Condensed',Arial,sans-serif;
  --x-bg:var(--ds-bg);--x-fg:var(--ds-text);--x-muted:var(--ds-muted);
  --x-line:var(--ds-border);--x-blue:var(--ds-accent);
