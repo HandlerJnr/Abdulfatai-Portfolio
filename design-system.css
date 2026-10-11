@@ -392,3 +392,38 @@ body .case-page .mockup-case-stage img[src*="mock.png"],
 body .case-page .mockup-case-stage img[src*="VistaMock.png"]{width:min(100%,660px)!important;height:auto!important;max-height:none!important;aspect-ratio:4/5!important;object-fit:contain!important;object-position:center!important;position:relative!important;transform:none!important;filter:none!important;flex-shrink:1}
 body .case-page .mockup-case-stage.horal-cover-stage .horal-cover-grid{display:flex!important;justify-content:center!important;align-items:center!important;max-width:100%;height:auto!important}
 body .case-page .mockup-case-stage.horal-cover-stage .horal-cover-grid img:not(:first-child){display:none!important}
+
+/* Selected work: one horizontal gallery, equal-scale landscape cards. */
+body .project-gallery{width:calc(100% - 2 * var(--ds-gutter));max-width:none;margin:0 var(--ds-gutter) var(--ds-space-section);min-width:0}
+body .project-gallery-toolbar{display:flex;align-items:end;justify-content:space-between;gap:24px;margin:0 0 26px;padding-block:18px;border-bottom:1px solid var(--ds-border)}
+body .project-gallery-toolbar h2{font:800 clamp(30px,3vw,49px)/1.1 var(--ds-display);margin:8px 0 0;color:var(--ds-text)}
+body .project-gallery-toolbar .x-kicker{margin:0;font-size:12px;letter-spacing:.13em;color:var(--ds-accent)}
+body .project-gallery-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+body .project-gallery-count{font:600 13px/1.2 var(--ds-body);color:var(--ds-muted);margin-right:10px}
+body .project-gallery-actions button{width:44px;height:44px;min-width:44px;border:1px solid var(--ds-border);border-radius:var(--ds-radius);background:var(--ds-surface);color:var(--ds-text);font-size:23px;cursor:pointer}
+body .project-gallery-actions button:hover{background:var(--ds-surface-raised);border-color:var(--ds-accent)}
+body .project-gallery-track{display:flex;align-items:stretch;gap:clamp(16px,2vw,28px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:2px;padding:0 2px 14px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ds-border) transparent}
+body .project-gallery-track>.x-project{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:clamp(270px,29vw,430px) minmax(0,1fr)!important;grid-template-areas:"media" "copy";align-items:stretch;gap:0!important;flex:0 0 clamp(330px,46vw,680px);width:clamp(330px,46vw,680px)!important;max-width:calc(100vw - 2 * var(--ds-gutter))!important;min-width:0;min-height:680px;margin:0!important;padding:0!important;background:var(--ds-surface);border:1px solid var(--ds-border)!important;border-radius:var(--ds-radius);overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always}
+body .project-gallery-track>.x-project>.x-carousel{grid-area:media;width:100%;height:100%;min-height:0;background:var(--ds-bg);overflow:hidden}
+body .project-gallery-track>.x-project>.x-carousel figure,
+body .project-gallery-track>.x-project>.x-carousel figure.project-showcase{width:100%!important;height:100%!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;border:0!important;border-radius:0!important;display:flex;align-items:center;justify-content:center;background:var(--ds-bg)!important}
+body .project-gallery-track>.x-project>.x-carousel figure[hidden]{display:none!important}
+body .project-gallery-track>.x-project>.x-carousel figure img,
+body .project-gallery-track>.x-project>.x-carousel figure.project-showcase img{height:100%!important;width:100%!important;max-height:100%!important;max-width:100%!important;object-fit:contain!important;object-position:center!important;filter:none!important;transform:none!important;border-radius:0!important}
+body .project-gallery-track>.x-project>.x-carousel figure::before,
+body .project-gallery-track>.x-project>.x-carousel figure::after{content:none!important}
+body .project-gallery-track>.x-project>.x-carousel .x-carousel-controls{position:absolute;bottom:10px;left:12px;right:12px;z-index:2;display:flex;gap:8px;align-items:center}
+body .project-gallery-track>.x-project>.x-carousel{position:relative}
+body .project-gallery-track>.x-project>.x-project-copy{grid-area:copy;display:flex;flex-direction:column;align-items:flex-start;min-width:0;width:100%;max-width:none;padding:clamp(18px,2vw,28px)!important;gap:10px}
+body .project-gallery-track>.x-project>.x-project-copy h2{font-size:clamp(27px,2.8vw,42px)!important;line-height:1.1!important;margin:0!important}
+body .project-gallery-track>.x-project>.x-project-copy p{font-size:clamp(14px,1.15vw,17px)!important;line-height:1.5!important;margin:0;overflow-wrap:anywhere}
+body .project-gallery-track>.x-project>.x-project-copy .project-proof{display:grid;gap:5px;padding:7px 0!important;margin:0!important}
+body .project-gallery-track>.x-project>.x-project-copy .project-proof :is(strong,span){font-size:clamp(12px,1vw,15px)!important;line-height:1.4!important}
+body .project-gallery-track>.x-project>.x-project-copy>a.x-button{margin-top:auto;width:max-content;max-width:100%;padding:10px 17px!important;min-height:42px}
+@media(max-width:760px){
+ body .project-gallery-track>.x-project{flex-basis:calc(100vw - 2 * var(--ds-gutter) - 24px);width:calc(100vw - 2 * var(--ds-gutter) - 24px)!important;grid-template-rows:clamp(230px,70vw,380px) minmax(0,1fr)!important;min-height:650px}
+ body .project-gallery-toolbar{align-items:center;gap:12px}
+ body .project-gallery-toolbar h2{font-size:30px}
+ body .project-gallery-count{display:none}
+ body .project-gallery-track>.x-project>.x-project-copy{padding:20px!important}
+}
