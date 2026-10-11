@@ -1,7 +1,7 @@
 (()=>{'use strict';
 if(window.__askJamiuMounted)return;
 window.__askJamiuMounted=true;
-const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href='/assets/ask-jamiu.css';document.head.appendChild(sheet);
+const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href='/assets/ask-jamiu.css?v=20261012-contrast-fix';document.head.appendChild(sheet);
 const SESSION_KEY='ask-jamiu-chat-v1';
 const suggestions={
   home:["What kind of designer are you?","Tell me about Horal","Show me your banking work","How do you approach a tricky problem?"],
