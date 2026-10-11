@@ -87,3 +87,9 @@
 }
 @media(max-width:340px){.aj-reset{font-size:10px;padding:7px}.aj-identity{gap:7px}.aj-eyebrow{max-width:135px}.aj-header{gap:5px}.aj-launch-copy small{display:none}}
 @media(prefers-reduced-motion:reduce){.aj-launch,.aj-dialog,.aj-chip{transition:none;animation:none}.aj-busy .aj-status:before{animation:none}}
+
+/* Follow-up stays light and secondary to the conversation. */
+.aj-more{border:1px solid #c6d0de;background:#eef2f9;border-radius:999px;color:#21394e;padding:9px 14px;font:650 12px/1.4 'DM Sans',Arial,sans-serif;cursor:pointer;margin-top:12px}
+.aj-more:hover{background:#e6f3ca;border-color:#b6d184}
+.aj-more:disabled{opacity:.5;cursor:wait}
+.aj-more:focus-visible{outline:3px solid #7d66dd;outline-offset:3px}
