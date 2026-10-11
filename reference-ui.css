@@ -53,3 +53,55 @@ body .portfolio-search-launch{background:#fff!important;color:#343434!important;
 body .summon-companion{background:var(--x-bg)!important;border:1px solid #fff!important;border-radius:8px;color:#fff!important}
 body .summon-companion :is(span,strong){color:#fff!important}
 body .case-next{color:#fff!important;border-color:var(--x-line)!important}
+
+/* Cross-route polish: shared visual rhythm, controls and safe mobile sizing. */
+:root{--ui-container:1080px;--ui-gutter:clamp(16px,4vw,36px);--ui-radius:8px;--ui-line:rgba(255,255,255,.18)}
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;min-width:0}
+body{overflow-x:clip}
+body :is(main,section,article,aside,figure,.library-page,.x-project,.x-info,.x-carousel,.project-drawer,.cv-drawer,.companion-picker,.portfolio-search-panel){min-width:0}
+body :is(img,svg,video,iframe){max-width:100%}
+body :is(p,li,dd,figcaption){overflow-wrap:break-word}
+body :is(button,a,input,textarea,select){font-family:'Saira Semi Condensed',Arial,sans-serif}
+body :is(button,a,input,textarea,select,summary):focus-visible{outline:2px solid var(--x-blue);outline-offset:3px}
+body :is(.x-button,.button,.button.primary,.header-cv,.reference-copy,.portfolio-search-launch,.summon-companion,.companion-dismiss-selection,.companion-random,.drawer-close,.cv-close,.search-submit,.navigation-toggle){border-radius:var(--ui-radius)!important;min-height:44px;max-width:100%;box-shadow:none;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+body :is(.x-button,.button,.button.primary,.reference-copy){text-decoration:none}
+body :is(.x-button,.button,.button.primary,.reference-copy):hover{transform:translateY(-1px)}
+body :is(.library-page,.case-page,.reference-about-page main){width:100%;max-width:100%}
+body .library-page :is(.library-hero,.library-group,.library-tabs,.library-grid,.brand-logo-callout),body :is(.x-hero,.x-info,.x-project,.x-offers){width:min(calc(100% - 2 * var(--ui-gutter)),var(--ui-container));max-width:var(--ui-container);margin-left:auto;margin-right:auto}
+body .x-project{gap:clamp(22px,4vw,54px)}
+body .x-carousel img{max-width:100%;object-fit:contain}
+body :is(.library-grid,.identity-grid,.companion-options){min-width:0}
+body :is(.library-card,.identity-card,.project-card){min-width:0;overflow:hidden}
+body :is(.project-drawer,.cv-drawer){max-width:min(100vw,920px);max-height:100dvh;overscroll-behavior:contain}
+body :is(.portfolio-search-panel,.companion-picker){max-width:calc(100vw - 24px)}
+body :is(.portfolio-search-panel input,.portfolio-search-panel textarea,.home-chat-form input,.home-chat-form textarea){font-size:16px}
+body .reference-desktop-links{display:flex;align-items:center;gap:clamp(12px,2vw,24px);margin-left:auto}
+body .reference-desktop-links a{font:600 14px/1.3 'Saira Semi Condensed',sans-serif;color:#fff;text-decoration:none;white-space:nowrap}
+body .reference-desktop-links a:hover,body .reference-desktop-links a[aria-current=page]{color:var(--x-blue)}
+body .reference-menu-primary a{min-height:44px;display:flex;align-items:center}
+body .x-offers article img{max-width:100%;height:auto}
+@media(min-width:901px){body header#top{max-width:100%;padding-inline:max(24px,calc((100vw - var(--ui-container))/2))!important}body .navigation-toggle{display:none!important}body .reference-desktop-links{display:flex}}
+@media(max-width:900px){body .reference-desktop-links{display:none}body header#top{padding-inline:var(--ui-gutter)!important}}
+@media(max-width:760px){
+body header#top{gap:8px!important;padding:10px 16px!important}
+body header#top .masthead{font-size:clamp(15px,4.4vw,20px)!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body .header-tools{gap:8px;flex-shrink:0}
+body .header-cv{display:none}
+body :is(.x-hero,.x-info,.x-project,.x-offers){width:calc(100% - 32px);padding-left:0;padding-right:0}
+body .x-hero,body .x-project,body .x-info{grid-template-columns:minmax(0,1fr)!important}
+body .x-project{gap:22px}
+body .x-project-copy{min-width:0}
+body .x-carousel{width:100%;min-width:0}
+body .x-carousel figure{max-width:100%;margin:0}
+body :is(.x-hero h1,.library-hero h1){font-size:clamp(40px,12vw,62px)!important;overflow-wrap:normal}
+body .x-actions{gap:10px}
+body .x-actions>*{flex:1 1 140px}
+body .library-grid,body .identity-grid{grid-template-columns:minmax(0,1fr)}
+body .library-page :is(.library-hero,.library-group,.library-tabs,.library-grid,.brand-logo-callout){width:calc(100% - 32px)}
+body :is(.project-drawer,.cv-drawer){width:100vw;max-width:100vw;margin:0 0 0 auto;height:100dvh;max-height:100dvh;border-radius:0}
+body .drawer-content,body .cv-intro{padding-inline:20px}
+body .companion-picker{max-height:min(86dvh,800px);overflow-y:auto}
+body .portfolio-search-panel{max-height:calc(100dvh - 24px);overflow:auto}
+}
+@media(prefers-reduced-motion:reduce){body :is(.x-button,.button,.portfolio-search-launch){transition:none}}
