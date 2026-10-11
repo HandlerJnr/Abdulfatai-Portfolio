@@ -1,0 +1,293 @@
+/* Responsive Norden-inspired presentation for Jamiu Abdulfatai.
+   Deliberately limited to the homepage. Other portfolio routes retain their design. */
+:root{
+  --home-ambient:#cac7c1;
+  --home-frame:#fff;
+  --home-surface:#f6f6f6;
+  --home-soft:#eeeeed;
+  --home-text:#161718;
+  --home-muted:#909293;
+  --home-line:#e9e9e7;
+  --home-green:#29b955;
+  --home-white:#fff;
+  --home-rounded:22px;
+}
+html{scroll-behavior:smooth;scroll-padding-top:22px}
+*,*::before,*::after{box-sizing:border-box}
+body.norden-home{
+  color:var(--home-text);
+  background:radial-gradient(ellipse 67% 34% at 86% 6%,#e6e5e1 0%,transparent 75%),
+             radial-gradient(ellipse 70% 38% at 5% 92%,#aaa69f 0%,transparent 82%),
+             var(--home-ambient);
+  min-height:100vh;margin:0;padding:74px 20px 100px;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5;
+}
+body.norden-home a{text-decoration:none;color:inherit}
+body.norden-home button{font:inherit;color:inherit;cursor:pointer}
+body.norden-home :is(a,button,input):focus-visible{
+  outline:2px solid var(--home-text);outline-offset:3px;
+}
+body.norden-home .skip-link{position:absolute;top:-100px;left:20px;z-index:1000}
+body.norden-home .skip-link:focus{top:15px;background:var(--home-frame);padding:10px}
+.norden-home .page-glow{
+  position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 52% 25%,#fff5 0,transparent 52%);
+  z-index:0;
+}
+.norden-home .portfolio-frame{
+  width:min(100%,600px);min-width:0;margin:0 auto;
+  padding:14px 14px 0;position:relative;z-index:1;
+  background:var(--home-frame);border:1px solid #fff6;
+  border-radius:24px;
+  box-shadow:0 22px 95px #34332e14,0 3px 18px #35322906;
+  overflow:clip;
+}
+.norden-home .mini-header{
+  min-height:44px;display:flex;align-items:center;
+  padding:0 20px 14px;gap:18px;position:relative;
+  background:var(--home-frame);z-index:10;
+}
+.norden-home .brand{display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:19px;font-weight:620;letter-spacing:-.055em;line-height:1}
+.norden-home .brand-symbol{
+  display:inline-grid;place-items:center;width:18px;height:18px;border:5px solid var(--home-text);border-radius:50%;
+}
+.norden-home .brand-symbol span{background:var(--home-frame);width:3px;height:3px;border-radius:50%}
+.norden-home .header-status{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--home-green);white-space:nowrap;margin-left:12px;
+}
+.norden-home .status-dot{width:9px;height:9px;display:inline-block;border-radius:50%;background:var(--home-green);box-shadow:0 0 0 4px #3cbf5010}
+.norden-home .nav-menu-toggle{
+  margin-left:auto;display:inline-flex;align-items:center;gap:13px;
+  font-size:13px;padding:7px 0 7px 9px;border:0;background:transparent;
+}
+.norden-home .menu-glyph{font-size:11px;letter-spacing:-2px;opacity:.75}
+.norden-home .mini-nav{
+  position:absolute;top:45px;right:0;width:min(365px,calc(100vw - 44px));z-index:40;
+  padding:18px 20px;background:var(--home-frame);border:1px solid var(--home-line);
+  border-radius:16px;box-shadow:0 25px 60px #1616161a;
+}
+.norden-home .mini-nav[hidden]{display:none}
+.norden-home .mini-nav-intro{display:grid;gap:3px;padding:4px 0 15px;border-bottom:1px solid var(--home-line)}
+.norden-home .mini-nav-intro strong{font-size:17px;font-weight:630;letter-spacing:-.04em}
+.norden-home .mini-nav-intro span{font-size:11px;color:var(--home-muted)}
+.norden-home .mini-nav>a,.norden-home .mini-nav .nav-agent{
+  display:flex;justify-content:space-between;align-items:center;gap:15px;
+  padding:12px 1px;border:0;border-bottom:1px solid var(--home-line);background:transparent;
+  width:100%;text-align:left;font-size:13px;
+}
+.norden-home .mini-nav>a:hover,.norden-home .mini-nav .nav-agent:hover{color:var(--home-muted)}
+.norden-home .mini-nav-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:17px}
+.norden-home .mini-nav-bottom>span{font-size:10px;letter-spacing:.14em;color:var(--home-muted)}
+.norden-home .appearance-toggle{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--home-line);padding:8px 12px;border-radius:10px;background:var(--home-surface);font-size:12px}
+.norden-home main{min-width:0;display:block}
+.norden-home .intro-card{
+  padding:58px clamp(25px,9.5%,58px) 60px;
+  background:var(--home-surface);border-radius:var(--home-rounded);
+  min-height:540px;display:flex;flex-direction:column;
+}
+.norden-home .identity-line{display:flex;align-items:center;gap:18px}
+.norden-home .profile-photo{
+  width:73px;height:73px;flex:0 0 73px;
+  border-radius:50%;overflow:hidden;display:block;
+  background:#e5e5e3;
+}
+.norden-home .profile-photo img{
+  display:block;width:100%;height:100%;object-fit:cover;object-position:center 14%;
+}
+.norden-home .identity-line>div:last-child{min-width:0}
+.norden-home .profile-name{display:block;font-size:20px;line-height:1.2;font-weight:540;letter-spacing:-.035em;color:var(--home-text)}
+.norden-home .profile-role{display:block;margin-top:4px;font-size:15px;line-height:1.4;color:var(--home-muted)}
+.norden-home .hero-copy{margin-top:69px}
+.norden-home .hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.17em;color:var(--home-muted);margin:0 0 13px;line-height:1.5}
+.norden-home h1{
+  color:var(--home-text);font-size:clamp(32px,4.55vw,41px);font-weight:390;
+  letter-spacing:-.058em;line-height:1.15;margin:0 0 17px;
+}
+.norden-home .hero-description{
+  margin:0;max-width:420px;font-size:15.7px;color:var(--home-muted);
+  line-height:1.86;font-weight:400;letter-spacing:-.014em;
+}
+.norden-home .hero-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:37px}
+.norden-home .hero-actions>a{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  min-height:47px;padding:12px 17px;border-radius:8px;font-size:13px;font-weight:500;
+}
+.norden-home .primary-cta{background:var(--home-text);color:var(--home-white)!important}
+.norden-home .primary-cta:hover{background:#424242}
+.norden-home .secondary-cta{background:var(--home-frame);color:var(--home-text)}
+.norden-home .secondary-cta:hover{background:var(--home-soft)}
+.norden-home .testimonial-card{
+  min-height:154px;margin-top:14px;padding:17px 23px 17px 18px;
+  display:grid;grid-template-columns:minmax(0,166px) minmax(0,1fr);gap:20px;align-items:center;
+  background:var(--home-surface);border-radius:16px;
+}
+.norden-home .testimonial-art{height:105px;position:relative;display:grid;place-items:center;overflow:hidden}
+.norden-home .testimonial-shot{
+  position:absolute;width:112px;height:73px;object-fit:cover;object-position:center;
+  background:#d2d4d3;padding:4px;border-radius:2px;box-shadow:0 12px 20px #0002;
+}
+.norden-home .shot-back{left:18px;top:12px;transform:rotate(-12deg)}
+.norden-home .shot-front{left:57px;top:27px;transform:rotate(2deg)}
+.norden-home .testimonial-content blockquote{
+  font-size:14.5px;line-height:1.55;font-weight:470;letter-spacing:-.015em;
+  margin:0 0 10px;
+}
+.norden-home .testimonial-person{display:flex;gap:10px;align-items:center}
+.norden-home .testimonial-initials{
+  display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;
+  border-radius:50%;background:#dfdcd7;color:var(--home-text);font-size:10px;font-weight:700;
+}
+.norden-home .testimonial-person strong{font-size:11.5px;font-weight:630;display:block;line-height:1.35}
+.norden-home .testimonial-person small{display:block;color:var(--home-muted);font-size:11px}
+.norden-home .brand-strip{
+  margin-top:14px;min-height:83px;border-radius:14px;
+  padding:20px 23px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--home-surface);overflow:hidden;
+}
+.norden-home .brand-strip>span{display:block;white-space:nowrap;color:var(--home-text)}
+.norden-home .strip-itss{font-weight:850;font-size:20px;letter-spacing:-.055em}
+.norden-home .strip-bizinc{font-weight:720;font-size:19px;letter-spacing:-.05em}
+.norden-home .strip-bizinc span{color:#9b9e9d}
+.norden-home .strip-horal{font-size:21px;font-weight:640;letter-spacing:-.085em}
+.norden-home .strip-kremor{font-size:16px;letter-spacing:-.065em;font-weight:790}
+.norden-home .strip-kremor span{font-size:9px;letter-spacing:.04em;margin-left:2px}
+.norden-home .work-showcase{margin-top:14px}
+.norden-home .section-topline{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:0 0 9px;padding:0 4px;
+}
+.norden-home .section-topline h2{font-size:12px;font-weight:610;margin:0}
+.norden-home .section-topline>span{font-size:10px;color:var(--home-muted);letter-spacing:.1em}
+.norden-home .project-rail{
+  display:flex;gap:13px;align-items:stretch;width:100%;overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;
+  padding-bottom:1px;-webkit-overflow-scrolling:touch;
+}
+.norden-home .project-rail::-webkit-scrollbar{display:none}
+.norden-home .project-tile{
+  display:block;min-width:clamp(178px,40%,236px);
+  flex:0 0 clamp(178px,40%,236px);
+  background:var(--home-surface);scroll-snap-align:start;
+  border-radius:9px;overflow:hidden;position:relative;
+}
+.norden-home .project-image{
+  display:flex;justify-content:center;align-items:center;
+  height:158px;background:#e3e2df;
+  overflow:hidden;
+}
+.norden-home .project-tile:nth-child(2n) .project-image{background:#1c1d1e}
+.norden-home .project-tile:nth-child(3n) .project-image{background:#dde0e1}
+.norden-home .project-image img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .3s ease}
+.norden-home .project-tile:hover .project-image img{transform:scale(1.035)}
+.norden-home .tile-horal .project-image img{width:58%;height:96%;margin-top:4%;filter:drop-shadow(0 12px 10px #0002)}
+.norden-home .project-tile-caption{min-height:57px;padding:9px 12px 10px;display:flex;flex-direction:column;gap:3px;background:var(--home-surface)}
+.norden-home .project-tile-caption strong{font-size:13px;font-weight:660;color:var(--home-text);line-height:1.2}
+.norden-home .project-tile-caption small{font-size:10px;color:var(--home-muted)}
+.norden-home .projects-bottom{
+  padding:12px 2px 11px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.norden-home .projects-bottom>span{font-size:9px;font-weight:660;letter-spacing:.12em;color:var(--home-muted)}
+.norden-home .rail-controls{display:flex;align-items:center;gap:5px}
+.norden-home .rail-controls button{display:grid;place-items:center;width:29px;height:29px;border:1px solid var(--home-line);border-radius:50%;background:var(--home-frame)}
+.norden-home .rail-controls button:hover{background:var(--home-surface)}
+.norden-home .projects-bottom>a{font-size:11px;color:var(--home-text);text-decoration:underline;text-underline-offset:3px}
+.norden-home .services-section{margin-top:4px}
+.norden-home .services-heading{
+  min-height:64px;padding:20px 28px;display:flex;align-items:center;justify-content:center;gap:14px;
+  background:var(--home-surface);border-radius:14px;font-size:14px;
+}
+.norden-home .services-heading h2{font-weight:520;margin:0;font-size:14px}
+.norden-home .services-heading span{font-size:17px;font-weight:350}
+.norden-home .service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:13px}
+.norden-home .service-card{
+  min-height:203px;background:var(--home-surface);border-radius:14px;
+  position:relative;display:flex;flex-direction:column;
+  padding:20px 19px 18px;overflow:hidden;
+}
+.norden-home .service-card h3{font-size:14px;font-weight:530;letter-spacing:-.022em;margin:0}
+.norden-home .service-card p{
+  font-size:14.3px;line-height:1.85;color:var(--home-muted);
+  max-width:220px;margin:auto 0 20px;padding-top:25px;
+}
+.norden-home .service-arrow{position:absolute;right:16px;top:16px;font-size:15px;opacity:0;transition:opacity .2s}
+.norden-home .service-card:hover .service-arrow,.norden-home .service-card:focus-visible .service-arrow{opacity:1}
+.norden-home .service-card:hover{background:var(--home-soft)}
+.norden-home .closing-card{margin-top:14px;min-height:260px;border-radius:16px;background:var(--home-surface);padding:36px 38px}
+.norden-home .closing-kicker{font-size:10px;letter-spacing:.13em;color:var(--home-muted);font-weight:650}
+.norden-home .closing-card h2{font-size:34px;line-height:1.13;letter-spacing:-.05em;font-weight:430;margin:14px 0 10px}
+.norden-home .closing-card p{font-size:13px;line-height:1.7;color:var(--home-muted);max-width:360px;margin:0 0 19px}
+.norden-home .closing-card>a{display:inline-flex;align-items:center;gap:16px;border-bottom:1px solid var(--home-text);font-size:13px;padding-bottom:4px}
+.norden-home .mini-footer{
+  display:flex;justify-content:space-between;gap:16px;align-items:center;
+  padding:25px 6px 26px;font-size:10px;color:var(--home-muted);flex-wrap:wrap;
+}
+.norden-home .mini-footer>div{display:flex;align-items:center;gap:13px}
+.norden-home .mini-footer a:hover{color:var(--home-text)}
+.norden-home>.portfolio-search-launch{display:none}
+.norden-home .portfolio-search{--search-bg:var(--home-frame);--search-card:var(--home-surface);--search-text:var(--home-text);--search-muted:var(--home-muted);--line:var(--home-line)}
+.norden-home .portfolio-search :is(input,button){font-size:16px}
+.norden-home .portfolio-search::backdrop{background:#0008}
+html[data-theme="dark"]{
+ --home-ambient:#181a1a;--home-frame:#262828;--home-surface:#343737;--home-soft:#414343;
+ --home-text:#f4f4f1;--home-muted:#c4c8c4;--home-line:#474a49;--home-green:#67d888;--home-white:#1b1c1c;
+}
+html[data-theme="dark"] body.norden-home{
+  background:radial-gradient(ellipse 67% 34% at 86% 6%,#313433 0%,transparent 75%),
+             radial-gradient(ellipse 70% 38% at 5% 92%,#141616 0%,transparent 82%),
+             var(--home-ambient);
+}
+html[data-theme="dark"] .norden-home .profile-photo{background:#4c5050}
+html[data-theme="dark"] .norden-home .testimonial-initials{background:#4f5352}
+html[data-theme="dark"] .norden-home .project-image{background:#414343}
+html[data-theme="dark"] .norden-home .project-tile:nth-child(2n) .project-image{background:#161818}
+html[data-theme="dark"] .norden-home .project-tile:nth-child(3n) .project-image{background:#393c3e}
+@media(max-width:640px){
+ body.norden-home{padding:10px 8px 30px}
+ .norden-home .portfolio-frame{border-radius:20px;padding:9px 9px 0}
+ .norden-home .mini-header{min-height:49px;padding:0 13px 10px;gap:10px}
+ .norden-home .brand{font-size:17px}
+ .norden-home .header-status{margin-left:0;font-size:11px}
+ .norden-home .nav-menu-toggle{font-size:12px}
+ .norden-home .mini-nav{top:44px;right:0}
+ .norden-home .intro-card{padding:46px clamp(22px,7vw,54px) 51px;min-height:516px}
+ .norden-home .hero-copy{margin-top:66px}
+ .norden-home h1{font-size:clamp(32px,8vw,41px)}
+ .norden-home .hero-description{font-size:15px;line-height:1.75}
+ .norden-home .hero-actions{margin-top:29px}
+ .norden-home .testimonial-card{grid-template-columns:112px minmax(0,1fr);gap:12px;padding:14px}
+ .norden-home .testimonial-art{height:102px}
+ .norden-home .testimonial-shot{width:89px;height:65px}
+ .norden-home .shot-back{left:1px;top:14px}
+ .norden-home .shot-front{left:23px;top:29px}
+ .norden-home .testimonial-content blockquote{font-size:12.3px;line-height:1.45}
+ .norden-home .testimonial-person small{font-size:10px}
+ .norden-home .brand-strip{padding:15px 12px;min-height:72px;gap:12px}
+ .norden-home .strip-itss{font-size:16px}
+ .norden-home .strip-bizinc{font-size:16px}
+ .norden-home .strip-horal{font-size:17px}
+ .norden-home .strip-kremor{font-size:13px}
+ .norden-home .project-tile{min-width:72%;flex-basis:72%}
+ .norden-home .project-image{height:170px}
+ .norden-home .service-grid{gap:9px}
+ .norden-home .service-card{padding:15px;min-height:183px}
+ .norden-home .service-card h3{font-size:13px}
+ .norden-home .service-card p{font-size:12.5px;line-height:1.65}
+ .norden-home .closing-card{padding:30px 25px}
+ .norden-home .mini-footer{padding-inline:4px}
+}
+@media(max-width:360px){
+ .norden-home .header-status{font-size:0;gap:0}
+ .norden-home .status-dot{width:8px;height:8px}
+ .norden-home .intro-card{padding-inline:22px}
+ .norden-home .profile-photo{width:63px;height:63px;flex-basis:63px}
+ .norden-home .profile-name{font-size:17px}
+ .norden-home h1{font-size:31px}
+ .norden-home .testimonial-card{grid-template-columns:98px minmax(0,1fr)}
+ .norden-home .testimonial-shot{width:76px}
+ .norden-home .shot-front{left:19px}
+ .norden-home .testimonial-content blockquote{font-size:11.5px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.norden-home *{transition:none!important}}
+
