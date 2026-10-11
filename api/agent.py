@@ -712,3 +712,43 @@ class handler(BaseHTTPRequestHandler):
                 "model": MODEL,
             },
         )
+
+
+# WSGI entrypoint for the current Vercel Python builder.
+# Reuses the original request handler instead of changing retrieval/model logic.
+def app(environ, start_response):
+    import io
+    from http import HTTPStatus
+    instance = handler.__new__(handler)
+    output = io.BytesIO()
+    response_headers = []
+    status_code = 200
+    class Headers:
+        def get(self, name, default=None):
+            key = "HTTP_" + str(name).upper().replace("-", "_")
+            if str(name).lower() == "content-length":
+                return environ.get("CONTENT_LENGTH", default)
+            if str(name).lower() == "content-type":
+                return environ.get("CONTENT_TYPE", default)
+            return environ.get(key, default)
+    instance.headers = Headers()
+    instance.rfile = environ.get("wsgi.input", io.BytesIO())
+    instance.wfile = output
+    def send_response(code):
+        nonlocal status_code
+        status_code = code
+    def send_header(key, value):
+        response_headers.append((str(key), str(value)))
+    instance.send_response = send_response
+    instance.send_header = send_header
+    instance.end_headers = lambda: None
+    if environ.get("REQUEST_METHOD", "GET").upper() == "POST":
+        instance.do_POST()
+    elif environ.get("REQUEST_METHOD", "GET").upper() == "GET":
+        instance.do_GET()
+    else:
+        status_code = 405
+        output.write(b'{"error":"Method not allowed."}')
+        response_headers.append(("Content-Type", "application/json"))
+    start_response(str(status_code) + " " + HTTPStatus(status_code).phrase, response_headers)
+    return [output.getvalue()]
