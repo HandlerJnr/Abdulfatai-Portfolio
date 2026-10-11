@@ -102,6 +102,13 @@
   const image=a.querySelector('img')?.getAttribute('src')||'';
   openResource(a.href,title,description,image);
  });
+ root.querySelector('[data-workspace-browse]')?.addEventListener('click',event=>{
+  if(selectedUrl)resetResource();
+  lastFocus=event.currentTarget;
+  viewer.classList.add('is-open');
+  document.body.classList.add('workspace-preview-open');
+  back.focus({preventScroll:true});
+ });
  back?.addEventListener('click',resetResource);
  document.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&viewer.classList.contains('is-open')){
