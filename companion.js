@@ -16,6 +16,7 @@ const randomButton=picker.querySelector('.companion-random');
 const dismissSelection=picker.querySelector('.companion-dismiss-selection');
 const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
+if(image&&!image.getAttribute('src'))image.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs';
 const character=companion.querySelector('.companion-character');
 character.addEventListener('click',()=>{if(active){wake();react('happy',850);signaturePower();burst()}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
