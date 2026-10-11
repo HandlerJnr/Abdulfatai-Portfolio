@@ -3993,3 +3993,312 @@ html[data-theme="dark"] body :is(
 ){
   background-color:var(--page-canvas)!important;
 }
+
+
+/* Portfolio visual system v3 — semantic theme contract
+   Structural canvas is shared; artwork is never repainted. */
+:root{
+  --ds-radius:12px;
+  --ds-control-radius:8px;
+  --page-canvas:var(--ds-bg);
+  --ui-radius:var(--ds-radius);
+  --ui-line:var(--ds-border);
+  --ui-container:none;
+}
+html[data-theme="light"]{
+  --ds-bg:#f5f6f5;
+  --ds-surface:#ffffff;
+  --ds-surface-raised:#e9eef2;
+  --ds-text:#20262c;
+  --ds-muted:#465460;
+  --ds-border:#c5cdd4;
+  --ds-accent:#165b9c;
+  --ds-on-accent:#ffffff;
+  --x-bg:var(--ds-bg);--x-fg:var(--ds-text);
+  --x-muted:var(--ds-muted);--x-line:var(--ds-border);
+  --x-blue:var(--ds-accent);
+  --support-border:var(--ds-border);
+  --support-callout:var(--ds-surface-raised);
+  --support-nav:var(--ds-surface);
+  --support-accent:var(--ds-accent);
+  --ref-paper:var(--ds-bg);--ref-ink:var(--ds-text);
+}
+html[data-theme="dark"]{
+  --ds-bg:#1a1c1e;
+  --ds-surface:#262b2e;
+  --ds-surface-raised:#30383d;
+  --ds-text:#f5f7f8;
+  --ds-muted:#c0cbd4;
+  --ds-border:#4b575f;
+  --ds-accent:#66b4ff;
+  --ds-on-accent:#071827;
+  --x-bg:var(--ds-bg);--x-fg:var(--ds-text);
+  --x-muted:var(--ds-muted);--x-line:var(--ds-border);
+  --x-blue:var(--ds-accent);
+  --support-border:var(--ds-border);
+  --support-callout:var(--ds-surface-raised);
+  --support-nav:var(--ds-surface);
+  --support-accent:var(--ds-accent);
+  --ref-paper:var(--ds-bg);--ref-ink:var(--ds-text);
+  --night-base:var(--ds-bg);
+  --night-surface:var(--ds-surface);
+  --night-raised:var(--ds-surface-raised);
+  --night-muted:var(--ds-muted);
+  --night-accent:var(--ds-accent);
+}
+html.companion-themed[data-theme="light"]{
+  --ds-accent:color-mix(in srgb,var(--poke-accent) 70%,#173958);
+}
+html.companion-themed[data-theme="dark"]{
+  --ds-accent:color-mix(in srgb,var(--poke-accent) 76%,#ddeeff);
+}
+html[data-theme] body{
+  background:var(--page-canvas)!important;
+  color:var(--ds-text)!important;
+}
+html[data-theme] body :is(header#top,header#top.is-scrolled){
+  background:var(--page-canvas)!important;
+  border-color:var(--ds-border)!important;
+  color:var(--ds-text)!important;
+}
+html[data-theme] body header#top :is(.masthead,.site-primary-nav a){
+  color:var(--ds-text)!important;
+}
+html[data-theme] body header#top .site-primary-nav a:is(:hover,:focus-visible,[aria-current="page"]){
+  color:var(--ds-accent)!important;
+}
+html[data-theme] body :is(
+  .biography,.testimonials,.technical-capabilities,.logo-section,
+  .professional-intro,.library-page,.logos-library,.library-end,
+  .case-body,.case-head,.reference-contact,.library-hero,.contact,
+  .work-section,.x-info,.x-more-work,.project-gallery,.case-next
+){
+  background-color:var(--page-canvas)!important;
+}
+html[data-theme] body :is(.library-hero,.case-head,.project-gallery-toolbar,.library-group,.case-section,.case-facts,.case-chapters,.library-tabs,.reviews-label){
+  border-color:var(--ds-border)!important;
+}
+html[data-theme] body :is(
+ .library-page h1,.library-page h2,.library-page h3,
+ .case-page h1,.case-page h2,.case-page h3,
+ .x-project h2,.testimonials h2,.biography h1,.ai-practice h2
+){color:var(--ds-text)!important}
+html[data-theme] body :is(
+ .library-hero>p:not(.eyebrow),.group-heading>p,
+ .case-head .lead,.case-section p,.case-section li,
+ .biography .bio-copy,.testimonials .subheading,
+ .ai-overview-heading>p,.ai-card-body>p:not(.eyebrow),
+ .ai-overview-grid p,.ai-end p
+){color:var(--ds-muted)!important}
+html[data-theme] body :is(.eyebrow,.x-kicker,.x-accent,.project-proof strong,.case-recruiter-snapshot article span){
+  color:var(--ds-accent)!important;
+}
+/* Fix the light callout with white text on the design-system pages. */
+html[data-theme] body :is(.brand-logo-callout,.ai-overview,.ai-overview-grid article,.ai-agent-card){
+  background:var(--ds-surface-raised)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-radius)!important;
+}
+html[data-theme] body .brand-logo-callout{
+  padding:clamp(22px,3.2vw,46px)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:clamp(20px,3vw,48px)!important;
+  min-width:0;
+}
+html[data-theme] body .brand-logo-callout :is(h2,h3){
+  color:var(--ds-text)!important;
+  font-size:clamp(28px,3.1vw,46px)!important;
+  line-height:1.1!important;
+}
+html[data-theme] body .brand-logo-callout p:not(.eyebrow){
+  color:var(--ds-muted)!important;
+  line-height:1.6!important;
+}
+html[data-theme] body .brand-logo-callout .button{flex:0 0 auto;max-width:100%;white-space:normal}
+html[data-theme] body .brand-logo-callout .eyebrow{color:var(--ds-accent)!important}
+html[data-theme] body :is(
+ .library-card,.identity-card,.ai-evidence-card,.ai-product-card,
+ .ai-delivery-card,.ai-overview-grid article,.quote,.review-card,
+ .project-index-card,.case-recruiter-snapshot article,.metric-row>div,
+ .project-gallery-track>.x-project,.ai-card,.case-card,
+ .companion-option,.ai-tool-list span,.ai-card-tags span
+){
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-radius)!important;
+  box-shadow:none!important;
+  overflow:hidden;
+}
+html[data-theme] body .ai-overview-grid{
+  border:0!important;gap:clamp(12px,2vw,24px)!important;
+}
+html[data-theme] body .ai-overview-grid article{padding:clamp(20px,2.2vw,30px)!important;min-height:0!important}
+html[data-theme] body .ai-overview-grid :is(h3,strong){color:var(--ds-text)!important}
+html[data-theme] body .ai-overview-grid :is(p,small){color:var(--ds-muted)!important}
+html[data-theme] body .ai-card-body{
+  background:var(--ds-surface)!important;color:var(--ds-text)!important;
+}
+html[data-theme] body .ai-card-body :is(p,small){color:var(--ds-muted)!important}
+html[data-theme] body :is(.ai-card-media,.library-cover,.identity-art){
+  background:var(--ds-surface-raised)!important;
+  border-color:var(--ds-border)!important;
+}
+html[data-theme] body :is(.ai-card-media,.library-cover) img{
+  max-width:100%;width:100%;height:100%;object-fit:contain!important;
+  transform:none!important;
+}
+html[data-theme] body :is(.ai-data-row,.ai-mini-data,.ai-research-states,.ai-stack-list,.ai-agent-flow,.ai-overview-heading){
+  border-color:var(--ds-border)!important;color:var(--ds-text)!important;
+}
+html[data-theme] body :is(.ai-data-row span,.ai-mini-data small,.ai-research-states small,.ai-stack-list small){
+  color:var(--ds-muted)!important;
+}
+/* Single corner and border treatment for all buttons and overlay controls. */
+html[data-theme] body :is(
+ button,.button,.x-button,.header-cv,.theme-control,.project-gallery-actions button,
+ .reference-copy,.identity-open,.library-tabs a,.case-chapters a,
+ .portfolio-search-launch,.search-close,.search-expand,.search-clear,
+ .companion-picker button,.summon-companion
+){
+  border-radius:var(--ds-control-radius)!important;
+  border-color:var(--ds-border)!important;
+}
+html[data-theme] body :is(.button.primary,.x-button,.header-cv){
+  background:var(--ds-text)!important;
+  color:var(--ds-bg)!important;
+  border:1px solid var(--ds-text)!important;
+}
+html[data-theme] body :is(.button.primary,.x-button,.header-cv):is(:hover,:focus-visible){
+  background:var(--ds-accent)!important;
+  border-color:var(--ds-accent)!important;
+  color:var(--ds-on-accent)!important;
+}
+html[data-theme] body .x-button.x-outline{
+  background:transparent!important;color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+}
+html[data-theme] body .x-button.x-outline:is(:hover,:focus-visible){
+  border-color:var(--ds-accent)!important;color:var(--ds-accent)!important;
+}
+html[data-theme] body :is(.case-chapters,.library-tabs){
+  background:var(--page-canvas)!important;border-color:var(--ds-border)!important;
+}
+html[data-theme] body :is(.case-chapters,.library-tabs) a{
+  color:var(--ds-text)!important;
+}
+html[data-theme] body :is(.case-chapters,.library-tabs) a:is(:hover,:focus-visible){
+  color:var(--ds-accent)!important;
+}
+/* Portfolio agent: one visual language in both modes. */
+html[data-theme] body .portfolio-search{
+  --search-bg:var(--ds-surface);
+  --search-card:var(--ds-surface-raised);
+  --search-border:var(--ds-border);
+  --search-ink:var(--ds-text);
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-radius)!important;
+}
+html[data-theme] body .portfolio-search :is(.search-heading,.search-conversation,.search-form,.search-mode){
+  background:var(--ds-surface)!important;
+  border-color:var(--ds-border)!important;
+  color:var(--ds-text)!important;
+}
+html[data-theme] body .portfolio-search :is(h2,.search-kicker,.search-welcome,.search-answer,.search-question,.search-result,strong,label){
+  color:var(--ds-text)!important;
+}
+html[data-theme] body .portfolio-search :is(.search-answer,.search-question,.search-result,.search-suggestions button,.search-clear,.search-expand){
+  background:var(--ds-surface-raised)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-control-radius)!important;
+}
+html[data-theme] body .portfolio-search :is(input,textarea){
+  background:var(--ds-bg)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-control-radius)!important;
+}
+html[data-theme] body .portfolio-search :is(input,textarea)::placeholder{color:var(--ds-muted)!important}
+html[data-theme] body .portfolio-search :is(.search-mode,.search-answer-meta,.search-welcome,.search-result p,.search-suggestions span){
+  color:var(--ds-muted)!important;
+}
+html[data-theme] body :is(.portfolio-search-launch,.summon-companion){
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-control-radius)!important;
+}
+/* Companion changes accent only, never page surfaces or contrast. */
+html[data-theme] body .companion-picker{
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border:1px solid var(--ds-border)!important;
+  border-radius:var(--ds-radius)!important;
+}
+html[data-theme] body .companion-picker :is(.companion-picker-head,.companion-picker-foot){
+  background:var(--ds-surface)!important;
+  color:var(--ds-text)!important;
+  border-color:var(--ds-border)!important;
+}
+html[data-theme] body .companion-option.is-selected{
+  background:var(--ds-surface-raised)!important;
+  border:2px solid var(--ds-accent)!important;
+  color:var(--ds-text)!important;
+}
+html[data-theme] body :is(.companion-picker-head span,.companion-picker-foot span){
+  color:var(--ds-muted)!important;
+}
+html.companion-themed[data-theme] body :is(.x-accent,.eyebrow,.x-kicker){
+  color:var(--ds-accent)!important;
+}
+/* Real 4:5 artwork, not redrawn and not cropped. Shared landscape cards. */
+@media(min-width:761px){
+  html[data-theme] body .project-gallery-track>.x-project{
+    display:grid!important;
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
+    grid-template-rows:minmax(0,1fr)!important;
+    grid-template-areas:"media copy"!important;
+    height:clamp(440px,34vw,530px)!important;
+    min-height:0!important;
+  }
+  html[data-theme] body .project-gallery-track>.x-project>.x-project-copy{
+    overflow-y:auto;min-height:0;gap:10px!important;
+  }
+  html[data-theme] body .project-gallery-track>.x-project>.x-carousel{
+    min-height:0!important;align-self:stretch!important;
+  }
+}
+html[data-theme] body .project-gallery-track>.x-project .x-carousel figure{
+  background:var(--ds-surface-raised)!important;
+}
+html[data-theme] body .project-gallery-track>.x-project .x-carousel figure img{
+  width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+  filter:none!important;transform:none!important;
+}
+html[data-theme] body .case-featured-head :is(.mockup-case-stage,.case-cover-stage){
+  background:var(--ds-surface-raised)!important;border-color:var(--ds-border)!important;
+  border-radius:var(--ds-radius)!important;
+}
+html[data-theme] body .case-featured-head :is(.mockup-case-stage,.case-cover-stage) img{
+  object-fit:contain!important;max-width:100%!important;max-height:100%!important;
+  transform:none!important;
+}
+@media(max-width:760px){
+  html[data-theme] body .brand-logo-callout{
+    display:flex!important;flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+  html[data-theme] body .project-gallery-track>.x-project{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:clamp(250px,77vw,410px) minmax(0,1fr)!important;
+    grid-template-areas:"media" "copy"!important;
+    min-height:660px!important;height:auto!important;
+  }
+}
+
