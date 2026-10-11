@@ -362,3 +362,6 @@ body .x-project .x-carousel figure img{image-rendering:auto}
  body .x-project:has(a[href="/work/horal/"]) .x-carousel figure img{max-width:55%!important;height:87%!important}
  body .x-project:has(a[href="/work/horal/"]) .x-carousel figure::before{font-size:18px;max-width:33%}
 }
+
+/* Keep inactive carousel slides inaccessible and out of layout. */
+body .x-carousel figure[hidden]{display:none!important}
