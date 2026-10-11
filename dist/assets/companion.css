@@ -260,3 +260,13 @@
 @keyframes screen-lightning{0%{stroke-dashoffset:1;opacity:0}20%{opacity:.85}60%{stroke-dashoffset:0;opacity:.8}100%{stroke-dashoffset:0;opacity:0}}
 @keyframes screen-power-sweep{0%{opacity:0;transform:translate(-50%,55px) scale(.4) rotate(0deg)}25%{opacity:.75}70%{opacity:.65}100%{opacity:0;transform:translate(calc(-50% + var(--screen-drift)),-110px) scale(1.15) rotate(var(--screen-turn))}}
 @media(prefers-reduced-motion:reduce){.companion-screen-power{display:none!important}}
+
+/* Mobile companion: keep drag and tap powers, but make the launcher quieter. */
+@media(max-width:760px){
+.summon-companion{right:12px;bottom:max(12px,env(safe-area-inset-bottom));min-width:0;width:142px;padding:9px 12px;border-radius:14px;gap:0;box-shadow:0 8px 22px #051a2f23}
+.summon-companion>span{display:none}
+.summon-companion>strong{font-size:12px;line-height:1.35;font-weight:600}
+.summon-companion:not(:focus-visible):not(.is-open){opacity:.88}
+.portfolio-companion.pokemon-companion{filter:drop-shadow(0 3px 4px #051a2f1b)}
+.pokemon-companion.is-dragging{filter:none}
+}
