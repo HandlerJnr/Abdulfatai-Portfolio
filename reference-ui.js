@@ -22,5 +22,18 @@ document.querySelectorAll('[data-project-archive],.more-work').forEach(root=>{
   if(seen.has(key))card.remove();else seen.add(key);
  });
 });
+
+// Horizontal case-study navigation. Native scrolling remains available on touch and trackpads.
+document.querySelectorAll('.project-gallery').forEach(gallery=>{
+ const track=gallery.querySelector('.project-gallery-track');
+ const prev=gallery.querySelector('.project-gallery-prev');
+ const next=gallery.querySelector('.project-gallery-next');
+ if(!track||!prev||!next)return;
+ const step=()=>{const card=track.querySelector('.x-project');return card?card.getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap||'0'):track.clientWidth};
+ prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:'smooth'}));
+ next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:'smooth'}));
+ const update=()=>{prev.disabled=track.scrollLeft<8;next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-8};
+ track.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);update();
+});
 const footer=document.querySelector('footer');if(footer){const button=document.createElement('button');button.className='reference-copy';button.textContent='Copy email';button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('aabdulfataijamiu@gmail.com');button.textContent='Copied';setTimeout(()=>button.textContent='Copy email',2000)}catch{button.textContent='aabdulfataijamiu@gmail.com'}});footer.append(button);}
 })();
