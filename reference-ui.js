@@ -1,5 +1,26 @@
 (()=>{
 document.querySelectorAll('.x-carousel').forEach(carousel=>{const slides=[...carousel.querySelectorAll('figure')];let index=0;carousel.querySelectorAll('[data-slide]').forEach(button=>button.addEventListener('click',()=>{slides[index].hidden=true;index=(index+Number(button.dataset.slide)+slides.length)%slides.length;slides[index].hidden=false;carousel.querySelector('[aria-live]').textContent=`${index+1} / ${slides.length}`;}));});
 const panel=document.querySelector('#site-navigation'),toggle=document.querySelector('.navigation-toggle');if(panel&&toggle){panel.classList.add('reference-menu');const links=document.createElement('div');links.className='reference-menu-primary';links.innerHTML='<a href="/">Home</a><a href="/work/">Work</a><a href="/about/">About</a><a href="/contact/">Contact</a>';panel.prepend(links);const close=document.createElement('button');close.className='reference-menu-close';close.type='button';close.textContent='Close ×';close.addEventListener('click',()=>{toggle.click();toggle.focus()});panel.append(close);new MutationObserver(()=>document.body.classList.toggle('reference-menu-open',!panel.hidden)).observe(panel,{attributes:true,attributeFilter:['hidden']});}
+// Desktop navigation uses the same destinations as the mobile menu.
+const header=document.querySelector('header#top');
+if(header && !header.querySelector('.reference-desktop-links')){
+ const nav=document.createElement('nav');
+ nav.className='reference-desktop-links';
+ nav.setAttribute('aria-label','Primary desktop navigation');
+ nav.innerHTML='<a href="/">Home</a><a href="/work/">Work</a><a href="/about/">About</a><a href="/ai/">AI practice</a><a href="/contact/">Contact</a>';
+ nav.querySelectorAll('a').forEach(a=>{if(location.pathname===a.getAttribute('href'))a.setAttribute('aria-current','page')});
+ header.insertBefore(nav,header.querySelector('.header-tools'));
+}
+// Prevent repeated project entries within a single collection, without
+// removing intentional homepage previews or full individual case studies.
+document.querySelectorAll('[data-project-archive],.more-work').forEach(root=>{
+ const seen=new Set();
+ root.querySelectorAll('[data-project-item]').forEach(card=>{
+  const href=card.querySelector('a[href^="/work/"]')?.getAttribute('href');
+  if(!href)return;
+  const key=href.replace(/\\/g,'/').replace(/\\?.*$/,'').replace(/\\/$/,'');
+  if(seen.has(key))card.remove();else seen.add(key);
+ });
+});
 const footer=document.querySelector('footer');if(footer){const button=document.createElement('button');button.className='reference-copy';button.textContent='Copy email';button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('aabdulfataijamiu@gmail.com');button.textContent='Copied';setTimeout(()=>button.textContent='Copy email',2000)}catch{button.textContent='aabdulfataijamiu@gmail.com'}});footer.append(button);}
 })();
