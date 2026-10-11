@@ -328,3 +328,36 @@ body.portfolio-navigating{opacity:0;transition:opacity .12s ease}
 .header .nav-wrapper{gap:32px}
 @media(max-width:991px){.portfolio-full-name{font-size:24px}.header .nav-wrapper{gap:20px}}
 @media(max-width:479px){.portfolio-full-name{font-size:21px;letter-spacing:-.7px}.header .nav-wrapper{gap:12px}}
+
+/* Shared hamburger navigation: row menu on desktop, large list on mobile. */
+.header.w-nav{background:#051a2f;backdrop-filter:none;border-bottom-color:#ffffff14}
+.header .nav-wrapper{justify-content:space-between;min-height:82px}
+.header button.portfolio-menu-trigger{display:grid!important;place-items:center;width:46px;height:46px;flex:0 0 46px;padding:0;margin:0;background:#fff;border:0;border-radius:50%;color:#051a2f;z-index:1002;cursor:pointer}
+.portfolio-menu-bars{width:20px;height:14px;position:relative;display:block}.portfolio-menu-bars i{position:absolute;left:0;right:0;height:1.5px;background:currentColor;top:3px;transition:transform .2s,top .2s}.portfolio-menu-bars i+ i{top:10px}
+.portfolio-menu-trigger[aria-expanded=true] .portfolio-menu-bars i{top:6px}.portfolio-menu-trigger[aria-expanded=true] .portfolio-menu-bars i+i{transform:scaleX(0)}
+.portfolio-menu-trigger:focus-visible{outline:3px solid #e9fa49;outline-offset:5px}
+.portfolio-navigation-panel[hidden]{display:none!important}
+.portfolio-navigation-panel{display:block;position:fixed;top:var(--portfolio-nav-height,100px);left:0;right:0;bottom:0;width:100%;max-height:none!important;background:#051a2f;color:#fff;overflow-y:auto;overscroll-behavior:contain;border:0;z-index:1001;animation:portfolio-menu-reveal .25s ease}
+.portfolio-navigation-open{overflow:hidden}.portfolio-navigation-open .summon-companion,.portfolio-navigation-open .pokemon-companion{visibility:hidden;pointer-events:none}
+.portfolio-menu-inner{max-width:1280px;width:100%;padding:28px 40px 32px;margin:auto;box-sizing:border-box}
+.portfolio-menu-heading{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px;font:400 12px/1.5 'DM Sans',sans-serif;color:#b8c4d0;letter-spacing:.08em}
+.portfolio-menu-links{border:1px solid #ffffff30;border-radius:20px;padding:0 28px;overflow:hidden}
+.portfolio-menu-link{display:grid;grid-template-columns:80px 1fr 48px;gap:20px;align-items:center;padding:18px 0;min-height:68px;border-bottom:1px solid #ffffff32;text-decoration:none;color:#fff;font:400 clamp(24px,2.6vw,36px)/1.2 'DM Sans',sans-serif;transition:color .2s,background .2s}
+.portfolio-menu-link:last-child{border-bottom:0}.portfolio-menu-number{font-size:22px;color:#b8c4d0}.portfolio-menu-arrow{color:#e9fa49;text-align:right;font-size:36px;transition:transform .2s}
+.portfolio-menu-link:hover,.portfolio-menu-link:focus-visible,.portfolio-menu-link[aria-current=page]{color:#e9fa49}.portfolio-menu-link:hover .portfolio-menu-arrow{transform:translate(3px,-3px)}.portfolio-menu-link:focus-visible{outline:2px solid #e9fa49;outline-offset:4px}
+.portfolio-menu-footer{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-top:28px;color:#b8c4d0;font:400 13px/1.6 'DM Sans',sans-serif}.portfolio-menu-footer a{color:#fff;text-decoration:underline;text-underline-offset:5px}
+@keyframes portfolio-menu-reveal{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:767px){.header .nav-wrapper{min-height:66px}.header button.portfolio-menu-trigger{width:38px;height:38px;flex-basis:38px}.portfolio-menu-inner{padding:36px 24px 28px}.portfolio-menu-heading{display:none}.portfolio-menu-links{border:0;border-radius:0;padding:0}.portfolio-menu-link{display:block;border:0;min-height:0;padding:8px 0;font-size:38px;letter-spacing:-1px;line-height:1.25}.portfolio-menu-number,.portfolio-menu-arrow{display:none}.portfolio-menu-link:nth-child(6){margin-top:32px;border-top:1px solid #ffffff26;padding-top:25px}.portfolio-menu-link:nth-child(n+6){font-size:24px;letter-spacing:-.4px;padding-block:9px}.portfolio-menu-footer{margin-top:40px;flex-wrap:wrap;padding-top:24px;border-top:1px solid #ffffff26}.portfolio-menu-footer>span{width:100%}}
+@media(prefers-reduced-motion:reduce){.portfolio-navigation-panel{animation:none}.portfolio-menu-link,.portfolio-menu-arrow,.portfolio-menu-bars i{transition:none}}
+
+/* Keep every navigation destination visible inside the available viewport. */
+.portfolio-navigation-panel{overflow:hidden}
+.portfolio-menu-inner{height:100%;display:flex;flex-direction:column;padding-block:clamp(12px,3dvh,28px)}
+.portfolio-menu-heading{flex:none;padding-bottom:clamp(8px,2dvh,24px)}
+.portfolio-menu-links{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(5,minmax(0,1fr));gap:0 36px;flex:1;min-height:0}
+.portfolio-menu-link{min-height:0;padding:clamp(6px,2dvh,18px) 0;font-size:clamp(22px,3.8dvh,36px);grid-template-columns:42px 1fr 32px;gap:12px}
+.portfolio-menu-link:nth-child(5){border-bottom:0}
+.portfolio-menu-number{font-size:18px}.portfolio-menu-arrow{font-size:28px}
+.portfolio-menu-footer{flex:none;margin-top:clamp(10px,2dvh,28px)}
+@media(max-width:767px){.portfolio-menu-inner{padding:12px 24px max(12px,env(safe-area-inset-bottom))}.portfolio-menu-links{display:flex;flex-direction:column;justify-content:space-evenly;gap:0;flex:1}.portfolio-menu-link{flex:none;padding:3px 0;font-size:clamp(22px,4.2dvh,38px);line-height:1.15;letter-spacing:-.6px}.portfolio-menu-link:nth-child(6){margin-top:8px;padding-top:10px}.portfolio-menu-link:nth-child(n+6){font-size:clamp(18px,3dvh,24px);padding-block:3px}.portfolio-menu-footer{margin-top:12px;padding-top:10px;gap:8px 24px;font-size:11px;line-height:1.4}.portfolio-menu-footer>span{width:auto;flex:1}.portfolio-menu-footer>span br{display:none}}
+@media(max-height:500px){.portfolio-menu-heading,.portfolio-menu-footer{display:none}.portfolio-menu-inner{padding:8px 20px}.portfolio-menu-links{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,minmax(0,1fr));grid-auto-flow:column;gap:0 24px;padding:0 14px}.portfolio-menu-link,.portfolio-menu-link:nth-child(n+6){display:flex;align-items:center;font-size:clamp(16px,4dvh,24px);margin:0;padding:2px 0;border-top:0;line-height:1.1}}
