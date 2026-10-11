@@ -8,5 +8,18 @@ for(const route of ['','about','work','services','contact','credentials','proces
 for(const forbidden of ['notes','resources','work-with-me','team','pricing','blog','product','styleguide','changelog'])if(fs.existsSync(path.join(dist,forbidden,'index.html')))errors.push('Inactive route is still served: '+forbidden);
 for(const slug of ['horal','pay4me','bizinc','kremor-ai','vista-itss','chalant-ai','arete','shortlet-lagos','settle','synqit','archi-tek','loan-investment-app','project-management-dashboard'])if(!fs.existsSync(path.join(dist,'work',slug,'index.html')))errors.push('Case study missing '+slug);
 for(const css of walk(path.join(dist,'assets')).filter(x=>x.endsWith('.css'))){for(const match of fs.readFileSync(css,'utf8').matchAll(/url\(["']?(\/[^)"']+)/g)){if(!fs.existsSync(path.join(dist,match[1])))errors.push(path.relative(dist,css)+': '+match[1])}}
-execFileSync(process.execPath,['--check',path.join(dist,'assets/portfolio.js')]);
+for(const filename of ['portfolio.js','companion.js','ask-jamiu.js'])execFileSync(process.execPath,['--check',path.join(dist,'assets',filename)]);
+execFileSync(process.execPath,['--check',path.join(root,'api/agent.js')]);
+execFileSync(process.execPath,[path.join(root,'scripts/agent-smoke.cjs')],{stdio:'inherit'});
+const home=fs.readFileSync(path.join(dist,'index.html'),'utf8');
+if(home.indexOf('id="selected-work"')<0||home.indexOf('id="selected-work"')>home.indexOf('class="service-section'))errors.push('Featured projects must precede services');
+for(const id of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',id,'index.html'),'utf8');if(!page.includes('class="case-story-intro"'))errors.push(id+': missing decision story');}
+for(const file of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',file,'index.html'),'utf8');if(!page.includes('id="chapter-6"')&&!page.includes('id="chapter-5"'))errors.push(file+': case study chapter anchors missing');}
+const work=fs.readFileSync(path.join(dist,'work/index.html'),'utf8');
+const order=[...work.matchAll(/<a href="\/work\/([^"]+)"/g)].slice(0,3).map(m=>m[1]).join(',');
+if(order!=='horal,pay4me,vista-itss')errors.push('Lead portfolio project order must be Horal, Radius, Vista');
+const about=fs.readFileSync(path.join(dist,'about/index.html'),'utf8');
+if(!about.includes('personal-note-section'))errors.push('Missing personal note on About page');
+const agentUI=fs.readFileSync(path.join(dist,'assets/ask-jamiu.js'),'utf8');
+if(!agentUI.includes('Tell me more')||!agentUI.includes('Compare my experience with a job'))errors.push('Recruiter chat affordances missing');
 if(errors.length){console.error(errors.join('\n'));process.exit(1)}console.log(`Verified ${pages} pages: links, local assets, required routes and JavaScript syntax pass.`);
