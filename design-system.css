@@ -365,3 +365,23 @@ body .x-project .x-carousel figure img{image-rendering:auto}
 
 /* Keep inactive carousel slides inaccessible and out of layout. */
 body .x-carousel figure[hidden]{display:none!important}
+
+/* Showcase component: preserves the supplied 4:5 compositions.
+   Each image stays uncropped while surrounding editorial copy reflows. */
+body .x-project{grid-template-columns:minmax(0,.38fr) minmax(0,.62fr);align-items:center}
+body .x-project .x-project-copy{min-width:0;max-width:70ch}
+body .x-project .x-project-copy h2{font-size:clamp(30px,3.3vw,58px);line-height:1.07;overflow-wrap:break-word}
+body .x-project .x-project-copy p{font-size:clamp(15px,1.2vw,19px);line-height:1.6}
+body .x-project .x-carousel{width:100%;min-width:0;max-width:100%;overflow:hidden}
+body .x-project .x-carousel figure.project-showcase{display:flex;align-items:center;justify-content:center;aspect-ratio:4/5!important;max-height:min(76svh,880px);background:var(--ds-surface)!important;overflow:hidden}
+body .x-project .x-carousel figure.project-showcase::before,
+body .x-project .x-carousel figure.project-showcase::after{content:none!important}
+body .x-project .x-carousel figure.project-showcase img{
+ width:100%!important;height:100%!important;max-width:100%!important;
+ display:block;object-fit:contain!important;object-position:center!important;
+ border-radius:0!important;transform:none!important;filter:none!important;
+ image-rendering:auto;
+}
+body .x-project .x-carousel figure[hidden]{display:none!important}
+@media(max-width:950px){body .x-project{grid-template-columns:minmax(0,1fr)!important;gap:26px}body .x-project .x-project-copy{max-width:100%}body .x-project .x-carousel figure.project-showcase{max-height:75svh}}
+@media(max-width:650px){body .x-project .x-project-copy h2{font-size:clamp(32px,9vw,48px)}body .x-project .x-carousel figure.project-showcase{max-height:none}body .x-project .x-carousel-controls{max-width:100%;flex-wrap:wrap}}
