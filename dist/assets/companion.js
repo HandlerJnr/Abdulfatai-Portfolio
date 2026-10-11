@@ -17,7 +17,7 @@ const dismissSelection=picker.querySelector('.companion-dismiss-selection');
 const options=[...picker.querySelectorAll('.companion-option')];
 const image=companion.querySelector('.companion-character-img');
 const character=companion.querySelector('.companion-character');
-character.addEventListener('click',()=>{if(active){wake();react('happy',850);signaturePower();burst()}});
+character.addEventListener('click',()=>{if(suppressDragClick){suppressDragClick=false;return}if(active){wake();react('happy',850);signaturePower();screenPower();burst()}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(pointer:fine)');
 const themeRoot=document.documentElement;
@@ -51,6 +51,7 @@ function applyTheme(id){
 }
 
 let active=null;
+let drag=null,mobilePosition=null,suppressDragClick=false;
 let targetX=innerWidth-110,targetY=innerHeight-110;
 let currentX=targetX,currentY=targetY;
 let lastX=targetX;
@@ -70,6 +71,7 @@ function syncFloatingHost(){
 // While crossing a control, the character yields pointer events to that control.
 function protectControls(){
   if(!active)return;
+  if(!finePointer.matches||drag){companion.classList.remove('yields-to-control');return}
   const box=character.getBoundingClientRect();
   const overlaps=[...currentHost.querySelectorAll('button,a,input,select,textarea,[role="button"]')].some(el=>{
     if(el===character||companion.contains(el)||picker.contains(el)||el===summon)return false;
@@ -159,7 +161,7 @@ function preparePower(){
  const [kind,label]=powers[active.id];
  companion.dataset.power=kind;
  character.setAttribute('aria-label',active.name+': '+label+' and confetti');
- character.title='Tap for '+label.toLowerCase();
+ character.title='Tap for '+label.toLowerCase()+' · drag to move on touchscreens';
  const ambient=document.createElement('span');
  ambient.className='companion-power companion-power-idle';ambient.setAttribute('aria-hidden','true');
  for(let i=0;i<3;i++){const bit=powerParticle(kind);bit.style.setProperty('--i',i);ambient.append(bit)}
@@ -182,6 +184,48 @@ function signaturePower(hover=false){
  companion.append(fx);setTimeout(()=>fx.remove(),1300);
 }
 
+let screenPowerTimer=0;
+function clearScreenPower(){
+ clearTimeout(screenPowerTimer);
+ document.querySelector('.companion-screen-power')?.remove();
+}
+function screenPower(){
+ if(!active||reduced.matches||document.hidden)return;
+ clearScreenPower();
+ const [kind,label]=powers[active.id];
+ const fx=document.createElement('div');
+ fx.className='companion-screen-power power-'+kind;
+ fx.setAttribute('aria-hidden','true');
+ const theme=themes[active.id];
+ fx.style.setProperty('--power-color',theme.accent);
+ fx.style.setProperty('--power-secondary',theme.accent2);
+ if(kind==='electric'){
+  // Continuous drawing and fading, with no repeated flashing.
+  const paths=[];
+  for(let i=0;i<5;i++){
+   let x=90+i*200;
+   let d='M'+x+' -20';
+   for(let y=60;y<=1060;y+=90){x+=Math.random()*140-70;d+=' L'+x.toFixed(1)+' '+y+' l'+(i%2?50:-50)+' -25'}
+   paths.push('<path pathLength="1" style="--bolt-delay:'+i*55+'ms" d="'+d+'"/>');
+  }
+  fx.innerHTML='<svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">'+paths.join('')+'</svg>';
+ }else{
+  const count=innerWidth<600?20:32;
+  for(let i=0;i<count;i++){
+   const bit=powerParticle(kind);
+   bit.classList.add('screen-power-particle');
+   bit.style.setProperty('--sx',((i+.5)/count*100)+'vw');
+   bit.style.setProperty('--sy',(10+Math.random()*80)+'dvh');
+   bit.style.setProperty('--screen-size',(kind==='psychic'||kind==='aura'?90+Math.random()*110:24+Math.random()*40)+'px');
+   bit.style.setProperty('--screen-turn',(Math.random()*120-60)+'deg');
+   bit.style.setProperty('--screen-drift',(Math.random()*120-60)+'px');
+   bit.style.setProperty('--screen-delay',(Math.random()*180)+'ms');
+   fx.append(bit);
+  }
+ }
+ document.body.append(fx);
+ screenPowerTimer=setTimeout(clearScreenPower,1700);
+}
 function isPerchable(el){
   if(!(el instanceof Element))return false;
   const target=el.closest(perchSelector);
@@ -234,10 +278,11 @@ function perchPosition(){
   return clamp(x,y);
 }
 function dismissCompanion(){
+  clearScreenPower();
   clearPowers();delete companion.dataset.power;
   clearTimeout(restTimer);clearTimeout(reactionTimer);reacting=false;delete companion.dataset.state;
   setPerch(null);
-  active=null;
+  active=null;drag=null;mobilePosition=null;suppressDragClick=false;companion.classList.remove('is-dragging');
   companion.hidden=true;
   companion.classList.remove('is-arriving','is-docked','is-perched');
   companion.style.transform='';
@@ -293,10 +338,10 @@ function react(value,duration){
 }
 character.addEventListener('pointerenter',()=>{wake();react('curious',1000);signaturePower(true)});
 character.addEventListener('focus',()=>{wake();react('curious',1000);signaturePower(true)});
-reduced.addEventListener('change',()=>{if(raf){cancelAnimationFrame(raf);raf=0}reacting=false;clearTimeout(reactionTimer);if(active){state('idle');startFollowing()}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=0}clearTimeout(restTimer)}else if(active){wake();startFollowing()}refreshArtwork()});
+reduced.addEventListener('change',()=>{clearScreenPower();if(raf){cancelAnimationFrame(raf);raf=0}reacting=false;clearTimeout(reactionTimer);if(active){state('idle');startFollowing()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){clearScreenPower();if(raf){cancelAnimationFrame(raf);raf=0}clearTimeout(restTimer)}else if(active){wake();startFollowing()}refreshArtwork()});
 function clamp(x,y){
-  const w=86,h=86,pad=8;
+  const w=companion.offsetWidth||86,h=companion.offsetHeight||86,pad=8;
   return {x:Math.max(pad,Math.min(innerWidth-w-pad,x)),y:Math.max(pad,Math.min(innerHeight-h-pad,y))};
 }
 function animate(){
@@ -324,8 +369,7 @@ function startFollowing(){
   if(!active)return;
   if(reduced.matches||!finePointer.matches){
     setPerch(null);
-    companion.classList.add('is-docked');
-    companion.style.transform='';
+    if(mobilePosition){placeMobile(mobilePosition.x,mobilePosition.y)}else{companion.classList.add('is-docked');companion.style.transform='';}
     requestAnimationFrame(protectControls);
     return;
   }
@@ -333,6 +377,41 @@ function startFollowing(){
   if(!raf)raf=requestAnimationFrame(animate);
 }
 
+// Direct touch movement stays responsive even when reduced motion is enabled.
+function placeMobile(x,y){
+ const c=clamp(x,y);
+ mobilePosition=c;currentX=targetX=c.x;currentY=targetY=c.y;
+ companion.classList.remove('is-docked');
+ companion.style.transform='translate3d('+c.x+'px,'+c.y+'px,0)';
+ companion.style.setProperty('--companion-tilt','0deg');
+}
+character.addEventListener('pointerdown',event=>{
+ if(!active||event.pointerType==='mouse'||drag)return;
+ const rect=companion.getBoundingClientRect();
+ drag={id:event.pointerId,x:event.clientX,y:event.clientY,offsetX:event.clientX-rect.left,offsetY:event.clientY-rect.top,moved:false};
+ suppressDragClick=false;setPerch(null);wake();
+ if(raf){cancelAnimationFrame(raf);raf=0}
+ companion.classList.remove('yields-to-control');
+ companion.classList.add('is-dragging');
+ placeMobile(rect.left,rect.top);
+ character.setPointerCapture(event.pointerId);
+});
+character.addEventListener('pointermove',event=>{
+ if(!drag||event.pointerId!==drag.id)return;
+ if(Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>6)drag.moved=true;
+ if(!drag.moved)return;
+ event.preventDefault();wake();state('moving');
+ placeMobile(event.clientX-drag.offsetX,event.clientY-drag.offsetY);
+});
+function finishDrag(event){
+ if(!drag||event.pointerId!==drag.id)return;
+ suppressDragClick=drag.moved||event.type==='pointercancel';
+ drag=null;companion.classList.remove('is-dragging');state('idle');
+ if(character.hasPointerCapture(event.pointerId))character.releasePointerCapture(event.pointerId);
+}
+character.addEventListener('pointerup',finishDrag);
+character.addEventListener('pointercancel',finishDrag);
+character.addEventListener('lostpointercapture',finishDrag);
 summon.addEventListener('click',()=>setPicker(picker.hidden));
 closeButton.addEventListener('click',()=>setPicker(false));
 options.forEach(option=>option.addEventListener('click',()=>choose(option)));
@@ -348,7 +427,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!picker.hidden){setPicker(false);summon.focus()}
 });
 addEventListener('pointermove',e=>{
-  if(!active||reduced.matches||!finePointer.matches)return;
+  if(!active||drag||e.pointerType!=='mouse'||reduced.matches||!finePointer.matches)return;
   if(companion.contains(e.target))return;
   wake();startFollowing();
   const target=nearbyPerch(e.clientX,e.clientY,e.target);

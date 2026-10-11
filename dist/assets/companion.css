@@ -242,3 +242,21 @@
 @keyframes companion-drawer-in{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 @media(max-width:760px){.companion-picker{inset:0 0 0 auto;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;padding:24px 18px}.companion-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}.companion-option{flex:none}.companion-picker-foot>span{display:block}.summon-companion{min-width:140px}.summon-companion.is-open{opacity:1}.companion-option-art{height:72px}}
 @media(prefers-reduced-motion:reduce){.companion-picker{animation:none}}
+
+/* Capture touch gestures only on the character; the rest of the page still scrolls. */
+.pokemon-companion button.companion-character{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.companion-character-img{-webkit-user-drag:none;pointer-events:none}
+.pokemon-companion.is-dragging button.companion-character{cursor:grabbing;animation:none!important}
+
+/* Short screen-wide signature powers; never intercept navigation or touch. */
+.companion-screen-power{position:fixed;inset:0;z-index:1050;overflow:hidden;pointer-events:none!important;contain:strict}
+.companion-screen-power *{pointer-events:none!important}
+.companion-screen-power>svg{width:100%;height:100%;overflow:visible}
+.power-electric path{fill:none;stroke:#f4d64d;stroke-width:3;stroke-linejoin:round;filter:drop-shadow(0 0 5px #e9b92c);stroke-dasharray:1;stroke-dashoffset:1;animation:screen-lightning 1.3s var(--bolt-delay) ease-out both}
+.screen-power-particle{position:absolute;left:var(--sx);top:var(--sy);width:var(--screen-size);height:var(--screen-size);color:var(--power-color);opacity:0;animation:screen-power-sweep 1.35s var(--screen-delay) ease-out both}
+.screen-power-particle svg{width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 0 6px var(--power-secondary))}
+.power-water .screen-power-particle{color:#64b7df}.power-fire .screen-power-particle{color:#ed853c}.power-leaf .screen-power-particle{color:#6b9e66}.power-fairy .screen-power-particle,.power-heart .screen-power-particle{color:#e597bc}
+.power-ghost .screen-power-particle{filter:blur(2px)}
+@keyframes screen-lightning{0%{stroke-dashoffset:1;opacity:0}20%{opacity:.85}60%{stroke-dashoffset:0;opacity:.8}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes screen-power-sweep{0%{opacity:0;transform:translate(-50%,55px) scale(.4) rotate(0deg)}25%{opacity:.75}70%{opacity:.65}100%{opacity:0;transform:translate(calc(-50% + var(--screen-drift)),-110px) scale(1.15) rotate(var(--screen-turn))}}
+@media(prefers-reduced-motion:reduce){.companion-screen-power{display:none!important}}
