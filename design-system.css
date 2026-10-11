@@ -385,3 +385,10 @@ body .x-project .x-carousel figure.project-showcase img{
 body .x-project .x-carousel figure[hidden]{display:none!important}
 @media(max-width:950px){body .x-project{grid-template-columns:minmax(0,1fr)!important;gap:26px}body .x-project .x-project-copy{max-width:100%}body .x-project .x-carousel figure.project-showcase{max-height:75svh}}
 @media(max-width:650px){body .x-project .x-project-copy h2{font-size:clamp(32px,9vw,48px)}body .x-project .x-carousel figure.project-showcase{max-height:none}body .x-project .x-carousel-controls{max-width:100%;flex-wrap:wrap}}
+
+/* Supplied 4:5 case-study artwork: no crop or stretch, even in older case templates. */
+body .case-page .mockup-case-stage{display:flex!important;align-items:center!important;justify-content:center!important;min-height:0!important;height:auto!important;max-height:none!important;overflow:visible!important;background:var(--ds-surface)!important;padding:clamp(12px,2.5vw,36px)!important}
+body .case-page .mockup-case-stage img[src*="mock.png"],
+body .case-page .mockup-case-stage img[src*="VistaMock.png"]{width:min(100%,660px)!important;height:auto!important;max-height:none!important;aspect-ratio:4/5!important;object-fit:contain!important;object-position:center!important;position:relative!important;transform:none!important;filter:none!important;flex-shrink:1}
+body .case-page .mockup-case-stage.horal-cover-stage .horal-cover-grid{display:flex!important;justify-content:center!important;align-items:center!important;max-width:100%;height:auto!important}
+body .case-page .mockup-case-stage.horal-cover-stage .horal-cover-grid img:not(:first-child){display:none!important}
