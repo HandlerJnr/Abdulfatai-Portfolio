@@ -284,3 +284,25 @@ body main#main>.x-project .x-carousel figure img{object-fit:contain;image-render
 body main#main>.x-info.x-intro{margin-top:clamp(48px,5vw,76px);padding-top:clamp(52px,6vw,100px)!important}
 body main#main>.x-offers{margin-bottom:clamp(72px,7vw,120px)}
 @media(max-width:650px){body main#main>.x-hero h1{font-size:clamp(39px,10vw,55px)!important}body .x-project .project-proof span{font-size:16px!important}}
+
+/* Unified editorial system for every supporting route (overrides old library theme). */
+:root{--portfolio-display:'Saira Semi Condensed',Impact,'Arial Narrow',sans-serif;--portfolio-body:'Saira Semi Condensed',Arial,sans-serif;--ui-gutter:clamp(22px,3.5vw,58px)}
+body:has(.library-page),body:has(.case-page){background:var(--x-bg)!important;color:var(--x-fg)!important}
+body .library-page,body .case-page{--support-gutter:var(--ui-gutter)!important;--support-section-gap:clamp(72px,7vw,118px)!important;--support-title:clamp(50px,7vw,104px);--support-section:clamp(32px,3.5vw,56px);--support-card:clamp(23px,2.3vw,34px);background:transparent!important;color:var(--x-fg)!important;font-family:var(--portfolio-body)!important}
+body .library-page :is(.library-hero h1,.group-heading h2,.logo-heading h2,.library-card h3,.identity-caption h3),body .case-page :is(.case-head h1,.case-section h2,.case-tab-panel h2){font-family:var(--portfolio-display)!important;font-weight:800!important;letter-spacing:-.025em!important;text-transform:none;line-height:1.08!important;color:var(--x-fg)!important}
+body .library-page :is(.library-hero h1),body .case-page .case-head h1{font-size:var(--support-title)!important;margin:18px 0 25px!important}
+body .library-page :is(.group-heading h2,.logo-heading h2),body .case-page :is(.case-section h2,.case-tab-panel h2){font-size:var(--support-section)!important}
+body .library-page :is(.library-card h3,.identity-caption h3){font-size:var(--support-card)!important}
+body .library-page :is(.library-hero,.library-group,.library-tabs,.library-grid,.brand-logo-callout,.library-end,.logo-section,.ai-section),body .case-page :is(.case-head,.case-body,.case-next,.case-chapters){width:calc(100% - 2 * var(--ui-gutter))!important;max-width:none!important;margin-left:var(--ui-gutter)!important;margin-right:var(--ui-gutter)!important;padding-left:0!important;padding-right:0!important}
+body .library-page .library-hero,body .case-page .case-head{padding-top:clamp(56px,6vw,98px)!important;padding-bottom:clamp(48px,5vw,78px)!important}
+body .library-page .library-group{padding-block:var(--support-section-gap)!important;border-top:1px solid var(--x-line)!important}
+body .library-page :is(.library-card,.identity-card,.ai-card,.credential-card){min-width:0;background:#303234!important;border:1px solid var(--x-line)!important;color:var(--x-fg)!important;border-radius:var(--ui-radius)!important;overflow:hidden}
+body .library-page :is(.library-card img,.identity-card img,.ai-card img){max-width:100%;height:auto}
+body .library-page :is(.library-card p,.library-hero p,.group-heading p,.logo-heading p,.identity-card p,.ai-card p),body .case-page :is(p,figcaption,li){font:400 clamp(15px,1.15vw,18px)/1.6 var(--portfolio-body)!important;color:var(--x-muted)!important}
+body .library-page :is(.eyebrow,.chapter-number),body .case-page .eyebrow{font:700 12px/1.4 var(--portfolio-body)!important;letter-spacing:.13em!important;color:var(--x-blue)!important}
+body .library-page :is(.library-tabs,.library-filter,.brand-tabs,.case-tabs){background:transparent!important;border-color:var(--x-line)!important}
+body .library-page :is(button,.library-card a,.text-link),body .case-page :is(button,.text-link){font-family:var(--portfolio-body)!important;border-radius:var(--ui-radius)!important}
+body .library-page .group-heading,body .library-page .logo-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,60px);align-items:end}
+body .case-page .case-section{border-top:1px solid var(--x-line)!important;padding-block:clamp(42px,5vw,82px)!important}
+body :is(.project-drawer,.cv-drawer,.portfolio-search,.companion-picker){border-radius:var(--ui-radius)!important;border:1px solid var(--x-line)!important}
+@media(max-width:760px){:root{--ui-gutter:20px}body .library-page .group-heading,body .library-page .logo-heading{grid-template-columns:minmax(0,1fr)!important}body .library-page .library-group{padding-block:64px!important}body .library-page .library-hero,body .case-page .case-head{padding-top:48px!important}}
