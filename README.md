@@ -1,17 +1,19 @@
-# Abdulfatai Jamiu — Product Design Portfolio
+# Jamiu Abdulfatai — Portfolio
 
-Static portfolio with the PDF-inspired editorial homepage, three coordinated studio mockups, and accessible project preview drawers.
+The active portfolio is in `dist/`. It includes 38 standalone pages, bundled project artwork, documents and the companion interface.
 
-## Publish
+## Previous version
 
-No build command or framework is required. Publish the repository root using the existing Vercel static configuration. All assets and case studies are included.
+The former portfolio is preserved in `archive/abdulfatai-portfolio-legacy-2026-10-11.zip`. It is inactive and excluded from the deployed output.
 
-## Preview locally
+## Validation
 
-Run `python3 -m http.server 4187` from the repository root, then open http://localhost:4187.
+Run `npm run build` (no dependencies required). This validates local links, assets, routes and JavaScript.
 
-## Project previews
+## Vercel
 
-Featured project buttons open a native modal side panel with role, dates, contributions, scope and links. Escape or Close dismisses it, focus returns to the trigger, and background scrolling is locked. Motion respects reduced-motion preferences. Original project imagery remains in the previews and full case studies; generated studio artwork is used only for cover presentation.
+Use repository root, framework Other, build command `npm run build`, and output directory `dist`.
+Automatic Git deployments are disabled with `git.deploymentEnabled: false` so replacing this code does not launch it automatically.
+When ready, deploy manually using Vercel CLI (`vercel --prod`) or enable Git deployments in `vercel.json` and push the change.
 
-Bizinc and Vista link to their company sites. Kremor links to the demo recorded in the previous portfolio and is labelled accordingly; a verified production URL can replace it when available.
+Source design repository: https://github.com/HandlerJnr/Abdulfatai-Website

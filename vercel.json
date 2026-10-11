@@ -1,14 +1,10 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "framework": null,
-  "buildCommand": null,
-  "installCommand": "",
-  "outputDirectory": ".",
-  "functions": {
-    "api/agent.py": {
-      "maxDuration": 60,
-      "memory": 1024,
-      "excludeFiles": "{assets/**,projects/**,logos/**,brand/**,credentials/**,system/**,work/**,**/*.pdf,**/*.jpg,**/*.jpeg,**/*.png,**/*.gif,**/*.svg,**/*.woff2,*.html,*.css,*.js,README.md,MOCKUP-NOTES.md,PORTFOLIO-SEARCH.md}"
-    }
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "git": {
+    "deploymentEnabled": false
   }
 }
