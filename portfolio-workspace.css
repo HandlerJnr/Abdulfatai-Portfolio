@@ -355,3 +355,14 @@ body:has(.portfolio-workspace)>.portfolio-search-launch{display:none!important}
  .portfolio-workspace .workspace-chat-pane{min-height:350px}
  .portfolio-workspace .workspace-viewer{display:none!important}
 }
+/* Small-screen access to the resource library without first sending a question. */
+.portfolio-workspace .workspace-chat-tools{display:flex;align-items:center;gap:12px;justify-content:flex-end}
+.portfolio-workspace .workspace-browse-trigger{
+ display:none;color:var(--ws-ink);background:transparent;border:1px solid var(--ws-line);
+ border-radius:0;padding:8px 9px;font:700 10px/1.2 Arial,sans-serif;
+}
+@media(max-width:680px){
+ .portfolio-workspace .workspace-online{display:none}
+ .portfolio-workspace .workspace-browse-trigger{display:inline-flex;align-items:center}
+ body.workspace-preview-open{overflow:hidden!important;overscroll-behavior:none}
+}
