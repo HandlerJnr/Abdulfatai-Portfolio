@@ -10,7 +10,14 @@ const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
 dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">A shortcut to the work</span><h2 id="portfolio-search-title">What would you like to know?</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent">Close</button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>Explore Jamiu’s work, experience and design decisions.</span></p><div class="search-conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">Ask anything about Jamiu’s published work in your own words — Start with a project or a question about his experience.</p></div><div class="search-suggestions"><button>Show me fintech work</button><button>What did you do at Bizinc?</button><button>How do you approach design systems?</button><button>Experience and skills</button></div><form class="search-form"><label for="portfolio-question">Ask the portfolio agent</label><div><input id="portfolio-question" type="search" maxlength="700" placeholder="e.g. What kind of product designer is Jamiu?" autocomplete="off"><button type="submit">Ask</button></div></form>';
-document.body.append(dialog);
+const workspaceHost=document.querySelector('[data-workspace-agent-host]');
+if(workspaceHost){
+  workspaceHost.append(dialog);
+  dialog.classList.add('search-embedded');
+  dialog.show();
+}else{
+  document.body.append(dialog);
+}
 
 const conversation=dialog.querySelector('.search-conversation');
 const input=dialog.querySelector('input');
@@ -597,6 +604,11 @@ function closeAgent(){
 }
 
 launcher.addEventListener('click',()=>{
+  if(workspaceHost){
+    document.querySelector('#workspace')?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(!mobileAgent.matches)input.focus({preventScroll:true});
+    return;
+  }
   dialog.showModal();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
@@ -638,6 +650,7 @@ const clear=document.createElement('button');clear.type='button';clear.className
 clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
 const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
 window.portfolioAgent={open:async(question='')=>{
+  if(workspaceHost&&!question.trim())document.querySelector('#workspace')?.scrollIntoView({behavior:'smooth',block:'start'});
   if(!dialog.open)launcher.click();
   await ready;
   if(question.trim()){input.value=question.slice(0,700);await ask(input.value);}
