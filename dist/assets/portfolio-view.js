@@ -1,4 +1,6 @@
 (()=>{
+if(!document.querySelector('link[href="/assets/portfolio-mode.css"]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/assets/portfolio-mode.css';document.head.append(style)}
+
  const key='jamiu-portfolio-view';
  const save=value=>{try{localStorage.setItem(key,value)}catch{}};
  const path=location.pathname.replace(/\/$/,'')||'/';
