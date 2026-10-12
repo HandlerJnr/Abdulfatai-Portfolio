@@ -93,7 +93,7 @@ for(const file of await filesIn(dist)){
   html=html.replace('</head>',metas+'</head>');
   // Replace a remaining generic agency CTA with a direct, personal invitation.
   html=html.replace(/<span class="cta-title-highlight">Ready to Create<\/span> with Jamiu &amp; bring your next idea to life\?/g,
-    '<span class="cta-title-highlight">Have something in mind?</span> I\\'d love to hear about it.');
+    "<span class=\"cta-title-highlight\">Have something in mind?</span> I'd love to hear about it.");
   await fs.writeFile(file,html,'utf8');
   if(!['/404','/privacy-policy','/terms-and-conditions'].includes(route))urls.push(canonical);
   count++;
