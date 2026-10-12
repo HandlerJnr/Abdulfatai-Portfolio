@@ -113,3 +113,13 @@
   .aj-launch-copy strong,.summon-companion>strong{font-size:11px}
   .aj-launch-icon{width:29px;height:29px;flex-basis:29px}
 }
+
+/* Structured output rendered with safe DOM nodes, never model-generated HTML. */
+.aj-message-body strong{font-weight:750;color:inherit}
+.aj-message-body em{font-style:italic}
+.aj-message-body ul,.aj-message-body ol{margin:10px 0 0;padding-left:22px;color:inherit;font:400 14px/1.7 'DM Sans',Arial,sans-serif}
+.aj-message-body li{margin:6px 0;overflow-wrap:anywhere}
+.aj-message-body li::marker{color:#7354cb}
+.aj-message-body ul+p,.aj-message-body ol+p,.aj-message-body p+ul,.aj-message-body p+ol{margin-top:12px}
+.aj-message-body .aj-message-heading{font-weight:750;margin-top:13px;color:#051a2f}
+.aj-message-agent .aj-message-body{overflow-wrap:anywhere}
