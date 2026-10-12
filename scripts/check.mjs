@@ -13,8 +13,7 @@ execFileSync(process.execPath,['--check',path.join(root,'api/agent.js')]);
 execFileSync(process.execPath,[path.join(root,'scripts/agent-smoke.cjs')],{stdio:'inherit'});
 const home=fs.readFileSync(path.join(dist,'index.html'),'utf8');
 if(home.indexOf('id="selected-work"')<0||home.indexOf('id="selected-work"')>home.indexOf('class="service-section'))errors.push('Featured projects must precede services');
-for(const id of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',id,'index.html'),'utf8');if(!page.includes('class="case-story-intro"'))errors.push(id+': missing decision story');}
-for(const file of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',file,'index.html'),'utf8');if(!page.includes('id="chapter-6"')&&!page.includes('id="chapter-5"'))errors.push(file+': case study chapter anchors missing');}
+for(const slug of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',slug,'index.html'),'utf8');if(!page.includes('id="chapter-4"'))errors.push(slug+': final chapter anchor missing');}
 const work=fs.readFileSync(path.join(dist,'work/index.html'),'utf8');
 const order=[...work.matchAll(/<a href="\/work\/([^"]+)"/g)].slice(0,3).map(m=>m[1]).join(',');
 if(order!=='horal,pay4me,vista-itss')errors.push('Lead portfolio project order must be Horal, Radius, Vista');

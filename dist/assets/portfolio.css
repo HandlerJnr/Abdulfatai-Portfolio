@@ -744,3 +744,65 @@ body[data-page^='/work/'] .authentic-content .case-story-link:hover{color:var(--
 .syncai-case .syncai-cards p:last-child{margin:0}
 .syncai-case .syncai-feature-list>div{padding:20px 0;border-bottom:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent)}
 .syncai-case .syncai-feature-list p{margin:8px 0 0}
+
+/* Desktop chapter links follow the existing simple experience-list style. */
+@media(min-width:1024px){
+ body[data-page^="/work/"] .authentic-content .case-study-layout{grid-template-columns:minmax(0,1fr) minmax(180px,220px)}
+ body[data-page^="/work/"] .authentic-content .case-study-layout>.case-body{grid-column:1;grid-row:1}
+ body[data-page^="/work/"] .authentic-content .case-study-layout>.case-chapter-nav{grid-column:2;grid-row:1;background:transparent;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;padding:4px 0 4px 24px;border-left:1px solid color-mix(in srgb,var(--neutral-04) 18%,transparent)}
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll{padding:0;gap:10px}
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll>.case-chapter-label{margin:0 0 12px;font-weight:500;font-size:10px;letter-spacing:.08em}
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll>a{padding:8px 0;min-height:34px;border:0;border-radius:0;background:transparent;color:var(--neutral-04);font-weight:500;font-size:13px;justify-content:space-between;gap:8px;text-decoration:none}
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll>a::after{content:'↗';flex-shrink:0}
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll>a:hover,body[data-page^="/work/"] .case-study-layout .case-chapter-scroll>a[aria-current="location"]{background:transparent;color:var(--neutral-04);text-decoration:underline;text-underline-offset:5px}
+}
+.syncai-screen-collections{display:grid;gap:24px;margin-top:28px}
+.syncai-screen-collections figure{margin:0!important}
+.syncai-screen-collections a{display:block;overflow:hidden;border:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent);border-radius:24px;background:var(--neutral-01);text-decoration:none!important}
+.syncai-screen-collections img{border-radius:0!important;width:100%;height:auto}
+.syncai-screen-collections a>span{display:block;padding:14px 20px;font:600 13px/1.4 var(--body-font);color:var(--neutral-04)}
+
+/* Short SyncAI story: four chapters, compact decisions and optional screen collections. */
+body[data-page="/work/syncai"] .syncai-case .case-section{margin-bottom:36px}
+.syncai-case .syncai-decision-list{display:grid;gap:14px}
+.syncai-case .syncai-decision-list article{margin:0;padding:24px;border-radius:24px;border:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent);background:var(--neutral-01)}
+.syncai-case .syncai-decision-list h5{font:400 24px/1.3 var(--heading-font);margin:0 0 12px}
+.syncai-case .syncai-decision-list p{margin:0}
+.syncai-case .syncai-extra-screens{padding:0;margin:24px 0}
+.syncai-case .syncai-extra-screens>summary{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-top:1px solid color-mix(in srgb,var(--neutral-04) 14%,transparent);border-bottom:1px solid color-mix(in srgb,var(--neutral-04) 14%,transparent);font-size:14px;font-weight:600;list-style:none}
+.syncai-case .syncai-extra-screens[open]>summary span{transform:rotate(45deg)}
+.syncai-related{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:24px;font-size:13px}.syncai-related p{margin:0!important}
+
+/* Project stories share a short, readable structure. */
+.concise-case .concise-case-label{font:600 12px/1.6 var(--body-font);letter-spacing:.03em}
+.concise-case .case-section{margin-bottom:36px!important}
+.concise-case .concise-decisions{display:grid;gap:14px}
+.concise-case .concise-decisions article{margin:0;padding:24px;border-radius:24px;border:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent);background:var(--neutral-01)}
+.concise-case .concise-decisions h5{font:400 24px/1.3 var(--heading-font);margin:0 0 12px}
+.concise-case .concise-decisions p{margin:0}
+.concise-case .concise-evidence{padding:0;margin-top:24px}
+.concise-case .concise-evidence>summary{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-block:1px solid color-mix(in srgb,var(--neutral-04) 14%,transparent);font-size:14px;font-weight:600;list-style:none}
+.concise-case .concise-evidence[open]>summary span{transform:rotate(45deg)}
+.concise-case .concise-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+
+body[data-page^="/work/"] .authentic-content .project-image-grid,body[data-page^="/work/"] .authentic-content .case-gallery,body[data-page^="/work/"] .authentic-content .bizinc-artifact-grid{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:28px;width:100%;min-width:0}
+body[data-page^="/work/"] .authentic-content figure{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+body[data-page^="/work/"] .authentic-content figure img{display:block;width:100%;max-width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain;margin:0}
+body[data-page^="/work/"] .authentic-content figure>a{display:block;width:100%;max-width:100%;min-width:0}
+body[data-page^="/work/"] .syncai-screen-collections{grid-template-columns:minmax(0,1fr)}
+
+/* Inline project evidence gets one full-width row per image. */
+/* Fluid project images follow their container at every viewport size. */
+body[data-page^="/work/"] .authentic-content figure img,.simple-view .simple-case-content figure img{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain;margin:0}
+
+/* Mobile chapter bar meets the fixed header and spans the viewport. */
+@media(max-width:1023px){
+ body[data-page^="/work/"] .authentic-content .case-study-layout>.case-chapter-nav{
+  top:var(--portfolio-nav-height,66px);width:100vw;max-width:none;
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+  padding:8px 12px;border-radius:0;border-left:0;border-right:0;border-top:0;
+  border-bottom:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent);
+  box-shadow:none;background:var(--neutral-01);backdrop-filter:none;
+ }
+ body[data-page^="/work/"] .case-study-layout .case-chapter-scroll{padding:0;gap:8px}
+}
