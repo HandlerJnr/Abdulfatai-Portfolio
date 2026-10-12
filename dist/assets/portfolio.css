@@ -459,7 +459,7 @@ body[data-page="/."] .portfolio-hero-actions{flex-direction:column;gap:16px}
 
 /* Proof banner: centered content, no floating name tags. */
 .portfolio-proof-strip{padding:clamp(34px,5vw,70px) 0 clamp(70px,8vw,120px);background:transparent}
-.portfolio-proof-strip .portfolio-proof-content{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(14px,1.8vw,20px);width:100%;min-height:0;padding:clamp(44px,5.5vw,70px) clamp(24px,5vw,70px);border:0;border-radius:40px;overflow:hidden;background:#9d89fc;box-shadow:none;text-align:center}
+.portfolio-proof-strip .portfolio-proof-content{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(14px,1.8vw,20px);width:100%;min-height:0;padding:clamp(44px,5.5vw,70px) clamp(24px,5vw,70px);border:0;border-radius:40px;overflow:hidden;background:#7b65c8;box-shadow:none;text-align:center}
 .portfolio-proof-strip .portfolio-proof-content::before{content:"";position:absolute;top:-1px;right:15%;width:60px;height:43px;background:#fff;clip-path:polygon(0 0,100% 0,0 100%);pointer-events:none}
 .portfolio-proof-strip .portfolio-proof-content > .portfolio-proof-top{flex:0 0 auto;min-height:0;position:relative;z-index:1;width:100%;max-width:1050px;margin:0 auto;text-align:center}
 .portfolio-proof-strip .portfolio-proof-label{display:inline-block;margin:0 0 18px;padding:0;background:transparent;border:0;border-radius:0;color:#f4efff;font:700 12px/1.3 'DM Sans',Arial,sans-serif;letter-spacing:.17em}
@@ -495,3 +495,31 @@ body[data-page="/."] .portfolio-hero-actions{flex-direction:column;gap:16px}
 .portfolio-proof-strip .portfolio-proof-links a{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){.portfolio-proof-strip .portfolio-proof-links a{transition:none}}
+
+/* Recruiter quick links complement, not replace, the full hamburger menu. */
+.portfolio-quick-nav{display:none}
+@media(min-width:1024px){
+  .header .nav-wrapper>.portfolio-quick-nav{display:flex;align-items:center;gap:clamp(16px,2vw,32px);margin-left:auto;margin-right:12px;flex:0 1 auto}
+  .portfolio-quick-nav a{display:inline-flex;align-items:center;min-height:44px;color:#fff;font:650 14px/1.3 'DM Sans',Arial,sans-serif;text-decoration:none;transition:color .2s ease}
+  .portfolio-quick-nav a:hover,.portfolio-quick-nav a[aria-current="page"]{color:#e9fa49}
+  .portfolio-quick-nav a:focus-visible{outline:3px solid #e9fa49;outline-offset:5px}
+  .portfolio-navigation-open .portfolio-quick-nav{visibility:hidden}
+}
+@media(max-width:1023px){.header .nav-wrapper>.portfolio-quick-nav{display:none}}
+/* Grounded availability message, secondary to the hero's work CTA. */
+body[data-page="/."] .portfolio-availability{display:flex;align-items:center;justify-content:center;gap:10px;max-width:680px;margin:15px auto 20px;color:#eff4fa;font:500 14px/1.55 'DM Sans',Arial,sans-serif;text-align:center}
+.portfolio-availability-dot{display:block;width:9px;height:9px;min-width:9px;border-radius:50%;background:#e9fa49;box-shadow:0 0 0 4px #e9fa4925}
+@media(max-width:767px){body[data-page="/."] .portfolio-availability{font-size:12px;line-height:1.5;margin:12px auto 18px;padding:0 4px}}
+/* Calm, sticky chapter links for long case studies. */
+.case-chapter-nav{position:sticky;top:calc(var(--portfolio-nav-height,82px) + 8px);z-index:10;display:flex;align-items:center;gap:9px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;max-width:100%;padding:10px 12px;margin:20px 0 36px;background:#ffffffed;border:1px solid #d9e0ed;border-radius:15px;box-shadow:0 8px 20px #071b3014;backdrop-filter:blur(12px)}
+.case-chapter-nav .case-chapter-label{flex:0 0 auto;white-space:nowrap;color:#596778;font:750 11px/1.3 'DM Sans',Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.case-chapter-nav a{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;white-space:nowrap;padding:9px 13px;min-height:38px;border:1px solid #d9e0ed;border-radius:100px;color:#172d43;background:#f7f9fc;text-decoration:none;font:650 12px/1.3 'DM Sans',Arial,sans-serif}
+.case-chapter-nav a:hover,.case-chapter-nav a[aria-current="location"]{color:#fff;background:#051a2f;border-color:#051a2f}
+.case-chapter-nav a:focus-visible{outline:3px solid #7b65c8;outline-offset:2px}
+.case-section[id]{scroll-margin-top:calc(var(--portfolio-nav-height,82px) + 86px)}
+@media(max-width:767px){.case-chapter-nav{top:calc(var(--portfolio-nav-height,66px) + 5px);margin:16px 0 28px;padding:8px;gap:6px;border-radius:12px}.case-chapter-nav a{font-size:11px;padding:8px 11px;min-height:38px}.case-chapter-nav .case-chapter-label{font-size:10px}.case-section[id]{scroll-margin-top:calc(var(--portfolio-nav-height,66px) + 76px)}}
+/* Smaller visual footprint while reading; all controls remain tappable. */
+@media(max-width:767px){
+  body.portfolio-reading .aj-launch,body.portfolio-reading .summon-companion{opacity:.84;box-shadow:none;border-color:#d1d9e5}
+  body.portfolio-reading .aj-launch:hover,body.portfolio-reading .aj-launch:focus-visible,body.portfolio-reading .summon-companion:hover,body.portfolio-reading .summon-companion:focus-visible{opacity:1}
+}

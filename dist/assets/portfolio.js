@@ -45,3 +45,57 @@ document.querySelectorAll('[data-credential-carousel]').forEach(carousel=>{const
 
 /* Ask Jamiu is progressively enhanced on every portfolio page. */
 ;(()=>{if(document.querySelector('script[data-ask-jamiu]'))return;const s=document.createElement('script');s.src='/assets/ask-jamiu.js?v=20261012-experience';s.defer=true;s.dataset.askJamiu='';document.body.appendChild(s)})();
+
+/* Small desktop shortcuts, shown only when there is enough room. */
+;(()=>{
+ const navWrapper=document.querySelector('.header .nav-wrapper');
+ const trigger=navWrapper?.querySelector('.portfolio-menu-trigger');
+ if(!navWrapper||!trigger||navWrapper.querySelector('.portfolio-quick-nav'))return;
+ const quick=document.createElement('nav');
+ quick.className='portfolio-quick-nav';
+ quick.setAttribute('aria-label','Quick links');
+ const current=location.pathname.replace(/\/$/,'')||'/';
+ for(const [name,path] of [['Work','/work'],['About','/about'],['Contact','/contact']]){
+   const link=document.createElement('a');
+   link.href=path;link.textContent=name;
+   if(current===path||(path==='/work'&&current.startsWith('/work/')))link.setAttribute('aria-current','page');
+   quick.append(link);
+ }
+ navWrapper.insertBefore(quick,trigger);
+})();
+/* Existing case study chapters become a navigable set without rewriting the story. */
+;(()=>{
+ const body=document.querySelector('.authentic-content .case-body');
+ if(!body||document.querySelector('.case-chapter-nav'))return;
+ const sections=[...body.querySelectorAll('.case-section[id]')].filter(s=>s.querySelector('h4'));
+ if(sections.length<3)return;
+ const nav=document.createElement('nav');
+ nav.className='case-chapter-nav';nav.setAttribute('aria-label','Case study chapters');
+ const label=document.createElement('span');label.className='case-chapter-label';label.textContent='Jump to';nav.append(label);
+ const links=[];
+ for(const section of sections){
+   const heading=section.querySelector('h4').cloneNode(true);
+   heading.querySelectorAll('.case-section-number').forEach(n=>n.remove());
+   const title=heading.textContent.replace(/\s+/g,' ').trim();
+   if(!title)continue;
+   const link=document.createElement('a');link.href='#'+encodeURIComponent(section.id);
+   link.textContent=title;link.setAttribute('aria-label','Jump to '+title);
+   nav.append(link);links.push({link,section});
+ }
+ body.before(nav);
+ const update=()=>{
+   let selected=links[0];
+   const cutoff=(document.querySelector('.header')?.getBoundingClientRect().height||82)+150;
+   for(const item of links){if(item.section.getBoundingClientRect().top<=cutoff)selected=item;}
+   for(const item of links){if(item===selected)item.link.setAttribute('aria-current','location');else item.link.removeAttribute('aria-current');}
+ };
+ let raf=0;
+ const schedule=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;update()});};
+ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});update();
+})();
+/* Quiet launchers while the visitor is reading a case study. */
+;(()=>{
+ if(!location.pathname.startsWith('/work/'))return;
+ const update=()=>document.body.classList.toggle('portfolio-reading',scrollY>560);
+ addEventListener('scroll',update,{passive:true});update();
+})();
