@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
-const hex=/#(?:[a-fA-F\d]{8}|[a-fA-F\d]{6}|[a-fA-F\d]{4}|[a-fA-F\d]{3})\b/g;
+const hex=/#(?:[a-fA-F\d]{8}|[a-fA-F\d]{6}|[a-fA-F\d]{4}|[a-fA-F\d]{3})\b/;
 const files=['dist/assets/portfolio.css','dist/assets/ask-jamiu.css','dist/assets/companion.css','dist/assets/portfolio.js'];
 const powerMarkers=[
   '/* Small, non-interactive signature powers stay inside the companion\'s orbit. */',
