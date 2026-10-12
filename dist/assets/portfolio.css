@@ -723,3 +723,12 @@ body[data-page^='/work/'] .authentic-content .case-story-link:hover{color:var(--
 @media(prefers-reduced-motion:reduce){.portfolio-mode-switch a{transition:none}}
 .simple-header .portfolio-mode-switch{display:inline-flex;gap:3px;flex-wrap:nowrap;font-size:12px;max-width:none;justify-content:flex-start}
 @media(max-width:767px){.simple-header .portfolio-mode-switch{font-size:11px}}
+
+/* Contact introduction: keep supporting copy and actions together. */
+.contact-section .contact-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:40px}
+.contact-intro-content{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px}
+.contact-section .contact-intro .section-subtitle.contact{max-width:52ch;width:100%;margin:0}
+.contact-intro-content .contact-fast-links{margin:0;justify-content:flex-start;flex-wrap:nowrap;gap:11px}
+.contact-intro-content .contact-fast-links a:first-child{background:var(--color-01);color:var(--neutral-04);border-color:var(--color-01)}
+.contact-intro-content .contact-fast-links a:first-child:hover{background:var(--neutral-04);color:var(--neutral-01);border-color:var(--neutral-04)}
+@media(max-width:991px){.contact-section .contact-intro{grid-template-columns:1fr;gap:24px}.contact-intro-content .contact-fast-links{flex-wrap:wrap}}
