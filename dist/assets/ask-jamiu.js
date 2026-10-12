@@ -93,7 +93,7 @@ function textBlocks(target,value,rich=false){
 function addSources(parent,ids){const items=[...new Set(Array.isArray(ids)?ids:[])].filter(id=>sourceInfo[id]).slice(0,3);if(!items.length)return;const wrap=el('div','aj-sources');wrap.append(el('span','aj-sources-label','Explore the work'));for(const id of items){const info=sourceInfo[id];const a=el('a','aj-source',info[0]+'  ↗');a.href=info[1];a.setAttribute('aria-label','Open '+info[0]+' case study or page');wrap.append(a);}parent.append(wrap);}
 function drawTurn(turn){const article=el('article','aj-message '+(turn.role==='user'?'aj-message-user':'aj-message-agent'));const name=el('span','aj-message-name',turn.role==='user'?'You':'Jamiu AI');article.append(name);const body=el('div','aj-message-body');textBlocks(body,turn.text,turn.role==='assistant');article.append(body);if(turn.role==='assistant')addSources(article,turn.source_ids);log.append(article);}
 function drawWelcome(){const hero=el('div','aj-welcome');hero.innerHTML='<span class="aj-welcome-mark">A LITTLE SHORTCUT</span><h3>Hello, nice to meet you.</h3><p>Looking for a particular project? Curious about how I design, or how I work with a team? Ask away. I\'ll keep it simple.</p>';log.append(hero);}
-function redraw(){log.replaceChildren();for(const t of turns)drawTurn(t);if(!turns.length)drawWelcome();chips.replaceChildren();if(!turns.length){chips.append(el('p','aj-chips-label','A few things you could ask'));for(const sample of currentSuggestions()){const b=el('button','aj-chip',sample+' ↗');b.type='button';b.addEventListener('click',()=>{if(sample==='Compare my experience with a job'){field.value='How does my documented design experience match this role? Please be fair about gaps.\n\nJob description:\n';resize();field.focus();scrollDown();return;}send(sample);});chips.append(b);}}if(turns.length&&turns[turns.length-1].role==='assistant'&&turns[turns.length-1].text&&!turns[turns.length-1].failed){const more=el('button','aj-more','Tell me more ↓');more.type='button';more.addEventListener('click',()=>send('Could you go a little deeper into your last answer with a specific example?'));chips.append(more);}resetBtn.disabled=!turns.length;scrollDown();}
+function redraw(){log.replaceChildren();for(const t of turns)drawTurn(t);if(!turns.length)drawWelcome();chips.replaceChildren();if(!turns.length){chips.append(el('p','aj-chips-label','A few things you could ask'));for(const sample of currentSuggestions()){const b=el('button','aj-chip',sample+' ↗');b.type='button';b.addEventListener('click',()=>{if(sample==='Compare my experience with a job'){field.value='How does my documented design experience match this role? Please be fair about gaps.\n\nJob description:\n';resize();field.focus();scrollDown();return;}send(sample);});chips.append(b);}}if(turns.length&&turns[turns.length-1].role==='assistant'&&turns[turns.length-1].text&&!turns[turns.length-1].failed){const more=el('button','aj-more','Tell me more ↓');more.type='button';more.addEventListener('click',()=>send('Tell me more',true));chips.append(more);}resetBtn.disabled=!turns.length;scrollDown();}
 function resize(){field.style.height='auto';field.style.height=Math.min(field.scrollHeight,132)+'px';}
 function setBusy(next){busy=next;sendBtn.disabled=next;field.disabled=next;chips.querySelectorAll('button').forEach(x=>x.disabled=next);dialog.classList.toggle('aj-busy',next);}
 function open(){opener=document.activeElement;if(typeof dialog.showModal==='function'){if(!dialog.open)dialog.showModal();}else dialog.setAttribute('open','');launch.setAttribute('aria-expanded','true');document.body.classList.add('aj-dialog-open');redraw();resize();field.focus({preventScroll:true});}
@@ -106,18 +106,18 @@ resetBtn.addEventListener('click',()=>{if(activeController)activeController.abor
 field.addEventListener('input',()=>{resize();save();});
 field.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();form.requestSubmit();}});
 form.addEventListener('submit',e=>{e.preventDefault();send(field.value);});
-async function send(value){
+async function send(value,followUp=false){
   const question=String(value||'').trim().slice(0,3500);if(busy||!question)return;
-  status.textContent='';const history=turns.filter(t=>!t.failed).slice(-10).map(t=>({role:t.role,text:t.text}));
+  status.textContent='';const history=turns.filter(t=>!t.failed).slice(-24).map(t=>({role:t.role,text:t.text,source_ids:t.source_ids||[],evidence_ids:t.evidence_ids||[]}));
   const user={role:'user',text:question};turns.push(user);field.value='';save();redraw();setBusy(true);scrollDown();
   status.textContent='Looking through my work...';
   activeController=new AbortController();
   const timeout=setTimeout(()=>activeController?.abort(),33000);
   try{
-    const response=await fetch('/api/agent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,history,page_context:{pathname:location.pathname,hash:location.hash,title:document.title}}),credentials:'same-origin',signal:activeController.signal});
+    const response=await fetch('/api/agent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,history,follow_up:followUp,page_context:{pathname:location.pathname,hash:location.hash,title:document.title}}),credentials:'same-origin',signal:activeController.signal});
     const payload=await response.json().catch(()=>null);
     if(!response.ok||typeof payload?.answer!=='string')throw new Error('agent_unavailable');
-    turns.push({role:'assistant',text:payload.answer,source_ids:payload.source_ids||[]});status.textContent='';save();redraw();
+    turns.push({role:'assistant',text:payload.answer,source_ids:payload.source_ids||[],evidence_ids:payload.evidence_ids||[]});status.textContent=payload.fallback?'From my published portfolio':'';save();redraw();
   }catch(error){
     turns.push({role:'assistant',text:'Sorry, I’m having trouble answering right now. You can still explore my projects or reach me through the contact page. Please try again in a moment.',source_ids:[],failed:true});
     status.textContent='Could not connect to the AI service.';save();redraw();
