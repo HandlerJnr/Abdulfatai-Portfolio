@@ -4,17 +4,34 @@
  const path=location.pathname.replace(/\/$/,'')||'/';
  const simple=path==='/simple'||path.startsWith('/simple/');
  if(simple)save('simple');
- if(!simple){
-  const wrapper=document.querySelector('.header .nav-wrapper');
-  const trigger=wrapper?.querySelector('.portfolio-menu-trigger');
-  if(trigger&&!wrapper.querySelector('.portfolio-view-control')){
-   const control=document.createElement('details');control.className='portfolio-view-control';
-   const simplePath=path.startsWith('/work/')?'/simple'+path:'/simple';
-   control.innerHTML='<summary aria-label="Choose portfolio view">View <span aria-hidden="true">⌄</span></summary><nav aria-label="Choose portfolio view"><a href="'+path+'" data-portfolio-view="visual" aria-current="page">Visual view</a><a href="'+simplePath+'" data-portfolio-view="simple">Simple view</a></nav>';
-   wrapper.insertBefore(control,trigger);
-   document.addEventListener('click',event=>{if(!control.contains(event.target))control.open=false});
-   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&control.open){control.open=false;control.querySelector('summary').focus()}});
-  }
+ const visualPath=simple?(path!=='/simple'?path.replace('/simple',''):'/'):path;
+ const simplePath=simple?path:(path!=='/'?'/simple'+path:'/simple');
+ const mode=document.createElement('nav');mode.className='portfolio-mode-switch';mode.setAttribute('aria-label','Portfolio view');
+ mode.innerHTML='<a href="'+visualPath+'" data-portfolio-view="visual"'+(!simple?' aria-current="page"':'')+'>Visual</a><a href="'+simplePath+'" data-portfolio-view="simple"'+(simple?' aria-current="page"':'')+'>Simple</a>';
+ if(simple){document.querySelector('.portfolio-mode-mount')?.replaceWith(mode)}
+ else{
+  const wrapper=document.querySelector('.header .nav-wrapper'),trigger=wrapper?.querySelector('.portfolio-menu-trigger');
+  wrapper?.querySelector('.portfolio-view-control')?.remove();
+  if(trigger)wrapper.insertBefore(mode,trigger);
+ }
+ if(simple){
+  const trigger=document.querySelector('.simple-menu-trigger'),menu=document.querySelector('#simple-navigation');
+  const setOpen=open=>{
+   if(!trigger||!menu)return;
+   menu.hidden=!open;menu.inert=!open;trigger.setAttribute('aria-expanded',String(open));trigger.setAttribute('aria-label',open?'Close navigation':'Open navigation');document.body.classList.toggle('simple-menu-open',open);
+   document.querySelectorAll('body>main,body>footer').forEach(el=>el.inert=open);
+  };
+  trigger?.addEventListener('click',()=>setOpen(trigger.getAttribute('aria-expanded')!=='true'));
+  menu?.addEventListener('click',event=>{if(event.target.closest('a'))setOpen(false)});
+  document.addEventListener('keydown',event=>{
+   if(trigger?.getAttribute('aria-expanded')!=='true')return;
+   if(event.key==='Escape'){setOpen(false);trigger.focus()}
+   if(event.key==='Tab'){event.preventDefault();const controls=[trigger,...menu.querySelectorAll('a')],i=controls.indexOf(document.activeElement);controls[(i+(event.shiftKey?-1:1)+controls.length)%controls.length].focus()}
+  });
+  const header=document.querySelector('.simple-header');
+  const measure=()=>document.documentElement.style.setProperty('--simple-header-height',header.getBoundingClientRect().height+'px');
+  measure();if(typeof ResizeObserver!=='undefined')new ResizeObserver(measure).observe(header);
+  addEventListener('pageshow',()=>setOpen(false));
  }
  let switching=false;
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
