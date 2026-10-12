@@ -523,3 +523,72 @@ body[data-page="/."] .portfolio-availability{display:flex;align-items:center;jus
   body.portfolio-reading .aj-launch,body.portfolio-reading .summon-companion{opacity:.84;box-shadow:none;border-color:color-mix(in srgb, var(--neutral-02) 94%, var(--color-02))}
   body.portfolio-reading .aj-launch:hover,body.portfolio-reading .aj-launch:focus-visible,body.portfolio-reading .summon-companion:hover,body.portfolio-reading .summon-companion:focus-visible{opacity:1}
 }
+
+/* Responsive alignment: honour the gutters used by the existing section-padding templates. */
+.portfolio-proof-strip{padding-inline:clamp(20px,2.35vw,30px)}
+.portfolio-proof-strip > .container{width:100%;max-width:1280px;min-width:0;margin-inline:auto;box-sizing:border-box}
+.portfolio-proof-strip .portfolio-proof-content{width:100%;max-width:100%;min-width:0;box-sizing:border-box;background-image:url(/assets/e78b808ef3e0f422.svg);background-position:85% 0;background-repeat:no-repeat;background-size:clamp(48px,6.3vw,81px) auto}
+.portfolio-proof-strip .portfolio-proof-content::before{content:none}
+/* The site's existing banner uses this exact SVG, not an improvised new shape. */
+.portfolio-proof-strip .portfolio-proof-top,
+.portfolio-proof-strip .portfolio-proof-bottom{max-width:100%;min-width:0}
+.portfolio-proof-strip .portfolio-proof-top h2{overflow-wrap:normal}
+.portfolio-proof-strip .portfolio-proof-links{min-width:0}
+.portfolio-proof-strip .portfolio-proof-links a{max-width:100%}
+@media(max-width:767px){
+ .portfolio-proof-strip{padding-inline:20px}
+ .portfolio-proof-strip .portfolio-proof-content{padding:40px 22px 36px;border-radius:28px;background-position:85% 0;background-size:clamp(39px,10vw,55px) auto}
+ .portfolio-proof-strip .portfolio-proof-top h2{font-size:clamp(36px,9.3vw,58px);letter-spacing:-.028em}
+ .portfolio-proof-strip .portfolio-proof-bottom{gap:18px}
+ .portfolio-proof-strip .portfolio-proof-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:10px}
+ .portfolio-proof-strip .portfolio-proof-links a{min-width:0;width:100%;white-space:normal;overflow-wrap:normal;gap:8px;font-size:clamp(11px,2.7vw,13px);padding:12px 10px}
+}
+@media(max-width:360px){
+ .portfolio-proof-strip{padding-inline:16px}
+ .portfolio-proof-strip .portfolio-proof-content{padding-inline:16px}
+ .portfolio-proof-strip .portfolio-proof-top h2{font-size:clamp(32px,9vw,38px)}
+}
+/* Case study chapter navigation reuses the site's existing horizontal carousel behaviour. */
+body[data-page^="/work/"] .authentic-content .case-chapter-nav{
+ box-sizing:border-box;width:100%;max-width:100%;min-width:0;
+ display:block;position:sticky;top:calc(var(--portfolio-nav-height,82px) + 8px);
+ margin:20px 0 36px;padding:8px;overflow:visible;
+ border:1px solid color-mix(in srgb,var(--neutral-02) 78%,var(--neutral-01));
+ border-radius:15px;background:color-mix(in srgb,var(--neutral-01) 94%,transparent);
+}
+.case-chapter-scroll{
+ display:flex;align-items:center;flex-flow:row nowrap;justify-content:flex-start;
+ gap:9px;width:100%;max-width:100%;min-width:0;
+ padding:4px;box-sizing:border-box;
+ overflow-x:auto;overflow-y:hidden;
+ scroll-snap-type:x proximity;scroll-padding-inline:6px;
+ -webkit-overflow-scrolling:touch;touch-action:pan-x;
+ overscroll-behavior-x:contain;scrollbar-width:thin;
+}
+.case-chapter-scroll > .case-chapter-label,.case-chapter-scroll > a{
+ flex-shrink:0;white-space:nowrap;min-width:max-content;
+}
+.case-chapter-scroll > a{scroll-snap-align:start}
+.case-chapter-scroll:focus-visible{outline:2px solid var(--neutral-03);outline-offset:1px}
+body.case-nav-near-bottom .aj-launch,body.case-nav-near-bottom .summon-companion{
+ visibility:hidden;pointer-events:none!important;
+}
+@media(max-width:767px){
+ body[data-page^="/work/"] .authentic-content .case-chapter-nav{
+   top:calc(var(--portfolio-nav-height,66px) + 6px);
+   padding:6px;margin:16px 0 28px;border-radius:12px;
+ }
+ .case-chapter-scroll{gap:8px;padding:3px;scrollbar-width:thin}
+ .case-chapter-scroll > a{min-height:42px;padding:10px 13px;font-size:12px}
+ .case-chapter-scroll > .case-chapter-label{font-size:10px}
+ .work-details-section.section-padding{padding-left:20px;padding-right:20px}
+ body[data-page^="/work/"] .authentic-content{min-width:0}
+ body[data-page^="/work/"] .case-story-intro{max-width:100%;box-sizing:border-box}
+ body[data-page^="/work/"] .case-story-notes>*{min-width:0;overflow-wrap:anywhere}
+}
+@media(max-width:360px){.work-details-section.section-padding{padding-left:16px;padding-right:16px}}
+/* Other content blocks follow the same side gutters as the existing sections. */
+@media(max-width:767px){
+ .personal-note-section,.implementation-section{padding-inline:20px}
+ .personal-note-section>.container,.implementation-section>.container{max-width:100%;min-width:0}
+}

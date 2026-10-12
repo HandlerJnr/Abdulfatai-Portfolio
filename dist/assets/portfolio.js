@@ -71,7 +71,8 @@ document.querySelectorAll('[data-credential-carousel]').forEach(carousel=>{const
  if(sections.length<3)return;
  const nav=document.createElement('nav');
  nav.className='case-chapter-nav';nav.setAttribute('aria-label','Case study chapters');
- const label=document.createElement('span');label.className='case-chapter-label';label.textContent='Jump to';nav.append(label);
+ const scroller=document.createElement('div');scroller.className='case-chapter-scroll';scroller.setAttribute('tabindex','0');scroller.setAttribute('aria-label','Scroll horizontally through case study chapters');nav.append(scroller);
+ const label=document.createElement('span');label.className='case-chapter-label';label.textContent='Jump to';scroller.append(label);
  const links=[];
  for(const section of sections){
    const heading=section.querySelector('h4').cloneNode(true);
@@ -80,14 +81,25 @@ document.querySelectorAll('[data-credential-carousel]').forEach(carousel=>{const
    if(!title)continue;
    const link=document.createElement('a');link.href='#'+encodeURIComponent(section.id);
    link.textContent=title;link.setAttribute('aria-label','Jump to '+title);
-   nav.append(link);links.push({link,section});
+   scroller.append(link);links.push({link,section});
  }
  body.before(nav);
+ let active=null;
  const update=()=>{
    let selected=links[0];
    const cutoff=(document.querySelector('.header')?.getBoundingClientRect().height||82)+150;
    for(const item of links){if(item.section.getBoundingClientRect().top<=cutoff)selected=item;}
    for(const item of links){if(item===selected)item.link.setAttribute('aria-current','location');else item.link.removeAttribute('aria-current');}
+   if(selected&&selected!==active){
+     active=selected;
+     const x=selected.link.offsetLeft;
+     const edge=x+selected.link.offsetWidth;
+     if(x<scroller.scrollLeft||edge>scroller.scrollLeft+scroller.clientWidth){
+       scroller.scrollTo({left:Math.max(0,x-(scroller.clientWidth-selected.link.offsetWidth)/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+     }
+   }
+   const rect=nav.getBoundingClientRect();
+   document.body.classList.toggle('case-nav-near-bottom',rect.top<innerHeight-54&&rect.bottom>innerHeight-135&&rect.top>0);
  };
  let raf=0;
  const schedule=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;update()});};
