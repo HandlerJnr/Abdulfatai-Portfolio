@@ -63,47 +63,88 @@ document.querySelectorAll('[data-credential-carousel]').forEach(carousel=>{const
  }
  navWrapper.insertBefore(quick,trigger);
 })();
-/* Existing case study chapters become a navigable set without rewriting the story. */
+/* Sticky desktop case-study sidebar; on mobile the same links swipe horizontally. */
 ;(()=>{
  const body=document.querySelector('.authentic-content .case-body');
  if(!body||document.querySelector('.case-chapter-nav'))return;
- const sections=[...body.querySelectorAll('.case-section[id]')].filter(s=>s.querySelector('h4'));
+ const sections=[...body.querySelectorAll('.case-section[id]')].filter(section=>section.querySelector('h4'));
  if(sections.length<3)return;
  const nav=document.createElement('nav');
- nav.className='case-chapter-nav';nav.setAttribute('aria-label','Case study chapters');
- const scroller=document.createElement('div');scroller.className='case-chapter-scroll';scroller.setAttribute('tabindex','0');scroller.setAttribute('aria-label','Scroll horizontally through case study chapters');nav.append(scroller);
- const label=document.createElement('span');label.className='case-chapter-label';label.textContent='Jump to';scroller.append(label);
+ nav.className='case-chapter-nav';
+ nav.setAttribute('aria-label','Case study chapters');
+ const scroller=document.createElement('div');
+ scroller.className='case-chapter-scroll';
+ scroller.setAttribute('tabindex','0');
+ scroller.setAttribute('aria-label','Scroll through case study chapters');
+ nav.append(scroller);
+ const label=document.createElement('span');
+ label.className='case-chapter-label';
+ label.textContent='Jump to';
+ scroller.append(label);
  const links=[];
  for(const section of sections){
    const heading=section.querySelector('h4').cloneNode(true);
-   heading.querySelectorAll('.case-section-number').forEach(n=>n.remove());
+   heading.querySelectorAll('.case-section-number').forEach(node=>node.remove());
    const title=heading.textContent.replace(/\s+/g,' ').trim();
    if(!title)continue;
-   const link=document.createElement('a');link.href='#'+encodeURIComponent(section.id);
-   link.textContent=title;link.setAttribute('aria-label','Jump to '+title);
-   scroller.append(link);links.push({link,section});
+   const link=document.createElement('a');
+   link.href='#'+encodeURIComponent(section.id);
+   link.textContent=title;
+   link.setAttribute('aria-label','Jump to '+title);
+   scroller.append(link);
+   links.push({link,section});
  }
- body.before(nav);
+ if(!links.length)return;
+ // The layout is scoped to the chapters, so sticky navigation stops at the end
+ // of the case study and the hero, story notes, and next sections stay intact.
+ const layout=document.createElement('div');
+ layout.className='case-study-layout';
+ body.before(layout);
+ layout.append(nav,body);
  let active=null;
+ const desktop=()=>matchMedia('(min-width:1024px)').matches;
+ const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const makeActiveVisible=(link)=>{
+   const box=link.getBoundingClientRect();
+   const view=scroller.getBoundingClientRect();
+   const behavior=reducedMotion()?'auto':'smooth';
+   if(desktop()){
+     if(box.top<view.top+5||box.bottom>view.bottom-5){
+       const top=scroller.scrollTop+box.top-view.top-(scroller.clientHeight-box.height)/2;
+       scroller.scrollTo({top:Math.max(0,top),behavior});
+     }
+   }else if(box.left<view.left+5||box.right>view.right-5){
+     const left=scroller.scrollLeft+box.left-view.left-(scroller.clientWidth-box.width)/2;
+     scroller.scrollTo({left:Math.max(0,left),behavior});
+   }
+ };
  const update=()=>{
    let selected=links[0];
-   const cutoff=(document.querySelector('.header')?.getBoundingClientRect().height||82)+150;
-   for(const item of links){if(item.section.getBoundingClientRect().top<=cutoff)selected=item;}
-   for(const item of links){if(item===selected)item.link.setAttribute('aria-current','location');else item.link.removeAttribute('aria-current');}
+   const cutoff=(document.querySelector('.header')?.getBoundingClientRect().height||82)+(desktop()?80:115);
+   for(const item of links){
+     if(item.section.getBoundingClientRect().top<=cutoff)selected=item;
+   }
+   for(const item of links){
+     if(item===selected)item.link.setAttribute('aria-current','location');
+     else item.link.removeAttribute('aria-current');
+   }
    if(selected&&selected!==active){
      active=selected;
-     const x=selected.link.offsetLeft;
-     const edge=x+selected.link.offsetWidth;
-     if(x<scroller.scrollLeft||edge>scroller.scrollLeft+scroller.clientWidth){
-       scroller.scrollTo({left:Math.max(0,x-(scroller.clientWidth-selected.link.offsetWidth)/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
-     }
+     makeActiveVisible(selected.link);
    }
    const rect=nav.getBoundingClientRect();
-   document.body.classList.toggle('case-nav-near-bottom',rect.top<innerHeight-54&&rect.bottom>innerHeight-135&&rect.top>0);
+   document.body.classList.toggle('case-nav-near-bottom',
+     !desktop()&&rect.top<innerHeight-54&&rect.bottom>innerHeight-135&&rect.top>0);
  };
  let raf=0;
- const schedule=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;update()});};
- addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});update();
+ const schedule=()=>{
+   if(raf)return;
+   raf=requestAnimationFrame(()=>{raf=0;update()});
+ };
+ addEventListener('scroll',schedule,{passive:true});
+ addEventListener('resize',()=>{active=null;schedule();},{passive:true});
+ addEventListener('hashchange',schedule);
+ update();
 })();
 /* Quiet launchers while the visitor is reading a case study. */
 ;(()=>{
