@@ -39,9 +39,59 @@ function save(){try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({turns:tur
 function restore(){try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'{}');turns=(Array.isArray(saved.turns)?saved.turns:[]).filter(v=>v&&['user','assistant'].includes(v.role)&&typeof v.text==='string').slice(-24);field.value=typeof saved.draft==='string'?saved.draft.slice(0,3500):'';}catch{turns=[];}}
 function currentSuggestions(){return location.pathname.startsWith('/work/')?suggestions.project:location.pathname==='/work'||location.pathname==='/'?suggestions.home:suggestions.general;}
 function scrollDown(){requestAnimationFrame(()=>{scroller.scrollTop=scroller.scrollHeight;});}
-function textBlocks(target,value){const text=String(value||'').trim();for(const p of text.split(/\n{2,}/)){if(!p.trim())continue;const item=el('p','',p.trim().replace(/(^|\n)\s*[-*]\s+/g,'$1• '));target.append(item);}}
+// Parse basic Markdown as DOM nodes. Model text never becomes executable HTML.
+function appendInline(target,value,rich){
+  const text=String(value||'');
+  if(!rich){target.append(document.createTextNode(text));return;}
+  const pattern=/\*\*([^*\n]+)\*\*|\*([^*\n]+)\*/g;
+  let match,last=0;
+  while((match=pattern.exec(text))){
+    if(match.index>last)target.append(document.createTextNode(text.slice(last,match.index)));
+    target.append(el(match[1]?'strong':'em','',match[1]||match[2]));
+    last=pattern.lastIndex;
+  }
+  if(last<text.length)target.append(document.createTextNode(text.slice(last)));
+}
+function textBlocks(target,value,rich=false){
+  const lines=String(value||'').replace(/\r\n?/g,'\n').trim().split('\n');
+  let paragraph=[],list=null;
+  function flushParagraph(){
+    if(!paragraph.length)return;
+    const p=el('p');
+    appendInline(p,paragraph.join(rich?' ':'\n'),rich);
+    target.append(p);paragraph=[];
+  }
+  function flushList(){if(list){target.append(list);list=null;}}
+  for(const raw of lines){
+    const line=raw.trim();
+    if(!line){flushParagraph();flushList();continue;}
+    const bullet=rich&&line.match(/^[-*•]\s+(.+)$/);
+    const numbered=rich&&line.match(/^\d+[.)]\s+(.+)$/);
+    if(bullet||numbered){
+      flushParagraph();
+      const tag=bullet?'ul':'ol';
+      if(list&&list.tagName.toLowerCase()!==tag)flushList();
+      if(!list)list=el(tag);
+      const item=el('li');
+      appendInline(item,(bullet||numbered)[1],true);
+      list.append(item);
+      continue;
+    }
+    flushList();
+    const heading=rich&&line.match(/^#{1,4}\s+(.+)$/);
+    if(heading){
+      flushParagraph();
+      const title=el('p','aj-message-heading');
+      appendInline(title,heading[1],true);
+      target.append(title);
+      continue;
+    }
+    paragraph.push(line);
+  }
+  flushParagraph();flushList();
+}
 function addSources(parent,ids){const items=[...new Set(Array.isArray(ids)?ids:[])].filter(id=>sourceInfo[id]).slice(0,3);if(!items.length)return;const wrap=el('div','aj-sources');wrap.append(el('span','aj-sources-label','Explore the work'));for(const id of items){const info=sourceInfo[id];const a=el('a','aj-source',info[0]+'  ↗');a.href=info[1];a.setAttribute('aria-label','Open '+info[0]+' case study or page');wrap.append(a);}parent.append(wrap);}
-function drawTurn(turn){const article=el('article','aj-message '+(turn.role==='user'?'aj-message-user':'aj-message-agent'));const name=el('span','aj-message-name',turn.role==='user'?'You':'Jamiu AI');article.append(name);const body=el('div','aj-message-body');textBlocks(body,turn.text);article.append(body);if(turn.role==='assistant')addSources(article,turn.source_ids);log.append(article);}
+function drawTurn(turn){const article=el('article','aj-message '+(turn.role==='user'?'aj-message-user':'aj-message-agent'));const name=el('span','aj-message-name',turn.role==='user'?'You':'Jamiu AI');article.append(name);const body=el('div','aj-message-body');textBlocks(body,turn.text,turn.role==='assistant');article.append(body);if(turn.role==='assistant')addSources(article,turn.source_ids);log.append(article);}
 function drawWelcome(){const hero=el('div','aj-welcome');hero.innerHTML='<span class="aj-welcome-mark">A LITTLE SHORTCUT</span><h3>Hello, nice to meet you.</h3><p>Looking for a particular project? Curious about how I design, or how I work with a team? Ask away. I\'ll keep it simple.</p>';log.append(hero);}
 function redraw(){log.replaceChildren();for(const t of turns)drawTurn(t);if(!turns.length)drawWelcome();chips.replaceChildren();if(!turns.length){chips.append(el('p','aj-chips-label','A few things you could ask'));for(const sample of currentSuggestions()){const b=el('button','aj-chip',sample+' ↗');b.type='button';b.addEventListener('click',()=>{if(sample==='Compare my experience with a job'){field.value='How does my documented design experience match this role? Please be fair about gaps.\n\nJob description:\n';resize();field.focus();scrollDown();return;}send(sample);});chips.append(b);}}if(turns.length&&turns[turns.length-1].role==='assistant'&&turns[turns.length-1].text&&!turns[turns.length-1].failed){const more=el('button','aj-more','Tell me more ↓');more.type='button';more.addEventListener('click',()=>send('Could you go a little deeper into your last answer with a specific example?'));chips.append(more);}resetBtn.disabled=!turns.length;scrollDown();}
 function resize(){field.style.height='auto';field.style.height=Math.min(field.scrollHeight,132)+'px';}
