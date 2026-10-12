@@ -732,3 +732,15 @@ body[data-page^='/work/'] .authentic-content .case-story-link:hover{color:var(--
 .contact-intro-content .contact-fast-links a:first-child{background:var(--color-01);color:var(--neutral-04);border-color:var(--color-01)}
 .contact-intro-content .contact-fast-links a:first-child:hover{background:var(--neutral-04);color:var(--neutral-01);border-color:var(--neutral-04)}
 @media(max-width:991px){.contact-section .contact-intro{grid-template-columns:1fr;gap:24px}.contact-intro-content .contact-fast-links{flex-wrap:wrap}}
+
+/* SyncAI: reuse case-study cards and keep evidence status visible. */
+.syncai-case .syncai-kicker{font:700 11px/1.5 var(--body-font);letter-spacing:.08em;margin-bottom:12px}
+.syncai-case .syncai-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.syncai-case .syncai-cards article{min-width:0;border:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent);border-radius:24px;background:var(--neutral-01)}
+.syncai-case .syncai-cards article:nth-child(4n+1){background:color-mix(in srgb,var(--neutral-01) 87%,var(--neutral-02))}
+.syncai-case .syncai-cards article:nth-child(4n+2){background:color-mix(in srgb,var(--neutral-01) 94%,var(--color-03))}
+.syncai-case .syncai-cards article:nth-child(4n+3){background:color-mix(in srgb,var(--neutral-01) 93%,var(--color-01))}
+.syncai-case .syncai-cards h5{font:400 25px/1.3 var(--heading-font);margin:0 0 16px;color:var(--neutral-04)}
+.syncai-case .syncai-cards p:last-child{margin:0}
+.syncai-case .syncai-feature-list>div{padding:20px 0;border-bottom:1px solid color-mix(in srgb,var(--neutral-04) 12%,transparent)}
+.syncai-case .syncai-feature-list p{margin:8px 0 0}

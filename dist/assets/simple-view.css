@@ -31,3 +31,14 @@
 @media(prefers-reduced-motion:reduce){.portfolio-mode-switch a{transition:none}}
 .simple-header .portfolio-mode-switch{display:inline-flex;gap:3px;flex-wrap:nowrap;font-size:12px;max-width:none;justify-content:flex-start}
 @media(max-width:767px){.simple-header .portfolio-mode-switch{font-size:11px}}
+
+.simple-view .syncai-case .case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:24px 0}
+.simple-view .syncai-case .case-grid article{border:1px solid var(--simple-line);border-radius:10px;padding:24px;background:var(--simple-surface);margin:0;min-width:0}
+.simple-view .syncai-case h5{font:600 20px/1.35 'DM Sans',sans-serif;margin:0 0 14px}
+.simple-view .syncai-case .syncai-kicker{font-size:11px;letter-spacing:.06em;font-weight:600}
+.simple-view .syncai-case .case-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:24px 0}
+.simple-view .syncai-case .case-meta strong{display:block;margin-bottom:6px}
+.simple-view .syncai-case .syncai-actions{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}
+.simple-view .syncai-case .syncai-actions a{display:inline-flex;padding:11px 15px;border:1px solid var(--simple-line);border-radius:6px;text-decoration:none;font-size:13px}
+.simple-view .syncai-case .syncai-feature-list>div{padding:18px 0;border-bottom:1px solid var(--simple-line)}
+@media(max-width:767px){.simple-view .syncai-case .case-grid,.simple-view .syncai-case .case-meta{grid-template-columns:1fr}}

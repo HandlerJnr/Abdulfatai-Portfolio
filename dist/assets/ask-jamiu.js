@@ -9,6 +9,7 @@ const suggestions={
   general:["Which project should I start with?","How do you work with developers?","Compare my experience with a job","What have you learned?"]
 };
 const sourceInfo={
+  syncai:['SyncAI','/work/syncai'],
   horal:['Horal','/work/horal'],
   pay4me:['Radius / Pay4Me','/work/pay4me'],
   'vista-itss':['Vista Digital Banking','/work/vista-itss'],
