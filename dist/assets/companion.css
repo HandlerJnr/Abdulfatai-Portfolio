@@ -276,3 +276,6 @@
   .companion-character,.companion-power,.companion-screen-power,.companion-power-burst,.companion-power-idle,.companion-burst{animation:none!important;transition:none!important}
   .summon-companion{transition:none!important}
 }
+
+/* Temporarily hidden, including before JavaScript runs. */
+:root:not(.companion-enabled) :is(.summon-companion,#companion-picker,#portfolio-companion){display:none!important}
