@@ -98,3 +98,4 @@ body[data-page^="/work/"] .authentic-content figure img,.simple-view .simple-cas
   box-shadow:none;background:var(--simple-paper);
  }
 }
+.homepage-tools{padding:28px 0;border-top:1px solid var(--simple-line);margin-top:28px}.homepage-tool-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:56px}.homepage-tools .aj-launch,.homepage-tools .summon-companion{position:static!important;inset:auto!important;transform:none!important;margin:0!important;z-index:auto!important;box-shadow:none!important}.homepage-work-more{margin-top:24px;font-weight:600}.case-validation-summary{line-height:1.7}

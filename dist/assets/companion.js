@@ -7,6 +7,7 @@ if(!document.querySelector('.summon-companion')||!document.querySelector('#compa
   document.body.insertAdjacentHTML('beforeend',companionMountMarkup);
 }
 const summon=document.querySelector('.summon-companion');
+
 const picker=document.querySelector('#companion-picker');
 const companion=document.querySelector('#portfolio-companion');
 if(!summon||!picker||!companion)return;

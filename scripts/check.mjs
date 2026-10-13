@@ -12,7 +12,8 @@ for(const filename of ['portfolio.js','companion.js','ask-jamiu.js'])execFileSyn
 execFileSync(process.execPath,['--check',path.join(root,'api/agent.js')]);
 execFileSync(process.execPath,[path.join(root,'scripts/agent-smoke.cjs')],{stdio:'inherit'});
 const home=fs.readFileSync(path.join(dist,'index.html'),'utf8');
-if(home.indexOf('id="selected-work"')<0||home.indexOf('id="selected-work"')>home.indexOf('class="service-section'))errors.push('Featured projects must precede services');
+const homeSections=[...home.matchAll(/<section\b[^>]*class="([^"]+)"/g)].map(m=>m[1]);
+if(!homeSections[0]?.includes('hero-section')||!homeSections[1]?.includes('home-featured-work'))errors.push('Featured projects must immediately follow the hero');
 for(const slug of ['horal','pay4me','vista-itss']){const page=fs.readFileSync(path.join(dist,'work',slug,'index.html'),'utf8');if(!page.includes('id="chapter-4"'))errors.push(slug+': final chapter anchor missing');}
 const work=fs.readFileSync(path.join(dist,'work/index.html'),'utf8');
 const order=[...work.matchAll(/<a href="\/work\/([^"]+)"/g)].slice(0,3).map(m=>m[1]).join(',');

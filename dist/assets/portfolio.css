@@ -806,3 +806,5 @@ body[data-page^="/work/"] .authentic-content figure img,.simple-view .simple-cas
  }
  body[data-page^="/work/"] .case-study-layout .case-chapter-scroll{padding:0;gap:8px}
 }
+/* Homepage helpers belong in the footer, never over the projects. */
+.homepage-tools{padding-top:32px;margin-top:32px;border-top:1px solid color-mix(in srgb,var(--neutral-04) 14%,transparent)}.homepage-tools>p{font-size:14px;margin:0 0 16px}.homepage-tool-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px}.homepage-tools .aj-launch,.homepage-tools .summon-companion{position:static!important;inset:auto!important;transform:none!important;margin:0!important;z-index:auto!important;box-shadow:none!important;max-width:100%}.homepage-tools .summon-companion{min-height:56px}.case-validation-summary{line-height:1.7}.case-validation-summary strong{font-weight:700}.home-featured-work{padding-top:clamp(48px,5vw,80px)}
