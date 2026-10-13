@@ -30,7 +30,7 @@ groups.forEach(([heading,links],index)=>{
  const panel=document.createElement('section');panel.className='bottom-menu-group';panel.dataset.tone=String(index+1);
  const top=document.createElement('div');top.className='bottom-menu-group-heading';
  const h=document.createElement('h3');h.textContent=heading;
- const icon=document.createElement('img');icon.src=index===1?'/assets/d7c19f194c1b075c.svg':'/assets/6b9726d2f057323d.svg';icon.alt='';icon.width=24;icon.height=24;icon.setAttribute('aria-hidden','true');top.append(h,icon);panel.append(top);
+ top.append(h);panel.append(top);
  const grid=document.createElement('div');grid.className='bottom-menu-grid';
  links.forEach(([name,path],i)=>{const a=document.createElement('a');a.href=route(path);const text=document.createElement('span');text.textContent=name;const number=document.createElement('span');number.className='bottom-menu-link-number';number.textContent=String(i+1).padStart(2,'0');number.setAttribute('aria-hidden','true');a.append(text,number);if(current===a.getAttribute('href'))a.setAttribute('aria-current','page');grid.append(a)});
  panel.append(grid);layout.append(panel);
