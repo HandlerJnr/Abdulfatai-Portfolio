@@ -1,0 +1,37 @@
+/* Tactile typography and a scroll-through case-study deck. Existing palette only. */
+.hero-header-wrapper .hero-title{display:inline-block;transform:perspective(850px) translate3d(var(--tile-x,0px),var(--tile-y,0px),0) rotateX(var(--tile-rx,0deg)) rotateY(var(--tile-ry,0deg)) rotate(var(--tile-r,0deg));transition:transform 650ms cubic-bezier(.2,.9,.2,1.2);transform-origin:center;backface-visibility:hidden}
+.hero-header-wrapper .hero-title.is-tracking{transition:transform 120ms ease-out}
+.hero-header-wrapper .hero-title-image-wrapper{transition:rotate 650ms cubic-bezier(.2,.9,.2,1.2)}
+.hero-header-wrapper:has(.is-tracking) .hero-title-image-wrapper{rotate:-5deg}
+body[data-page] .home-featured-work.motion-deck{overflow:visible}
+body[data-page] .motion-deck .project-slider{width:100%;margin:48px 0 0;height:auto;background:transparent;overflow:visible}
+body[data-page] .motion-deck .project-slider-mask{display:block;width:100%;height:auto;overflow:visible;white-space:normal;scroll-snap-type:none;padding:0 0 40px;contain:none}
+body[data-page] .motion-deck .project-slider .w-slide{display:block;position:relative;float:none;width:100%!important;margin:0 0 56px;vertical-align:top;opacity:1;transform:none}
+body[data-page] .motion-deck .portfolio-project-card{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:stretch;gap:0;min-height:420px!important;border:1px solid color-mix(in srgb,var(--neutral-04) 15%,transparent);border-radius:28px;overflow:hidden;isolation:isolate;background:var(--neutral-02);color:var(--neutral-04);transform-origin:50% 0;transform:translateY(var(--card-lift,0px)) scale(var(--card-scale,1)) rotate(var(--card-turn,0deg));box-shadow:0 16px 40px color-mix(in srgb,var(--neutral-04) 10%,transparent);text-decoration:none}
+body[data-page] .motion-deck .w-slide:nth-child(3n+2) .portfolio-project-card{background:var(--neutral-03)}
+body[data-page] .motion-deck .w-slide:nth-child(3n+3) .portfolio-project-card{background:var(--color-01)}
+body[data-page] .motion-deck .portfolio-project-card .project-thumbnail-wrapper{align-self:stretch;aspect-ratio:auto;min-height:420px!important;height:100%!important;overflow:hidden;background:var(--neutral-01)}
+body[data-page] .motion-deck .portfolio-project-card .project-thumbnail{height:100%!important;object-fit:contain;transform:scale(var(--image-scale,1.015));transition:transform 800ms cubic-bezier(.2,.7,.2,1)}
+body[data-page] .motion-deck .portfolio-project-card .single-project-content{position:relative;justify-content:center;padding:clamp(24px,4vw,64px)!important;gap:18px!important;min-width:0;background:transparent}
+body[data-page] .motion-deck .portfolio-project-card h4{font-size:clamp(32px,4vw,60px);line-height:1.08;text-wrap:balance;color:inherit}
+body[data-page] .motion-deck .portfolio-project-card .single-project-content>p{color:inherit}
+body[data-page] .motion-deck .portfolio-project-card .project-view-action{align-self:flex-start;display:inline-flex;align-items:center;gap:20px;margin-top:12px!important;color:inherit}
+.motion-deck .project-view-action::after{content:'↗';display:inline-block;font-size:24px;transition:transform 350ms cubic-bezier(.2,.9,.2,1.2)}
+.motion-case-number{display:block;font:500 12px/1.5 var(--body-font);letter-spacing:.1em;margin-bottom:auto;padding-bottom:24px}
+.motion-deck .project-slider-arrow,.motion-deck .w-slider-nav{display:none!important}
+.motion-deck .portfolio-project-card:focus-visible{outline:3px solid var(--neutral-04);outline-offset:6px;--image-scale:1.05}
+.motion-work-track{display:flex;align-items:center;gap:16px;margin-top:24px;font:500 12px/1.5 var(--body-font);letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-04)}
+.motion-work-track::before{content:'';height:2px;width:72px;background:currentColor;transform:scaleX(var(--work-progress,.05));transform-origin:left;transition:transform 150ms linear}
+@media(hover:hover) and (pointer:fine){.motion-deck .portfolio-project-card:hover{--image-scale:1.055}.motion-deck .portfolio-project-card:hover .project-view-action::after{transform:translate(5px,-5px)}}
+@media(min-width:992px) and (min-height:700px) and (prefers-reduced-motion:no-preference){
+ body[data-page] .motion-deck .project-slider .w-slide{position:sticky;top:calc(100px + var(--case-index,0)*8px);padding-bottom:0;margin-bottom:80px}
+ body[data-page] .motion-deck .portfolio-project-card{min-height:0!important;height:min(60vh,580px)}
+ body[data-page] .motion-deck .portfolio-project-card .project-thumbnail-wrapper{min-height:0!important}
+}
+@media(max-width:991px){body[data-page] .motion-deck .portfolio-project-card{grid-template-columns:1fr;min-height:0!important;border-radius:20px}body[data-page] .motion-deck .portfolio-project-card .project-thumbnail-wrapper{aspect-ratio:62/43;height:auto!important;min-height:0!important}body[data-page] .motion-deck .portfolio-project-card .single-project-content{padding:28px!important;gap:12px!important}.motion-case-number{padding-bottom:4px;margin:0}body[data-page] .motion-deck .project-slider .w-slide{margin-bottom:32px}body[data-page] .motion-deck .portfolio-project-card h4{font-size:36px}}
+@media(prefers-reduced-motion:reduce){.hero-header-wrapper .hero-title{transform:none!important;transition:none}.hero-header-wrapper .hero-title-image-wrapper{rotate:none!important;transition:none}body[data-page] .motion-deck .portfolio-project-card{transform:none!important}.motion-deck .project-thumbnail,.motion-deck .project-view-action::after{transform:none!important;transition:none!important}html{scroll-behavior:auto}}
+body[data-page] .motion-deck .section-content-wrapper{gap:24px}
+body[data-page] .motion-deck .portfolio-work-intro{margin-bottom:0}
+body[data-page] .motion-deck .motion-work-track{margin-top:0}
+body[data-page] .motion-deck .project-slider{margin-top:16px}
+body[data-page] .motion-deck .portfolio-project-card .portfolio-case-role{color:var(--neutral-04)}
