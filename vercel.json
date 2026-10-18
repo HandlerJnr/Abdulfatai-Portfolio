@@ -1,14 +1,74 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": null,
   "installCommand": "",
   "outputDirectory": ".",
-  "functions": {
-    "api/agent.py": {
-      "maxDuration": 60,
-      "memory": 1024,
-      "excludeFiles": "{assets/**,projects/**,logos/**,brand/**,credentials/**,system/**,work/**,**/*.pdf,**/*.jpg,**/*.jpeg,**/*.png,**/*.gif,**/*.svg,**/*.woff2,*.html,*.css,*.js,README.md,MOCKUP-NOTES.md,PORTFOLIO-SEARCH.md}"
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/work/horal",
+      "destination": "/work/agentic",
+      "permanent": true
+    },
+    {
+      "source": "/work/pay4me",
+      "destination": "/work/div-supply-sticker",
+      "permanent": true
+    },
+    {
+      "source": "/work/vista-itss",
+      "destination": "/work/mt-1",
+      "permanent": true
+    },
+    {
+      "source": "/work/bizinc",
+      "destination": "/work/brewbot",
+      "permanent": true
+    },
+    {
+      "source": "/work/kremor-ai",
+      "destination": "/work/journey-desk",
+      "permanent": true
+    },
+    {
+      "source": "/work/chalant-ai",
+      "destination": "/work/div-supply-landing",
+      "permanent": true
+    },
+    {
+      "source": "/work/arete",
+      "destination": "/work/desktop-portfolio",
+      "permanent": true
+    },
+    {
+      "source": "/work/shortlet-lagos",
+      "destination": "/work/smooov",
+      "permanent": true
+    },
+    {
+      "source": "/work/synqit",
+      "destination": "/work/journey-retro",
+      "permanent": true
+    },
+    {
+      "source": "/work/archi-tek",
+      "destination": "/work/puffer-asterisk",
+      "permanent": true
+    },
+    {
+      "source": "/work/loan-investment-app",
+      "destination": "/work/fullstack",
+      "permanent": true
+    },
+    {
+      "source": "/work/project-management-dashboard",
+      "destination": "/work/texture-generator",
+      "permanent": true
+    },
+    {
+      "source": "/ai",
+      "destination": "/#ai-practice",
+      "permanent": true
     }
-  }
+  ]
 }

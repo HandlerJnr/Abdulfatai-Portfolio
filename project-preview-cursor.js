@@ -1,0 +1,8 @@
+/* Decorative mouse preview cursor; project links remain native and accessible. */
+(()=>{'use strict';const fine=matchMedia('(hover:hover) and (pointer:fine)');const cursor=document.createElement('div');cursor.className='project-preview-cursor';cursor.setAttribute('aria-hidden','true');cursor.innerHTML='<span>Preview</span>';document.body.appendChild(cursor);let active=false,frame=0,x=0,y=0;
+function draw(){frame=0;cursor.style.transform=`translate3d(${x}px,${y}px,0)`}
+function hide(){active=false;cursor.classList.remove('is-visible');document.body.classList.remove('is-previewing-project')}
+function area(target){if(!target?.closest)return null;const card=target.closest('[data-feed-open]');if(!card)return null;if(card.classList.contains('project-card'))return target.closest('.project-card_media');return card}
+document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||!fine.matches||!area(e.target)){hide();return}x=e.clientX;y=e.clientY;if(!active){draw();active=true;cursor.classList.add('is-visible');document.body.classList.add('is-previewing-project')}else if(!frame)frame=requestAnimationFrame(draw)},{passive:true});
+document.addEventListener('pointerout',e=>{if(!e.relatedTarget||!area(e.relatedTarget))hide()},{passive:true});document.addEventListener('pointerdown',hide,{passive:true,capture:true});document.addEventListener('pointercancel',hide,{passive:true});document.addEventListener('portfolio:sectionchange',hide);document.addEventListener('visibilitychange',()=>{if(document.hidden)hide()});addEventListener('blur',hide);addEventListener('scroll',hide,{passive:true,capture:true});fine.addEventListener('change',hide);
+})();
