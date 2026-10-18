@@ -5,3 +5,10 @@
 /* Portal the dropdown above scroll containers and constrain it to the viewport. */
 #portfolio-menu{position:fixed;z-index:1000;box-sizing:border-box;margin:0;isolation:isolate;font-size:16px;line-height:1.4;background:var(--_colors---background--primary,#f5f5f3);color:var(--_colors---text--primary,#252523);scrollbar-width:thin;overflow-x:hidden}
 #portfolio-menu>a>span:first-child{font-size:1em}#portfolio-menu>a{padding:.75em .5em}#portfolio-menu>a>small{font-size:.72em}#portfolio-menu .portfolio-menu-footer{font-size:.95em}
+
+/* Mobile navigation stays reachable independently of the profile scroll container. */
+@media(max-width:767px){
+.portfolio-navigation.is-mobile-fixed{position:fixed;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:999;font-size:16px}
+.is-mobile-fixed .portfolio-menu-toggle{width:48px;height:48px;min-height:48px;border:1px solid var(--_colors---border--primary);border-radius:50%;background:var(--_colors---background--primary,#f5f5f3);color:var(--_colors---text--primary,#252523);box-shadow:0 4px 20px #00000014;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.is-mobile-fixed .portfolio-menu-icon{width:25px;height:24px}
+}
