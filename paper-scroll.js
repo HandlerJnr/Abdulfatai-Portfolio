@@ -49,7 +49,7 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   document.querySelectorAll('[data-feed-modal]').forEach(modal=>document.body.appendChild(modal));
   root.before(host);content.appendChild(root);source.appendChild(content);host.append(source,output);
   document.documentElement.classList.add('has-paper-scroll');
-  instance=createBend({source,content,output},{zone:240,angle:80,rounding:150,perspective:700,ease:240,smoothing:.1,tumble:.5,tilt:.5,direction:'in',top:true,bottom:true});
+  instance=createBend({source,content,output},{zone:100,angle:32,rounding:90,perspective:1500,ease:160,smoothing:.14,tumble:0,tilt:0,direction:'in',top:true,bottom:true});
   if(!instance)throw Error('Bend renderer unavailable');
   previousLenis=window.ltLenis;
   previousLenis?.destroy?.();
