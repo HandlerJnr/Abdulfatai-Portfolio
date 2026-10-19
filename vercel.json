@@ -6,68 +6,88 @@
   "cleanUrls": true,
   "redirects": [
     {
-      "source": "/work/horal",
-      "destination": "/work/agentic",
-      "permanent": true
-    },
-    {
       "source": "/work/pay4me",
-      "destination": "/work/div-supply-sticker",
+      "destination": "/work/radius-pay4me",
       "permanent": true
     },
     {
       "source": "/work/vista-itss",
-      "destination": "/work/mt-1",
-      "permanent": true
-    },
-    {
-      "source": "/work/bizinc",
-      "destination": "/work/brewbot",
-      "permanent": true
-    },
-    {
-      "source": "/work/kremor-ai",
-      "destination": "/work/journey-desk",
-      "permanent": true
-    },
-    {
-      "source": "/work/chalant-ai",
-      "destination": "/work/div-supply-landing",
-      "permanent": true
-    },
-    {
-      "source": "/work/arete",
-      "destination": "/work/desktop-portfolio",
-      "permanent": true
-    },
-    {
-      "source": "/work/shortlet-lagos",
-      "destination": "/work/smooov",
-      "permanent": true
-    },
-    {
-      "source": "/work/synqit",
-      "destination": "/work/journey-retro",
+      "destination": "/work/vista-digital-banking",
       "permanent": true
     },
     {
       "source": "/work/archi-tek",
-      "destination": "/work/puffer-asterisk",
-      "permanent": true
-    },
-    {
-      "source": "/work/loan-investment-app",
-      "destination": "/work/fullstack",
+      "destination": "/work/architek",
       "permanent": true
     },
     {
       "source": "/work/project-management-dashboard",
-      "destination": "/work/texture-generator",
+      "destination": "/work/reporting-portal",
       "permanent": true
     },
     {
       "source": "/ai",
       "destination": "/#ai-practice",
+      "permanent": true
+    },
+    {
+      "source": "/work/agentic",
+      "destination": "/work/horal",
+      "permanent": true
+    },
+    {
+      "source": "/work/div-supply-sticker",
+      "destination": "/work/radius-pay4me",
+      "permanent": true
+    },
+    {
+      "source": "/work/mt-1",
+      "destination": "/work/vista-digital-banking",
+      "permanent": true
+    },
+    {
+      "source": "/work/brewbot",
+      "destination": "/work/bizinc",
+      "permanent": true
+    },
+    {
+      "source": "/work/journey-desk",
+      "destination": "/work/kremor-ai",
+      "permanent": true
+    },
+    {
+      "source": "/work/div-supply-landing",
+      "destination": "/work/chalant-ai",
+      "permanent": true
+    },
+    {
+      "source": "/work/desktop-portfolio",
+      "destination": "/work/arete",
+      "permanent": true
+    },
+    {
+      "source": "/work/smooov",
+      "destination": "/work/shortlet-lagos",
+      "permanent": true
+    },
+    {
+      "source": "/work/journey-retro",
+      "destination": "/work/synqit",
+      "permanent": true
+    },
+    {
+      "source": "/work/puffer-asterisk",
+      "destination": "/work/architek",
+      "permanent": true
+    },
+    {
+      "source": "/work/fullstack",
+      "destination": "/work/loan-investment-app",
+      "permanent": true
+    },
+    {
+      "source": "/work/texture-generator",
+      "destination": "/work/reporting-portal",
       "permanent": true
     }
   ]

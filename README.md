@@ -2,6 +2,6 @@
 
 Personal portfolio at https://jamiudesigns.vercel.app/.
 
-Approved source: `b03de6d4443bc413cbc67d578cd7a9d069de60c7`.
+Approved source: `19966a8aa302d0b51cb8617009cc2fd00914f9a0`.
 
-The previous portfolio is preserved on `archive/portfolio-before-lately-2026-10-19`. Academic Proofreader support pages remain available.
+The previous portfolio is preserved on `archive/portfolio-before-lately-2026-10-19`.

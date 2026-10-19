@@ -20,3 +20,5 @@
 .home-panel_experience-item>.home-panel_text,.home-panel_experience-role{min-width:0;max-width:100%;white-space:normal;overflow-wrap:break-word}
 .home-panel_experience-role{text-align:right;justify-self:stretch}
 @media(max-width:360px){.home-panel_experience-item{grid-template-columns:minmax(0,1fr);gap:.2em}.home-panel_experience-role{text-align:left}}
+
+.personal-philosophy{color:var(--_colors---text--secondary);white-space:normal;word-break:normal;text-wrap:wrap}.personal-offscreen{padding-top:.75em;border-top:1px solid var(--_colors---border--primary)}
