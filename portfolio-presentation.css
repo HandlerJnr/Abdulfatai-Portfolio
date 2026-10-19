@@ -22,3 +22,15 @@
 @media(max-width:360px){.home-panel_experience-item{grid-template-columns:minmax(0,1fr);gap:.2em}.home-panel_experience-role{text-align:left}}
 
 .personal-philosophy{color:var(--_colors---text--secondary);white-space:normal;word-break:normal;text-wrap:wrap}.personal-offscreen{padding-top:.75em;border-top:1px solid var(--_colors---border--primary)}
+
+/* Compact identity banner inspired by the supplied Move Green reference. */
+.home-panel_identity{--identity-green:#103e2c;--identity-ink:#f7f9f7;align-self:stretch;width:100%;min-width:0;box-sizing:border-box;display:flex;align-items:flex-end;gap:1em;padding:1em;background:var(--identity-green);color:var(--identity-ink);border:1px solid #f7f9f7b3;border-radius:1.1em;box-shadow:0 0 0 1px #103e2c18}
+.home-panel_identity .home-panel_name-wrapper{min-width:0;flex:1;padding-top:2.25em}
+.home-panel_identity .home-panel_name{color:var(--identity-ink);overflow-wrap:normal}
+.home-panel_identity .home-panel_name-wrapper>.text-style-label{color:#f7f9f7b8;white-space:normal;line-height:1.5}
+.home-panel_identity .home-panel_avatar{box-shadow:0 0 0 1px #f7f9f733}
+.home-panel_identity>.portfolio-navigation{top:1em;right:1em}
+.home-panel_identity>.portfolio-navigation .portfolio-menu-toggle{color:var(--identity-ink)}
+.home-panel_identity>.portfolio-navigation-anchor{top:1em;right:1em}
+.home-panel_identity .portfolio-menu-toggle:focus-visible{outline-color:var(--identity-ink)}
+@media(max-width:479px){.home-panel_identity{padding:.85em;gap:.8em;border-radius:1em}.home-panel_identity .home-panel_avatar{width:5em;height:5em}.home-panel_identity>.portfolio-navigation,.home-panel_identity>.portfolio-navigation-anchor{top:.85em;right:.85em}.home-panel_identity .home-panel_name-wrapper>.text-style-label{font-size:.65em;letter-spacing:.045em}}
