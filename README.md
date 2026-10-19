@@ -1,7 +1,7 @@
-# Jamiu Abdulfatai — Portfolio
+# Jamiu Abdulfatai — Product Designer
 
-Current static portfolio, deployed at https://jamiudesigns.vercel.app/.
+Personal portfolio at https://jamiudesigns.vercel.app/.
 
-The previous portfolio is preserved on `archive/portfolio-before-lately-2026-10-19` at commit `08b66280df84def489bb775c720802f70709d505`.
+Approved source: `b03de6d4443bc413cbc67d578cd7a9d069de60c7`.
 
-This release mirrors the approved Lately-style Site source commit `29798503117eb449595f83617e268f2d28fbfea6`. The academic-proofreader support pages remain available.
+The previous portfolio is preserved on `archive/portfolio-before-lately-2026-10-19`. Academic Proofreader support pages remain available.
