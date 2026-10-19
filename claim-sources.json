@@ -1,0 +1,33 @@
+{
+  "checked": "2026-10-19",
+  "claims": {
+    "radius": {
+      "url": "https://withradius.com/",
+      "figures": [
+        "120K+ registered users",
+        "1,500+ five-star reviews",
+        "6H average delivery on business days"
+      ],
+      "attribution": "Company-reported, not personal design impact"
+    },
+    "horal": {
+      "url": "https://play.google.com/store/apps/details?id=ng.horal.app",
+      "figures": [
+        "100+ downloads"
+      ],
+      "attribution": "Store threshold, not exact total"
+    },
+    "kremor": {
+      "source": "credentials/files/kremor-founder-reference.pdf",
+      "supported": "Combined UI/UX and AI-evaluation responsibilities",
+      "removed": "96+ task count not substantiated by the reference"
+    },
+    "synqit": {
+      "removed": "3x improvement, no published benchmark"
+    },
+    "design-scope": {
+      "source": "User-supplied project screens",
+      "meaning": "Counts describe designed scope, not measured outcomes"
+    }
+  }
+}
