@@ -1,11 +1,12 @@
 import {createBend,supportsHtmlInCanvas} from '/vendor/canvas-ui-bend.js';
 /* Canvas UI Bend integration. Reference settings: Anthony Luong's paper-curl experiment. */
 const motion=matchMedia('(prefers-reduced-motion:reduce)');
-const root=document.querySelector('.page-wrapper');
+const root=document.querySelector('.section_feed');
+const desktop=matchMedia('(min-width:992px)');
 const params=new URLSearchParams(location.search);
 const status={supported:supportsHtmlInCanvas(),active:false,reason:'unsupported'};
 window.portfolioPaperScroll=status;
-if(root&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
+if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
  let instance,host,content,source,output,previousLenis,adapter,stopped=false,restored=false;
  const initialY=scrollY;
  const notify=()=>{window.dispatchEvent(new Event('scroll'));window.ScrollTrigger?.update()};
@@ -14,7 +15,7 @@ if(root&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
   const y=content?.scrollTop||0;
   instance?.destroy();
   content?.removeEventListener('scroll',notify);
-  if(host?.parentNode){host.before(root);host.remove()}
+  if(host?.parentNode){host.before(content?.querySelector('.section_feed')||root);host.remove()}
   document.documentElement.classList.remove('has-paper-scroll');
   if(window.ltLenis===adapter)window.ltLenis=null;
   window.ScrollTrigger?.scrollerProxy(window,null);
@@ -28,7 +29,7 @@ if(root&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
   content=document.createElement('div');content.className='portfolio-paper-content';content.tabIndex=-1;
   output=document.createElement('canvas');output.className='portfolio-paper-output';output.setAttribute('aria-hidden','true');
   // Overlay dialogs stay in the native DOM above the distorted sheet.
-  root.querySelectorAll('[data-feed-modal]').forEach(modal=>document.body.appendChild(modal));
+  document.querySelectorAll('[data-feed-modal]').forEach(modal=>document.body.appendChild(modal));
   root.before(host);content.appendChild(root);source.appendChild(content);host.append(source,output);
   document.documentElement.classList.add('has-paper-scroll');
   instance=createBend({source,content,output},{zone:240,angle:80,rounding:150,perspective:700,ease:240,smoothing:.1,tumble:.5,tilt:.5,direction:'in',top:true,bottom:true});
@@ -59,6 +60,7 @@ if(root&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
   content.scrollTop=initialY;
   content.addEventListener('scroll',notify,{passive:true});
   document.addEventListener('portfolio:sectionchange',()=>instance?.resize());
+  desktop.addEventListener('change',()=>{if(!desktop.matches)restore('single-column-layout')});
   motion.addEventListener('change',()=>{if(motion.matches)restore('reduced-motion')});
   output.addEventListener('webglcontextlost',()=>restore('graphics-context-lost'),{once:true});
   window.ScrollTrigger?.refresh();
