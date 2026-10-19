@@ -9,12 +9,29 @@ window.portfolioPaperScroll=status;
 if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
  let instance,host,content,source,output,previousLenis,adapter,stopped=false,restored=false;
  const initialY=scrollY;
+ function wheelScroll(event){
+  if(stopped||event.ctrlKey||event.metaKey)return;
+  // HTML drawn inside a canvas is not a native wheel-scroll target.
+  // Route input explicitly to the live project-column scroll container.
+  const unit=event.deltaMode===1?16:event.deltaMode===2?content.clientHeight:1;
+  event.preventDefault();
+  content.scrollTop+=event.deltaY*unit;
+ }
+ function keyScroll(event){
+  if(stopped||event.altKey||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable],button,[role="tab"]'))return;
+  const page=content.clientHeight*.85;
+  const moves={ArrowDown:48,ArrowUp:-48,PageDown:page,PageUp:-page,' ':event.shiftKey?-page:page};
+  if(event.key==='Home'||event.key==='End'){event.preventDefault();content.scrollTop=event.key==='Home'?0:content.scrollHeight}
+  else if(event.key in moves){event.preventDefault();content.scrollTop+=moves[event.key]}
+ }
  const notify=()=>{window.dispatchEvent(new Event('scroll'));window.ScrollTrigger?.update()};
  function restore(reason){
   if(restored)return;restored=true;
   const y=content?.scrollTop||0;
   instance?.destroy();
   content?.removeEventListener('scroll',notify);
+  host?.removeEventListener('wheel',wheelScroll,true);
+  content?.removeEventListener('keydown',keyScroll);
   if(host?.parentNode){host.before(content?.querySelector('.section_feed')||root);host.remove()}
   document.documentElement.classList.remove('has-paper-scroll');
   if(window.ltLenis===adapter)window.ltLenis=null;
@@ -59,6 +76,10 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   });
   content.scrollTop=initialY;
   content.addEventListener('scroll',notify,{passive:true});
+  host.addEventListener('wheel',wheelScroll,{capture:true,passive:false});
+  content.addEventListener('keydown',keyScroll);
+  content.setAttribute('aria-label','Project column');
+  content.setAttribute('role','region');
   document.addEventListener('portfolio:sectionchange',()=>instance?.resize());
   desktop.addEventListener('change',()=>{if(!desktop.matches)restore('single-column-layout')});
   motion.addEventListener('change',()=>{if(motion.matches)restore('reduced-motion')});
