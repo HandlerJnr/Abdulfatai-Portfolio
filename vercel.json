@@ -94,7 +94,6 @@
   "functions": {
     "api/agent.py": {
       "maxDuration": 60,
-      "memory": 1024,
       "excludeFiles": "{assets/**,vendor/**,academic-proofreader/**,brand/**,logos/**,credentials/**,system/**,work/**,works/**,**/*.html,**/*.css,**/*.js,tests/**,README.md}"
     }
   }

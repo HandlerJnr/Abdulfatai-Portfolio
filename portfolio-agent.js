@@ -4,6 +4,7 @@ launcher.className='portfolio-search-launch';
 launcher.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg><span>Ask about my work</span>';
 launcher.setAttribute('aria-label','Ask about Jamiu’s work');
 launcher.setAttribute('aria-haspopup','dialog');
+launcher.setAttribute('aria-expanded','false');
 const launchHost=document.querySelector('.home-panel_layout');if(launchHost){const bio=launchHost.querySelector('.home-panel_bio');if(bio)bio.after(launcher);else launchHost.append(launcher)}else document.body.append(launcher);
 
 const dialog=document.createElement('dialog');
