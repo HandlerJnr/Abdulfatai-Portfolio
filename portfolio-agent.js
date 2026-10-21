@@ -29,7 +29,32 @@ const SESSION_KEY='jamiu-agent-session-v2';
 let turns=[];
 let originContext=null;
 let originUrl='';
-function renderWelcome(){conversation.replaceChildren(text('p','Ask about Jamiu’s work, experience or design decisions.','search-welcome'));dialog.classList.remove('has-conversation');}
+const welcomeLines=[
+ 'What would you like to know?',
+ 'Have a role in mind? Let’s talk about it.',
+ 'Looking for a particular kind of experience?',
+ 'Curious about a project? Ask away.',
+ 'What matters most in your next designer?',
+ 'Let’s find the work that’s relevant to you.'
+];
+let welcomeIndex=Math.floor(Math.random()*welcomeLines.length);
+function renderWelcome(){
+ const state=text('div','','search-welcome-state');
+ const emblem=text('div','','agent-welcome-emblem');emblem.setAttribute('aria-hidden','true');
+ const icon=document.createElement('img');icon.src='/assets/db99cb95c28524de.png';icon.alt='';icon.width=64;icon.height=64;emblem.append(icon);
+ const headline=text('p',welcomeLines[welcomeIndex],'search-welcome');headline.setAttribute('aria-hidden','true');
+ const accessible=text('p','Ask about Jamiu’s work, experience or a role you’re hiring for.','sr-only');
+ const note=text('p','Ask in your own words, or choose a question below.','agent-welcome-note');
+ state.append(emblem,headline,accessible,note);conversation.replaceChildren(state);dialog.classList.remove('has-conversation');
+}
+renderWelcome();
+setInterval(()=>{
+ if(!dialog.open||document.hidden||dialog.classList.contains('has-conversation')||input.value.trim()||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+ const headline=conversation.querySelector('.search-welcome-state .search-welcome');if(!headline)return;
+ welcomeIndex=(welcomeIndex+1+Math.floor(Math.random()*(welcomeLines.length-1)))%welcomeLines.length;
+ headline.textContent=welcomeLines[welcomeIndex];
+ headline.animate?.([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});
+},7500);
 function saveConversation(){
   try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:1,updated:Date.now(),history,turns:turns.slice(-24),draft:input.value.slice(0,700),originContext,originUrl}));}catch{}
 }
