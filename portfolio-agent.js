@@ -452,7 +452,7 @@ function sourceCards(found){
  const cards=text('div','','search-results');
  uniqueRecords(found).forEach(record=>{
   const link=document.createElement('a');link.href=record.url;link.className='search-result';
-  const projectSlug=new URL(record.url,location.origin).pathname.match(/^\\/work\\/([^/]+)\\/?$/)?.[1]||'';
+  const projectSlug=new URL(record.url,location.origin).pathname.match(/^\/work\/([^/]+)\/?$/)?.[1]||'';
   link.setAttribute('aria-label','View '+record.title+' work');
   link.addEventListener('click',event=>{
    if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
