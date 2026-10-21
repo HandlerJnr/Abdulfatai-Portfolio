@@ -80,7 +80,7 @@ function resizeComposer(){
  const previous=input.getBoundingClientRect().height||44;
  input.style.transition='none';
  input.style.height='auto';
- const cap=Math.min(192,Math.max(96,innerHeight*.25));
+ const cap=Math.min(168,Math.max(88,(window.visualViewport?.height||innerHeight)*.24));
  const measured=input.scrollHeight;
  const next=Math.max(44,Math.min(measured,cap));
  input.style.height=previous+'px';
@@ -427,39 +427,49 @@ async function getRecords(){
   return loading;
 }
 
+// Resolve work mentioned by name in the assistant's answer; avoid stale previews.
+function projectsInAnswer(answer,question){
+ if(!records||!/\b(project|work|portfolio|case stud|show|preview|open|view|best|strongest|b2b|fintech|marketplace|design)\b/i.test(question))return [];
+ const lower=cleanAgentOutput(answer).toLowerCase();
+ const aliases={'vista-itss':['vista digital banking','vista banking','vista'],
+   'pay4me':['radius / pay4me','radius','pay4me'],
+   'archi-tek':['archi-tek','architek'],
+   'kremor-ai':['kremor ai','kremor'],
+   'chalant-ai':['chalant ai','chalant']};
+ return records.filter(record=>record.url.startsWith('/work/')).map(record=>{
+  const names=[record.title.toLowerCase(),...(aliases[record.id]||[])];
+  const positions=names.map(name=>{
+   const at=lower.indexOf(name);if(at<0)return -1;
+   const before=lower[at-1]||' ',after=lower[at+name.length]||' ';
+   return /[a-z0-9]/.test(before)||/[a-z0-9]/.test(after)?-1:at;
+  }).filter(at=>at>=0);
+  const urlAt=lower.indexOf(record.url.toLowerCase());
+  if(urlAt>=0)positions.push(urlAt);
+  return {record,index:positions.length?Math.min(...positions):-1};
+ }).filter(item=>item.index>=0).sort((a,b)=>a.index-b.index).slice(0,3).map(item=>item.record);
+}
 function sourceCards(found){
-  const cards=text('div','','search-results');
-  found.forEach(record=>{
-    const link=document.createElement('a');
-    link.href=record.url;
-    link.className='search-result';
-    link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(chatView==='focused'&&dockViewport.matches){event.preventDefault();event.stopImmediatePropagation();showProof(record)}});
-    const proofURL=new URL(record.url,location.origin);
-    const project=proofURL.pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
-    if(project&&document.querySelector('[data-feed-detail="'+project+'"]')){
-      link.setAttribute('data-feed-open',project);
-      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
-    }else if(['/', '/works/', '/brand/', '/logos/', '/system/', '/credentials/'].includes(proofURL.pathname)&&!proofURL.hash){
-      link.setAttribute('data-section-step','');
-      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
-    }
-
-    if(record.image){
-      const image=document.createElement('img');
-      image.src=record.image;
-      image.alt='';
-      image.loading='lazy';
-      link.append(image);
-    }else{
-      link.append(text('span',record.title.slice(0,1),'search-monogram'));
-    }
-
-    const copy=text('div');
-    copy.append(text('strong',record.title),text('span',record.summary));
-    link.append(copy);
-    cards.append(link);
+ const cards=text('div','','search-results');
+ uniqueRecords(found).forEach(record=>{
+  const link=document.createElement('a');link.href=record.url;link.className='search-result';
+  link.setAttribute('aria-label',dockViewport.matches?'Preview '+record.title:'Open '+record.title);
+  link.addEventListener('click',event=>{
+   if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   if(dockViewport.matches){
+    event.preventDefault();
+    if(chatView==='docked')setChatView('focused');
+    showProof(record);
+   }else closeAgent();
   });
-  return cards;
+  if(record.image){
+   const image=document.createElement('img');image.src=record.image;image.alt='';image.loading='lazy';link.append(image);
+  }else link.append(text('span',record.title.slice(0,1),'search-monogram'));
+  const copy=text('div');
+  copy.append(text('strong',record.title),text('span',record.summary),
+    text('span',dockViewport.matches?'Select to preview ↗':'Open case study ↗','agent-source-action'));
+  link.append(copy);cards.append(link);
+ });
+ return cards;
 }
 
 function normaliseCurrentPath(value){
@@ -567,8 +577,7 @@ function showInputClarification(q){
 }
 async function ask(q){
   q=q.trim();if(!q)return;
-  const previewAtAsk=proofRequest;
-  dialog.dispatchEvent(new CustomEvent('agent-question'));
+   dialog.dispatchEvent(new CustomEvent('agent-question'));
   if(busy)return;
   if(needsClarification(q)){
     showInputClarification(q);
@@ -613,16 +622,11 @@ async function ask(q){
       response.dataset.agentError=error?.code||'agent-unavailable';
     }
 
-    // Select a preview from the actual project named in a navigation answer,
-    // including when the model does not return an evidence ID.
-    if(!evidenceCards.length&&/\b(show|preview|open|view|point me|where|strongest|best project|top project|impressive|see it|see the project)\b/i.test(q)){
-      const lower=answer.toLowerCase();
-      const mentioned=records.find(record=>record.url.startsWith('/work/')&&(
-        record.id==='vista-itss'?/\bvista\b/i.test(answer):
-        record.id==='pay4me'?/\b(radius|pay4me)\b/i.test(answer):
-        lower.includes(record.title.toLowerCase())
-      ));
-      if(mentioned)evidenceCards=[mentioned];
+    // Suggestions are clickable choices, never an automatic preview.
+    const mentionedProjects=projectsInAnswer(answer,q);
+    if(mentionedProjects.length){
+      evidenceCards=uniqueRecords([...mentionedProjects,...evidenceCards.filter(record=>record.url.startsWith('/work/'))]).slice(0,3);
+      if(dockViewport.matches&&chatView==='focused')clearProofForSuggestions();
     }
     response.classList.remove('is-thinking');
     response.replaceChildren();
@@ -643,18 +647,8 @@ async function ask(q){
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
-      response.append(text('span',usedAgent?'Portfolio proof':'Read these projects','search-kicker'));
+      response.append(text('span',mentionedProjects.length?'Choose a project to preview':'Portfolio proof','search-kicker'));
       response.append(sourceCards(evidenceCards));
-      if(dockViewport.matches){
-        const previewAction=text('button','Show '+evidenceCards[0].title+' in preview ↗','agent-preview-action');
-        previewAction.type='button';
-        previewAction.addEventListener('click',()=>{
-          if(chatView==='docked')setChatView('focused');
-          showProof(evidenceCards[0]);
-        });
-        response.append(previewAction);
-      }
-      if(chatView==='focused'&&dockViewport.matches&&proofRequest===previewAtAsk)showProof(evidenceCards[0]);
     }
 
     turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent});
@@ -774,7 +768,7 @@ launcher.addEventListener('click',()=>{
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
-  input.focus({preventScroll:true});resizeComposer();
+  if(!fullScreenViewport.matches)input.focus({preventScroll:true});resizeComposer();
 });
 
 dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
