@@ -76,3 +76,10 @@
 
 .search-form textarea{transition:height .16s ease-out}
 @media(prefers-reduced-motion:reduce){.search-form textarea{transition:none}}
+
+/* Keep the conversation on the same focused reading measure as its composer. */
+.search-conversation{padding-inline:max(1.5em,calc((100% - 45em)/2))}
+.search-question{max-width:80%}
+.search-answer-body{max-width:68ch}
+.portfolio-search.is-docked .search-conversation{padding-inline:1em}
+@media(max-width:767px){.search-conversation{padding-inline:1.2em}}
