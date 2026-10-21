@@ -35,6 +35,7 @@ def evaluate(base_url,cases):
    except Exception as error:
     rows.append({'question':turn['question'],'error':type(error).__name__});break
   results.append({'case':case['name'],'pass':len(rows)==len(case['turns']) and all(row.get('pass') for row in rows),'turns':rows})
+  if any(row.get('error')=='rate_limit' for row in rows):break
  return results
 
 if __name__=='__main__':

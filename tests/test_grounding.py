@@ -40,13 +40,13 @@ class Grounding(unittest.TestCase):
  def test_social_mode_cannot_hide_personal_claims(self):
   self.assertEqual(a['validate_grounded_reply'](json.dumps({'answer':"You're welcome!",'kind':'social','claims':[]}),{}),"You're welcome!")
   with self.assertRaises(RuntimeError):a['validate_grounded_reply'](json.dumps({'answer':'He is a NASA engineer.','kind':'social','claims':[]}),{})
- def test_review_rewrites_wrong_draft_instead_of_passing_it_through(self):
+ def test_generation_checks_prior_false_claim_without_duplicate_provider_calls(self):
   sources={'f':{'text':'Jamiu designed this portfolio in Figma.'}}
-  prompt=a['build_prompt']('Which development team?',[], '', 'conversation',{})
+  prompt=a['build_prompt']('Which development team?',[{'role':'assistant','content':'A development team built it.'}], '', 'conversation',{})
   review={'answer':'He designed this portfolio in Figma.','kind':'grounded','claims':[{'text':'He designed this portfolio in Figma.','source_id':'f','quote':'designed this portfolio in Figma'}]}
-  model=Mock(side_effect=[('A development team built it.','test'),(json.dumps(review),'test')]);a['call_model']=model
+  model=Mock(return_value=(json.dumps(review),'test'));a['call_model']=model
   answer,_=a['checked_answer'](prompt,sources)
-  self.assertNotIn('development team',answer);self.assertEqual(model.call_count,2)
+  self.assertNotIn('development team',answer);self.assertEqual(model.call_count,1)
   self.assertIn('A development team built it.',model.call_args.args[0])
  def test_no_draft_or_review_failure_leaks_to_stream(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('grounding_invalid'))
