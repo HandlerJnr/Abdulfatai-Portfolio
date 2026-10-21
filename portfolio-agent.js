@@ -809,7 +809,7 @@ addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{
 document.addEventListener('portfolio:sectionchange',positionDock);
 syncViewControl();
 
-dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();if(!tourPanel.hidden){finishAgentTour(true);return;}if(!chatActions.hidden){setActionsOpen(false);actionToggle.focus({preventScroll:true})}else closeAgent()}});
+dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();if(!chatActions.hidden){setActionsOpen(false);actionToggle.focus({preventScroll:true})}else closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
 const fullScreenViewport=window.matchMedia('(max-width:991px)');
 // Lock document scrolling without turning body into a fixed positioning container.
@@ -893,7 +893,6 @@ launcher.addEventListener('click',()=>{
   getRecords().catch(()=>{});
   // Focus the composer immediately on desktop; mobile visitors tap it when ready.
   if(!fullScreenViewport.matches)input.focus({preventScroll:true});resizeComposer();
-  offerAgentTour();
 });
 
 dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
@@ -912,7 +911,6 @@ dialog.addEventListener('cancel',event=>{
 
 dialog.addEventListener('close',()=>{
   if(dialog.open)return; // Switching views queues a close event before reopening.
-  finishAgentTour(false);
   if(chatView==='docked'&&profile)profile.scrollTop=profileScroll;
   chatView='focused';dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');syncViewControl();
   document.body.style.overflow=savedOverflow;
@@ -1058,45 +1056,6 @@ async function showProof(record){
   details.removeAttribute('aria-busy');setOpenAction();
  }catch{if(token===proofRequest){details.removeAttribute('aria-busy');details.append(text('p','The full page is available through the link below.','agent-proof-role'))}}
 }
-// A first-use invitation, with a short tour that can always be reopened.
-const TOUR_KEY='jamiu-agent-tour-v1';
-let tourIndex=-1,tourSteps=[],tourTarget=null;
-const tourHelp=text('button','?','agent-tour-help');tourHelp.type='button';tourHelp.setAttribute('aria-label','How to use this chat');tourHelp.title='How to use this chat';windowControls.insertBefore(tourHelp,closeButton);
-const tourPanel=text('section','','agent-tour-panel');tourPanel.hidden=true;tourPanel.setAttribute('aria-label','Chat walkthrough');dialog.append(tourPanel);
-function rememberAgentTour(){try{localStorage.setItem(TOUR_KEY,'seen')}catch{}}
-function finishAgentTour(restoreFocus=false){if(tourTarget)tourTarget.classList.remove('agent-tour-target');tourTarget=null;tourIndex=-1;tourPanel.hidden=true;rememberAgentTour();if(restoreFocus)tourHelp.focus({preventScroll:true});}
-function agentTourSteps(){
- const steps=[{title:'Ask in your own words',body:'Ask about Jamiu’s work, experience or a specific project. Follow-up questions stay in the conversation. Use Stop while a reply arrives, or Retry if it fails.',target:form}];
- if(dockViewport.matches)steps.push(
-  {title:'Browse while you chat',body:'Chat stays on the left while you scroll and navigate the portfolio beside it. Select a project to explore its details. Close chat anytime; reopening keeps your conversation.',target:closeButton}
- );
- steps.push({title:'Compare a role',body:'Open Chat options (the three dots), then Compare a role. Paste a job description or upload a PDF or Word file, review its text and compare it with the portfolio.',target:actionToggle});
- return steps;
-}
-function showAgentTourStep(index){
- if(tourTarget)tourTarget.classList.remove('agent-tour-target');
- tourIndex=index;const step=tourSteps[index];tourTarget=step.target;tourTarget.classList.add('agent-tour-target');
- tourPanel.replaceChildren();tourPanel.hidden=false;
- const count=text('p',(index+1)+' / '+tourSteps.length,'agent-tour-count');
- const title=text('h3',step.title);title.tabIndex=-1;
- const description=text('p',step.body);const actions=text('div','','agent-tour-actions');
- const skip=text('button','Skip tour');skip.type='button';skip.addEventListener('click',()=>finishAgentTour(true));actions.append(skip);
- if(index>0){const back=text('button','Back');back.type='button';back.addEventListener('click',()=>showAgentTourStep(index-1));actions.append(back);}
- const next=text('button',index===tourSteps.length-1?'Done':'Next');next.type='button';next.addEventListener('click',()=>index===tourSteps.length-1?finishAgentTour(true):showAgentTourStep(index+1));actions.append(next);
- tourPanel.append(count,title,description,actions);title.focus({preventScroll:true});
-}
-function startAgentTour(){rememberAgentTour();setActionsOpen(false);tourSteps=agentTourSteps();showAgentTourStep(0);}
-function offerAgentTour(){
- try{if(localStorage.getItem(TOUR_KEY))return;}catch{}
- if(turns.length)return;
- tourPanel.replaceChildren(text('h3','A quick look around?'),text('p','See how to chat, explore projects and compare a role.'));
- const actions=text('div','','agent-tour-actions');const skip=text('button','Not now');skip.type='button';skip.addEventListener('click',()=>finishAgentTour(false));
- const start=text('button','Start tour');start.type='button';start.addEventListener('click',startAgentTour);actions.append(skip,start);tourPanel.append(actions);tourPanel.hidden=false;
-}
-tourHelp.addEventListener('click',()=>tourPanel.hidden?startAgentTour():finishAgentTour(true));
-input.addEventListener('input',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
-dialog.addEventListener('agent-question',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
-dockViewport.addEventListener('change',()=>{if(tourIndex>=0){tourSteps=agentTourSteps();showAgentTourStep(0)}});
 const ready=getRecords().then(()=>{initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
 window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
