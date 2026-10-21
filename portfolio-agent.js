@@ -411,6 +411,15 @@ function sourceCards(found){
     const link=document.createElement('a');
     link.href=record.url;
     link.className='search-result';
+    const proofURL=new URL(record.url,location.origin);
+    const project=proofURL.pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
+    if(project&&document.querySelector('[data-feed-detail="'+project+'"]')){
+      link.setAttribute('data-feed-open',project);
+      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
+    }else if(['/', '/works/', '/brand/', '/logos/', '/system/', '/credentials/'].includes(proofURL.pathname)&&!proofURL.hash){
+      link.setAttribute('data-section-step','');
+      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
+    }
 
     if(record.image){
       const image=document.createElement('img');
@@ -623,6 +632,64 @@ async function ask(q){
 const reduceAgentMotion=matchMedia('(prefers-reduced-motion:reduce)');
 let closingAgent=false;
 let savedOverflow='';
+let chatView='focused';
+const dockViewport=matchMedia('(min-width:992px)');
+const profile=document.querySelector('.home-panel_component');
+let profileScroll=0;
+const windowControls=text('div','','search-window-controls');
+const closeButton=dialog.querySelector('.search-close');
+const viewButton=text('button','','search-view-toggle');viewButton.type='button';
+windowControls.append(viewButton,closeButton);dialog.querySelector('.search-heading').append(windowControls);
+function syncViewControl(){
+ viewButton.hidden=!dockViewport.matches||!profile;
+ const docked=chatView==='docked';
+ document.querySelectorAll('[data-feed-modal]').forEach(modal=>modal.setAttribute('aria-modal',String(!docked)));
+ viewButton.setAttribute('aria-label',docked?'Expand chat to centred view':'Dock chat on the left and browse projects');
+ viewButton.title=docked?'Expand chat':'Browse alongside projects';
+ viewButton.setAttribute('aria-pressed',String(docked));
+ viewButton.innerHTML=docked?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 4v16M7 9l-2 3 2 3"/></svg>';
+}
+function positionDock(){
+ if(chatView!=='docked'||!profile||!dialog.open)return;
+ const rect=profile.getBoundingClientRect(),style=getComputedStyle(profile);
+ const padding=Math.max(16,parseFloat(style.paddingLeft)||16);
+ const identity=profile.querySelector('.home-panel_identity')?.getBoundingClientRect();
+ const top=Math.min(Math.max(16,(identity?.bottom||rect.top+100)+20),Math.max(16,innerHeight-360));
+ const left=Math.max(12,rect.left+padding);
+ const width=Math.max(240,rect.width-padding-(parseFloat(style.paddingRight)||padding));
+ const height=Math.max(240,innerHeight-top-20);
+ for(const [key,value] of Object.entries({left,top,width,height}))dialog.style.setProperty('--agent-dock-'+key,value+'px');
+ document.body.style.setProperty('--agent-project-left',Math.max(0,rect.right)+'px');
+}
+function setChatView(next){
+ if(next==='docked'&&(!dockViewport.matches||!profile))next='focused';
+ if(next===chatView||!dialog.open){syncViewControl();return;}
+ const before=dialog.getBoundingClientRect(),focus=document.activeElement,conversationScroll=conversation.scrollTop;
+ // Reopen the same dialog without rebuilding it: draft, messages and scroll survive.
+ dialog.close();chatView=next;
+ const docked=next==='docked';
+ dialog.classList.toggle('is-docked',docked);document.body.classList.toggle('agent-is-docked',docked);
+ dialog.inert=false;
+ if(docked){
+  profileScroll=profile.scrollTop;profile.scrollTop=0;
+  document.body.style.overflow=savedOverflow;dialog.show();positionDock();
+ }else{
+  if(profile)profile.scrollTop=profileScroll;
+  dialog.showModal();document.body.style.overflow='hidden';
+ }
+ syncViewControl();
+ if(!reduceAgentMotion.matches&&dialog.animate){
+  const after=dialog.getBoundingClientRect();
+  dialog.animate([{transformOrigin:'top left',transform:'translate('+(before.left-after.left)+'px,'+(before.top-after.top)+'px) scale('+(before.width/after.width)+','+(before.height/after.height)+')',opacity:.85},{transformOrigin:'top left',transform:'translate(0,0) scale(1,1)',opacity:1}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'});
+ }
+ (dialog.contains(focus)?focus:input).focus({preventScroll:true});conversation.scrollTop=conversationScroll;saveConversation();
+}
+viewButton.addEventListener('click',()=>setChatView(chatView==='focused'?'docked':'focused'));
+dockViewport.addEventListener('change',()=>{if(!dockViewport.matches&&chatView==='docked')setChatView('focused');syncViewControl()});
+addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{passive:true});
+document.addEventListener('portfolio:sectionchange',positionDock);
+syncViewControl();
+
 dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
 
@@ -639,8 +706,9 @@ launcher.addEventListener('click',()=>{
   document.querySelector('.portfolio-navigation button[aria-expanded=\"true\"]')?.click();
   dialog.inert=false;
   input.disabled=false;input.readOnly=false;
-  dialog.showModal();
-  savedOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
+  savedOverflow=document.body.style.overflow;chatView='focused';
+  dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');
+  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
@@ -662,6 +730,9 @@ dialog.addEventListener('cancel',event=>{
 });
 
 dialog.addEventListener('close',()=>{
+  if(dialog.open)return; // Switching views queues a close event before reopening.
+  if(chatView==='docked'&&profile)profile.scrollTop=profileScroll;
+  chatView='focused';dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');syncViewControl();
   document.body.style.overflow=savedOverflow;
   saveConversation();
   input.blur();

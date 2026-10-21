@@ -30,6 +30,23 @@
 }
 
 /* New conversation: a calm, animated invitation; hidden as soon as a message is sent. */
+.portfolio-search{inset:0;margin:auto;width:min(54em,calc(100vw - 48px));height:min(88dvh,52em)}
+.search-window-controls{display:flex;align-items:center;gap:.5em;flex:none}
+.search-view-toggle{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--agent-line);border-radius:50%;color:inherit;background:transparent;cursor:pointer;transition:background .18s ease}
+.search-view-toggle[hidden]{display:none}.search-view-toggle svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}.search-view-toggle:hover{background:var(--_colors---background--secondary,#eeeee8)}
+@media(min-width:992px){
+ .portfolio-search.is-docked{inset:auto;left:var(--agent-dock-left);top:var(--agent-dock-top);width:var(--agent-dock-width);height:var(--agent-dock-height);margin:0;max-width:none;max-height:none;box-shadow:none;animation:none}
+ .portfolio-search.is-docked .search-heading{padding:1em 1em .75em}.portfolio-search.is-docked .search-heading h2{font-size:1.25em}.portfolio-search.is-docked .search-kicker{font-size:.6em}
+ .portfolio-search.is-docked .search-mode{padding-inline:1.3em}.portfolio-search.is-docked .search-conversation{padding:1em}.portfolio-search.is-docked .search-form{padding-inline:1em}
+ .portfolio-search.is-docked .search-close,.portfolio-search.is-docked .search-view-toggle{width:36px;height:36px}
+ .portfolio-search.is-docked .search-welcome-state .search-welcome{font-size:1.25em}
+ body.agent-is-docked .home-panel_component{overflow:hidden}
+ body.agent-is-docked .home-panel_layout>:not(.home-panel_top):not(.home-panel_identity){visibility:hidden;pointer-events:none}
+ body.agent-is-docked [data-feed-modal]{left:var(--agent-project-left);width:calc(100vw - var(--agent-project-left))}
+ body.agent-is-docked [data-feed-modal] .feed-modal_panel{width:calc(100% - 2em)}
+ body.agent-is-docked [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1em;padding:1em}
+}
+@media(max-width:991px){.portfolio-search{inset:8px;margin:0;width:calc(100vw - 16px);height:calc(100dvh - 16px)}}
 .search-conversation:has(.search-welcome-state){display:flex;align-items:center;justify-content:center}
 .search-welcome-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;gap:1.25em;padding:2em 0}
 .search-welcome-state .search-welcome{margin:0;max-width:24ch;min-height:2.7em;display:flex;align-items:center;justify-content:center;font-size:1.6em;line-height:1.35;text-wrap:balance}
