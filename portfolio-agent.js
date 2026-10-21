@@ -28,6 +28,10 @@ let loading;
 let lastProject;
 let history=[];
 let busy=false;
+let activeRequest=null;
+const sendIcon=submit.innerHTML;
+function setGenerating(value){submit.disabled=false;submit.type=value?"button":"submit";submit.setAttribute("aria-label",value?"Stop response":"Send question");submit.title=value?"Stop response":"Send question";submit.innerHTML=value?'<span class="agent-stop-square" aria-hidden="true"></span>':sendIcon;}
+submit.addEventListener("click",event=>{if(busy){event.preventDefault();if(activeRequest){activeRequest.stopped=true;activeRequest.controller.abort();}}});
 let inputVocabulary;
 const SESSION_KEY='jamiu-agent-session-v2';
 let turns=[];
@@ -68,7 +72,7 @@ function restoreConversation(){
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
       if(turn.role==='user'){previousQuestion=turn.text;conversation.append(text('p',turn.text,'search-question'));}
-      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.contact||shouldOfferContact(previousQuestion))response.append(renderContactActions());conversation.append(response);}
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion))response.append(renderContactActions());conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
@@ -574,37 +578,53 @@ function asksAboutCurrentPage(q){
   return /\b(this project|this page|this screen|this section|current page|what am i looking at|what is this page|what's this page|tell me about this|explain this page|explain this screen|what does this mean|what is this about|what's this about)\b/i.test(String(q||''));
 }
 
-async function askAgent(question){
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),55000);
+async function askAgent(question,onDelta=()=>{}){
+  const request=activeRequest;
+  const controller=request.controller;
+  const timer=setTimeout(()=>{request.timedOut=true;controller.abort();},55000);
   try{
     const response=await fetch('/api/agent',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        question,
-        job_description:roleDescription,
-        history:history.slice(-10),
-        page_context:currentPageContext()
-      }),
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question,stream:true,job_description:roleDescription,history:history.slice(-10),page_context:currentPageContext()}),
       signal:controller.signal
     });
-    let data={};
-    try{data=await response.json()}catch{}
-    if(!response.ok||!data.answer){
-      const error=new Error(data.error||'Agent unavailable');
-      error.code=data.code||'agent-unavailable';
-      throw error;
+    if(!response.ok){const data=await response.json().catch(()=>({}));throw Object.assign(new Error(data.error||'Agent unavailable'),{code:data.code||'agent-unavailable'});}
+    if(!(response.headers.get('content-type')||'').includes('application/x-ndjson')){
+      const data=await response.json();if(!data.answer)throw Error('Empty answer');
+      return {answer:data.answer,sourceIds:data.source_ids||[],evidenceLinks:data.evidence_links||[],intent:data.intent||''};
     }
-    return {
-      answer:data.answer,
-      sourceIds:Array.isArray(data.source_ids)?data.source_ids:[],
-      model:data.model||''
-    };
-  }finally{
-    clearTimeout(timer);
-  }
+    const reader=response.body.getReader(),decoder=new TextDecoder();
+    let buffer='',answer='',result=null;
+    function accept(line){
+      if(!line.trim())return;
+      const event=JSON.parse(line);
+      if(event.type==='delta'&&typeof event.text==='string'){answer+=event.text;request.partial=answer;onDelta(answer);}
+      if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code});
+      if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||''};
+    }
+    try{
+      while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let at;while((at=buffer.indexOf('\n'))>=0){accept(buffer.slice(0,at));buffer=buffer.slice(at+1);}if(done)break;}
+      if(buffer.trim())accept(buffer);
+      if(!result||!result.answer)throw Object.assign(new Error('Reply interrupted'),{code:'stream_incomplete'});
+      return result;
+    }finally{await reader.cancel().catch(()=>{});reader.releaseLock();}
+  }finally{clearTimeout(timer);}
 }
+function renderEvidenceLinks(links){
+ const block=text('div','','agent-evidence-links');block.setAttribute('aria-label','Supporting sources');
+ for(const source of (links||[]).slice(0,2)){
+  try{const url=new URL(source.url);if(url.protocol!=='https:')continue;const link=text('a',String(source.label||'Supporting source'));link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';block.append(link);}catch{}
+ }
+ return block;
+}
+function contextualPreview(question,answer){
+ const named=projectsInAnswer(question).filter(record=>record.url.startsWith('/work/'));
+ const discussed=projectsInAnswer(answer);
+ const record=named.length===1?named[0]:null;
+ if(record&&discussed.some(item=>item.id===record.id)&&dockViewport.matches&&chatView==='focused')showProof(record);
+ return record;
+}
+
 function localAnswer(found,q){
   if(!found.length)return 'I couldn’t find matching published information. Try a project name or ask about Jamiu’s experience.';
   const pageRecord=currentPageRecord();
@@ -617,7 +637,7 @@ function showInputClarification(q){
   const response=text('div','','search-answer');
   response.append(renderAgentAnswer(INPUT_CLARIFICATION));
   conversation.append(response);
-  turns.push({role:'assistant',text:INPUT_CLARIFICATION});saveConversation();
+  turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-8);saveConversation();
   conversation.scrollTop=response.offsetTop-conversation.offsetTop;
   input.focus({preventScroll:true});
 }
@@ -625,19 +645,24 @@ async function ask(q){
   q=q.trim();if(!q)return;
    dialog.dispatchEvent(new CustomEvent('agent-question'));
   if(busy)return;
+  conversation.querySelectorAll(".agent-retry").forEach(button=>button.remove());
   if(needsClarification(q)){
     showInputClarification(q);
     return;
   }
   dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();
-  busy=true;
-  submit.disabled=true;dialog.querySelector('.search-clear').disabled=true;conversation.setAttribute('aria-busy','true');
-  conversation.append(text('p',q,'search-question'));
+  conversation.querySelectorAll(".agent-retry").forEach(button=>button.remove());
+  busy=true;activeRequest={controller:new AbortController(),stopped:false,partial:""};
+  setGenerating(true);
+  submit.disabled=false;dialog.querySelector('.search-clear').disabled=true;conversation.setAttribute('aria-busy','true');
+  const questionNode=text('p',q,'search-question');conversation.append(questionNode);
   turns.push({role:'user',text:q});
 
   const response=text('div','','search-answer is-thinking');
-  response.append(text('p','Looking through the portfolio…'));
+  const thinking=text('p','Thinking…','agent-thinking');thinking.setAttribute('role','status');response.append(thinking);
+  response.setAttribute('aria-live','off');
   conversation.append(response);
+  conversation.scrollTop=conversation.scrollHeight;
   input.value='';resizeComposer();
 
   try{
@@ -647,7 +672,7 @@ async function ask(q){
       input.value=q;
       response.classList.remove('is-thinking');
       response.replaceChildren(renderAgentAnswer(INPUT_CLARIFICATION));
-      turns.push({role:'assistant',text:INPUT_CLARIFICATION});saveConversation();
+      turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-8);saveConversation();
       input.focus({preventScroll:true});
       return;
     }
@@ -656,40 +681,51 @@ async function ask(q){
     const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=[];
+    let evidenceCards=[];let links=[],interrupted=false,stopped=false;
 
     try{
-      const result=await askAgent(q);
-      answer=result.answer;
+      if(activeRequest.stopped)throw new DOMException('Stopped','AbortError');
+      const result=await askAgent(q,partial=>{
+        const nearBottom=conversation.scrollHeight-conversation.scrollTop-conversation.clientHeight<100;
+        response.classList.remove('is-thinking');response.replaceChildren(text('p',partial,'agent-stream-text'));
+        if(nearBottom)conversation.scrollTop=conversation.scrollHeight;
+      });
+      answer=result.answer;links=result.evidenceLinks||[];
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
-      answer=roleDescription?'I couldn’t complete the role comparison right now. Please try again shortly. Your description is still available to review.':fallback;
-      response.dataset.agentError=error?.code||'agent-unavailable';
+      stopped=activeRequest.stopped;interrupted=true;
+      answer=activeRequest.partial||(stopped?'Response stopped.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
+      response.dataset.agentError=stopped?'stopped':error?.code||'agent-unavailable';
     }
 
-    // Suggestions are clickable choices, never an automatic preview.
+    // Multiple suggestions remain choices; an explicit single project can preview.
     const mentionedProjects=projectsInAnswer(answer);
-    if(mentionedProjects.length)evidenceCards=mentionedProjects;
-    // Every project recommendation follows the same choose-first interaction.
-    if(evidenceCards.some(record=>record.url.startsWith('/work/'))&&dockViewport.matches&&chatView==='focused')
+    if(usedAgent&&mentionedProjects.length)evidenceCards=mentionedProjects;
+    // Clear the preview when the visitor is offered several different projects.
+    if(evidenceCards.length>1&&evidenceCards.some(record=>record.url.startsWith('/work/'))&&dockViewport.matches&&chatView==='focused')
       clearProofForSuggestions();
     response.classList.remove('is-thinking');
     response.replaceChildren();
     response.append(renderAgentAnswer(answer));
-
+    if(usedAgent)contextualPreview(q,answer);
+    if(links.length)response.append(renderEvidenceLinks(links));
     const hasEvidence=usedAgent&&evidenceCards.length>0;
     const meta=text(
       'p',
       usedAgent
         ? (hasEvidence?'Supporting portfolio evidence is linked below.':'Portfolio conversation.')
-        : (roleDescription?'Role comparison is temporarily unavailable.':'Live chat is unavailable right now. These are matching excerpts from the portfolio.'),
+        : (stopped?'Stopped.':activeRequest.partial?'Reply interrupted. You can retry.':'The reply could not be completed.'),
       'search-answer-meta'
     );
     dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent
       ? (hasEvidence?'Portfolio conversation · Supporting evidence below.':'Portfolio conversation')
-      : 'Portfolio search · Live chat temporarily unavailable.';
+      : (stopped?'Portfolio conversation · Stopped':'Portfolio conversation · Please retry');
     if(!usedAgent)response.append(meta);
+    if(interrupted){
+      const retry=text('button','Retry','agent-retry');retry.type='button';retry.setAttribute('aria-label','Retry the last question');
+      retry.addEventListener('click',()=>{if(busy)return;questionNode.remove();response.remove();turns.splice(-2);ask(q);});response.append(retry);
+    }
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
@@ -699,7 +735,7 @@ async function ask(q){
 
     const offerContact=shouldOfferContact(q);
     if(offerContact)response.append(renderContactActions());
-    turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
+    turns.push({role:'assistant',text:answer,evidenceLinks:links,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
     dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));
 
     // Search excerpts are not model replies and must not steer later conversation.
@@ -709,12 +745,14 @@ async function ask(q){
     }
   }catch{
     response.classList.remove('is-thinking');
-    response.replaceChildren(text('p','The portfolio index could not load. Please try again, or browse selected work from the menu.'));
+    const message='The portfolio could not load. Please retry.';
+    response.dataset.agentError='index-unavailable';response.replaceChildren(text('p',message));
+    const retry=text('button','Retry','agent-retry');retry.type='button';retry.addEventListener('click',()=>{if(busy)return;questionNode.remove();response.remove();turns.splice(-2);ask(q);});response.append(retry);turns.push({role:'assistant',text:message});
   }finally{
-    busy=false;
+    busy=false;activeRequest=null;setGenerating(false);
     submit.disabled=false;dialog.querySelector('.search-clear').disabled=false;conversation.setAttribute('aria-busy','false');
     saveConversation();
-    conversation.scrollTop=response.offsetTop-conversation.offsetTop;
+    const announcement=text("span",response.dataset.agentError?"Response stopped or interrupted.":"Reply complete.","sr-only");announcement.setAttribute("role","status");response.append(announcement);
   }
 }
 

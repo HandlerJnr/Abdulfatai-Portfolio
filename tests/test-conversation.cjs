@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../portfolio-agent.js','utf8');
+class Node{constructor(tag='',value='',cls=''){this.tag=tag;this.textContent=value;this.className=cls;this.children=[];this.dataset={};this.events={};this.classList={add(){},remove(){}};}append(...nodes){for(const n of nodes){n.parent=this;this.children.push(n);}}replaceChildren(...nodes){this.children=[];this.append(...nodes);}setAttribute(){}remove(){if(this.parent)this.parent.children=this.parent.children.filter(n=>n!==this);}querySelector(){return null;}querySelectorAll(selector){return this.children.flatMap(n=>[...(selector==='.agent-retry'&&n.className==='agent-retry'?[n]:[]),...n.querySelectorAll(selector)]);}addEventListener(name,cb){this.events[name]=cb;}}
+const conversation=new Node(),clear={disabled:false},mode={textContent:''};let preview=0,latest;
+const c={AbortController,DOMException,CustomEvent:class{},conversation,dialog:{classList:{add(){}},dispatchEvent(){},querySelector:s=>s==='.search-clear'?clear:mode},input:{value:'',focus(){}},submit:{},text:(...args)=>new Node(...args),busy:false,activeRequest:null,turns:[],history:[],roleDescription:'',inputVocabulary:{},records:[],dockViewport:{matches:true},chatView:'focused',needsClarification:()=>false,showInputClarification(){},setGenerating:v=>{c.generating=v},getRecords:async()=>[],portfolioVocabulary:()=>({}),rank:()=>[],asksAboutCurrentPage:()=>false,recordScore:()=>0,localAnswer:()=>'',getRecord:()=>null,projectsInAnswer:()=>[],clearProofForSuggestions(){},renderAgentAnswer:s=>new Node('p',s),renderEvidenceLinks:()=>new Node(),contextualPreview:()=>preview++,sourceCards:()=>new Node(),shouldOfferContact:()=>false,renderContactActions:()=>new Node(),resizeComposer(){},saveConversation(){}};
+vm.createContext(c);vm.runInContext(src.slice(src.indexOf('async function ask(q)'),src.indexOf('\nconst reduceAgentMotion')),c);
+(async()=>{
+ c.askAgent=async(q,delta)=>{latest=q;c.activeRequest.partial='A partial reply';delta('A partial reply');throw Error('network')};
+ await c.ask('Tell me about OAU');assert.equal(c.busy,false);assert.equal(c.generating,false);assert.equal(c.turns.length,2);assert.equal(c.history.length,0);assert.equal(c.turns[1].text,'A partial reply');
+ let retry=conversation.querySelectorAll('.agent-retry')[0];assert(retry);
+ c.askAgent=async q=>({answer:'Complete answer',sourceIds:[],evidenceLinks:[]});retry.events.click();
+ await new Promise(resolve=>setImmediate(resolve));assert.equal(c.turns.length,2);assert.equal(c.history.length,2);assert.equal(c.turns[1].text,'Complete answer');assert.equal(preview,1);
+ c.askAgent=async(q,delta)=>{c.activeRequest.partial='Stopped partial';delta('Stopped partial');c.activeRequest.stopped=true;c.activeRequest.controller.abort();throw new DOMException('stop','AbortError')};
+ await c.ask('Tell me more');assert.equal(c.turns[3].text,'Stopped partial');assert.equal(c.history.length,2);assert.equal(c.busy,false);assert(conversation.querySelectorAll('.agent-retry').length===1);
+ c.askAgent=async()=>{throw Error('network')};await c.ask('Another question');assert.equal(conversation.querySelectorAll('.agent-retry').length,1);assert.equal(c.turns.length,6);
+ console.log('Conversation checks passed: partial failure, single-question retry without duplicate turns, history isolation, Stop preserving text, controls reset and old retry removal.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

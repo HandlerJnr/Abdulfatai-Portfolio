@@ -246,6 +246,62 @@ def call_model(prompt):
     return content, provider
 
 
+def stream_model(prompt):
+    endpoint, token, provider = model_endpoint()
+    request = urllib.request.Request(endpoint, data=json.dumps({
+        "model": MODEL, "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.35, "max_completion_tokens": 450, "stream": True,
+    }).encode("utf-8"), headers={"Authorization": "Bearer " + token,
+        "Content-Type": "application/json", "Accept": "text/event-stream"}, method="POST")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as upstream:
+            finished = False
+            for raw in upstream:
+                line = raw.decode("utf-8").strip()
+                if not line.startswith("data:"):
+                    continue
+                payload = line[5:].strip()
+                if payload == "[DONE]":
+                    finished = True
+                    break
+                event = json.loads(payload)
+                if event.get("error"):
+                    raise RuntimeError("model_stream")
+                for choice in event.get("choices", []):
+                    content = (choice.get("delta") or {}).get("content")
+                    if isinstance(content, str) and content:
+                        yield content
+                    if choice.get("finish_reason"):
+                        finished = True
+            if not finished:
+                raise RuntimeError("model_stream_incomplete")
+    except (GeneratorExit, BrokenPipeError, ConnectionResetError):
+        raise
+    except Exception as error:
+        raise RuntimeError("model_stream_unavailable") from error
+
+
+def evidence_links(question, history, intent):
+    if not should_show_sources(intent):
+        return []
+    links = []
+    for record_id in domain_proof_ids(question, history):
+        record = RECORDS.get(record_id, {})
+        if not record.get("knowledge_only"):
+            continue
+        for source in record.get("evidence", []):
+            url = source.get("url", "")
+            if source.get("type") == "press-report" and url.startswith("https://"):
+                links.append({"label": "Press coverage · " + record.get("title", ""), "url": url})
+    return links[:2]
+
+
+def contextual_clarification(question, history):
+    if not history and re.fullmatch(r"(?:tell me about |what about |his |explain )?leadership[?!. ]*", question, re.I):
+        return "Would you like to know about his technical leadership at Enactus or his design leadership?"
+    return ""
+
+
 def normalise_route_path(value):
     raw = clip(value, 260)
     if not raw:
@@ -586,6 +642,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- Answer only the requested aspect. Use recent turns for follow-ups like 'what did he speak about?' or 'what was his role?'; do not repeat the full biography. If more than one event fits, ask one short clarifying question.\n"
         "- Use HOFAL for questions about community impact or Enactus, and OAU for speaking or youth/AI talks. Do not insert either into unrelated project answers.\n"
         "- Answer the person's actual message first. Sound like a knowledgeable human guide to the portfolio, not a search engine.\n"
+        "- If a question has multiple plausible meanings, ask one short clarification naming the relevant choices. Do not ask for clarification when the conversation already makes the meaning clear.\n"
         "- Use the recent conversation to resolve pronouns, shorthand and follow-ups. Do not reset the conversation on every turn.\n"
         "- Do not automatically name projects. If the question can be answered directly from Jamiu's profile, role, process or the conversation, answer it directly.\n"
         "- If a project is explicitly named, stay on that project unless wider context is requested.\n"
@@ -613,7 +670,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- Distinguish company/product traction from a claim that design alone caused it.\n"
         "- The portfolio contains employer/founder/academic references, five LinkedIn recommendations, work-linked awards and certifications. Never claim those are absent when the credentials record establishes them.\n"
         "- In critical-evidence mode, mention genuine gaps or unvalidated assumptions only when they directly answer the concern.\n"
-        "- In navigation mode, be brief and point to the relevant portfolio project or live product. The desktop conversation displays clickable project cards. A visitor must choose one before its details appear in the right-side preview column; do not claim the preview is already open. On mobile, a project card opens its case-study page. Never say that a published case study cannot be shown within the desktop interface.\n"
+        "- In navigation mode, be brief and point to the relevant portfolio project or live product. The desktop conversation displays clickable project cards. A single explicitly named project can open in the desktop preview; multiple suggestions remain choices. Do not claim a preview opened on mobile or in docked mode. On mobile, a project card opens its case-study page. Never say that a published case study cannot be shown within the desktop interface.\n"
         "- If multiple published projects fit a request, name them by their exact portfolio titles, so the interface can offer separate project cards that visitors choose between. Do not claim that selecting one project previews all the others.\n"
         "- When a visitor asks to see a project here, describe the built-in preview rather than redirecting them to a different website.\n"
         "- For any internal portfolio project or case study, use the relative route from its URL field, such as /work/vista-digital-banking/. Never use jamiuabdulfatai.com, an outdated portfolio domain, or invent a route. The interface already supplies clickable proof cards; do not repeat bare URLs unnecessarily.\n\n"
@@ -687,6 +744,7 @@ class handler(BaseHTTPRequestHandler):
                 "auth_configured": auth,
                 "records": len(RECORD_LIST),
                 "nodes": len(NODES),
+                "streaming": True,
             },
         )
 
@@ -733,9 +791,16 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             retrieved, used_ids = "", []
 
+        clarification = contextual_clarification(question, history)
+        if clarification:
+            return json_response(self, 200, {"answer": clarification, "source_ids": [], "intent": "clarification"})
+
         prompt = build_prompt(question, history, retrieved, intent, page_context)
         if job_description:
             prompt += build_job_fit_prompt(job_description, question)
+
+        if body.get("stream") is True:
+            return self.stream_reply(prompt, used_ids, question, history, intent, page_context)
 
         try:
             answer, provider = call_model(prompt)
@@ -757,6 +822,7 @@ class handler(BaseHTTPRequestHandler):
             {
                 "answer": clip(answer, 4200),
                 "source_ids": select_proof_ids(answer, used_ids, question, intent),
+                "evidence_links": evidence_links(question, history, intent),
                 "intent": intent,
                 "page_id": page_context.get("page_id", ""),
                 "engine": "llamaindex-bm25+gpt-oss-120b",
@@ -766,3 +832,41 @@ class handler(BaseHTTPRequestHandler):
         )
 
 
+
+    def stream_reply(self, prompt, used_ids, question, history, intent, page_context):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/x-ndjson; charset=utf-8")
+        self.send_header("Cache-Control", "no-store, no-transform")
+        self.send_header("X-Accel-Buffering", "no")
+        self.end_headers()
+        def send(event):
+            self.wfile.write((json.dumps(event, ensure_ascii=False) + "\n").encode("utf-8"))
+            self.wfile.flush()
+        stream = None
+        try:
+            send({"type": "status", "message": "Thinking…"})
+            answer = ""
+            stream = stream_model(prompt)
+            for delta in stream:
+                delta = delta[:max(0, 4200-len(answer))]
+                if delta:
+                    answer += delta
+                    send({"type": "delta", "text": delta})
+                if len(answer) >= 4200:
+                    break
+            if not answer.strip():
+                raise RuntimeError("model_empty")
+            send({"type": "done", "answer": answer,
+                  "source_ids": select_proof_ids(answer, used_ids, question, intent),
+                  "evidence_links": evidence_links(question, history, intent),
+                  "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL})
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        except Exception:
+            try:
+                send({"type": "error", "error": "The reply was interrupted. Please retry.", "code": "stream_unavailable"})
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+        finally:
+            if stream is not None:
+                stream.close()

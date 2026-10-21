@@ -352,3 +352,16 @@
 @media(prefers-reduced-motion:reduce){
  .search-answer .agent-contact-link{transition:none}
 }
+
+
+/* Streaming responses and recovery controls */
+.agent-stop-square{display:block;width:12px;height:12px;background:currentColor;border-radius:2px;margin:auto}
+.agent-stream-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.agent-thinking{display:flex;align-items:center;gap:.6em}
+.agent-thinking::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:agent-think 1.2s ease-in-out infinite}
+@keyframes agent-think{50%{opacity:.3}}
+.agent-retry{font:inherit;font-size:.85em;border:1px solid #7775;border-radius:999px;padding:.45em .9em;background:transparent;color:inherit;cursor:pointer;margin-top:.7em;min-height:36px}
+.agent-retry:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.agent-evidence-links{display:flex;flex-wrap:wrap;gap:.5em;margin-top:.8em}
+.agent-evidence-links a{font-size:.8em;color:inherit;text-decoration:underline;text-underline-offset:3px;padding:.3em 0}
+@media(prefers-reduced-motion:reduce){.agent-thinking::before{animation:none}}
