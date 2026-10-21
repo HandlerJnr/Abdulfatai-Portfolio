@@ -78,6 +78,16 @@
 @media(prefers-reduced-motion:reduce){.search-form textarea{transition:none}}
 
 /* Keep the conversation on the same focused reading measure as its composer. */
+.search-chat-actions{display:flex;align-items:center;justify-content:center;gap:1em;flex:0 0 auto;align-self:center;max-width:100%;padding:.25em 1em}
+.search-chat-actions .search-clear,.role-fit-action{width:auto;min-height:36px;margin:0;padding:.5em;font:inherit;font-size:.7em;line-height:1.4;text-align:center;border:0;background:transparent;color:var(--agent-muted);cursor:pointer}
+.role-fit-action:hover,.search-chat-actions .search-clear:hover{text-decoration:underline;text-underline-offset:3px}
+.portfolio-search .agent-workspace .agent-chat-column .search-chat-actions .search-clear{width:auto}
+.role-fit-panel[hidden],.agent-chat-column .search-conversation[hidden]{display:none!important}
+.role-fit-panel{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;width:min(calc(100% - 2.5em),42em);box-sizing:border-box;margin:0 auto;padding:1.25em 0}
+.role-fit-heading{display:flex;align-items:center;justify-content:space-between;gap:1em}.role-fit-heading h3{font:inherit;font-size:1.25em;font-weight:500;letter-spacing:-.02em;margin:0}.role-fit-heading button{font:inherit;font-size:.7em;background:none;color:inherit;border:0;padding:.5em;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.role-fit-panel>p{font-size:.78em;line-height:1.7;color:var(--agent-muted);margin:1em 0}.role-fit-file-row{display:flex;align-items:center;gap:.75em;flex-wrap:wrap;margin:1.25em 0}.role-fit-file-row button{font:inherit;font-size:.75em;line-height:1.4;padding:.65em .8em;border:1px solid var(--agent-line);background:transparent;color:inherit;cursor:pointer}.role-fit-file-row span{font-size:.65em;color:var(--agent-muted)}
+.role-fit-panel>label{display:block;font-size:.7em;color:var(--agent-muted);margin-bottom:.65em}.role-fit-panel textarea{display:block;box-sizing:border-box;width:100%;height:min(32dvh,18em);min-height:120px;resize:vertical;max-height:45dvh;border:1px solid var(--agent-line);border-radius:.35em;background:var(--_colors---background--secondary,#eeeee8);color:inherit;padding:1em;font:inherit;font-size:16px;line-height:1.6;caret-color:var(--agent-ink)}.role-fit-panel textarea:focus{outline:none;box-shadow:none}
+.role-fit-panel .role-fit-status{font-size:.7em;min-height:1.5em}.role-fit-panel .role-fit-privacy{font-size:.65em;line-height:1.7}.role-fit-buttons{display:flex;justify-content:flex-end;align-items:center;gap:1em;flex-wrap:wrap;margin:1em 0}.role-fit-buttons button{font:inherit;font-size:.75em;line-height:1.5;padding:.75em 1em;border:1px solid var(--agent-line);background:var(--agent-ink);color:var(--agent-paper);cursor:pointer;border-radius:.25em}.role-fit-buttons [data-role-remove]{background:transparent;color:var(--agent-muted)}.role-fit-panel button:disabled{opacity:.45;cursor:wait}
 .agent-workspace{display:flex;flex:1;min-height:0;min-width:0;overflow:hidden}
 .agent-chat-column{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;overflow:hidden}
 .agent-library,.agent-proof{display:none}

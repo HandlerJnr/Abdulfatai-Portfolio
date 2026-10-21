@@ -21,6 +21,7 @@ input.setAttribute('data-lenis-prevent','');
 const form=dialog.querySelector('form');
 const submit=form.querySelector('button');
 let records;
+let roleDescription="";
 let selectedProofId="",proofRequest=0;
 const proofCache=new Map();
 let loading;
@@ -525,6 +526,7 @@ async function askAgent(question){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         question,
+        job_description:roleDescription,
         history:history.slice(-10),
         page_context:currentPageContext()
       }),
@@ -606,7 +608,7 @@ async function ask(q){
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
-      answer=fallback;
+      answer=roleDescription?'I couldn’t complete the role comparison right now. Please try again shortly. Your description is still available to review.':fallback;
       response.dataset.agentError=error?.code||'agent-unavailable';
     }
 
@@ -619,7 +621,7 @@ async function ask(q){
       'p',
       usedAgent
         ? (hasEvidence?'Supporting portfolio evidence is linked below.':'Portfolio conversation.')
-        : 'Live chat is unavailable right now. These are matching excerpts from the portfolio.',
+        : (roleDescription?'Role comparison is temporarily unavailable.':'Live chat is unavailable right now. These are matching excerpts from the portfolio.'),
       'search-answer-meta'
     );
     dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent
@@ -769,12 +771,47 @@ form.addEventListener('submit',event=>{
 
 
 const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';form.before(clear);
-clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+clear.addEventListener('click',()=>{if(busy)return;roleDescription="";roleFileToken++;roleText.value="";rolePanel.hidden=true;conversation.hidden=false;updateRoleAction();history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+const fitButton=text('button','Compare a role','role-fit-action');fitButton.type='button';
+const chatActions=text('div','','search-chat-actions');chatActions.append(clear,fitButton);
+const rolePanel=text('section','','role-fit-panel');rolePanel.hidden=true;rolePanel.setAttribute('aria-label','Job description comparison');rolePanel.setAttribute('data-lenis-prevent','');
+rolePanel.innerHTML='<div class="role-fit-heading"><h3>Compare a role</h3><button type="button" data-role-cancel aria-label="Return to chat">Back to chat</button></div><p>Paste the job description, or upload it and check the extracted text before comparing.</p><div class="role-fit-file-row"><button type="button" data-role-upload>Upload PDF or Word</button><span>PDF or .docx · Up to 2 MB</span><input type="file" accept=".pdf,.docx" hidden></div><label for="role-description">Job description</label><textarea id="role-description" maxlength="12000" placeholder="Paste the role and its main requirements here…"></textarea><p class="role-fit-status" role="status" aria-live="polite"></p><p class="role-fit-privacy">Files are processed for text extraction and aren’t saved by this site. When you compare, the reviewed text is sent to the AI provider. Please leave out confidential or personal information.</p><div class="role-fit-buttons"><button type="button" data-role-remove hidden>Remove role</button><button type="button" data-role-compare disabled>Compare with Jamiu’s work</button></div>';
+const roleText=rolePanel.querySelector('textarea'),roleFile=rolePanel.querySelector('input[type=file]'),roleStatus=rolePanel.querySelector('.role-fit-status'),compareRole=rolePanel.querySelector('[data-role-compare]'),uploadRole=rolePanel.querySelector('[data-role-upload]');
+let parsingRole=false,roleFileToken=0;
+function updateRoleAction(){fitButton.textContent=roleDescription?'Review role':'Compare a role';rolePanel.querySelector('[data-role-remove]').hidden=!roleDescription}
+function syncRoleText(){compareRole.disabled=parsingRole||roleText.value.trim().length<80;roleStatus.textContent=roleText.value.length.toLocaleString()+' / 12,000 characters';}
+function closeRolePanel(){rolePanel.hidden=true;conversation.hidden=false;input.focus({preventScroll:true});resizeComposer()}
+fitButton.addEventListener('click',()=>{rolePanel.hidden=false;conversation.hidden=true;roleText.value=roleDescription||roleText.value;syncRoleText();updateRoleAction();roleText.focus({preventScroll:true})});
+rolePanel.querySelector('[data-role-cancel]').addEventListener('click',closeRolePanel);
+roleText.addEventListener('input',syncRoleText);
+uploadRole.addEventListener('click',()=>roleFile.click());
+rolePanel.querySelector('[data-role-remove]').addEventListener('click',()=>{roleDescription='';roleText.value='';updateRoleAction();closeRolePanel()});
+roleFile.addEventListener('change',async()=>{
+ const file=roleFile.files?.[0];if(!file)return;
+ const token=++roleFileToken;
+ if(!/\.(pdf|docx)$/i.test(file.name)){roleStatus.textContent='Please choose a PDF or Word .docx file.';return}
+ if(file.size>2*1024*1024){roleStatus.textContent='Please choose a file smaller than 2 MB.';return}
+ parsingRole=true;compareRole.disabled=true;uploadRole.disabled=true;roleStatus.textContent='Reading '+file.name+'…';
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
+ try{
+  const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+  const response=await fetch('/api/job-description',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename:file.name,content_base64:btoa(binary)}),signal:controller.signal});
+  const result=await response.json();if(token!==roleFileToken)return;
+  if(!response.ok||!result.text)throw Error(result.error||'The document could not be read. Paste the description instead.');
+  roleText.value=result.text;roleStatus.textContent='Text extracted. Review it below before comparing.';if(!rolePanel.hidden)roleText.focus({preventScroll:true});
+ }catch(error){roleStatus.textContent=error.name==='AbortError'?'Reading timed out. Try again or paste the description.':error.message}
+ finally{clearTimeout(timer);parsingRole=false;uploadRole.disabled=false;compareRole.disabled=roleText.value.trim().length<80;roleFile.value=''}
+});
+compareRole.addEventListener('click',async()=>{
+ if(busy||parsingRole)return;
+ const description=roleText.value.trim();if(description.length<80||description.length>12000){syncRoleText();return}
+ roleDescription=description;updateRoleAction();closeRolePanel();await ask('Compare this job description with Jamiu’s published experience.');
+});
 const workspace=text('div','','agent-workspace');
 const library=text('nav','','agent-library');library.setAttribute('aria-label','Portfolio pages and projects');library.setAttribute('data-lenis-prevent','');
 const centre=text('section','','agent-chat-column');centre.setAttribute('aria-label','Chat');
 const proof=text('aside','','agent-proof');proof.setAttribute('aria-label','Selected work preview');proof.setAttribute('data-lenis-prevent','');
-centre.append(conversation,clear,form);workspace.append(library,centre,proof);dialog.append(workspace);
+centre.append(conversation,rolePanel,chatActions,form);workspace.append(library,centre,proof);dialog.append(workspace);
 proof.append(text('p','[Preview]','search-kicker'),text('p','Select work to take a closer look.','agent-proof-empty'));
 function markSelection(){library.querySelectorAll('[data-agent-record]').forEach(button=>{const active=button.dataset.agentRecord===selectedProofId;button.classList.toggle('is-selected',active);if(active)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current')})}
 function initWorkspaceNavigation(){
