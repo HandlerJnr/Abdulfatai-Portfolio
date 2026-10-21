@@ -13,71 +13,71 @@
   },
   {
     "question": "a",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "Z",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "é",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "?",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "!!!",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "...",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "—",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "🙂",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "a b c",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "I",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "tell me",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "tell me about",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "what is",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "can you",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "how do I",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "please",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "and the",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "CV",
@@ -193,31 +193,31 @@
   },
   {
     "question": "asdf",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "qwerty",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "zzzz",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "sdjfksdj",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "abcxyz",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "asdf qwer zxcv",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "tell me about asdf",
-    "clarify": true
+    "clarify": false
   },
   {
     "question": "Who is he?",
@@ -229,6 +229,18 @@
   },
   {
     "question": "What is this?",
+    "clarify": false
+  },
+  {
+    "question": "That is crazy yunno",
+    "clarify": false
+  },
+  {
+    "question": "Thatis crazy yunno",
+    "clarify": false
+  },
+  {
+    "question": "mad o 😂",
     "clarify": false
   }
 ]

@@ -24,18 +24,9 @@ class Tone(unittest.TestCase):
   self.assertIn('CURRENT VISITOR MESSAGE\nWhat did he speak about?',prompt)
   self.assertIn('Never invent',prompt)
   self.assertIn('do not reintroduce or define Jamiu',prompt)
- def test_acknowledgements_pass_client_and_server_vocabulary(self):
-  source=(ROOT/'api/agent.py').read_text();tree=ast.parse(source);js=(ROOT/'portfolio-agent.js').read_text()
-  constants={}
-  for node in tree.body:
-   if isinstance(node,ast.Assign):
-    for target in node.targets:
-     if isinstance(target,ast.Name) and target.id in ['FRAGMENT_WORDS','INPUT_VOCABULARY']:
-      constants[target.id]=eval(compile(ast.Expression(node.value),'<constant>','eval'),{'frozenset':frozenset,'set':set})
-   if isinstance(node,ast.Expr) and isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute) and isinstance(node.value.func.value,ast.Name) and node.value.func.value.id=='INPUT_VOCABULARY':
-    try:constants['INPUT_VOCABULARY'].update(ast.literal_eval(node.value.args[0]))
-    except (ValueError,TypeError):pass
-  a.update(constants)
-  for q in ['interesting','fair enough','gotcha','got it','really?','nice','hmm']:
+ def test_all_nonempty_turns_reach_the_model(self):
+  for q in ['That is crazy yunno','Thatis crazy yunno','mad o','got it','?','🙂','é','asdf']:
    self.assertFalse(a['needs_clarification'](q),q)
+  for q in ['', '  ', '\t\n']:
+   self.assertTrue(a['needs_clarification'](q),repr(q))
 if __name__=='__main__':unittest.main()

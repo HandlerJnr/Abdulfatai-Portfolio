@@ -32,7 +32,6 @@ let activeRequest=null;
 const sendIcon=submit.innerHTML;
 function setGenerating(value){submit.disabled=false;submit.type=value?"button":"submit";submit.setAttribute("aria-label",value?"Stop response":"Send question");submit.title=value?"Stop response":"Send question";submit.innerHTML=value?'<span class="agent-stop-square" aria-hidden="true"></span>':sendIcon;}
 submit.addEventListener("click",event=>{if(busy){event.preventDefault();if(activeRequest){activeRequest.stopped=true;activeRequest.controller.abort();}}});
-let inputVocabulary;
 const SESSION_KEY='jamiu-agent-session-v2';
 let turns=[];
 const welcomeLines=[
@@ -95,25 +94,9 @@ input.addEventListener('keydown',event=>{
 });
 addEventListener('resize',resizeComposer);
 
-// Keep this conservative rule aligned with api/agent.py and the shared test cases.
-const INPUT_CLARIFICATION="Keep typing, ask me anything about Jamiu’s work, experience, skills, or this page.";
-const FRAGMENT_WORDS=new Set(["a", "an", "the", "i", "me", "my", "you", "your", "he", "his", "she", "her", "it", "its", "we", "our", "they", "their", "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did", "can", "could", "would", "should", "will", "shall", "may", "might", "must", "of", "to", "for", "from", "in", "on", "at", "by", "with", "and", "or", "but", "if", "as", "about", "what", "which", "who", "whom", "whose", "when", "where", "how", "tell", "ask", "show", "please"]);
-function portfolioVocabulary(items){
-  const vocabulary=new Set(["hi", "hello", "hey", "thanks", "thank", "cheers", "yes", "no", "okay", "ok", "more", "why", "explain", "help", "cv", "ux", "ui", "ai", "js", "go", "pricing", "price", "salary", "availability", "available", "contact", "email", "phone", "weakness", "weaknesses", "shortcomings", "blind", "strengths", "improve", "improvement", "growth", "development", "limitations", "remote", "freelance", "hiring", "hire", "resume", "r\u00e9sum\u00e9", "portfolio", "work", "skills", "experience", "projects", "process", "rates", "rate", "cost"]);
-  ['haha', 'lol', 'hmm', 'nice', 'cool', 'interesting', 'wow', 'fair', 'sure', 'gotcha', 'got', 'understood', 'really', 'exactly', 'alright', 'okay', 'convinced'].forEach(word=>vocabulary.add(word));
-  ['hofal','enactus','fudma','almajiri','oau','obafemi','oduduwa','keynote','speaker','speaking','speak','spoke','talk','event','attended','role','panel','summit','volunteering','community','governance','responsibility','ownership'].forEach(word=>vocabulary.add(word));
-  items.forEach(record=>{
-    const words=['id','title','summary','text'].map(field=>String(record[field]||'')).join(' ').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
-    words.forEach(word=>vocabulary.add(word));
-  });
-  return vocabulary;
-}
-function needsClarification(value){
-  if(/^(?:who is he|what does he do|what is (?:this|it))\s*[?!.]*$/i.test(String(value||'').trim()))return false;
-  if(/\bc(?:\+\+|#)/i.test(String(value||'')))return false;
-  const tokens=String(value||'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
-  return !tokens.some(token=>Array.from(token).length>1&&!FRAGMENT_WORDS.has(token)&&(!inputVocabulary||inputVocabulary.has(token)));
-}
+// Send every non-empty turn to the model, including slang and reactions.
+const INPUT_CLARIFICATION="What would you like to talk about?";
+function needsClarification(value){return !String(value||'').trim();}
 
 function text(tag,value,className){
   const el=document.createElement(tag);
@@ -668,7 +651,6 @@ async function ask(q){
 
   try{
     await getRecords();
-    if(!inputVocabulary)inputVocabulary=portfolioVocabulary(records);
     if(needsClarification(q)){
       input.value=q;
       response.classList.remove('is-thinking');
@@ -1108,7 +1090,7 @@ tourHelp.addEventListener('click',()=>tourPanel.hidden?startAgentTour():finishAg
 input.addEventListener('input',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
 dialog.addEventListener('agent-question',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
 dockViewport.addEventListener('change',()=>{if(tourIndex>=0){tourSteps=agentTourSteps();showAgentTourStep(0)}});
-const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
+const ready=getRecords().then(()=>{initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
 window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
   await ready;
