@@ -252,7 +252,8 @@
 }
 .agent-action-host .search-chat-actions{
  position:absolute;right:0;top:calc(100% + .55em);
- width:min(230px,calc(100vw - 2em));
+ width:232px;max-width:none;min-width:220px;
+ flex:none;align-self:auto;justify-content:flex-start;
  padding:.45em;box-sizing:border-box;
  border:1px solid var(--agent-line);border-radius:.6em;
  background:var(--agent-paper);
@@ -262,7 +263,7 @@
 .agent-action-host .search-chat-actions[hidden]{display:none!important}
 .agent-action-host .search-chat-actions :is(.search-clear,.role-fit-action){
  display:block;width:100%;min-height:44px;max-width:none;
- margin:0;padding:.75em .85em;text-align:left;white-space:normal;
+ margin:0;padding:.75em .85em;text-align:left;white-space:nowrap;overflow-wrap:normal;
  border:0;border-radius:.35em;
  color:var(--agent-ink);font:inherit;font-size:.82em;line-height:1.5;
 }
@@ -298,8 +299,9 @@
   flex-shrink:0;
  }
  .agent-action-host .search-chat-actions{
-  right:0;
-  width:min(240px,calc(100vw - 1.5em));
+  right:0;left:auto;
+  width:min(232px,calc(100vw - 1.5em));
+  min-width:0;max-width:none;
  }
 }
 @media(prefers-reduced-motion:reduce){
