@@ -23,7 +23,7 @@
           "my love",
           "I built"
         ],
-        "max_repeated_trigram_ratio": 0.55
+        "max_repeated_trigram_ratio": 0.3
       }
     ]
   },

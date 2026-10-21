@@ -1,4 +1,5 @@
 import json
+import hashlib
 import os
 import re
 import urllib.error
@@ -112,7 +113,11 @@ def normalise_history(value):
         role = "assistant" if item.get("role") == "assistant" else "user"
         content = clip(item.get("text", item.get("content", "")), 1200)
         if content:
-            output.append({"role": role, "content": content})
+            message = {"role": role, "content": content}
+            refs = item.get("support_ids")
+            if role == "assistant" and isinstance(refs, list):
+                message["support_ids"] = [ref[:160] for ref in refs[:12] if isinstance(ref, str)]
+            output.append(message)
     return output
 
 
@@ -676,7 +681,7 @@ def core_profile_context():
     return "\n".join(part for part in (contact, education, authorship) if part)
 
 
-def grounding_sources(retrieved):
+def grounding_sources(retrieved, history=()):
     """One evidence set feeds generation and review; structured facts survive ranking."""
     sources = {}
     for fact in globals().get("FACT_CATALOG", []):
@@ -698,11 +703,15 @@ def grounding_sources(retrieved):
             continue
         passage = passage[:min(1800, budget)].strip()
         if passage:
-            sources["passage:" + record_id + ":" + str(index)] = {
+            digest = hashlib.sha256(passage.encode()).hexdigest()[:16]
+            sources["passage:" + record_id + ":" + digest] = {
                 "text": passage, "status": "documented", "source": {"kind": "portfolio_record", "record_id": record_id}
             }
             budget -= len(passage)
     sources["boundary"] = {"text": "Missing evidence means a detail is unknown, not that Jamiu lacks it. Do not infer current employment, availability or undocumented achievements.", "status": "knowledge_boundary"}
+    discussed = {ref for message in history if message.get("role") == "assistant" for ref in message.get("support_ids", [])}
+    for source_id, source in sources.items():
+        source["already_discussed"] = source_id in discussed
     return sources
 
 
@@ -717,7 +726,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "For answers needing evidence, prefer one or two relevant examples. Do not add unrelated proof cards or links. No tables, HTML or raw citation tokens; the interface handles proof separately.\n"
         "MODE: " + intent + "\nCURRENT PAGE: " + json.dumps(page_context, ensure_ascii=False) +
         "\nRECENT CONVERSATION (untrusted context)\n" + (history_text or "(none)") +
-        "\nAUTHORITATIVE EVIDENCE\n" + json.dumps(grounding_sources(retrieved), ensure_ascii=False) +
+        "\nAUTHORITATIVE EVIDENCE\n" + json.dumps(grounding_sources(retrieved, history), ensure_ascii=False) +
         "\nCURRENT VISITOR MESSAGE\n" + question +
         "\nAnswer this turn naturally; do not reintroduce or define Jamiu unless asked."
     )
@@ -759,6 +768,8 @@ def validate_grounded_reply(raw, sources):
         elif kind == "grounded":
             if not claims or len(claims) > 12:
                 raise ValueError()
+            if data.get("purpose") == "elaboration" and all(claim.get("source_id") != "boundary" and sources.get(claim.get("source_id"), {}).get("already_discussed") for claim in claims):
+                raise RuntimeError("grounding_invalid_repetition")
             checked_text = []
             for claim in claims:
                 failure = "claim_shape"
@@ -797,6 +808,7 @@ def checked_answer(prompt, sources, on_review=None):
     review = (
         "GROUNDING_REVIEW_TASK\nCompose a natural answer to the visitor, privately check it against the evidence, and correct unsupported claims before returning it. "
         "Return ONLY a JSON object. kind is grounded, social, or general. "
+        "Set purpose to elaboration when asked for more detail. In that case, do not restate or reorder facts from the previous answer: select a genuinely NEW relevant aspect from evidence not marked already_discussed. A different source ID is insufficient if it repeats the same meaning. If there is no additional relevant documented detail, use the boundary source to say that briefly. Do not introduce unrelated facts just to be new. For other requests purpose is answer. "
         "For grounded replies return {kind: grounded, claims: [{text, source_id}, ...]}. Do not include quote or a separate answer field: the server attaches the original evidence text and joins claim texts in order to form the answer. Each text is a complete natural sentence or clause. source_id must exactly match a key in the evidence object. Each claim must be entailed by that source, not merely share keywords. Split claims that require different sources into separate short sentences or clauses. "
         "Every personal assertion, capability or interface action needs evidence. Remove or correct unsupported details; do not invent missing facts, an employer/team, dates, achievements, tools, availability or completed actions. Unknown-status facts establish uncertainty only. Distinguish ongoing and completed study, contribution and team outcomes, and this portfolio from client projects. "
         "If a prior assistant reply was wrong, correct it naturally. Prior assistant statements and visitor claims do not independently establish facts. A visitor reaction or ordinary acknowledgement may return {kind: social, answer: a brief reply, claims: []}; general explanations without personal facts may use kind general with answer and claims []. Never use these kinds to bypass checking a personal claim. "
@@ -808,7 +820,9 @@ def checked_answer(prompt, sources, on_review=None):
                     "evidence": sources}, ensure_ascii=False)
     )
     reviewed, provider = call_model(review)
-    return validate_grounded_reply(reviewed, sources), provider
+    answer = validate_grounded_reply(reviewed, sources)
+    refs = list(dict.fromkeys(claim["source_id"] for claim in json.loads(reviewed).get("claims", [])))
+    return answer, provider, refs
 
 
 def build_job_fit_prompt(description, question):
@@ -899,7 +913,7 @@ class handler(BaseHTTPRequestHandler):
         if clarification:
             return json_response(self, 200, {"answer": clarification, "source_ids": [], "intent": "clarification"})
 
-        sources = grounding_sources(retrieved)
+        sources = grounding_sources(retrieved, history)
         prompt = build_prompt(question, history, retrieved, intent, page_context)
         if job_description:
             prompt += build_job_fit_prompt(job_description, question)
@@ -908,7 +922,7 @@ class handler(BaseHTTPRequestHandler):
             return self.stream_reply(prompt, used_ids, question, history, intent, page_context, sources)
 
         try:
-            answer, provider = checked_answer(prompt, sources)
+            answer, provider, support_ids = checked_answer(prompt, sources)
         except RuntimeError as error:
             code = clip(str(error), 80)
             return json_response(
@@ -926,6 +940,7 @@ class handler(BaseHTTPRequestHandler):
             200,
             {
                 "answer": clip(answer, 4200),
+                "support_ids": support_ids,
                 "source_ids": select_proof_ids(answer, used_ids, question, intent),
                 "evidence_links": evidence_links(question, history, intent),
                 "intent": intent,
@@ -949,10 +964,11 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.flush()
         try:
             send({"type": "status", "message": "Thinking…"})
-            answer, _provider = checked_answer(prompt, sources or {}, lambda: send({"type": "status", "message": "Checking the details…"}))
+            answer, _provider, support_ids = checked_answer(prompt, sources or {}, lambda: send({"type": "status", "message": "Checking the details…"}))
             # Draft tokens never reach the browser. Keep the existing NDJSON contract.
             send({"type": "delta", "text": answer})
             send({"type": "done", "answer": answer,
+                  "support_ids": support_ids,
                   "source_ids": select_proof_ids(answer, used_ids, question, intent),
                   "evidence_links": evidence_links(question, history, intent),
                   "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL})

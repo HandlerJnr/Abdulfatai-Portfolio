@@ -1,11 +1,11 @@
-import ast,io,json,os,re,urllib.request,urllib.error,urllib.parse,unittest
+import ast,hashlib,io,json,os,re,urllib.request,urllib.error,urllib.parse,unittest
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 from unittest.mock import Mock
 ROOT=Path(__file__).resolve().parents[1]
 tree=ast.parse((ROOT/'api/agent.py').read_text())
 tree.body=[n for n in tree.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
-a=dict(json=json,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test',MAX_HISTORY=10)
+a=dict(json=json,hashlib=hashlib,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test',MAX_HISTORY=10)
 a['RECORD_LIST']=json.loads((ROOT/'portfolio-knowledge.json').read_text())
 a['RECORDS']={r['id']:r for r in a['RECORD_LIST']}
 a['FACT_CATALOG']=json.loads((ROOT/'agent-facts.json').read_text())['facts']
@@ -18,6 +18,20 @@ class Grounding(unittest.TestCase):
   expected=[{'role':'user','content':'His qualification?'},{'role':'assistant','content':'PGD at AFIT.'}]
   for field in ['text','content']:
    self.assertEqual(a['normalise_history']([{'role':m['role'],field:m['content']} for m in expected]),expected)
+ def test_elaboration_rejects_only_reusing_discussed_sources(self):
+  sources={'old':{'text':'He designed the portfolio UI in Figma.','already_discussed':True},'new':{'text':'He structures reusable components in the implementation.','already_discussed':False}}
+  reply={'kind':'grounded','purpose':'elaboration','claims':[{'text':'He designed it in Figma.','source_id':'old'}]}
+  with self.assertRaisesRegex(RuntimeError,'repetition'):a['validate_grounded_reply'](json.dumps(reply),sources)
+  reply['claims']=[{'text':'He structures reusable components.','source_id':'new'}]
+  self.assertIn('reusable',a['validate_grounded_reply'](json.dumps(reply),sources))
+  history=a['normalise_history']([{'role':'assistant','text':'Earlier reply.','support_ids':['fact:portfolio.authorship']}])
+  self.assertTrue(a['grounding_sources']('',history)['fact:portfolio.authorship']['already_discussed'])
+ def test_passage_ids_do_not_change_with_retrieval_order(self):
+  one='SOURCE ID: about\nTITLE: About\nTEXT: Stable source passage about his work.'
+  other='SOURCE ID: about\nTITLE: About\nTEXT: Another source passage.'
+  first=a['grounding_sources'](one);second=a['grounding_sources'](other+'\n\n---\n\n'+one)
+  source_id=next(key for key in first if key.startswith('passage:'))
+  self.assertIn(source_id,second)
  def test_catalog_provenance_and_status(self):
   facts=a['FACT_CATALOG'];self.assertEqual(len({f['id'] for f in facts}),len(facts))
   for fact in facts:
@@ -62,7 +76,7 @@ class Grounding(unittest.TestCase):
   prompt=a['build_prompt']('Which development team?',[{'role':'assistant','content':'A development team built it.'}], '', 'conversation',{})
   review={'answer':'He designed this portfolio in Figma.','kind':'grounded','claims':[{'text':'He designed this portfolio in Figma.','source_id':'f','quote':'designed this portfolio in Figma'}]}
   model=Mock(return_value=(json.dumps(review),'test'));a['call_model']=model
-  answer,_=a['checked_answer'](prompt,sources)
+  answer,_,refs=a['checked_answer'](prompt,sources)
   self.assertNotIn('development team',answer);self.assertEqual(model.call_count,1)
   self.assertIn('A development team built it.',model.call_args.args[0])
  def test_no_draft_or_review_failure_leaks_to_stream(self):
@@ -72,7 +86,7 @@ class Grounding(unittest.TestCase):
   events=[json.loads(l) for l in h.wfile.getvalue().splitlines()]
   self.assertEqual(events[-1]['type'],'error');self.assertFalse(any(e['type'] in ('delta','done') for e in events))
  def test_successful_checked_answer_uses_existing_client_protocol(self):
-  def checked(prompt,sources,on_review):on_review();return ('Checked reply.','test')
+  def checked(prompt,sources,on_review):on_review();return ('Checked reply.','test',[])
   a.update(checked_answer=checked,select_proof_ids=lambda *args:[],evidence_links=lambda *args:[])
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None
   h.stream_reply('prompt',[],'q',[],'conversation',{}, {})

@@ -35,7 +35,7 @@ def evaluate(base_url,cases):
     repeated=len(new&old)/max(1,len(new))
     limit=turn.get('max_repeated_trigram_ratio',1.0)
     rows.append({'question':turn['question'],'answer':answer,'pass':not missing and not forbidden and repeated<=limit,'missing':missing,'forbidden':forbidden,'repeated_trigram_ratio':round(repeated,3)})
-    history.extend([{'role':'user','content':turn['question']},{'role':'assistant','content':answer}])
+    history.extend([{'role':'user','content':turn['question']},{'role':'assistant','content':answer,'support_ids':done.get('support_ids',[])}])
    except urllib.error.HTTPError as error:
     rows.append({'question':turn['question'],'error':'http_'+str(error.code)});break
    except Exception as error:

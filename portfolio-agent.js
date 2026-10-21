@@ -586,7 +586,7 @@ async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
     if(!response.ok){const data=await response.json().catch(()=>({}));throw Object.assign(new Error(data.error||'Agent unavailable'),{code:data.code||'agent-unavailable'});}
     if(!(response.headers.get('content-type')||'').includes('application/x-ndjson')){
       const data=await response.json();if(!data.answer)throw Error('Empty answer');
-      return {answer:data.answer,sourceIds:data.source_ids||[],evidenceLinks:data.evidence_links||[],intent:data.intent||''};
+      return {answer:data.answer,sourceIds:data.source_ids||[],supportIds:data.support_ids||[],evidenceLinks:data.evidence_links||[],intent:data.intent||''};
     }
     const reader=response.body.getReader(),decoder=new TextDecoder();
     let buffer='',answer='',result=null;
@@ -596,7 +596,7 @@ async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
       if(event.type==='status'&&typeof event.message==='string')onStatus(event.message);
       if(event.type==='delta'&&typeof event.text==='string'){answer+=event.text;request.partial=answer;onDelta(answer);}
       if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code,retryAfter:event.retry_after});
-      if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||''};
+      if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],supportIds:event.support_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||''};
     }
     try{
       while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let at;while((at=buffer.indexOf('\n'))>=0){accept(buffer.slice(0,at));buffer=buffer.slice(at+1);}if(done)break;}
@@ -676,7 +676,7 @@ async function ask(q){
     const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=[];let links=[],interrupted=false,stopped=false,retryAfter=0;
+    let evidenceCards=[];let supportIds=[];let links=[],interrupted=false,stopped=false,retryAfter=0;
 
     try{
       if(activeRequest.stopped)throw new DOMException('Stopped','AbortError');
@@ -685,7 +685,7 @@ async function ask(q){
         response.classList.remove('is-thinking');response.replaceChildren(text('p',partial,'agent-stream-text'));
         if(nearBottom)conversation.scrollTop=conversation.scrollHeight;
       },message=>{thinking.textContent=message;});
-      answer=result.answer;links=result.evidenceLinks||[];
+      answer=result.answer;links=result.evidenceLinks||[];supportIds=result.supportIds||[];
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
@@ -740,7 +740,7 @@ async function ask(q){
 
     // Search excerpts are not model replies and must not steer later conversation.
     if(usedAgent){
-      history.push({role:'user',text:q},{role:'assistant',text:answer});
+      history.push({role:'user',text:q},{role:'assistant',text:answer,support_ids:supportIds});
       history=history.slice(-8);
     }
   }catch{

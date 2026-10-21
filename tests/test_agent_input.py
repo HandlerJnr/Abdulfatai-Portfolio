@@ -30,7 +30,7 @@ class InputTests(unittest.TestCase):
         for case in json.loads((ROOT / 'tests/agent-input-cases.json').read_text()):
             with self.subTest(question=case['question']):
                 retrieve = Mock(return_value=('published evidence', ['horal']))
-                model = Mock(return_value=('A grounded answer.', 'test'))
+                model = Mock(return_value=('A grounded answer.', 'test', []))
                 response = Mock()
                 agent.update(retrieve=retrieve, checked_answer=model, call_model=model, json_response=response)
                 request = agent['handler'].__new__(agent['handler'])
