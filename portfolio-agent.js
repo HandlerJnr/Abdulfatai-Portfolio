@@ -2,7 +2,7 @@
 const launcher=document.createElement('button');
 launcher.className='portfolio-search-launch';
 launcher.type='button';
-launcher.innerHTML='<img src="/agent-favicon.svg" width="36" height="36" alt=""><span class="sr-only">Chat with Jamiu’s portfolio agent</span>';
+launcher.innerHTML='<img src="/assets/db99cb95c28524de.png" width="36" height="36" alt=""><span class="sr-only">Chat with Jamiu’s portfolio agent</span>';
 launcher.title='Chat about Jamiu’s work';
 launcher.setAttribute('aria-label','Ask about Jamiu’s work');
 launcher.setAttribute('aria-haspopup','dialog');
