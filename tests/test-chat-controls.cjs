@@ -8,7 +8,7 @@ for(const mobile of [false,true]){
  const dialog={open:false,inert:true,classList:{remove(){}},showModal(){assert.equal(this.inert,false);this.open=true}};
  const input={disabled:true,readOnly:true,focus(){focused++}};
  const attributes={};
- const context={dialog,input,launcher:{setAttribute:(k,v)=>attributes[k]=v},document:{body:{style:{overflow:''},classList:{remove(){}}},querySelector:()=>null},syncViewControl(){},getRecords:()=>Promise.resolve(),mobileAgent:{matches:mobile}};
+ const context={dialog,input,launcher:{setAttribute:(k,v)=>attributes[k]=v},document:{body:{style:{overflow:''},classList:{remove(){}}},querySelector:()=>null},syncViewControl(){},resizeComposer(){},getRecords:()=>Promise.resolve(),mobileAgent:{matches:mobile}};
  vm.createContext(context);vm.runInContext('('+opening+')()',context);
  assert.equal(dialog.open,true);assert.equal(dialog.inert,false);
  assert.equal(input.disabled,false);assert.equal(input.readOnly,false);assert.equal(focused,1);

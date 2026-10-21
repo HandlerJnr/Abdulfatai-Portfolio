@@ -12,11 +12,12 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-lenis-prevent role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><input id="portfolio-question" type="text" maxlength="700" placeholder="What would you like to know?" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-lenis-prevent role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><textarea id="portfolio-question" rows="1" maxlength="700" placeholder="Ask anything about Jamiu’s work" autocomplete="off" enterkeyhint="send" aria-label="Message the portfolio agent"></textarea><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
-const input=dialog.querySelector('input');
+const input=dialog.querySelector('textarea');
+input.setAttribute('data-lenis-prevent','');
 const form=dialog.querySelector('form');
 const submit=form.querySelector('button');
 let records;
@@ -65,14 +66,25 @@ function restoreConversation(){
     turns=Array.isArray(saved.turns)?saved.turns.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-24):[];
     originContext=saved.originContext&&typeof saved.originContext.pathname==='string'?saved.originContext:null;
     originUrl=typeof saved.originUrl==='string'&&saved.originUrl.startsWith('/')&&!saved.originUrl.startsWith('//')?saved.originUrl:'';
-    input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';
+    input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();turns.forEach(turn=>{
       if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
       else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
-input.addEventListener('input',saveConversation);
+function resizeComposer(){
+ input.style.height='auto';
+ const cap=Math.min(192,Math.max(96,innerHeight*.25));
+ const measured=input.scrollHeight;
+ input.style.height=Math.max(44,Math.min(measured,cap))+'px';
+ input.style.overflowY=measured>cap?'auto':'hidden';
+}
+input.addEventListener('input',()=>{resizeComposer();saveConversation()});
+input.addEventListener('keydown',event=>{
+ if(event.key==='Enter'&&!event.shiftKey&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.isComposing){event.preventDefault();if(!busy&&input.value.trim())form.requestSubmit()}
+});
+addEventListener('resize',resizeComposer);
 
 // Keep this conservative rule aligned with api/agent.py and the shared test cases.
 const INPUT_CLARIFICATION="Keep typing, ask me anything about Jamiu’s work, experience, skills, or this page.";
@@ -557,7 +569,7 @@ async function ask(q){
   const response=text('div','','search-answer is-thinking');
   response.append(text('p','Looking through the portfolio…'));
   conversation.append(response);
-  input.value='';
+  input.value='';resizeComposer();
 
   try{
     await getRecords();
@@ -680,21 +692,9 @@ function setChatView(next){
   const after=dialog.getBoundingClientRect();
   dialog.animate([{transformOrigin:'top left',transform:'translate('+(before.left-after.left)+'px,'+(before.top-after.top)+'px) scale('+(before.width/after.width)+','+(before.height/after.height)+')',opacity:.85},{transformOrigin:'top left',transform:'translate(0,0) scale(1,1)',opacity:1}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'});
  }
- (dialog.contains(focus)?focus:input).focus({preventScroll:true});conversation.scrollTop=conversationScroll;saveConversation();
+ (dialog.contains(focus)?focus:input).focus({preventScroll:true});resizeComposer();conversation.scrollTop=conversationScroll;saveConversation();
 }
 viewButton.addEventListener('click',()=>setChatView(chatView==='focused'?'docked':'focused'));
-const browseRow=text('div','','search-browse-row');
-const browseLabel=text('label','Browse the portfolio');browseLabel.htmlFor='agent-browse-section';
-const browseSelect=document.createElement('select');browseSelect.id='agent-browse-section';browseSelect.setAttribute('aria-label','Browse portfolio sections');
-document.querySelectorAll('#portfolio-menu>a').forEach(link=>{
- const url=new URL(link.href,location.origin);if(url.hash)return;
- const option=document.createElement('option');option.value=url.pathname;option.textContent=link.textContent.trim();browseSelect.append(option);
-});
-function syncBrowseSection(){browseSelect.value=location.pathname}
-browseSelect.addEventListener('change',()=>{const link=[...document.querySelectorAll('#portfolio-menu>a')].find(link=>new URL(link.href,location.origin).pathname===browseSelect.value);link?.click()});
-browseRow.append(browseLabel,browseSelect);dialog.querySelector('.search-mode').after(browseRow);
-document.addEventListener('portfolio:sectionchange',syncBrowseSection);syncBrowseSection();
-
 dockViewport.addEventListener('change',()=>{if(!dockViewport.matches&&chatView==='docked')setChatView('focused');syncViewControl()});
 addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{passive:true});
 document.addEventListener('portfolio:sectionchange',positionDock);
@@ -722,7 +722,7 @@ launcher.addEventListener('click',()=>{
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
-  input.focus({preventScroll:true});
+  input.focus({preventScroll:true});resizeComposer();
 });
 
 dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
@@ -757,7 +757,7 @@ form.addEventListener('submit',event=>{
 
 
 const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';form.before(clear);
-clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
 const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
 window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
