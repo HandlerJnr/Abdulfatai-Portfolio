@@ -119,3 +119,99 @@
 .search-answer-body{max-width:68ch}
 .portfolio-search.is-docked .search-conversation{padding-inline:1em}
 @media(max-width:767px){.search-conversation{padding-inline:1.2em}}
+
+
+/* Agent refinement: gentle ambient icon motion even before interaction. */
+.portfolio-search-launch img{
+  animation:agent-star-roll 11s linear infinite;
+  transform-origin:center center;
+  will-change:transform;
+}
+@media(hover:hover) and (pointer:fine){
+  .portfolio-search-launch:is(:hover,:focus-visible) img{animation-duration:2.4s}
+}
+@media(prefers-reduced-motion:reduce){
+  .portfolio-search-launch img,
+  .portfolio-search-launch:is(:hover,:focus-visible) img{animation:none!important;will-change:auto}
+}
+
+/* The project preview is an editorial reading column, not tiny metadata. */
+@media(min-width:992px){
+  .portfolio-search:not(.is-docked) .agent-workspace{
+    grid-template-columns:minmax(155px,.8fr) minmax(0,2.1fr) minmax(285px,1.35fr);
+  }
+  .portfolio-search:not(.is-docked) .agent-proof{
+    padding:1.3em;
+    scrollbar-gutter:stable;
+  }
+}
+.agent-proof-title{font-size:1.15em;line-height:1.4}
+.agent-proof-summary,.agent-proof-empty{
+  font-size:.88em;line-height:1.7;
+  color:var(--agent-ink);
+}
+.agent-proof-role{font-size:.8em;line-height:1.65}
+.agent-proof-disclosure>summary{font-size:.86em;line-height:1.55}
+.agent-proof-disclosure>div>p{font-size:.84em;line-height:1.75}
+.agent-proof-open{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:42px;max-width:100%;padding:.65em 1em;
+  margin:.15em 0 1.15em;border:1px solid var(--agent-line);
+  border-radius:.35em;text-decoration:none;font-size:.82em;
+  line-height:1.45;font-weight:500;transition:background .2s ease;
+}
+.agent-proof-open:hover{background:var(--_colors---background--secondary,#eeeee8)}
+.agent-proof-details{min-width:0;overflow-wrap:anywhere}
+.agent-proof-image{height:auto;max-height:240px}
+.agent-proof-disclosure>div{min-width:0}
+
+/* Full-bleed chat workspace on touch-size screens, including landscape phones.
+   The visual viewport variables allow the composer to clear an on-screen keyboard. */
+@media(max-width:991px){
+  .portfolio-search,
+  .portfolio-search[open]{
+    position:fixed;
+    inset:auto!important;
+    left:0!important;
+    top:var(--agent-visual-top,0px)!important;
+    width:100vw!important;
+    max-width:none!important;
+    height:var(--agent-visual-height,100dvh)!important;
+    max-height:none!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    padding:0;
+    overflow:hidden;
+  }
+  .portfolio-search .search-heading{
+    padding:max(1em,env(safe-area-inset-top)) max(1.1em,env(safe-area-inset-right)) .75em max(1.1em,env(safe-area-inset-left));
+  }
+  .portfolio-search .search-mode{padding:.15em 1.35em .85em}
+  .portfolio-search .search-conversation{
+    padding:1em max(1.1em,env(safe-area-inset-right)) 1em max(1.1em,env(safe-area-inset-left));
+    min-height:0;
+    -webkit-overflow-scrolling:touch;
+  }
+  .portfolio-search .agent-chat-column{height:100%;min-height:0;overflow:hidden}
+  .portfolio-search .agent-workspace{min-height:0;flex:1;overflow:hidden}
+  .portfolio-search .search-form{
+    width:100%;max-width:none;
+    padding:.35em max(1em,env(safe-area-inset-right)) max(.75em,env(safe-area-inset-bottom)) max(1em,env(safe-area-inset-left));
+    flex-shrink:0;
+    background:var(--agent-paper);
+  }
+  .portfolio-search .search-chat-actions{padding:.2em 1em}
+  .portfolio-search .search-close{width:44px;height:44px;min-width:44px;min-height:44px}
+  .portfolio-search .search-answer{font-size:.96em}
+  .portfolio-search .search-welcome-state{padding:1.2em 0}
+}
+@media(max-width:400px){
+  .portfolio-search .search-heading h2{font-size:1.25em}
+  .portfolio-search .search-heading{gap:.5em}
+  .portfolio-search .search-conversation{padding-inline:1em}
+}
+@media(prefers-reduced-motion:reduce){
+  .agent-proof-open{transition:none}
+}
