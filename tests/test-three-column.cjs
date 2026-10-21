@@ -8,8 +8,9 @@ const start=js.indexOf("const workspace=text('div','','agent-workspace');"),end=
 vm.runInContext(js.slice(start,end)+"globalThis.centre=centre;globalThis.workspace=workspace",context);
 assert.equal(context.centre.children[0],context.conversation);
 assert.equal(context.centre.children[1],context.rolePanel);
-assert.equal(context.centre.children[2],context.chatActions);
-assert.equal(context.centre.children[3],context.form);
+assert.equal(context.centre.children[2],context.form);
+assert.equal(context.centre.children.length,3);
+assert(!context.centre.children.includes(context.chatActions));
 assert.equal(context.workspace.children.length,3);
 assert(css.includes('.portfolio-search:not(.is-docked) .agent-workspace{display:grid'));
 assert(css.includes('@media(min-width:992px)'));
