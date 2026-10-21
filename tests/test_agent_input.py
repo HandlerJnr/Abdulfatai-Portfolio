@@ -67,5 +67,5 @@ class InputTests(unittest.TestCase):
         self.assertIn('brand', agent['domain_proof_ids']('Branding', []))
         self.assertEqual(agent['response_intent']('Show me proof of his work', [], page), 'navigation')
         self.assertFalse(agent['should_show_sources']('page-context'))
-        self.assertTrue(agent['should_show_sources']('domain-evidence'))
+        self.assertFalse(agent['should_show_sources']('domain-evidence'))
 

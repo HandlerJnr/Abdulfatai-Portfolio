@@ -184,7 +184,7 @@ def call_model(prompt):
         "model": MODEL,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.35,
-        "max_completion_tokens": 650,
+        "max_completion_tokens": 450,
     }
     request = urllib.request.Request(
         endpoint,
@@ -382,13 +382,9 @@ def response_intent(question, history, page_context):
     evidence_terms = (
         "prove", "proof", "evidence", "back that up", "source", "reference",
         "recommendation", "testimonial", "credential", "certification", "award",
-        "qualified", "qualification", "impact", "metric", "metrics", "result",
-        "results", "outcome", "traction", "conversion", "growth", "downloads",
-        "scale", "leadership", "manager", "managed", "collaboration", "collaborate",
-        "developer", "engineering", "hire", "hiring", "fit for", "suitable",
-        "capable", "good at", "strong at", "strength", "weakness", "senior",
-        "assess", "assessment", "evaluate", "evaluation", "rating", "score",
-        "compare", "comparison", "why should", "can he", "does he have experience"
+        "impact", "metric", "result", "outcome", "traction", "conversion",
+        "downloads", "why hire", "why should", "fit for", "suitable",
+        "assess", "compare", "qualification"
     )
     critical_terms = (
         "weakness", "gap", "missing", "limit", "limitation", "risk", "concern",
@@ -407,7 +403,32 @@ def response_intent(question, history, page_context):
 
 
 def should_show_sources(intent):
-    return intent in ("domain-evidence", "evidence", "critical-evidence", "navigation")
+    return intent in ("evidence", "critical-evidence", "navigation")
+
+
+def select_proof_ids(answer, candidates, question, intent):
+    if not should_show_sources(intent):
+        return []
+    lower = str(answer or "").lower()
+    aliases = {
+        "vista-itss": ("vista",), "pay4me": ("radius", "pay4me"),
+        "archi-tek": ("architek", "archi-tek"),
+        "system": ("design system", "component library"),
+        "brand": ("brand & identity", "brand and identity", "branding"),
+        "logos": ("logos", "logo design", "marks"),
+        "credentials": ("reference", "recommendation", "award", "certification", "credential"),
+    }
+    output = []
+    for record_id in candidates:
+        record = RECORDS.get(record_id)
+        if not record or record_id in ("about", "cv") or record_id in output:
+            continue
+        names = aliases.get(record_id, ()) + (record.get("title", ""), record_id.replace("-", " "))
+        if any(name and re.search(r"(?<!\w)" + re.escape(name.lower()) + r"(?!\w)", lower) for name in names):
+            output.append(record_id)
+        if len(output) == 2:
+            break
+    return output
 
 
 def retrieve(question, history, intent, page_context):
@@ -537,7 +558,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- In page-context mode, explain what the current page is, what work/problem it represents, what the visitor is seeing, and why it matters. Never call it the homepage unless CURRENT PAGE is actually '/'.\n"
         "- For unrelated questions, current-page context is background only; do not force it into the answer.\n"
         "- Do not append generic caveats, scores, source lists or 'limitations' paragraphs to ordinary answers.\n"
-        "- Default to a natural 2-6 sentence answer. Go longer when the visitor asks for detail.\n"
+        "- Default to 1-3 short sentences, usually 35-70 words. A greeting needs one sentence. Go longer only when the visitor asks for detail. Do not repeat the question, add a sales pitch or end every answer with an offer.\n"
         "- Do not pretend to be Jamiu; speak about him naturally in third person.\n"
         "- Never invent projects, employers, dates, metrics, clients, skills, research, availability, work eligibility, pricing or personal facts.\n\n"
 
@@ -549,6 +570,8 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- Bold text sparingly for short labels only.\n\n"
 
         "WHEN CLAIMS NEED BACKUP\n"
+        "- Use relevant evidence internally, but do not automatically display or offer proof for ordinary questions about skills, background, process or a project.\n"
+        "- Show links only for requests for proof, references, outcomes, comparisons, suitability or navigation. Discuss only one or two relevant sources; never introduce unrelated projects to fill proof cards.\n"
         "- In domain-evidence, evidence or critical-evidence mode, support the answer with the most relevant published proof: the dedicated portfolio library/page for that discipline, shipped work, responsibilities, metrics, references, LinkedIn recommendations, awards, certifications or live links.\n"
         "- When someone asks about branding/graphic design, use Brand & identity and Logos & marks as first-class proof. When they ask about design systems, use the Design systems library first, then shipped examples such as Vista, Bizinc or Shortlet where useful. Apply the same principle to every recognised portfolio discipline.\n"
         "- Prefer one or two decisive examples in prose. The interface can show additional proof cards separately.\n"
@@ -662,7 +685,7 @@ class handler(BaseHTTPRequestHandler):
             200,
             {
                 "answer": clip(answer, 4200),
-                "source_ids": used_ids if should_show_sources(intent) else [],
+                "source_ids": select_proof_ids(answer, used_ids, question, intent),
                 "intent": intent,
                 "page_id": page_context.get("page_id", ""),
                 "engine": "llamaindex-bm25+gpt-oss-120b",

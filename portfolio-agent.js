@@ -542,13 +542,13 @@ async function ask(q){
     const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=fallbackRecords.slice(0,2);
+    let evidenceCards=[];
 
     try{
       const result=await askAgent(q);
       answer=result.answer;
       usedAgent=true;
-      evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,3);
+      evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
       answer=fallback;
       response.dataset.agentError=error?.code||'agent-unavailable';
@@ -569,7 +569,7 @@ async function ask(q){
     dialog.querySelector('.search-mode>span:last-child').textContent=usedAgent
       ? (hasEvidence?'Portfolio conversation · Supporting evidence below.':'Portfolio conversation')
       : 'Portfolio search · Live chat temporarily unavailable.';
-    response.append(meta);
+    if(!usedAgent)response.append(meta);
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
@@ -596,18 +596,18 @@ async function ask(q){
   }
 }
 
+const reduceAgentMotion=matchMedia('(prefers-reduced-motion:reduce)');
+let closingAgent=false;
 let savedOverflow='';
 dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
 
 function closeAgent(){
-  if(document.activeElement&&dialog.contains(document.activeElement)&&typeof document.activeElement.blur==='function'){
-    document.activeElement.blur();
-  }
-  input.blur();
-  requestAnimationFrame(()=>{
-    if(dialog.open)dialog.close();
-  });
+  if(!dialog.open||closingAgent)return;
+  closingAgent=true;input.blur();
+  if(reduceAgentMotion.matches||!dialog.animate){dialog.close();closingAgent=false;return;}
+  const exit=dialog.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:'translateX(12px)'}],{duration:160,easing:'ease-in'});
+  exit.finished.catch(()=>{}).then(()=>{if(dialog.open)dialog.close();closingAgent=false});
 }
 
 launcher.addEventListener('click',()=>{
