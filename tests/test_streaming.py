@@ -25,6 +25,17 @@ class Tests(unittest.TestCase):
  def test_secret_not_in_stream_errors(self):
   with patch('urllib.request.urlopen',side_effect=ValueError('secret')):
    with self.assertRaisesRegex(RuntimeError,'model_stream_unavailable'):list(a['stream_model']('test'))
+ def test_stream_request_uses_working_client_identity(self):
+  data=upstream([{'choices':[{'delta':{'content':'reply'},'finish_reason':'stop'}]}])
+  with patch('urllib.request.urlopen',return_value=data) as request:
+   list(a['stream_model']('test'))
+  self.assertEqual(request.call_args.args[0].get_header('User-agent'),'JamiuPortfolio/1.0')
+ def test_before_first_token_failure_recovers(self):
+  def broken(p):raise RuntimeError('model_stream_http_403');yield ''
+  a.update(stream_model=broken,call_model=lambda p:('Recovered answer','test'),select_proof_ids=lambda *args:[],evidence_links=lambda *args:[])
+  h=self.request();h.stream_reply('prompt',[],'q',[],'conversation',{})
+  events=[json.loads(line) for line in h.wfile.getvalue().splitlines()]
+  self.assertEqual(events[-1]['type'],'done');self.assertEqual(events[-1]['answer'],'Recovered answer')
  def request(self):
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda status:None;h.send_header=lambda *args:None;h.end_headers=lambda:None;return h
  def test_wire_protocol_and_evidence(self):

@@ -252,9 +252,10 @@ def stream_model(prompt):
         "model": MODEL, "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.35, "max_completion_tokens": 450, "stream": True,
     }).encode("utf-8"), headers={"Authorization": "Bearer " + token,
-        "Content-Type": "application/json", "Accept": "text/event-stream"}, method="POST")
+        "Content-Type": "application/json", "Accept": "text/event-stream",
+        "User-Agent": "JamiuPortfolio/1.0"}, method="POST")
     try:
-        with urllib.request.urlopen(request, timeout=30) as upstream:
+        with urllib.request.urlopen(request, timeout=15) as upstream:
             finished = False
             for raw in upstream:
                 line = raw.decode("utf-8").strip()
@@ -275,6 +276,10 @@ def stream_model(prompt):
                         finished = True
             if not finished:
                 raise RuntimeError("model_stream_incomplete")
+    except urllib.error.HTTPError as error:
+        code = error.code
+        error.close()
+        raise RuntimeError("model_stream_http_" + str(code)) from error
     except (GeneratorExit, BrokenPipeError, ConnectionResetError):
         raise
     except Exception as error:
@@ -843,6 +848,7 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write((json.dumps(event, ensure_ascii=False) + "\n").encode("utf-8"))
             self.wfile.flush()
         stream = None
+        answer = ""
         try:
             send({"type": "status", "message": "Thinking…"})
             answer = ""
@@ -862,11 +868,28 @@ class handler(BaseHTTPRequestHandler):
                   "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL})
         except (BrokenPipeError, ConnectionResetError):
             pass
-        except Exception:
+        except Exception as error:
+            diagnostic = str(error)
+            print("portfolio_agent_stream_error:", diagnostic if re.fullmatch(r"model_[a-z0-9_]+", diagnostic) else type(error).__name__)
             try:
-                send({"type": "error", "error": "The reply was interrupted. Please retry.", "code": "stream_unavailable"})
+                if not answer:
+                    # Recover only before text is delivered; never overwrite a partial answer.
+                    fallback, _provider = call_model(prompt)
+                    fallback = clip(fallback, 4200)
+                    send({"type": "delta", "text": fallback})
+                    send({"type": "done", "answer": fallback,
+                          "source_ids": select_proof_ids(fallback, used_ids, question, intent),
+                          "evidence_links": evidence_links(question, history, intent),
+                          "intent": intent, "model": MODEL})
+                else:
+                    send({"type": "error", "error": "The reply was interrupted. Please retry.", "code": "stream_unavailable"})
             except (BrokenPipeError, ConnectionResetError):
                 pass
+            except Exception:
+                try:
+                    send({"type": "error", "error": "Chat is temporarily unavailable. Please retry.", "code": "agent_unavailable"})
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
         finally:
             if stream is not None:
                 stream.close()
