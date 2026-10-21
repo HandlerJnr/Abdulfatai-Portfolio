@@ -452,12 +452,29 @@ function sourceCards(found){
  const cards=text('div','','search-results');
  uniqueRecords(found).forEach(record=>{
   const link=document.createElement('a');link.href=record.url;link.className='search-result';
-  link.setAttribute('aria-label',dockViewport.matches?'Preview '+record.title:'Open '+record.title);
+  const projectSlug=new URL(record.url,location.origin).pathname.match(/^\\/work\\/([^/]+)\\/?$/)?.[1]||'';
+  link.setAttribute('aria-label','View '+record.title+' work');
   link.addEventListener('click',event=>{
    if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   if(dockViewport.matches&&chatView==='docked'&&projectSlug){
+    // Preserve the original docked behaviour: the site's existing feed modal
+    // opens alongside the docked chat rather than expanding the chat itself.
+    const modal=document.querySelector('[data-feed-modal]');
+    if(!modal){event.preventDefault();window.location.assign(record.url);return}
+    link.setAttribute('data-feed-open',projectSlug);
+    if(!document.querySelector('[data-feed-detail="'+projectSlug+'"]')){
+     event.preventDefault();event.stopPropagation();
+     proofSource(record).then(()=>link.click()).catch(()=>{
+      link.removeAttribute('data-feed-open');
+      window.location.assign(record.url);
+     });
+    }
+    // Leave the click to the site's delegated [data-feed-open] listener.
+    return;
+   }
+   link.removeAttribute('data-feed-open');
    if(dockViewport.matches){
     event.preventDefault();
-    if(chatView==='docked')setChatView('focused');
     showProof(record);
    }else closeAgent();
   });
@@ -466,7 +483,7 @@ function sourceCards(found){
   }else link.append(text('span',record.title.slice(0,1),'search-monogram'));
   const copy=text('div');
   copy.append(text('strong',record.title),text('span',record.summary),
-    text('span',dockViewport.matches?'Select to preview ↗':'Open case study ↗','agent-source-action'));
+    text('span','Select to view work ↗','agent-source-action'));
   link.append(copy);cards.append(link);
  });
  return cards;
