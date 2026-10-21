@@ -31,8 +31,6 @@ let busy=false;
 let inputVocabulary;
 const SESSION_KEY='jamiu-agent-session-v2';
 let turns=[];
-let originContext=null;
-let originUrl='';
 const welcomeLines=[
  'What would you like to know?',
  'Have a role in mind? Let’s talk about it.',
@@ -59,7 +57,7 @@ setInterval(()=>{
  headline.animate?.([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});
 },7500);
 function saveConversation(){
-  try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:1,updated:Date.now(),history,turns:turns.slice(-24),draft:input.value.slice(0,700),originContext,originUrl}));}catch{}
+  try{sessionStorage.setItem(SESSION_KEY,JSON.stringify({version:1,updated:Date.now(),history,turns:turns.slice(-24),draft:input.value.slice(0,700)}));}catch{}
 }
 function restoreConversation(){
   try{
@@ -67,8 +65,6 @@ function restoreConversation(){
     if(!saved||saved.version!==1||Date.now()-saved.updated>86400000)return;
     history=Array.isArray(saved.history)?saved.history.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-8):[];
     turns=Array.isArray(saved.turns)?saved.turns.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-24):[];
-    originContext=saved.originContext&&typeof saved.originContext.pathname==='string'?saved.originContext:null;
-    originUrl=typeof saved.originUrl==='string'&&saved.originUrl.startsWith('/')&&!saved.originUrl.startsWith('//')?saved.originUrl:'';
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();turns.forEach(turn=>{
       if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
@@ -751,27 +747,23 @@ syncViewControl();
 dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();if(!chatActions.hidden){setActionsOpen(false);actionToggle.focus({preventScroll:true})}else closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
 const fullScreenViewport=window.matchMedia('(max-width:991px)');
+// Lock document scrolling without turning body into a fixed positioning container.
+// iOS Safari otherwise shifts the entire dialog off-screen when the keyboard appears.
 let mobileScrollLock=null;
 function lockAgentPage(){
  if(!fullScreenViewport.matches||mobileScrollLock)return;
- const body=document.body,html=document.documentElement;
- mobileScrollLock={y:window.scrollY,position:body.style.position,top:body.style.top,
-  left:body.style.left,right:body.style.right,width:body.style.width,htmlOverflow:html.style.overflow};
- body.style.position='fixed';body.style.top='-'+mobileScrollLock.y+'px';
- body.style.left='0';body.style.right='0';body.style.width='100%';
- html.style.overflow='hidden';
+ const html=document.documentElement,body=document.body;
+ mobileScrollLock={htmlOverflow:html.style.overflow,bodyOverflow:body.style.overflow};
+ html.style.overflow='hidden';body.style.overflow='hidden';
  body.classList.add('agent-mobile-active');html.classList.add('agent-mobile-active');
  window.ltLenis?.stop();
 }
 function unlockAgentPage(){
  if(!mobileScrollLock)return;
- const body=document.body,html=document.documentElement,prior=mobileScrollLock;
+ const html=document.documentElement,body=document.body,prior=mobileScrollLock;
  mobileScrollLock=null;
- body.style.position=prior.position;body.style.top=prior.top;
- body.style.left=prior.left;body.style.right=prior.right;body.style.width=prior.width;
- html.style.overflow=prior.htmlOverflow;
+ html.style.overflow=prior.htmlOverflow;body.style.overflow=prior.bodyOverflow;
  body.classList.remove('agent-mobile-active');html.classList.remove('agent-mobile-active');
- window.scrollTo(0,prior.y);
  window.ltLenis?.start();
 }
 function updateAgentViewport(){
@@ -779,26 +771,36 @@ function updateAgentViewport(){
  if(!fullScreenViewport.matches){
   dialog.style.removeProperty('--agent-visual-height');
   dialog.style.removeProperty('--agent-visual-top');
-  dialog.classList.remove('has-virtual-keyboard');return;
+  dialog.classList.remove('has-virtual-keyboard');
+  return;
  }
- const viewport=window.visualViewport,height=Math.round(viewport?.height||window.innerHeight);
- dialog.classList.toggle('has-virtual-keyboard',height<window.innerHeight-120);
+ const viewport=window.visualViewport;
+ const height=Math.round(viewport?.height||window.innerHeight);
+ const top=Math.max(0,Math.round(viewport?.offsetTop||0));
+ const keyboardOpen=height<window.innerHeight-120;
+ dialog.classList.toggle('has-virtual-keyboard',keyboardOpen);
  dialog.style.setProperty('--agent-visual-height',height+'px');
- // Keep the workspace still while iOS pans the virtual viewport for the keyboard.
- dialog.style.setProperty('--agent-visual-top','0px');
+ dialog.style.setProperty('--agent-visual-top',top+'px');
+ // Keep the input from increasing the modal's total height as Safari resizes.
+ resizeComposer();
 }
 let viewportUpdateFrame=0;
 function requestAgentViewportUpdate(){
  if(viewportUpdateFrame)return;
- viewportUpdateFrame=requestAnimationFrame(()=>{viewportUpdateFrame=0;updateAgentViewport()});
+ viewportUpdateFrame=requestAnimationFrame(()=>{
+  viewportUpdateFrame=0;updateAgentViewport();
+ });
 }
 window.visualViewport?.addEventListener('resize',requestAgentViewportUpdate);
+window.visualViewport?.addEventListener('scroll',requestAgentViewportUpdate,{passive:true});
 window.addEventListener('resize',requestAgentViewportUpdate);
 fullScreenViewport.addEventListener('change',()=>{
  if(!dialog.open)return;
  if(fullScreenViewport.matches)lockAgentPage();else unlockAgentPage();
  requestAgentViewportUpdate();
 });
+input.addEventListener('focus',requestAgentViewportUpdate);
+input.addEventListener('blur',requestAgentViewportUpdate);
 
 function closeAgent(){
   if(!dialog.open||closingAgent)return;
@@ -819,7 +821,7 @@ launcher.addEventListener('click',()=>{
   dialog.showModal();document.body.style.overflow='hidden';syncViewControl();lockAgentPage();updateAgentViewport();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
-  // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
+  // Focus the composer immediately on desktop; mobile visitors tap it when ready.
   if(!fullScreenViewport.matches)input.focus({preventScroll:true});resizeComposer();
 });
 
@@ -857,7 +859,7 @@ form.addEventListener('submit',event=>{
 
 
 const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';
-clear.addEventListener('click',()=>{if(busy)return;roleDescription="";roleFileToken++;roleText.value="";rolePanel.hidden=true;conversation.hidden=false;updateRoleAction();history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
+clear.addEventListener('click',()=>{if(busy)return;roleDescription="";roleFileToken++;roleText.value="";rolePanel.hidden=true;conversation.hidden=false;updateRoleAction();history=[];turns=[];lastProject=null;input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
 const fitButton=text('button','Compare a role','role-fit-action');fitButton.type='button';
 const chatActions=text('div','','search-chat-actions');chatActions.id='agent-chat-actions';chatActions.hidden=true;chatActions.append(clear,fitButton);
 const actionHost=text('div','','agent-action-host');
@@ -866,7 +868,11 @@ actionToggle.setAttribute('aria-label','Chat options');
 actionToggle.setAttribute('aria-expanded','false');
 actionToggle.setAttribute('aria-controls',chatActions.id);
 function setActionsOpen(open){chatActions.hidden=!open;actionToggle.setAttribute('aria-expanded',String(open))}
-actionToggle.addEventListener('click',()=>setActionsOpen(chatActions.hidden));
+actionToggle.addEventListener('click',event=>{
+ setActionsOpen(chatActions.hidden);
+ // A tap should not leave a persistent focused outline on this button.
+ if(event.detail>0)actionToggle.blur();
+});
 chatActions.addEventListener('click',event=>{if(event.target.closest('button'))setActionsOpen(false)});
 document.addEventListener('pointerdown',event=>{if(!chatActions.hidden&&!actionHost.contains(event.target))setActionsOpen(false)});
 actionHost.append(actionToggle,chatActions);windowControls.insertBefore(actionHost,closeButton);

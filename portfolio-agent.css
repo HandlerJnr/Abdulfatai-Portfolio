@@ -10,7 +10,7 @@
 @media(prefers-reduced-motion:reduce){.portfolio-search[open]{animation:none}}
 .portfolio-search-launch{transition:transform .22s ease,box-shadow .22s ease,opacity .18s ease}.portfolio-search-launch:hover{transform:translateY(-2px)}.portfolio-search-launch img{transition:transform .3s cubic-bezier(.2,.8,.2,1)}.portfolio-search-launch:active{transform:scale(.96)}.search-close,.search-result,.search-form button{transition:background .18s ease,opacity .18s ease,transform .18s ease}.search-close:hover,.search-form button:hover:not(:disabled){transform:translateY(-1px)}.search-form>div{transition:border-color .18s ease}.search-answer:not(.is-thinking){animation:agent-answer-enter .22s ease-out}.search-result:hover{transform:translateY(-1px)}@keyframes agent-answer-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.portfolio-search-launch,.portfolio-search-launch img,.search-close,.search-result,.search-form button,.search-form>div{transition:none}.search-answer:not(.is-thinking){animation:none}.portfolio-search-launch:hover,.portfolio-search-launch:hover img,.portfolio-search-launch:active,.search-close:hover,.search-form button:hover:not(:disabled),.search-result:hover{transform:none}}
 
-/* Hover-only wheel motion and an aurora flare around the original star. */
+/* Ambient rotating star and an aurora flare on hover. */
 .portfolio-search-launch{isolation:isolate;overflow:visible}
 .portfolio-search-launch img{position:relative;z-index:1;border-radius:50%}
 .portfolio-search-launch::before,.portfolio-search-launch::after{content:"";position:absolute;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s ease}
@@ -69,7 +69,6 @@
 .search-form textarea{display:block;box-sizing:border-box;resize:none;min-height:44px;height:44px;max-height:192px;padding:.6em .4em .6em 0;overflow-x:hidden;overflow-y:hidden;white-space:pre-wrap;overflow-wrap:anywhere;scrollbar-width:thin;overscroll-behavior:contain;touch-action:pan-y}
 .search-form button{width:40px;height:40px;min-width:40px;min-height:40px;border-radius:50%;margin-bottom:2px}
 .search-clear{align-self:center;width:min(calc(100% - 3em),45em);box-sizing:border-box;text-align:center;margin:0;padding:.5em 0}
-.portfolio-search.is-docked .search-clear{width:calc(100% - 2em)}
 
 .search-form label{text-align:center}
 .portfolio-search .search-form textarea,.portfolio-search .search-form textarea:focus,.portfolio-search .search-form textarea:focus-visible{outline:none!important;box-shadow:none!important;border:0;border-radius:0;caret-color:var(--agent-ink)}
@@ -81,7 +80,6 @@
 .search-chat-actions{display:flex;align-items:center;justify-content:center;gap:1em;flex:0 0 auto;align-self:center;max-width:100%;padding:.25em 1em}
 .search-chat-actions .search-clear,.role-fit-action{width:auto;min-height:36px;margin:0;padding:.5em;font:inherit;font-size:.7em;line-height:1.4;text-align:center;border:0;background:transparent;color:var(--agent-muted);cursor:pointer}
 .role-fit-action:hover,.search-chat-actions .search-clear:hover{text-decoration:underline;text-underline-offset:3px}
-.portfolio-search .agent-workspace .agent-chat-column .search-chat-actions .search-clear{width:auto}
 .role-fit-panel[hidden],.agent-chat-column .search-conversation[hidden]{display:none!important}
 .role-fit-panel{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;width:min(calc(100% - 2.5em),42em);box-sizing:border-box;margin:0 auto;padding:1.25em 0}
 .role-fit-heading{display:flex;align-items:center;justify-content:space-between;gap:1em}.role-fit-heading h3{font:inherit;font-size:1.25em;font-weight:500;letter-spacing:-.02em;margin:0}.role-fit-heading button{font:inherit;font-size:.7em;background:none;color:inherit;border:0;padding:.5em;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
@@ -97,7 +95,6 @@
  .agent-library{border-right:1px solid var(--agent-line)}.agent-proof{border-left:1px solid var(--agent-line)}
  .portfolio-search:not(.is-docked) .agent-chat-column .search-conversation{padding-inline:1.25em}
  .portfolio-search:not(.is-docked) .agent-chat-column .search-form{width:100%;padding-inline:1.25em}
- .portfolio-search:not(.is-docked) .agent-chat-column .search-clear{width:calc(100% - 2.5em)}
  .agent-chat-column .search-answer-body{max-width:100%}
 }
 .agent-library>.search-kicker,.agent-proof>.search-kicker{margin:0 0 1.5em}
@@ -201,6 +198,8 @@
     padding:.35em max(1em,env(safe-area-inset-right)) max(.75em,env(safe-area-inset-bottom)) max(1em,env(safe-area-inset-left));
     flex-shrink:0;
     background:var(--agent-paper);
+    /* The form stays in flow at the foot of the viewport, never over the keyboard. */
+    position:relative;
   }
   .portfolio-search .search-chat-actions{padding:.2em 1em}
   .portfolio-search .search-close{width:44px;height:44px;min-width:44px;min-height:44px}
@@ -215,18 +214,6 @@
 @media(prefers-reduced-motion:reduce){
   .agent-proof-open{transition:none}
 }
-
-/* Direct and keyboard-accessible project preview action inside responses. */
-.agent-preview-action{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:auto;max-width:100%;min-height:42px;margin:.9em 0 .1em;
-  padding:.65em 1em;border:1px solid var(--agent-line);
-  border-radius:.35em;background:var(--_colors---background--secondary,#eeeee8);
-  color:var(--agent-ink);font:inherit;font-size:.9em;font-weight:500;
-  line-height:1.45;cursor:pointer;text-align:left;
-}
-.agent-preview-action:hover{background:var(--agent-paper)}
-.agent-preview-action:focus-visible{outline:2px solid var(--agent-ink);outline-offset:3px}
 
 /* Select a project deliberately: previews never change just because AI named one. */
 .search-result{min-height:70px;cursor:pointer}
@@ -306,4 +293,23 @@
 }
 @media(prefers-reduced-motion:reduce){
  .agent-action-host .search-chat-actions{scroll-behavior:auto}
+}
+
+/* A touch tap should not retain the native focus ring on the chat options.
+   Keyboard focus remains visible through the shared :focus-visible treatment. */
+.portfolio-search .agent-actions-toggle:focus:not(:focus-visible){
+ outline:none;
+ box-shadow:none;
+}
+@media(max-width:991px){
+ .portfolio-search .agent-workspace,
+ .portfolio-search .agent-chat-column,
+ .portfolio-search .search-conversation{
+  min-height:0;
+ }
+ .portfolio-search .search-form{
+  flex:none;
+  margin-top:auto;
+  z-index:2;
+ }
 }
