@@ -577,6 +577,10 @@ def retrieve(question, history, intent, page_context):
         for node in RECORD_NODES.get(current_page_id, [])[:18]:
             add_node(node)
 
+    # Keep academic facts available even when a broad qualification question retrieves certificates.
+    for node in RECORD_NODES.get("education", []):
+        add_node(node)
+
     # Domain records come first when a visitor asks about a specific discipline/capability.
     for record_id in domain_ids[:5]:
         for node in RECORD_NODES.get(record_id, [])[:10]:
