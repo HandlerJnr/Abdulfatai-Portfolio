@@ -74,10 +74,16 @@ function restoreConversation(){
   }catch{}
 }
 function resizeComposer(){
+ const previous=input.getBoundingClientRect().height||44;
+ input.style.transition='none';
  input.style.height='auto';
  const cap=Math.min(192,Math.max(96,innerHeight*.25));
  const measured=input.scrollHeight;
- input.style.height=Math.max(44,Math.min(measured,cap))+'px';
+ const next=Math.max(44,Math.min(measured,cap));
+ input.style.height=previous+'px';
+ void input.offsetHeight;
+ input.style.removeProperty('transition');
+ input.style.height=next+'px';
  input.style.overflowY=measured>cap?'auto':'hidden';
 }
 input.addEventListener('input',()=>{resizeComposer();saveConversation()});
