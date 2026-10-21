@@ -215,3 +215,15 @@
 @media(prefers-reduced-motion:reduce){
   .agent-proof-open{transition:none}
 }
+
+/* Direct and keyboard-accessible project preview action inside responses. */
+.agent-preview-action{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:auto;max-width:100%;min-height:42px;margin:.9em 0 .1em;
+  padding:.65em 1em;border:1px solid var(--agent-line);
+  border-radius:.35em;background:var(--_colors---background--secondary,#eeeee8);
+  color:var(--agent-ink);font:inherit;font-size:.9em;font-weight:500;
+  line-height:1.45;cursor:pointer;text-align:left;
+}
+.agent-preview-action:hover{background:var(--agent-paper)}
+.agent-preview-action:focus-visible{outline:2px solid var(--agent-ink);outline-offset:3px}
