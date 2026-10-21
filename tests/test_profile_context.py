@@ -13,7 +13,7 @@ class ProfileContext(unittest.TestCase):
      self.assertIn('Email: owner@example.com',prompt)
      self.assertIn('PGD Aerospace Engineering, AFIT; MSc ongoing',prompt)
      self.assertIn('Current authoritative facts override mistaken earlier assistant replies',prompt)
-     self.assertIn('or invent a contact form',prompt)
+     self.assertIn('inventing a contact form',prompt)
      self.assertIn('There is no embedded video call',prompt)
      self.assertIn('Portfolio: AI-assisted coding under Jamiu’s direction',prompt)
      self.assertIn('Earlier assistant messages are conversation context, not independent evidence',prompt)

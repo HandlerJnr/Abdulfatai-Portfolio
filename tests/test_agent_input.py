@@ -32,7 +32,7 @@ class InputTests(unittest.TestCase):
                 retrieve = Mock(return_value=('published evidence', ['horal']))
                 model = Mock(return_value=('A grounded answer.', 'test'))
                 response = Mock()
-                agent.update(retrieve=retrieve, call_model=model, json_response=response)
+                agent.update(retrieve=retrieve, checked_answer=model, call_model=model, json_response=response)
                 request = agent['handler'].__new__(agent['handler'])
                 body = json.dumps({'question': case['question'], 'history': [{'role': 'user', 'text': 'Horal'}],
                                    'page_context': {'page_id': 'horal', 'pathname': '/work/horal'}}).encode()

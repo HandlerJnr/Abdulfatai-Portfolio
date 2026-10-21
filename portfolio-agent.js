@@ -573,7 +573,7 @@ function asksAboutCurrentPage(q){
   return /\b(this project|this page|this screen|this section|current page|what am i looking at|what is this page|what's this page|tell me about this|explain this page|explain this screen|what does this mean|what is this about|what's this about)\b/i.test(String(q||''));
 }
 
-async function askAgent(question,onDelta=()=>{}){
+async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
   const request=activeRequest;
   const controller=request.controller;
   const timer=setTimeout(()=>{request.timedOut=true;controller.abort();},55000);
@@ -593,6 +593,7 @@ async function askAgent(question,onDelta=()=>{}){
     function accept(line){
       if(!line.trim())return;
       const event=JSON.parse(line);
+      if(event.type==='status'&&typeof event.message==='string')onStatus(event.message);
       if(event.type==='delta'&&typeof event.text==='string'){answer+=event.text;request.partial=answer;onDelta(answer);}
       if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code,retryAfter:event.retry_after});
       if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||''};
@@ -683,7 +684,7 @@ async function ask(q){
         const nearBottom=conversation.scrollHeight-conversation.scrollTop-conversation.clientHeight<100;
         response.classList.remove('is-thinking');response.replaceChildren(text('p',partial,'agent-stream-text'));
         if(nearBottom)conversation.scrollTop=conversation.scrollHeight;
-      });
+      },message=>{thinking.textContent=message;});
       answer=result.answer;links=result.evidenceLinks||[];
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
