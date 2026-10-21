@@ -186,8 +186,7 @@ function renderContactActions(){
  mail.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Enquiry from Jamiu’s portfolio');
  mail.setAttribute('aria-label','Email Jamiu at '+CONTACT_EMAIL);
  mail.append(text('strong','Email Jamiu'),text('span',CONTACT_EMAIL));
- const video=text('button','Request a live walkthrough','agent-contact-link');video.type='button';video.addEventListener('click',openPortfolioCall);
- actions.append(phone,mail,video);block.append(actions);
+ actions.append(phone,mail);block.append(actions);
  return block;
 }
 
@@ -1108,19 +1107,8 @@ tourHelp.addEventListener('click',()=>tourPanel.hidden?startAgentTour():finishAg
 input.addEventListener('input',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
 dialog.addEventListener('agent-question',()=>{if(!tourPanel.hidden)finishAgentTour(false)});
 dockViewport.addEventListener('change',()=>{if(tourIndex>=0){tourSteps=agentTourSteps();showAgentTourStep(0)}});
-let callModule;
-async function openPortfolioCall(){
- try{
-  if(!callModule)callModule=(async()=>{
-   const css=document.createElement('link');css.rel='stylesheet';css.href='/calls/call.css';document.head.append(css);
-   for(const src of ['/calls/peer.js','/calls/panel.js'])await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.append(script)});
-  })().catch(error=>{callModule=null;throw error});
-  await callModule;await window.portfolioCall.open();
- }catch{dialog.querySelector('.search-mode>span:last-child').textContent='Live walkthroughs are unavailable right now. Please email Jamiu.';}
-}
-const callAction=text('button','Request a live walkthrough','role-fit-action');callAction.type='button';callAction.addEventListener('click',openPortfolioCall);chatActions.append(callAction);
 const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
-window.portfolioAgent={dock:()=>{if(dockViewport.matches)setChatView('docked')},requestCall:openPortfolioCall,open:async(question='')=>{
+window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
   await ready;
   if(question.trim()){input.value=question.slice(0,700);await ask(input.value);}
@@ -1130,6 +1118,5 @@ document.querySelectorAll('[data-agent-open]').forEach(button=>button.addEventLi
   window.portfolioAgent.open();
 }));
 })();
-
 
 
