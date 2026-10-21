@@ -651,13 +651,11 @@ function syncViewControl(){
 }
 function positionDock(){
  if(chatView!=='docked'||!profile||!dialog.open)return;
- const rect=profile.getBoundingClientRect(),style=getComputedStyle(profile);
- const padding=Math.max(16,parseFloat(style.paddingLeft)||16);
- const identity=profile.querySelector('.home-panel_identity')?.getBoundingClientRect();
- const top=Math.min(Math.max(16,(identity?.bottom||rect.top+100)+20),Math.max(16,innerHeight-360));
- const left=Math.max(12,rect.left+padding);
- const width=Math.max(240,rect.width-padding-(parseFloat(style.paddingRight)||padding));
- const height=Math.max(240,innerHeight-top-20);
+ const rect=profile.getBoundingClientRect();
+ const edge=16;
+ const top=edge,left=Math.max(edge,rect.left+edge);
+ const width=Math.max(240,rect.width-edge*2);
+ const height=Math.max(240,innerHeight-edge*2);
  for(const [key,value] of Object.entries({left,top,width,height}))dialog.style.setProperty('--agent-dock-'+key,value+'px');
  document.body.style.setProperty('--agent-project-left',Math.max(0,rect.right)+'px');
 }
@@ -685,6 +683,18 @@ function setChatView(next){
  (dialog.contains(focus)?focus:input).focus({preventScroll:true});conversation.scrollTop=conversationScroll;saveConversation();
 }
 viewButton.addEventListener('click',()=>setChatView(chatView==='focused'?'docked':'focused'));
+const browseRow=text('div','','search-browse-row');
+const browseLabel=text('label','Browse the portfolio');browseLabel.htmlFor='agent-browse-section';
+const browseSelect=document.createElement('select');browseSelect.id='agent-browse-section';browseSelect.setAttribute('aria-label','Browse portfolio sections');
+document.querySelectorAll('#portfolio-menu>a').forEach(link=>{
+ const url=new URL(link.href,location.origin);if(url.hash)return;
+ const option=document.createElement('option');option.value=url.pathname;option.textContent=link.textContent.trim();browseSelect.append(option);
+});
+function syncBrowseSection(){browseSelect.value=location.pathname}
+browseSelect.addEventListener('change',()=>{const link=[...document.querySelectorAll('#portfolio-menu>a')].find(link=>new URL(link.href,location.origin).pathname===browseSelect.value);link?.click()});
+browseRow.append(browseLabel,browseSelect);dialog.querySelector('.search-mode').after(browseRow);
+document.addEventListener('portfolio:sectionchange',syncBrowseSection);syncBrowseSection();
+
 dockViewport.addEventListener('change',()=>{if(!dockViewport.matches&&chatView==='docked')setChatView('focused');syncViewControl()});
 addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{passive:true});
 document.addEventListener('portfolio:sectionchange',positionDock);
