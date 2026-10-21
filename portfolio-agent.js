@@ -764,20 +764,14 @@ const profile=document.querySelector('.home-panel_component');
 let profileScroll=0;
 const windowControls=text('div','','search-window-controls');
 const closeButton=dialog.querySelector('.search-close');
-const viewButton=text('button','','search-view-toggle');viewButton.type='button';
-windowControls.append(viewButton,closeButton);dialog.querySelector('.search-heading').append(windowControls);
+windowControls.append(closeButton);dialog.querySelector('.search-heading').append(windowControls);
 function syncViewControl(){
- viewButton.hidden=!dockViewport.matches||!profile;
  const docked=chatView==='docked';
  document.querySelectorAll('[data-feed-modal]').forEach(modal=>modal.setAttribute('aria-modal',String(!docked)));
- viewButton.setAttribute('aria-label',docked?'Expand chat to centred view':'Dock chat on the left and browse projects');
- viewButton.title=docked?'Expand chat':'Browse alongside projects';
- viewButton.setAttribute('aria-pressed',String(docked));
- viewButton.innerHTML=docked?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 4v16M7 9l-2 3 2 3"/></svg>';
 }
 function positionDock(){
- if(chatView!=='docked'||!profile||!dialog.open)return;
- const rect=profile.getBoundingClientRect();
+ if(chatView!=='docked'||!dialog.open)return;
+ const rect=profile?profile.getBoundingClientRect():{left:0,right:Math.min(380,innerWidth*.36),width:Math.min(380,innerWidth*.36)};
  const edge=16;
  const top=edge,left=Math.max(edge,rect.left+edge);
  const width=Math.max(240,rect.width-edge*2);
@@ -786,7 +780,7 @@ function positionDock(){
  document.body.style.setProperty('--agent-project-left',Math.max(0,rect.right)+'px');
 }
 function setChatView(next){
- if(next==='docked'&&(!dockViewport.matches||!profile))next='focused';
+ if(next==='docked'&&!dockViewport.matches)next='focused';
  if(next===chatView||!dialog.open){syncViewControl();return;}
  const before=dialog.getBoundingClientRect(),focus=document.activeElement,conversationScroll=conversation.scrollTop;
  // Reopen the same dialog without rebuilding it: draft, messages and scroll survive.
@@ -795,7 +789,7 @@ function setChatView(next){
  dialog.classList.toggle('is-docked',docked);document.body.classList.toggle('agent-is-docked',docked);
  dialog.inert=false;
  if(docked){
-  profileScroll=profile.scrollTop;profile.scrollTop=0;
+  if(profile){profileScroll=profile.scrollTop;profile.scrollTop=0;}
   document.body.style.overflow=savedOverflow;dialog.show();positionDock();
  }else{
   if(profile)profile.scrollTop=profileScroll;
@@ -810,8 +804,7 @@ function setChatView(next){
  }
  (dialog.contains(focus)?focus:input).focus({preventScroll:true});resizeComposer();conversation.scrollTop=conversationScroll;saveConversation();
 }
-viewButton.addEventListener('click',()=>setChatView(chatView==='focused'?'docked':'focused'));
-dockViewport.addEventListener('change',()=>{if(!dockViewport.matches&&chatView==='docked')setChatView('focused');syncViewControl()});
+dockViewport.addEventListener('change',()=>{if(dialog.open)setChatView(dockViewport.matches?'docked':'focused');syncViewControl()});
 addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{passive:true});
 document.addEventListener('portfolio:sectionchange',positionDock);
 syncViewControl();
@@ -888,9 +881,14 @@ launcher.addEventListener('click',()=>{
   document.querySelector('.portfolio-navigation button[aria-expanded=\"true\"]')?.click();
   dialog.inert=false;
   input.disabled=false;input.readOnly=false;
-  savedOverflow=document.body.style.overflow;chatView='focused';
-  dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');
-  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();lockAgentPage();updateAgentViewport();
+  savedOverflow=document.body.style.overflow;chatView=dockViewport.matches?'docked':'focused';
+  const docked=chatView==='docked';
+  dialog.classList.toggle('is-docked',docked);document.body.classList.toggle('agent-is-docked',docked);
+  if(docked){
+    if(profile){profileScroll=profile.scrollTop;profile.scrollTop=0;}
+    dialog.show();positionDock();
+  }else{dialog.showModal();document.body.style.overflow='hidden';}
+  syncViewControl();lockAgentPage();updateAgentViewport();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // Focus the composer immediately on desktop; mobile visitors tap it when ready.
@@ -1069,10 +1067,8 @@ function rememberAgentTour(){try{localStorage.setItem(TOUR_KEY,'seen')}catch{}}
 function finishAgentTour(restoreFocus=false){if(tourTarget)tourTarget.classList.remove('agent-tour-target');tourTarget=null;tourIndex=-1;tourPanel.hidden=true;rememberAgentTour();if(restoreFocus)tourHelp.focus({preventScroll:true});}
 function agentTourSteps(){
  const steps=[{title:'Ask in your own words',body:'Ask about Jamiu’s work, experience or a specific project. Follow-up questions stay in the conversation. Use Stop while a reply arrives, or Retry if it fails.',target:form}];
- if(dockViewport.matches&&chatView==='focused')steps.push(
-  {title:'Browse the work',body:'Choose a project from the list on the left. Its details appear in the preview on the right.',target:library},
-  {title:'Explore a project',body:'The preview shows the project’s summary and details. Open the full case study for the complete work.',target:proof},
-  {title:'Keep browsing while you chat',body:'Use this icon to dock chat on the left. You can scroll and navigate the portfolio beside it. Use the same icon to expand chat again.',target:viewButton}
+ if(dockViewport.matches)steps.push(
+  {title:'Browse while you chat',body:'Chat stays on the left while you scroll and navigate the portfolio beside it. Select a project to explore its details. Close chat anytime; reopening keeps your conversation.',target:closeButton}
  );
  steps.push({title:'Compare a role',body:'Open Chat options (the three dots), then Compare a role. Paste a job description or upload a PDF or Word file, review its text and compare it with the portfolio.',target:actionToggle});
  return steps;
