@@ -659,7 +659,8 @@ def core_profile_context():
     contact = "\n".join(line for line in about.splitlines()
                         if line.startswith(("Phone:", "Email:", "Visitors may call")))
     education = records.get("education", {}).get("text", "")
-    return "\n".join(part for part in (contact, education) if part)
+    authorship = records.get("portfolio-build", {}).get("text", "")
+    return "\n".join(part for part in (contact, education, authorship) if part)
 
 
 def build_prompt(question, history, retrieved, intent, page_context):
@@ -675,6 +676,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- Visitors can contact Jamiu using Call Jamiu (telephone) and Email Jamiu (editable email draft). For requests to talk, call, email or reach him, give a brief direct route using the documented contact details. When the contact buttons are shown, refer to them. Do not say no direct contact exists, send visitors hunting for a link, or invent a contact form.\n"
         "- A telephone link opens the visitor’s calling app; it does not place a call automatically. There is no embedded video call, live-presence indicator or booking calendar. Do not claim a call, message or booking was completed or that Jamiu is online or available.\n"
         "- Job descriptions can be pasted or uploaded through Compare a role. Project cards can open the portfolio preview. Only describe actions the interface supports; never claim an action happened unless confirmed.\n"
+        "- For questions about this portfolio website, use its own build record, not a generic client-project workflow. Never infer a research phase, Figma process, engineering handoff or development team from polished visuals. Earlier assistant messages are conversation context, not independent evidence. If an earlier answer invented a fact, acknowledge and correct it directly rather than defending it or asking an unnecessary clarification.\n"
         "- Current authoritative facts override mistaken earlier assistant replies. Missing retrieved evidence is not proof that a qualification, contact method or reference does not exist. State uncertainty only about the specific missing detail; never infer employment status from project dates.\n\n"
 
         "HOW TO CONVERSE\n"

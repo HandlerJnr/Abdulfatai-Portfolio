@@ -144,5 +144,13 @@
     "knowledge_only": true,
     "summary": "Completed BSc (Hons) Physics and PGD in Aerospace Engineering from Air Force Institute of Technology (AFIT), Kaduna; currently studying MSc User Experience Design at the University of Brighton.",
     "text": "Academic qualifications and highest qualification: Jamiu holds a BSc (Hons) in Physics (2018–2023, listed on his LinkedIn) and a completed Postgraduate Diploma (PGD) in Aerospace Engineering (confirmed directly by Jamiu on 21 October 2026). The PGD was awarded by Air Force Institute of Technology (AFIT), Kaduna, as confirmed directly by Jamiu. Its dates and grade have not been supplied; do not invent them.\nHe is currently studying MSc User Experience Design at the University of Brighton. This MSc is ongoing, not an awarded degree. When asked his highest completed qualification, identify the PGD in Aerospace Engineering and distinguish it from the MSc he is pursuing. A PGD is a postgraduate diploma, not a master's degree.\nDo not say he has no formal degree or that short professional certificates are his highest academic qualification. His professional certifications and awards are separately documented in the credentials record. Do not infer employment status, paid engagements or availability from project dates."
+  },
+  {
+    "id": "portfolio-build",
+    "title": "How this portfolio was built",
+    "url": "",
+    "knowledge_only": true,
+    "summary": "Jamiu shaped and built this portfolio through an AI-assisted coding workflow; no separate development team is documented.",
+    "text": "This portfolio website: Jamiu directs its design, content, interactions and implementation through an AI-assisted coding workflow using ChatGPT/Codex. The implementation is maintained in GitHub and deployed on Vercel. Describe his ownership honestly while acknowledging AI coding assistance; do not claim every line was written manually or independently.\nNo separate development team or engineer handoff is documented for this portfolio. Do not attribute its code to a development team. Client projects involving engineering teams (such as Vista) are different from the creation of this website.\nFor 'how did he build this portfolio?', explain only this documented workflow. Do not invent a research phase, Figma mockups, usability studies, team members, exact tools or technologies beyond those documented. For 'which development team?' following an unsupported assistant claim, correct the mistake directly: no separate team is documented; this portfolio was built through Jamiu's AI-assisted workflow. Do not ask visitors to clarify a confusion the assistant itself introduced."
   }
 ]
