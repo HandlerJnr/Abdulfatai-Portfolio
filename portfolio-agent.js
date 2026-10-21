@@ -428,8 +428,8 @@ async function getRecords(){
 }
 
 // Resolve work mentioned by name in the assistant's answer; avoid stale previews.
-function projectsInAnswer(answer,question){
- if(!records||!/\b(project|work|portfolio|case stud|show|preview|open|view|best|strongest|b2b|fintech|marketplace|design)\b/i.test(question))return [];
+function projectsInAnswer(answer){
+ if(!records)return [];
  const lower=cleanAgentOutput(answer).toLowerCase();
  const aliases={'vista-itss':['vista digital banking','vista banking','vista'],
    'pay4me':['radius / pay4me','radius','pay4me'],
@@ -437,7 +437,7 @@ function projectsInAnswer(answer,question){
    'kremor-ai':['kremor ai','kremor'],
    'chalant-ai':['chalant ai','chalant']};
  return records.filter(record=>record.url.startsWith('/work/')).map(record=>{
-  const names=[record.title.toLowerCase(),...(aliases[record.id]||[])];
+  const names=[record.title.toLowerCase(),record.id.replace(/-/g,' '),...(aliases[record.id]||[])];
   const positions=names.map(name=>{
    const at=lower.indexOf(name);if(at<0)return -1;
    const before=lower[at-1]||' ',after=lower[at+name.length]||' ';
@@ -623,11 +623,11 @@ async function ask(q){
     }
 
     // Suggestions are clickable choices, never an automatic preview.
-    const mentionedProjects=projectsInAnswer(answer,q);
-    if(mentionedProjects.length){
-      evidenceCards=uniqueRecords([...mentionedProjects,...evidenceCards.filter(record=>record.url.startsWith('/work/'))]).slice(0,3);
-      if(dockViewport.matches&&chatView==='focused')clearProofForSuggestions();
-    }
+    const mentionedProjects=projectsInAnswer(answer);
+    if(mentionedProjects.length)evidenceCards=mentionedProjects;
+    // Every project recommendation follows the same choose-first interaction.
+    if(evidenceCards.some(record=>record.url.startsWith('/work/'))&&dockViewport.matches&&chatView==='focused')
+      clearProofForSuggestions();
     response.classList.remove('is-thinking');
     response.replaceChildren();
     response.append(renderAgentAnswer(answer));
