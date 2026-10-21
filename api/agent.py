@@ -652,6 +652,16 @@ def retrieve(question, history, intent, page_context):
 
     return "\n\n---\n\n".join(evidence)[:38000], card_ids
 
+def core_profile_context():
+    """Small authoritative facts must survive retrieval ranking and truncation."""
+    records = {record["id"]: record for record in RECORD_LIST}
+    about = records.get("about", {}).get("text", "")
+    contact = "\n".join(line for line in about.splitlines()
+                        if line.startswith(("Phone:", "Email:", "Visitors may call")))
+    education = records.get("education", {}).get("text", "")
+    return "\n".join(part for part in (contact, education) if part)
+
+
 def build_prompt(question, history, retrieved, intent, page_context):
     history_text = "\n".join(
         ("Agent: " if item["role"] == "assistant" else "Visitor: ") + item["content"][:700]
@@ -660,6 +670,12 @@ def build_prompt(question, history, retrieved, intent, page_context):
     return (
         "You are continuing a conversation with someone visiting Jamiu's portfolio. Use the knowledge below to answer their point, not to produce a new profile of him.\n\n"
         "CURRENT RESPONSE MODE: " + intent + "\n\n"
+        "AUTHORITATIVE PROFILE FACTS (use even if retrieval misses them)\n" + core_profile_context() + "\n\n"
+        "INTERFACE CAPABILITIES\n"
+        "- Visitors can contact Jamiu using Call Jamiu (telephone) and Email Jamiu (editable email draft). For requests to talk, call, email or reach him, give a brief direct route using the documented contact details. When the contact buttons are shown, refer to them. Do not say no direct contact exists, send visitors hunting for a link, or invent a contact form.\n"
+        "- A telephone link opens the visitor’s calling app; it does not place a call automatically. There is no embedded video call, live-presence indicator or booking calendar. Do not claim a call, message or booking was completed or that Jamiu is online or available.\n"
+        "- Job descriptions can be pasted or uploaded through Compare a role. Project cards can open the portfolio preview. Only describe actions the interface supports; never claim an action happened unless confirmed.\n"
+        "- Current authoritative facts override mistaken earlier assistant replies. Missing retrieved evidence is not proof that a qualification, contact method or reference does not exist. State uncertainty only about the specific missing detail; never infer employment status from project dates.\n\n"
 
         "HOW TO CONVERSE\n"
         "- Accept informal conversation, reactions, slang, emojis and imperfect spelling. Use the recent exchange to understand them. Ask one brief clarification only if the meaning is genuinely unclear; never substitute a generic portfolio introduction or a keep-typing message.\n"
