@@ -313,3 +313,42 @@
   z-index:2;
  }
 }
+
+/* Contextual next step: visible inside the conversation in all chat views. */
+.agent-contact{margin-top:1.15em;padding-top:1em;border-top:1px solid var(--agent-line)}
+.agent-contact-prompt{
+ margin:0 0 .85em;font-size:.94em;line-height:1.55;
+ color:var(--agent-ink);font-weight:500;
+}
+.agent-contact-links{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));
+ gap:.6em;min-width:0;
+}
+.search-answer .agent-contact-link{
+ display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+ gap:.18em;box-sizing:border-box;min-width:0;min-height:54px;
+ padding:.8em 1em;border:1px solid var(--agent-line);border-radius:.4em;
+ background:var(--_colors---background--secondary,#eeeee8);
+ color:var(--agent-ink);text-decoration:none;
+ transition:background .18s ease,border-color .18s ease;
+ -webkit-tap-highlight-color:transparent;
+}
+.agent-contact-link strong{display:block;font-weight:600;font-size:.88em;line-height:1.4}
+.agent-contact-link span{
+ display:block;width:100%;font-size:.75em;line-height:1.45;
+ color:var(--agent-muted);overflow-wrap:anywhere;
+}
+.search-answer .agent-contact-link:hover{
+ border-color:var(--agent-ink);background:var(--agent-paper)
+}
+.search-answer .agent-contact-link:focus-visible{
+ outline:2px solid var(--agent-ink);outline-offset:3px;
+}
+@media(max-width:991px){
+ .agent-contact{margin-top:1em}
+ .agent-contact-links{grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr))}
+ .search-answer .agent-contact-link{min-height:48px}
+}
+@media(prefers-reduced-motion:reduce){
+ .search-answer .agent-contact-link{transition:none}
+}

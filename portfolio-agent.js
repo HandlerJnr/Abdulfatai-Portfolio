@@ -66,9 +66,9 @@ function restoreConversation(){
     history=Array.isArray(saved.history)?saved.history.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-8):[];
     turns=Array.isArray(saved.turns)?saved.turns.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-24):[];
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
-    if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();turns.forEach(turn=>{
-      if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
-      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));conversation.append(response);}
+    if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
+      if(turn.role==='user'){previousQuestion=turn.text;conversation.append(text('p',turn.text,'search-question'));}
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.contact||shouldOfferContact(previousQuestion))response.append(renderContactActions());conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
@@ -95,7 +95,7 @@ addEventListener('resize',resizeComposer);
 const INPUT_CLARIFICATION="Keep typing, ask me anything about Jamiu’s work, experience, skills, or this page.";
 const FRAGMENT_WORDS=new Set(["a", "an", "the", "i", "me", "my", "you", "your", "he", "his", "she", "her", "it", "its", "we", "our", "they", "their", "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did", "can", "could", "would", "should", "will", "shall", "may", "might", "must", "of", "to", "for", "from", "in", "on", "at", "by", "with", "and", "or", "but", "if", "as", "about", "what", "which", "who", "whom", "whose", "when", "where", "how", "tell", "ask", "show", "please"]);
 function portfolioVocabulary(items){
-  const vocabulary=new Set(["hi", "hello", "hey", "thanks", "thank", "cheers", "yes", "no", "okay", "ok", "more", "why", "explain", "help", "cv", "ux", "ui", "ai", "js", "go", "pricing", "price", "salary", "availability", "available", "contact", "email", "phone", "remote", "freelance", "hiring", "hire", "resume", "r\u00e9sum\u00e9", "portfolio", "work", "skills", "experience", "projects", "process", "rates", "rate", "cost"]);
+  const vocabulary=new Set(["hi", "hello", "hey", "thanks", "thank", "cheers", "yes", "no", "okay", "ok", "more", "why", "explain", "help", "cv", "ux", "ui", "ai", "js", "go", "pricing", "price", "salary", "availability", "available", "contact", "email", "phone", "weakness", "weaknesses", "shortcomings", "blind", "strengths", "improve", "improvement", "growth", "development", "limitations", "remote", "freelance", "hiring", "hire", "resume", "r\u00e9sum\u00e9", "portfolio", "work", "skills", "experience", "projects", "process", "rates", "rate", "cost"]);
   items.forEach(record=>{
     const words=['id','title','summary','text'].map(field=>String(record[field]||'')).join(' ').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
     words.forEach(word=>vocabulary.add(word));
@@ -151,6 +151,38 @@ function appendInline(parent,value){
     cursor=pattern.lastIndex;
   }
   if(cursor<input.length)parent.append(document.createTextNode(input.slice(cursor)));
+}
+
+
+const CONTACT_PHONE='+447344383739';
+const CONTACT_PHONE_LABEL='+44 7344 383739';
+const CONTACT_EMAIL='aabdulfataijamiu@gmail.com';
+function shouldOfferContact(question){
+ const q=String(question||'').toLowerCase();
+ if(!q.trim())return false;
+ // Respond to personal questions or invitations, not critiques of a project or website.
+ const personalQuestion=(
+  /\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
+  || /\b(?:where|how|what)\b.{0,65}\b(?:he|his|jamiu)\b.{0,40}\b(?:improve|grow|develop|work on)\b/i.test(q)
+ ) &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
+ const directContact=/\b(contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
+ return personalQuestion||directContact;
+}
+function renderContactActions(){
+ const block=text('section','','agent-contact');
+ block.setAttribute('aria-label','Contact Jamiu');
+ block.append(text('p','Would you like to call Jamiu now or send him an email?','agent-contact-prompt'));
+ const actions=text('div','','agent-contact-links');
+ const phone=text('a','','agent-contact-link');
+ phone.href='tel:'+CONTACT_PHONE;
+ phone.setAttribute('aria-label','Call Jamiu at '+CONTACT_PHONE_LABEL);
+ phone.append(text('strong','Call Jamiu'),text('span',CONTACT_PHONE_LABEL));
+ const mail=text('a','','agent-contact-link');
+ mail.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Enquiry from Jamiu’s portfolio');
+ mail.setAttribute('aria-label','Email Jamiu at '+CONTACT_EMAIL);
+ mail.append(text('strong','Email Jamiu'),text('span',CONTACT_EMAIL));
+ actions.append(phone,mail);block.append(actions);
+ return block;
 }
 
 function renderAgentAnswer(value){
@@ -664,7 +696,9 @@ async function ask(q){
       response.append(sourceCards(evidenceCards));
     }
 
-    turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent});
+    const offerContact=shouldOfferContact(q);
+    if(offerContact)response.append(renderContactActions());
+    turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
     dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));
 
     // Search excerpts are not model replies and must not steer later conversation.
