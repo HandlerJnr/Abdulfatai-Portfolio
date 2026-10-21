@@ -5,7 +5,7 @@ from unittest.mock import Mock
 ROOT=Path(__file__).resolve().parents[1]
 tree=ast.parse((ROOT/'api/agent.py').read_text())
 tree.body=[n for n in tree.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
-a=dict(json=json,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test')
+a=dict(json=json,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test',MAX_HISTORY=10)
 a['RECORD_LIST']=json.loads((ROOT/'portfolio-knowledge.json').read_text())
 a['RECORDS']={r['id']:r for r in a['RECORD_LIST']}
 a['FACT_CATALOG']=json.loads((ROOT/'agent-facts.json').read_text())['facts']
@@ -14,6 +14,10 @@ original=a.copy()
 
 class Grounding(unittest.TestCase):
  def setUp(self):a.update(original)
+ def test_history_normalises_both_client_formats(self):
+  expected=[{'role':'user','content':'His qualification?'},{'role':'assistant','content':'PGD at AFIT.'}]
+  for field in ['text','content']:
+   self.assertEqual(a['normalise_history']([{'role':m['role'],field:m['content']} for m in expected]),expected)
  def test_catalog_provenance_and_status(self):
   facts=a['FACT_CATALOG'];self.assertEqual(len({f['id'] for f in facts}),len(facts))
   for fact in facts:

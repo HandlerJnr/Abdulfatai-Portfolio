@@ -110,7 +110,7 @@ def normalise_history(value):
         if not isinstance(item, dict):
             continue
         role = "assistant" if item.get("role") == "assistant" else "user"
-        content = clip(item.get("text"), 1200)
+        content = clip(item.get("text", item.get("content", "")), 1200)
         if content:
             output.append({"role": role, "content": content})
     return output
