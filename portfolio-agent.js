@@ -157,6 +157,17 @@ function shouldOfferContact(question){
  const directContact=/\b(contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
  return personalQuestion||directContact;
 }
+function contactActionContent(kind,label,detail){
+ const icon=text('span','','agent-contact-icon');
+ icon.setAttribute('aria-hidden','true');
+ const path=kind==='phone'
+  ?'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.79a2 2 0 0 1-.45 2.11L8.09 9.89a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.57 2.79.69A2 2 0 0 1 22 16.92Z"/>'
+  :'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>';
+ icon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true">'+path+'</svg>';
+ const copy=text('span','','agent-contact-copy');
+ copy.append(text('strong',label),text('span',detail,'agent-contact-detail'));
+ return [icon,copy];
+}
 function renderContactActions(){
  const block=text('section','','agent-contact');
  block.setAttribute('aria-label','Contact Jamiu');
@@ -165,11 +176,11 @@ function renderContactActions(){
  const phone=text('a','','agent-contact-link');
  phone.href='tel:'+CONTACT_PHONE;
  phone.setAttribute('aria-label','Call Jamiu at '+CONTACT_PHONE_LABEL);
- phone.append(text('strong','Call Jamiu'),text('span',CONTACT_PHONE_LABEL));
+ phone.append(...contactActionContent('phone','Call Jamiu',CONTACT_PHONE_LABEL));
  const mail=text('a','','agent-contact-link');
  mail.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Enquiry from Jamiu’s portfolio');
  mail.setAttribute('aria-label','Email Jamiu at '+CONTACT_EMAIL);
- mail.append(text('strong','Email Jamiu'),text('span',CONTACT_EMAIL));
+ mail.append(...contactActionContent('email','Email Jamiu',CONTACT_EMAIL));
  actions.append(phone,mail);block.append(actions);
  return block;
 }
