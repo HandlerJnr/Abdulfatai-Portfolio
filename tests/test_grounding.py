@@ -32,6 +32,8 @@ class Grounding(unittest.TestCase):
   self.assertEqual(a['validate_grounded_reply'](json.dumps(valid),sources),valid['answer'])
   claim_only=dict(valid);claim_only.pop('answer')
   self.assertEqual(a['validate_grounded_reply'](json.dumps(claim_only),sources),valid['answer'])
+  without_quote=json.loads(json.dumps(claim_only));without_quote['claims'][0].pop('quote')
+  self.assertEqual(a['validate_grounded_reply'](json.dumps(without_quote),sources),valid['answer'])
   for field,value in [('quote','a team of ten engineers'),('source_id','invented')]:
    bad=json.loads(json.dumps(valid));bad['claims'][0][field]=value
    with self.assertRaisesRegex(RuntimeError,'grounding_invalid'):a['validate_grounded_reply'](json.dumps(bad),sources)

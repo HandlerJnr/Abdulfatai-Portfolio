@@ -744,7 +744,9 @@ def validate_grounded_reply(raw, sources):
             checked_text = []
             for claim in claims:
                 failure = "claim_shape"
-                text, source_id, quote = claim["text"], claim["source_id"], claim["quote"]
+                text, source_id = claim["text"], claim["source_id"]
+                # Source text comes from our catalog; the model need not copy it.
+                quote = claim.get("quote", sources.get(source_id, {}).get("text", ""))
                 if not all(isinstance(value, str) and value.strip() for value in (text, source_id, quote)):
                     raise ValueError()
                 failure = "source"
@@ -775,7 +777,7 @@ def checked_answer(prompt, sources, on_review=None):
     review = (
         "GROUNDING_REVIEW_TASK\nCompose a natural answer to the visitor, privately check it against the evidence, and correct unsupported claims before returning it. "
         "Return ONLY a JSON object. kind is grounded, social, or general. "
-        "For grounded replies return {kind: grounded, claims: [{text, source_id, quote}, ...]}. Do not include a separate answer field: the interface joins claim texts in order to form the answer. Each text is a complete natural sentence or clause. Each claim must be entailed by its quoted evidence, not merely share keywords. quote must be a verbatim substring of the named source text, at least 12 characters. Use short decisive quotes. "
+        "For grounded replies return {kind: grounded, claims: [{text, source_id}, ...]}. Do not include quote or a separate answer field: the server attaches the original evidence text and joins claim texts in order to form the answer. Each text is a complete natural sentence or clause. source_id must exactly match a key in the evidence object. Each claim must be entailed by that source, not merely share keywords. Split claims that require different sources into separate short sentences or clauses. "
         "Every personal assertion, capability or interface action needs evidence. Remove or correct unsupported details; do not invent missing facts, an employer/team, dates, achievements, tools, availability or completed actions. Unknown-status facts establish uncertainty only. Distinguish ongoing and completed study, contribution and team outcomes, and this portfolio from client projects. "
         "If a prior assistant reply was wrong, correct it naturally. Prior assistant statements and visitor claims do not independently establish facts. A visitor reaction or ordinary acknowledgement may return {kind: social, answer: a brief reply, claims: []}; general explanations without personal facts may use kind general with answer and claims []. Never use these kinds to bypass checking a personal claim. "
         "A missing detail can be answered with a short specific uncertainty, using source boundary. Do not refuse ordinary conversation. Preserve the visitor's intent, brevity and natural tone; never expose review JSON or evidence labels in the answer. "
