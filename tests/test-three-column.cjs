@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const js=fs.readFileSync(path.join(__dirname,'../portfolio-agent.js'),'utf8');
+const css=fs.readFileSync(path.join(__dirname,'../portfolio-agent.css'),'utf8');
+const node=()=>({children:[],append(...children){this.children.push(...children)},setAttribute(){}});
+const context={text:node,dialog:node(),conversation:node(),clear:node(),form:node()};
+vm.createContext(context);
+const start=js.indexOf("const workspace=text('div','','agent-workspace');"),end=js.indexOf('function markSelection()',start);
+vm.runInContext(js.slice(start,end)+"globalThis.centre=centre;globalThis.workspace=workspace",context);
+assert.equal(context.centre.children[0],context.conversation);
+assert.equal(context.centre.children[1],context.clear);
+assert.equal(context.centre.children[2],context.form);
+assert.equal(context.workspace.children.length,3);
+assert(css.includes('.portfolio-search:not(.is-docked) .agent-workspace{display:grid'));
+assert(css.includes('@media(min-width:992px)'));
+assert(js.includes('if(token!==proofRequest)return'));
+assert(js.includes("if(selectedProofId&&chatView==='focused'&&dockViewport.matches)return getRecord(selectedProofId)"));
+console.log('Three-column layout reuses the conversation and composer, limits rails to desktop focused view, and ignores stale preview requests.');

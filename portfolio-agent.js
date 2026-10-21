@@ -21,6 +21,8 @@ input.setAttribute('data-lenis-prevent','');
 const form=dialog.querySelector('form');
 const submit=form.querySelector('button');
 let records;
+let selectedProofId="",proofRequest=0;
+const proofCache=new Map();
 let loading;
 let lastProject;
 let history=[];
@@ -429,6 +431,7 @@ function sourceCards(found){
     const link=document.createElement('a');
     link.href=record.url;
     link.className='search-result';
+    link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(chatView==='focused'&&dockViewport.matches){event.preventDefault();event.stopImmediatePropagation();showProof(record)}});
     const proofURL=new URL(record.url,location.origin);
     const project=proofURL.pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
     if(project&&document.querySelector('[data-feed-detail="'+project+'"]')){
@@ -470,6 +473,7 @@ function activeProjectPath(){
 }
 function currentPageRecord(){
   if(!records)return null;
+  if(selectedProofId&&chatView==='focused'&&dockViewport.matches)return getRecord(selectedProofId);
   if(window.location.hash==='#ai-practice')return getRecord('ai-practice');
   const modalRecord=records.find(record=>record.url===activeProjectPath());if(modalRecord)return modalRecord;
   const current=normaliseCurrentPath(window.location.pathname);
@@ -501,7 +505,7 @@ function currentPageContext(){
   const record=currentPageRecord();
   return {
     page_id:record?.id||'',
-    pathname:activeProjectPath()||window.location.pathname,
+    pathname:selectedProofId&&chatView==='focused'&&record?new URL(record.url,location.origin).pathname:activeProjectPath()||window.location.pathname,
     hash:window.location.hash||'',
     title:document.title||record?.title||'',
     record_title:record?.title||''
@@ -560,6 +564,7 @@ function showInputClarification(q){
 }
 async function ask(q){
   q=q.trim();if(!q)return;
+  const previewAtAsk=proofRequest;
   dialog.dispatchEvent(new CustomEvent('agent-question'));
   if(busy)return;
   if(needsClarification(q)){
@@ -626,6 +631,7 @@ async function ask(q){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
       response.append(text('span',usedAgent?'Portfolio proof':'Read these projects','search-kicker'));
       response.append(sourceCards(evidenceCards));
+      if(chatView==='focused'&&dockViewport.matches&&proofRequest===previewAtAsk)showProof(evidenceCards[0]);
     }
 
     turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent});
@@ -764,7 +770,80 @@ form.addEventListener('submit',event=>{
 
 const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';form.before(clear);
 clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
-const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
+const workspace=text('div','','agent-workspace');
+const library=text('nav','','agent-library');library.setAttribute('aria-label','Portfolio pages and projects');library.setAttribute('data-lenis-prevent','');
+const centre=text('section','','agent-chat-column');centre.setAttribute('aria-label','Chat');
+const proof=text('aside','','agent-proof');proof.setAttribute('aria-label','Selected work preview');proof.setAttribute('data-lenis-prevent','');
+centre.append(conversation,clear,form);workspace.append(library,centre,proof);dialog.append(workspace);
+proof.append(text('p','[Preview]','search-kicker'),text('p','Select work to take a closer look.','agent-proof-empty'));
+function markSelection(){library.querySelectorAll('[data-agent-record]').forEach(button=>{const active=button.dataset.agentRecord===selectedProofId;button.classList.toggle('is-selected',active);if(active)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current')})}
+function initWorkspaceNavigation(){
+ library.replaceChildren(text('p','[Portfolio]','search-kicker'));
+ const group=document.createElement('details');group.className='agent-project-group';group.open=true;
+ const summary=text('summary','Projects');group.append(summary);
+ const list=text('div','','agent-project-list');
+ function item(record,host){const button=text('button',record.title,'agent-library-item');button.type='button';button.dataset.agentRecord=record.id;button.addEventListener('click',()=>showProof(record));host.append(button)}
+ records.filter(record=>record.url.startsWith('/work/')).forEach(record=>item(record,list));group.append(list);library.append(group);
+ for(const id of ['brand','logos','system','credentials']){const record=getRecord(id);if(record)item(record,library)}
+ markSelection();
+}
+async function proofSource(record){
+ const url=new URL(record.url,location.origin),slug=url.pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
+ if(slug){const local=document.querySelector('[data-feed-detail="'+slug+'"]');if(local)return local}
+ if(!proofCache.has(url.pathname)){
+  const task=fetch(url.pathname,{credentials:'same-origin'}).then(async response=>{if(!response.ok)throw Error('Preview unavailable');return new DOMParser().parseFromString(await response.text(),'text/html')});
+  proofCache.set(url.pathname,task);task.catch(()=>proofCache.delete(url.pathname));
+ }
+ const doc=await proofCache.get(url.pathname);
+ const source=slug?doc.querySelector('[data-feed-detail="'+slug+'"]'):doc.querySelector('.section_feed');
+ if(!source)throw Error('Preview unavailable');
+ if(slug&&!document.querySelector('[data-feed-detail="'+slug+'"]')){
+  let storage=document.querySelector('.agent-project-sources');if(!storage){storage=document.createElement('div');storage.className='agent-project-sources';storage.hidden=true;document.body.append(storage)}
+  storage.append(document.importNode(source,true));
+ }
+ return source;
+}
+async function showProof(record){
+ if(!record)return;
+ const token=++proofRequest;selectedProofId=record.id;markSelection();
+ proof.replaceChildren(text('p','[Preview]','search-kicker'),text('h3',record.title,'agent-proof-title'));
+ if(record.image){const img=document.createElement('img');img.src=record.image;img.alt=record.title+' preview';img.className='agent-proof-image';proof.append(img)}
+ proof.append(text('p',record.summary,'agent-proof-summary'));
+ const details=text('div','','agent-proof-details');details.setAttribute('aria-busy','true');proof.append(details);
+ const open=text('a',record.url.startsWith('/work/')?'Open project preview':'Open section','agent-proof-open');open.href=record.url;proof.append(open);
+ const setOpenAction=()=>{
+  const slug=new URL(record.url,location.origin).pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
+  if(slug&&document.querySelector('[data-feed-detail="'+slug+'"]'))open.setAttribute('data-feed-open',slug);else if(!slug)open.setAttribute('data-section-step','');
+ };
+ setOpenAction();open.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;setChatView('docked')});
+ proof.scrollTop=0;
+ try{
+  const source=await proofSource(record);if(token!==proofRequest)return;
+  details.replaceChildren();
+  const project=record.url.startsWith('/work/');
+  if(project){
+   const image=source.querySelector('.feed-detail_gallery img');
+   if(image&&!proof.querySelector('.agent-proof-image')){const img=document.createElement('img');img.src=image.getAttribute('src');img.alt=image.alt||record.title+' preview';img.className='agent-proof-image';details.append(img)}
+   const role=source.querySelector('.project-role');if(role)details.append(text('p',role.textContent,'agent-proof-role'));
+   const panels=[...source.querySelectorAll('[data-detail-panel]')];
+   for(const panel of panels){
+    const disclosure=document.createElement('details');disclosure.className='agent-proof-disclosure';disclosure.open=panel===panels[0];
+    const heading=panel.querySelector('h3');disclosure.append(text('summary',heading?.textContent||'Project details'));
+    const body=text('div');for(const node of panel.querySelectorAll('p,li')){const copy=text('p',node.textContent);body.append(copy)}
+    disclosure.append(body);details.append(disclosure);
+   }
+  }else{
+   const grid=text('div','','agent-proof-grid');const seen=new Set();
+   for(const image of source.querySelectorAll('.feed_card img,.project-card_media img')){
+    const src=image.getAttribute('src');if(!src||seen.has(src))continue;seen.add(src);
+    const img=document.createElement('img');img.src=src;img.alt=image.alt||record.title;img.loading='lazy';grid.append(img);if(seen.size===6)break;
+   }
+   details.append(grid);
+  }
+  details.removeAttribute('aria-busy');setOpenAction();
+ }catch{if(token===proofRequest){details.removeAttribute('aria-busy');details.append(text('p','The full page is available through the link below.','agent-proof-role'))}}
+}
+const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
 window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
   await ready;
