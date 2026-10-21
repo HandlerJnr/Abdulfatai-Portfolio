@@ -122,6 +122,7 @@ function text(tag,value,className){
 
 function cleanAgentOutput(value){
   return String(value||'')
+    .replace(/https?:\/\/(?:www\.)?jamiuabdulfatai\.com(?=\/|\b)/gi,location.origin)
     .replace(/\u2014/g,', ')
     .replace(/<br\s*\/?\s*>/gi,'\n')
     .replace(/<[^>]+>/g,' ')
@@ -612,6 +613,17 @@ async function ask(q){
       response.dataset.agentError=error?.code||'agent-unavailable';
     }
 
+    // Select a preview from the actual project named in a navigation answer,
+    // including when the model does not return an evidence ID.
+    if(!evidenceCards.length&&/\b(show|preview|open|view|point me|where|strongest|best project|top project|impressive|see it|see the project)\b/i.test(q)){
+      const lower=answer.toLowerCase();
+      const mentioned=records.find(record=>record.url.startsWith('/work/')&&(
+        record.id==='vista-itss'?/\bvista\b/i.test(answer):
+        record.id==='pay4me'?/\b(radius|pay4me)\b/i.test(answer):
+        lower.includes(record.title.toLowerCase())
+      ));
+      if(mentioned)evidenceCards=[mentioned];
+    }
     response.classList.remove('is-thinking');
     response.replaceChildren();
     response.append(renderAgentAnswer(answer));
@@ -633,6 +645,15 @@ async function ask(q){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
       response.append(text('span',usedAgent?'Portfolio proof':'Read these projects','search-kicker'));
       response.append(sourceCards(evidenceCards));
+      if(dockViewport.matches){
+        const previewAction=text('button','Show '+evidenceCards[0].title+' in preview ↗','agent-preview-action');
+        previewAction.type='button';
+        previewAction.addEventListener('click',()=>{
+          if(chatView==='docked')setChatView('focused');
+          showProof(evidenceCards[0]);
+        });
+        response.append(previewAction);
+      }
       if(chatView==='focused'&&dockViewport.matches&&proofRequest===previewAtAsk)showProof(evidenceCards[0]);
     }
 
@@ -701,6 +722,7 @@ function setChatView(next){
   if(profile)profile.scrollTop=profileScroll;
   dialog.showModal();document.body.style.overflow='hidden';
  }
+ updateAgentViewport();
  syncViewControl();
  if(!reduceAgentMotion.matches&&dialog.animate){
   const after=dialog.getBoundingClientRect();
@@ -716,6 +738,22 @@ syncViewControl();
 
 dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
+const fullScreenViewport=window.matchMedia('(max-width:991px)');
+function updateAgentViewport(){
+  if(!dialog.open)return;
+  if(!fullScreenViewport.matches){
+    dialog.style.removeProperty('--agent-visual-height');
+    dialog.style.removeProperty('--agent-visual-top');
+    return;
+  }
+  const viewport=window.visualViewport;
+  dialog.style.setProperty('--agent-visual-height',Math.round(viewport?.height||window.innerHeight)+'px');
+  dialog.style.setProperty('--agent-visual-top',Math.max(0,Math.round(viewport?.offsetTop||0))+'px');
+}
+window.visualViewport?.addEventListener('resize',updateAgentViewport);
+window.visualViewport?.addEventListener('scroll',updateAgentViewport,{passive:true});
+window.addEventListener('resize',updateAgentViewport);
+fullScreenViewport.addEventListener('change',updateAgentViewport);
 
 function closeAgent(){
   if(!dialog.open||closingAgent)return;
@@ -732,7 +770,7 @@ launcher.addEventListener('click',()=>{
   input.disabled=false;input.readOnly=false;
   savedOverflow=document.body.style.overflow;chatView='focused';
   dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');
-  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();
+  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();updateAgentViewport();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
@@ -847,7 +885,7 @@ async function showProof(record){
  if(record.image){const img=document.createElement('img');img.src=record.image;img.alt=record.title+' preview';img.className='agent-proof-image';proof.append(img)}
  proof.append(text('p',record.summary,'agent-proof-summary'));
  const details=text('div','','agent-proof-details');details.setAttribute('aria-busy','true');proof.append(details);
- const open=text('a',record.url.startsWith('/work/')?'Open project preview':'Open section','agent-proof-open');open.href=record.url;proof.append(open);
+ const open=text('a',record.url.startsWith('/work/')?'Open full case study ↗':'Open portfolio section ↗','agent-proof-open');open.href=record.url;open.setAttribute('aria-label', 'Open '+record.title+' full page');proof.insertBefore(open,details);
  const setOpenAction=()=>{
   const slug=new URL(record.url,location.origin).pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
   if(slug&&document.querySelector('[data-feed-detail="'+slug+'"]'))open.setAttribute('data-feed-open',slug);else if(!slug)open.setAttribute('data-section-step','');
