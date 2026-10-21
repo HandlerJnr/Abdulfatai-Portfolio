@@ -599,7 +599,7 @@ async function askAgent(question,onDelta=()=>{}){
       if(!line.trim())return;
       const event=JSON.parse(line);
       if(event.type==='delta'&&typeof event.text==='string'){answer+=event.text;request.partial=answer;onDelta(answer);}
-      if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code});
+      if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code,retryAfter:event.retry_after});
       if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||''};
     }
     try{
@@ -681,7 +681,7 @@ async function ask(q){
     const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=[];let links=[],interrupted=false,stopped=false;
+    let evidenceCards=[];let links=[],interrupted=false,stopped=false,retryAfter=0;
 
     try{
       if(activeRequest.stopped)throw new DOMException('Stopped','AbortError');
@@ -694,8 +694,8 @@ async function ask(q){
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
-      stopped=activeRequest.stopped;interrupted=true;
-      answer=activeRequest.partial||(stopped?'Response stopped.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
+      stopped=activeRequest.stopped;interrupted=true;retryAfter=Math.max(0,Math.min(60,Number(error.retryAfter)||0));
+      answer=activeRequest.partial||(stopped?'Response stopped.':retryAfter?'Chat is busy right now. Please wait a moment, then retry.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
       response.dataset.agentError=stopped?'stopped':error?.code||'agent-unavailable';
     }
 
@@ -725,6 +725,11 @@ async function ask(q){
     if(interrupted){
       const retry=text('button','Retry','agent-retry');retry.type='button';retry.setAttribute('aria-label','Retry the last question');
       retry.addEventListener('click',()=>{if(busy)return;questionNode.remove();response.remove();turns.splice(-2);ask(q);});response.append(retry);
+      if(retryAfter){
+        retry.disabled=true;
+        const availableAt=Date.now()+retryAfter*1000;
+        const tick=()=>{const remaining=Math.max(0,Math.ceil((availableAt-Date.now())/1000));retry.textContent=remaining?'Retry in '+remaining+'s':'Retry';retry.disabled=remaining>0;if(remaining&&retry.isConnected)setTimeout(tick,1000);};tick();
+      }
     }
 
     if(evidenceCards.length){

@@ -36,6 +36,14 @@ class Tests(unittest.TestCase):
   h=self.request();h.stream_reply('prompt',[],'q',[],'conversation',{})
   events=[json.loads(line) for line in h.wfile.getvalue().splitlines()]
   self.assertEqual(events[-1]['type'],'done');self.assertEqual(events[-1]['answer'],'Recovered answer')
+ def test_rate_limit_does_not_repeat_provider_request(self):
+  from unittest.mock import Mock
+  issue=RuntimeError('model_stream_http_429');issue.retry_after=12
+  def limited(p):raise issue;yield ''
+  fallback=Mock();a.update(stream_model=limited,call_model=fallback)
+  h=self.request();h.stream_reply('prompt',[],'q',[],'conversation',{})
+  events=[json.loads(line) for line in h.wfile.getvalue().splitlines()]
+  self.assertEqual(events[-1]['code'],'rate_limit');self.assertEqual(events[-1]['retry_after'],12);fallback.assert_not_called()
  def request(self):
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda status:None;h.send_header=lambda *args:None;h.end_headers=lambda:None;return h
  def test_wire_protocol_and_evidence(self):

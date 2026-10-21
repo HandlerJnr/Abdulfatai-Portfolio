@@ -278,8 +278,14 @@ def stream_model(prompt):
                 raise RuntimeError("model_stream_incomplete")
     except urllib.error.HTTPError as error:
         code = error.code
+        try:
+            retry_after = max(1, min(60, int(float(error.headers.get("retry-after", "30")))))
+        except (ValueError, TypeError):
+            retry_after = 30
         error.close()
-        raise RuntimeError("model_stream_http_" + str(code)) from error
+        issue = RuntimeError("model_stream_http_" + str(code))
+        issue.retry_after = retry_after
+        raise issue from error
     except (GeneratorExit, BrokenPipeError, ConnectionResetError):
         raise
     except Exception as error:
@@ -657,6 +663,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "- Do not append generic caveats, scores, source lists or 'limitations' paragraphs to ordinary answers.\n"
         "- Default to 1-3 short sentences, usually 35-70 words. A greeting needs one sentence. Go longer only when the visitor asks for detail. Do not repeat the question, add a sales pitch or end every answer with an offer.\n"
         "- Do not pretend to be Jamiu; speak about him naturally in third person.\n"
+        "- For latest/most recent work, use documented project dates rather than the portfolio display order. If dates do not establish an exact order, say which work is among the most recent instead of inventing a ranking.\n"
         "- Never invent projects, employers, dates, metrics, clients, skills, research, availability, work eligibility, pricing or personal facts.\n\n"
 
         "OUTPUT FORMAT\n"
@@ -702,11 +709,11 @@ def build_prompt(question, history, retrieved, intent, page_context):
         + (history_text or "(none)")
         + "\n\nFULL PORTFOLIO MAP\n"
         + "\n".join(
-            record["id"] + ": " + record.get("title", "") + " — " + record.get("summary", "")[:220]
+            record["id"] + ": " + record.get("title", "") + (" (" + record.get("text", "").split("\n")[0] + ")" if re.fullmatch(r"20\d{2}(?:[–-]20\d{2})?", record.get("text", "").split("\n")[0]) else "") + " — " + record.get("summary", "")[:100]
             for record in RECORD_LIST
         )
         + "\n\nRETRIEVED PORTFOLIO PASSAGES\n"
-        + (retrieved[:12000] or "(none)")
+        + (retrieved[:6000] or "(none)")
         + "\n\nCURRENT VISITOR MESSAGE\n"
         + question
         + "\n\nReply conversationally now."
@@ -872,7 +879,10 @@ class handler(BaseHTTPRequestHandler):
             diagnostic = str(error)
             print("portfolio_agent_stream_error:", diagnostic if re.fullmatch(r"model_[a-z0-9_]+", diagnostic) else type(error).__name__)
             try:
-                if not answer:
+                if diagnostic == "model_stream_http_429":
+                    send({"type": "error", "error": "Chat is busy right now. Please wait a moment before retrying.",
+                          "code": "rate_limit", "retry_after": getattr(error, "retry_after", 30)})
+                elif not answer:
                     # Recover only before text is delivered; never overwrite a partial answer.
                     fallback, _provider = call_model(prompt)
                     fallback = clip(fallback, 4200)
