@@ -302,10 +302,6 @@
  box-shadow:none;
 }
 @media(max-width:991px){
- .portfolio-search[open]{
-  /* Keep the modal in Safari's visual viewport when the keyboard pans it. */
-  contain:layout style;
- }
  .portfolio-search .agent-workspace,
  .portfolio-search .agent-chat-column,
  .portfolio-search .search-conversation{
