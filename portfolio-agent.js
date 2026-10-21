@@ -96,6 +96,7 @@ const INPUT_CLARIFICATION="Keep typing, ask me anything about Jamiu’s work, ex
 const FRAGMENT_WORDS=new Set(["a", "an", "the", "i", "me", "my", "you", "your", "he", "his", "she", "her", "it", "its", "we", "our", "they", "their", "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being", "am", "do", "does", "did", "can", "could", "would", "should", "will", "shall", "may", "might", "must", "of", "to", "for", "from", "in", "on", "at", "by", "with", "and", "or", "but", "if", "as", "about", "what", "which", "who", "whom", "whose", "when", "where", "how", "tell", "ask", "show", "please"]);
 function portfolioVocabulary(items){
   const vocabulary=new Set(["hi", "hello", "hey", "thanks", "thank", "cheers", "yes", "no", "okay", "ok", "more", "why", "explain", "help", "cv", "ux", "ui", "ai", "js", "go", "pricing", "price", "salary", "availability", "available", "contact", "email", "phone", "weakness", "weaknesses", "shortcomings", "blind", "strengths", "improve", "improvement", "growth", "development", "limitations", "remote", "freelance", "hiring", "hire", "resume", "r\u00e9sum\u00e9", "portfolio", "work", "skills", "experience", "projects", "process", "rates", "rate", "cost"]);
+  ['hofal','enactus','fudma','almajiri','oau','obafemi','oduduwa','keynote','speaker','speaking','speak','spoke','talk','event','attended','role','panel','summit','volunteering','community','governance','responsibility','ownership'].forEach(word=>vocabulary.add(word));
   items.forEach(record=>{
     const words=['id','title','summary','text'].map(field=>String(record[field]||'')).join(' ').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[];
     words.forEach(word=>vocabulary.add(word));
@@ -1031,4 +1032,5 @@ document.querySelectorAll('[data-agent-open]').forEach(button=>button.addEventLi
   window.portfolioAgent.open();
 }));
 })();
+
 
