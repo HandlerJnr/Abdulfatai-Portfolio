@@ -80,7 +80,7 @@ function resizeComposer(){
  const previous=input.getBoundingClientRect().height||44;
  input.style.transition='none';
  input.style.height='auto';
- const cap=Math.min(192,Math.max(96,innerHeight*.25));
+ const cap=Math.min(168,Math.max(88,(window.visualViewport?.height||innerHeight)*.24));
  const measured=input.scrollHeight;
  const next=Math.max(44,Math.min(measured,cap));
  input.style.height=previous+'px';
@@ -427,39 +427,49 @@ async function getRecords(){
   return loading;
 }
 
+// Resolve work mentioned by name in the assistant's answer; avoid stale previews.
+function projectsInAnswer(answer){
+ if(!records)return [];
+ const lower=cleanAgentOutput(answer).toLowerCase();
+ const aliases={'vista-itss':['vista digital banking','vista banking','vista'],
+   'pay4me':['radius / pay4me','radius','pay4me'],
+   'archi-tek':['archi-tek','architek'],
+   'kremor-ai':['kremor ai','kremor'],
+   'chalant-ai':['chalant ai','chalant']};
+ return records.filter(record=>record.url.startsWith('/work/')).map(record=>{
+  const names=[record.title.toLowerCase(),record.id.replace(/-/g,' '),...(aliases[record.id]||[])];
+  const positions=names.map(name=>{
+   const at=lower.indexOf(name);if(at<0)return -1;
+   const before=lower[at-1]||' ',after=lower[at+name.length]||' ';
+   return /[a-z0-9]/.test(before)||/[a-z0-9]/.test(after)?-1:at;
+  }).filter(at=>at>=0);
+  const urlAt=lower.indexOf(record.url.toLowerCase());
+  if(urlAt>=0)positions.push(urlAt);
+  return {record,index:positions.length?Math.min(...positions):-1};
+ }).filter(item=>item.index>=0).sort((a,b)=>a.index-b.index).slice(0,3).map(item=>item.record);
+}
 function sourceCards(found){
-  const cards=text('div','','search-results');
-  found.forEach(record=>{
-    const link=document.createElement('a');
-    link.href=record.url;
-    link.className='search-result';
-    link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(chatView==='focused'&&dockViewport.matches){event.preventDefault();event.stopImmediatePropagation();showProof(record)}});
-    const proofURL=new URL(record.url,location.origin);
-    const project=proofURL.pathname.match(/^\/work\/([^/]+)\/?$/)?.[1];
-    if(project&&document.querySelector('[data-feed-detail="'+project+'"]')){
-      link.setAttribute('data-feed-open',project);
-      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
-    }else if(['/', '/works/', '/brand/', '/logos/', '/system/', '/credentials/'].includes(proofURL.pathname)&&!proofURL.hash){
-      link.setAttribute('data-section-step','');
-      link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if(dockViewport.matches&&profile)setChatView('docked');else closeAgent()});
-    }
-
-    if(record.image){
-      const image=document.createElement('img');
-      image.src=record.image;
-      image.alt='';
-      image.loading='lazy';
-      link.append(image);
-    }else{
-      link.append(text('span',record.title.slice(0,1),'search-monogram'));
-    }
-
-    const copy=text('div');
-    copy.append(text('strong',record.title),text('span',record.summary));
-    link.append(copy);
-    cards.append(link);
+ const cards=text('div','','search-results');
+ uniqueRecords(found).forEach(record=>{
+  const link=document.createElement('a');link.href=record.url;link.className='search-result';
+  link.setAttribute('aria-label',dockViewport.matches?'Preview '+record.title:'Open '+record.title);
+  link.addEventListener('click',event=>{
+   if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   if(dockViewport.matches){
+    event.preventDefault();
+    if(chatView==='docked')setChatView('focused');
+    showProof(record);
+   }else closeAgent();
   });
-  return cards;
+  if(record.image){
+   const image=document.createElement('img');image.src=record.image;image.alt='';image.loading='lazy';link.append(image);
+  }else link.append(text('span',record.title.slice(0,1),'search-monogram'));
+  const copy=text('div');
+  copy.append(text('strong',record.title),text('span',record.summary),
+    text('span',dockViewport.matches?'Select to preview ↗':'Open case study ↗','agent-source-action'));
+  link.append(copy);cards.append(link);
+ });
+ return cards;
 }
 
 function normaliseCurrentPath(value){
@@ -567,8 +577,7 @@ function showInputClarification(q){
 }
 async function ask(q){
   q=q.trim();if(!q)return;
-  const previewAtAsk=proofRequest;
-  dialog.dispatchEvent(new CustomEvent('agent-question'));
+   dialog.dispatchEvent(new CustomEvent('agent-question'));
   if(busy)return;
   if(needsClarification(q)){
     showInputClarification(q);
@@ -613,17 +622,12 @@ async function ask(q){
       response.dataset.agentError=error?.code||'agent-unavailable';
     }
 
-    // Select a preview from the actual project named in a navigation answer,
-    // including when the model does not return an evidence ID.
-    if(!evidenceCards.length&&/\b(show|preview|open|view|point me|where|strongest|best project|top project|impressive|see it|see the project)\b/i.test(q)){
-      const lower=answer.toLowerCase();
-      const mentioned=records.find(record=>record.url.startsWith('/work/')&&(
-        record.id==='vista-itss'?/\bvista\b/i.test(answer):
-        record.id==='pay4me'?/\b(radius|pay4me)\b/i.test(answer):
-        lower.includes(record.title.toLowerCase())
-      ));
-      if(mentioned)evidenceCards=[mentioned];
-    }
+    // Suggestions are clickable choices, never an automatic preview.
+    const mentionedProjects=projectsInAnswer(answer);
+    if(mentionedProjects.length)evidenceCards=mentionedProjects;
+    // Every project recommendation follows the same choose-first interaction.
+    if(evidenceCards.some(record=>record.url.startsWith('/work/'))&&dockViewport.matches&&chatView==='focused')
+      clearProofForSuggestions();
     response.classList.remove('is-thinking');
     response.replaceChildren();
     response.append(renderAgentAnswer(answer));
@@ -643,18 +647,8 @@ async function ask(q){
 
     if(evidenceCards.length){
       lastProject=evidenceCards.find(record=>!['about','credentials','cv'].includes(record.id))||evidenceCards[0];
-      response.append(text('span',usedAgent?'Portfolio proof':'Read these projects','search-kicker'));
+      response.append(text('span',mentionedProjects.length?'Choose a project to preview':'Portfolio proof','search-kicker'));
       response.append(sourceCards(evidenceCards));
-      if(dockViewport.matches){
-        const previewAction=text('button','Show '+evidenceCards[0].title+' in preview ↗','agent-preview-action');
-        previewAction.type='button';
-        previewAction.addEventListener('click',()=>{
-          if(chatView==='docked')setChatView('focused');
-          showProof(evidenceCards[0]);
-        });
-        response.append(previewAction);
-      }
-      if(chatView==='focused'&&dockViewport.matches&&proofRequest===previewAtAsk)showProof(evidenceCards[0]);
     }
 
     turns.push({role:'assistant',text:answer,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent});
@@ -722,6 +716,7 @@ function setChatView(next){
   if(profile)profile.scrollTop=profileScroll;
   dialog.showModal();document.body.style.overflow='hidden';
  }
+ if(fullScreenViewport.matches)lockAgentPage();
  updateAgentViewport();
  syncViewControl();
  if(!reduceAgentMotion.matches&&dialog.animate){
@@ -736,27 +731,61 @@ addEventListener('resize',positionDock);addEventListener('scroll',positionDock,{
 document.addEventListener('portfolio:sectionchange',positionDock);
 syncViewControl();
 
-dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();closeAgent()}});
+dialog.addEventListener('keydown',event=>{event.stopPropagation();if(event.key==='Escape'){event.preventDefault();if(!chatActions.hidden){setActionsOpen(false);actionToggle.focus({preventScroll:true})}else closeAgent()}});
 const mobileAgent=window.matchMedia('(max-width:600px), (pointer:coarse)');
 const fullScreenViewport=window.matchMedia('(max-width:991px)');
-function updateAgentViewport(){
-  if(!dialog.open)return;
-  if(!fullScreenViewport.matches){
-    dialog.style.removeProperty('--agent-visual-height');
-    dialog.style.removeProperty('--agent-visual-top');
-    return;
-  }
-  const viewport=window.visualViewport;
-  dialog.style.setProperty('--agent-visual-height',Math.round(viewport?.height||window.innerHeight)+'px');
-  dialog.style.setProperty('--agent-visual-top',Math.max(0,Math.round(viewport?.offsetTop||0))+'px');
+let mobileScrollLock=null;
+function lockAgentPage(){
+ if(!fullScreenViewport.matches||mobileScrollLock)return;
+ const body=document.body,html=document.documentElement;
+ mobileScrollLock={y:window.scrollY,position:body.style.position,top:body.style.top,
+  left:body.style.left,right:body.style.right,width:body.style.width,htmlOverflow:html.style.overflow};
+ body.style.position='fixed';body.style.top='-'+mobileScrollLock.y+'px';
+ body.style.left='0';body.style.right='0';body.style.width='100%';
+ html.style.overflow='hidden';
+ body.classList.add('agent-mobile-active');html.classList.add('agent-mobile-active');
+ window.ltLenis?.stop();
 }
-window.visualViewport?.addEventListener('resize',updateAgentViewport);
-window.visualViewport?.addEventListener('scroll',updateAgentViewport,{passive:true});
-window.addEventListener('resize',updateAgentViewport);
-fullScreenViewport.addEventListener('change',updateAgentViewport);
+function unlockAgentPage(){
+ if(!mobileScrollLock)return;
+ const body=document.body,html=document.documentElement,prior=mobileScrollLock;
+ mobileScrollLock=null;
+ body.style.position=prior.position;body.style.top=prior.top;
+ body.style.left=prior.left;body.style.right=prior.right;body.style.width=prior.width;
+ html.style.overflow=prior.htmlOverflow;
+ body.classList.remove('agent-mobile-active');html.classList.remove('agent-mobile-active');
+ window.scrollTo(0,prior.y);
+ window.ltLenis?.start();
+}
+function updateAgentViewport(){
+ if(!dialog.open)return;
+ if(!fullScreenViewport.matches){
+  dialog.style.removeProperty('--agent-visual-height');
+  dialog.style.removeProperty('--agent-visual-top');
+  dialog.classList.remove('has-virtual-keyboard');return;
+ }
+ const viewport=window.visualViewport,height=Math.round(viewport?.height||window.innerHeight);
+ dialog.classList.toggle('has-virtual-keyboard',height<window.innerHeight-120);
+ dialog.style.setProperty('--agent-visual-height',height+'px');
+ // Keep the workspace still while iOS pans the virtual viewport for the keyboard.
+ dialog.style.setProperty('--agent-visual-top','0px');
+}
+let viewportUpdateFrame=0;
+function requestAgentViewportUpdate(){
+ if(viewportUpdateFrame)return;
+ viewportUpdateFrame=requestAnimationFrame(()=>{viewportUpdateFrame=0;updateAgentViewport()});
+}
+window.visualViewport?.addEventListener('resize',requestAgentViewportUpdate);
+window.addEventListener('resize',requestAgentViewportUpdate);
+fullScreenViewport.addEventListener('change',()=>{
+ if(!dialog.open)return;
+ if(fullScreenViewport.matches)lockAgentPage();else unlockAgentPage();
+ requestAgentViewportUpdate();
+});
 
 function closeAgent(){
   if(!dialog.open||closingAgent)return;
+  if(!chatActions.hidden)setActionsOpen(false);
   closingAgent=true;input.blur();
   if(reduceAgentMotion.matches||!dialog.animate){dialog.close();closingAgent=false;return;}
   const exit=dialog.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:'translateX(12px)'}],{duration:160,easing:'ease-in'});
@@ -770,11 +799,11 @@ launcher.addEventListener('click',()=>{
   input.disabled=false;input.readOnly=false;
   savedOverflow=document.body.style.overflow;chatView='focused';
   dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');
-  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();updateAgentViewport();
+  dialog.showModal();document.body.style.overflow='hidden';syncViewControl();lockAgentPage();updateAgentViewport();
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
   // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
-  input.focus({preventScroll:true});resizeComposer();
+  if(!fullScreenViewport.matches)input.focus({preventScroll:true});resizeComposer();
 });
 
 dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
@@ -796,6 +825,8 @@ dialog.addEventListener('close',()=>{
   if(chatView==='docked'&&profile)profile.scrollTop=profileScroll;
   chatView='focused';dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');syncViewControl();
   document.body.style.overflow=savedOverflow;
+  unlockAgentPage();
+  dialog.classList.remove('has-virtual-keyboard');
   saveConversation();
   input.blur();
   launcher.setAttribute('aria-expanded','false');
@@ -808,17 +839,27 @@ form.addEventListener('submit',event=>{
 });
 
 
-const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';form.before(clear);
+const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';
 clear.addEventListener('click',()=>{if(busy)return;roleDescription="";roleFileToken++;roleText.value="";rolePanel.hidden=true;conversation.hidden=false;updateRoleAction();history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';resizeComposer();renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
 const fitButton=text('button','Compare a role','role-fit-action');fitButton.type='button';
-const chatActions=text('div','','search-chat-actions');chatActions.append(clear,fitButton);
+const chatActions=text('div','','search-chat-actions');chatActions.id='agent-chat-actions';chatActions.hidden=true;chatActions.append(clear,fitButton);
+const actionHost=text('div','','agent-action-host');
+const actionToggle=text('button','⋯','agent-actions-toggle');actionToggle.type='button';
+actionToggle.setAttribute('aria-label','Chat options');
+actionToggle.setAttribute('aria-expanded','false');
+actionToggle.setAttribute('aria-controls',chatActions.id);
+function setActionsOpen(open){chatActions.hidden=!open;actionToggle.setAttribute('aria-expanded',String(open))}
+actionToggle.addEventListener('click',()=>setActionsOpen(chatActions.hidden));
+chatActions.addEventListener('click',event=>{if(event.target.closest('button'))setActionsOpen(false)});
+document.addEventListener('pointerdown',event=>{if(!chatActions.hidden&&!actionHost.contains(event.target))setActionsOpen(false)});
+actionHost.append(actionToggle,chatActions);windowControls.insertBefore(actionHost,closeButton);
 const rolePanel=text('section','','role-fit-panel');rolePanel.hidden=true;rolePanel.setAttribute('aria-label','Job description comparison');rolePanel.setAttribute('data-lenis-prevent','');
 rolePanel.innerHTML='<div class="role-fit-heading"><h3>Compare a role</h3><button type="button" data-role-cancel aria-label="Return to chat">Back to chat</button></div><p>Paste the job description, or upload it and check the extracted text before comparing.</p><div class="role-fit-file-row"><button type="button" data-role-upload>Upload PDF or Word</button><span>PDF or .docx · Up to 2 MB</span><input type="file" accept=".pdf,.docx" hidden></div><label for="role-description">Job description</label><textarea id="role-description" maxlength="12000" placeholder="Paste the role and its main requirements here…"></textarea><p class="role-fit-status" role="status" aria-live="polite"></p><p class="role-fit-privacy">Files are processed for text extraction and aren’t saved by this site. When you compare, the reviewed text is sent to the AI provider. Please leave out confidential or personal information.</p><div class="role-fit-buttons"><button type="button" data-role-remove hidden>Remove role</button><button type="button" data-role-compare disabled>Compare with Jamiu’s work</button></div>';
 const roleText=rolePanel.querySelector('textarea'),roleFile=rolePanel.querySelector('input[type=file]'),roleStatus=rolePanel.querySelector('.role-fit-status'),compareRole=rolePanel.querySelector('[data-role-compare]'),uploadRole=rolePanel.querySelector('[data-role-upload]');
 let parsingRole=false,roleFileToken=0;
 function updateRoleAction(){fitButton.textContent=roleDescription?'Review role':'Compare a role';rolePanel.querySelector('[data-role-remove]').hidden=!roleDescription}
 function syncRoleText(){compareRole.disabled=parsingRole||roleText.value.trim().length<80;roleStatus.textContent=roleText.value.length.toLocaleString()+' / 12,000 characters';}
-function closeRolePanel(){rolePanel.hidden=true;conversation.hidden=false;input.focus({preventScroll:true});resizeComposer()}
+function closeRolePanel(){rolePanel.hidden=true;conversation.hidden=false;if(!fullScreenViewport.matches)input.focus({preventScroll:true});resizeComposer()}
 fitButton.addEventListener('click',()=>{rolePanel.hidden=false;conversation.hidden=true;roleText.value=roleDescription||roleText.value;syncRoleText();updateRoleAction();roleText.focus({preventScroll:true})});
 rolePanel.querySelector('[data-role-cancel]').addEventListener('click',closeRolePanel);
 roleText.addEventListener('input',syncRoleText);
@@ -849,8 +890,12 @@ const workspace=text('div','','agent-workspace');
 const library=text('nav','','agent-library');library.setAttribute('aria-label','Portfolio pages and projects');library.setAttribute('data-lenis-prevent','');
 const centre=text('section','','agent-chat-column');centre.setAttribute('aria-label','Chat');
 const proof=text('aside','','agent-proof');proof.setAttribute('aria-label','Selected work preview');proof.setAttribute('data-lenis-prevent','');
-centre.append(conversation,rolePanel,chatActions,form);workspace.append(library,centre,proof);dialog.append(workspace);
-proof.append(text('p','[Preview]','search-kicker'),text('p','Select work to take a closer look.','agent-proof-empty'));
+centre.append(conversation,rolePanel,form);workspace.append(library,centre,proof);dialog.append(workspace);
+proof.append(text('p','[Preview]','search-kicker'),text('p','Select a project to see its work.','agent-proof-empty'));
+function clearProofForSuggestions(){
+ proofRequest++;selectedProofId='';markSelection();
+ proof.replaceChildren(text('p','[Preview]','search-kicker'),text('p','Choose a project from the conversation to preview it here.','agent-proof-empty'));
+}
 function markSelection(){library.querySelectorAll('[data-agent-record]').forEach(button=>{const active=button.dataset.agentRecord===selectedProofId;button.classList.toggle('is-selected',active);if(active)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current')})}
 function initWorkspaceNavigation(){
  library.replaceChildren(text('p','[Portfolio]','search-kicker'));

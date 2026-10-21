@@ -227,3 +227,81 @@
 }
 .agent-preview-action:hover{background:var(--agent-paper)}
 .agent-preview-action:focus-visible{outline:2px solid var(--agent-ink);outline-offset:3px}
+
+/* Select a project deliberately: previews never change just because AI named one. */
+.search-result{min-height:70px;cursor:pointer}
+.search-result div>.agent-source-action{
+ display:block;-webkit-line-clamp:unset;margin-top:.65em;
+ font-size:.78em;font-weight:600;line-height:1.5;color:var(--agent-ink);
+}
+.search-result:focus-visible{outline:2px solid var(--agent-ink);outline-offset:3px}
+.agent-proof-empty{max-width:30ch}
+
+/* Utility actions live in the top-right menu, clear of the mobile composer. */
+.portfolio-search .search-heading{position:relative;z-index:5}
+.agent-action-host{position:relative;display:flex;align-items:center}
+.portfolio-search .agent-actions-toggle{
+ display:grid;place-items:center;width:44px;height:44px;min-width:44px;
+ border:1px solid var(--agent-line);border-radius:50%;
+ background:transparent;color:var(--agent-ink);font:inherit;
+ font-size:1.55em;line-height:1;cursor:pointer;
+}
+.portfolio-search .agent-actions-toggle:hover,
+.portfolio-search .agent-actions-toggle[aria-expanded=true]{
+ background:var(--_colors---background--secondary,#eeeee8)
+}
+.agent-action-host .search-chat-actions{
+ position:absolute;right:0;top:calc(100% + .55em);
+ width:min(230px,calc(100vw - 2em));
+ padding:.45em;box-sizing:border-box;
+ border:1px solid var(--agent-line);border-radius:.6em;
+ background:var(--agent-paper);
+ box-shadow:0 10px 35px #0003;
+ z-index:15;display:flex;flex-direction:column;align-items:stretch;gap:.1em;
+}
+.agent-action-host .search-chat-actions[hidden]{display:none!important}
+.agent-action-host .search-chat-actions :is(.search-clear,.role-fit-action){
+ display:block;width:100%;min-height:44px;max-width:none;
+ margin:0;padding:.75em .85em;text-align:left;white-space:normal;
+ border:0;border-radius:.35em;
+ color:var(--agent-ink);font:inherit;font-size:.82em;line-height:1.5;
+}
+.agent-action-host .search-chat-actions :is(.search-clear,.role-fit-action):hover,
+.agent-action-host .search-chat-actions :is(.search-clear,.role-fit-action):focus-visible{
+ text-decoration:none;background:var(--_colors---background--secondary,#eeeee8)
+}
+
+/* Keep the page locked and the composer stationary while the soft keyboard opens. */
+@media(max-width:991px){
+ html.agent-mobile-active,body.agent-mobile-active{
+  overflow:hidden!important;overscroll-behavior:none!important;
+ }
+ .portfolio-search{
+  overscroll-behavior:none;overflow-anchor:none;
+  touch-action:manipulation;
+ }
+ .portfolio-search .agent-workspace,
+ .portfolio-search .agent-chat-column{overscroll-behavior:none;overflow-anchor:none}
+ .portfolio-search .search-conversation,
+ .portfolio-search .role-fit-panel{
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y;
+ }
+ .portfolio-search .search-form{
+  position:relative;z-index:1;
+  padding-bottom:max(.75em,env(safe-area-inset-bottom));
+ }
+ .portfolio-search.has-virtual-keyboard .search-form{
+  padding-bottom:.4em;
+ }
+ .portfolio-search .search-heading{
+  flex-shrink:0;
+ }
+ .agent-action-host .search-chat-actions{
+  right:0;
+  width:min(240px,calc(100vw - 1.5em));
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .agent-action-host .search-chat-actions{scroll-behavior:auto}
+}
