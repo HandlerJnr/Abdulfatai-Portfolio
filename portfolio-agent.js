@@ -67,7 +67,7 @@ function restoreConversation(){
     originContext=saved.originContext&&typeof saved.originContext.pathname==='string'?saved.originContext:null;
     originUrl=typeof saved.originUrl==='string'&&saved.originUrl.startsWith('/')&&!saved.originUrl.startsWith('//')?saved.originUrl:'';
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';
-    if(turns.length){dialog.classList.add('has-conversation');conversation.replaceChildren();turns.forEach(turn=>{
+    if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();turns.forEach(turn=>{
       if(turn.role==='user')conversation.append(text('p',turn.text,'search-question'));
       else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta)response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
@@ -523,7 +523,7 @@ function localAnswer(found,q){
   return found.slice(0,2).map(record=>record.title+': '+excerpt(record,q)).join('\n\n');
 }
 function showInputClarification(q){
-  dialog.classList.add('has-conversation');
+  dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();
   if(q){conversation.append(text('p',q,'search-question'));turns.push({role:'user',text:q});}
   const response=text('div','','search-answer');
   response.append(renderAgentAnswer(INPUT_CLARIFICATION));
@@ -540,7 +540,7 @@ async function ask(q){
     showInputClarification(q);
     return;
   }
-  dialog.classList.add('has-conversation');
+  dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();
   busy=true;
   submit.disabled=true;dialog.querySelector('.search-clear').disabled=true;conversation.setAttribute('aria-busy','true');
   conversation.append(text('p',q,'search-question'));
