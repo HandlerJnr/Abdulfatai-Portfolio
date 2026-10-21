@@ -3,7 +3,7 @@
 [data-feed-modal] .feed-modal_controls{flex:none}
 [data-feed-modal] .feed-modal_body{overflow:hidden;min-height:0;display:flex}
 [data-feed-modal] .feed-detail_component{height:100%;width:100%;min-height:0;min-width:0;box-sizing:border-box;grid-template-rows:minmax(0,1fr);padding:1.5em;gap:1.5em;overflow:hidden}
-[data-feed-modal] .feed-detail_gallery{min-height:0;min-width:0;height:100%;overflow:hidden}
+[data-feed-modal] .feed-detail_gallery{min-height:0;min-width:0;width:calc(100% - 1px);height:calc(100% - 1px);overflow:hidden}
 [data-feed-modal] .horal-product-gallery{position:static;display:flex;flex-direction:column;height:100%;min-height:0;gap:.75em}
 [data-feed-modal] .horal-product-preview{flex:1;min-height:0;width:100%;height:auto;max-height:none;aspect-ratio:auto;display:flex;align-items:center;justify-content:center}
 [data-feed-modal] .horal-gallery-image{display:block;width:100%;height:100%;max-height:100%;object-fit:cover}
@@ -19,10 +19,10 @@
 /* Product feed cards share the moderate 3:2 presentation ratio. */
 .section_feed[data-collection="products"] .feed_card,.section_feed[data-collection="works"] .feed_card{height:auto;aspect-ratio:3/2}
 .section_feed[data-collection="products"] .feed_card>.horal-cover,.section_feed[data-collection="works"] .feed_card>.horal-cover{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
-@media(min-width:992px){[data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}}
+@media(min-width:992px){[data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}}
 @media(max-width:991px){
  [data-feed-modal] .feed-modal_panel{height:90dvh;max-height:90dvh}
- [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1.48fr) minmax(0,1fr);padding:1em;gap:1em}
+ [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1.36fr) minmax(0,1fr);padding:1em;gap:1em}
  [data-feed-modal] .horal-thumbnails{max-height:3.75em;gap:.35em}
  [data-feed-modal] .horal-thumbnail{max-height:3.25em;max-width:5em;flex-basis:3em}
  [data-feed-modal] .collection-gallery .horal-thumbnail{flex-basis:3.5em;max-width:3.5em}
