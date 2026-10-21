@@ -15,7 +15,7 @@ for(const mobile of [false,true]){
  assert.equal(attributes['aria-expanded'],'true');
 }
 assert(source.includes('document.body.append(launcher)'));
-assert(source.includes('/agent-favicon.svg'));
+assert(source.includes('/assets/db99cb95c28524de.png'));
 assert(!source.includes('launchHost'));
 assert(!source.includes('agent-project-launch'));
 const keyboard=source.match(/dialog\.addEventListener\('keydown',(event=>\{[^\n]+\})\);/)[1];
