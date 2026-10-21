@@ -1,11 +1,13 @@
 (()=>{
 const launcher=document.createElement('button');
 launcher.className='portfolio-search-launch';
-launcher.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg><span>Ask about my work</span>';
+launcher.type='button';
+launcher.innerHTML='<img src="/agent-favicon.svg" width="36" height="36" alt=""><span class="sr-only">Chat with Jamiu’s portfolio agent</span>';
+launcher.title='Chat about Jamiu’s work';
 launcher.setAttribute('aria-label','Ask about Jamiu’s work');
 launcher.setAttribute('aria-haspopup','dialog');
 launcher.setAttribute('aria-expanded','false');
-const launchHost=document.querySelector('.home-panel_layout');if(launchHost){const bio=launchHost.querySelector('.home-panel_bio');if(bio)bio.after(launcher);else launchHost.append(launcher)}else document.body.append(launcher);
+document.body.append(launcher);
 
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
@@ -609,14 +611,16 @@ function closeAgent(){
 }
 
 launcher.addEventListener('click',()=>{
+  if(dialog.open){input.focus({preventScroll:true});return;}
   document.querySelector('.portfolio-navigation button[aria-expanded=\"true\"]')?.click();
+  dialog.inert=false;
+  input.disabled=false;input.readOnly=false;
   dialog.showModal();
   savedOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
   launcher.setAttribute('aria-expanded','true');
   getRecords().catch(()=>{});
-  // Desktop gets immediate keyboard focus. On phones, wait for an intentional tap
-  // so Safari never changes the visual viewport just from opening the drawer.
-  if(!mobileAgent.matches)input.focus({preventScroll:true});else dialog.querySelector('.search-close').focus({preventScroll:true});
+  // A deliberate launcher tap opens a ready-to-type chat on desktop and touch devices.
+  input.focus({preventScroll:true});
 });
 
 dialog.querySelector('.search-close')?.addEventListener('click',closeAgent);
@@ -657,11 +661,6 @@ window.portfolioAgent={open:async(question='')=>{
   await ready;
   if(question.trim()){input.value=question.slice(0,700);await ask(input.value);}
 }};
-document.querySelectorAll('[data-feed-modal] .feed-modal_controls,.practice-modal .feed-modal_controls').forEach(controls=>{
-  const button=text('button','Ask about this project','agent-project-launch');button.type='button';
-  button.setAttribute('aria-haspopup','dialog');controls.append(button);
-  button.addEventListener('click',()=>window.portfolioAgent.open('Tell me about this project'));
-});
 document.querySelectorAll('[data-agent-open]').forEach(button=>button.addEventListener('click',()=>{
   document.querySelector('.navigation.is-open .navigation-toggle')?.click();
   window.portfolioAgent.open();

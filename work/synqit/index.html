@@ -800,7 +800,7 @@
       }
       for (var n = modal; n.parentElement && n !== document.body; n = n.parentElement) {
         gsap.utils.toArray(n.parentElement.children).forEach(function (el) {
-          if (el === n || el.inert || el.tagName === 'SCRIPT') return;
+          if (el === n || el.inert || el.tagName === 'SCRIPT' || el.matches('.portfolio-search,.portfolio-search-launch')) return;
           el.inert = true;
           inerted.push(el);
         });
