@@ -12,7 +12,7 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-lenis-prevent role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><div class="search-suggestions"><button type="button">Show me fintech work</button><button type="button">What did Jamiu design at Vista?</button><button type="button">How does he approach design systems?</button><button type="button">What is this project about?</button></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><input id="portfolio-question" type="text" maxlength="700" placeholder="What would you like to know?" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-lenis-prevent role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><input id="portfolio-question" type="text" maxlength="700" placeholder="What would you like to know?" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
@@ -44,8 +44,7 @@ function renderWelcome(){
  const icon=document.createElement('img');icon.src='/assets/db99cb95c28524de.png';icon.alt='';icon.width=64;icon.height=64;emblem.append(icon);
  const headline=text('p',welcomeLines[welcomeIndex],'search-welcome');headline.setAttribute('aria-hidden','true');
  const accessible=text('p','Ask about Jamiu’s work, experience or a role you’re hiring for.','sr-only');
- const note=text('p','Ask in your own words, or choose a question below.','agent-welcome-note');
- state.append(emblem,headline,accessible,note);conversation.replaceChildren(state);dialog.classList.remove('has-conversation');
+ state.append(emblem,headline,accessible);conversation.replaceChildren(state);dialog.classList.remove('has-conversation');
 }
 renderWelcome();
 setInterval(()=>{
@@ -675,10 +674,8 @@ form.addEventListener('submit',event=>{
   ask(input.value);
 });
 
-dialog.querySelectorAll('.search-suggestions button').forEach(button=>{
-  button.addEventListener('click',()=>ask(button.textContent));
-});
-const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';dialog.querySelector('.search-suggestions').after(clear);
+
+const clear=document.createElement('button');clear.type='button';clear.className='search-clear';clear.textContent='New conversation';form.before(clear);
 clear.addEventListener('click',()=>{if(busy)return;history=[];turns=[];lastProject=null;originContext=null;originUrl='';input.value='';renderWelcome();if(!mobileAgent.matches)input.focus({preventScroll:true});dialog.querySelector('.search-context-link')?.remove();dialog.dispatchEvent(new CustomEvent('agent-question'));saveConversation();});
 const ready=getRecords().then(()=>{inputVocabulary=portfolioVocabulary(records);restoreConversation();}).catch(()=>{});
 window.portfolioAgent={open:async(question='')=>{
