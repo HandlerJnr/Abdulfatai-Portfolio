@@ -46,6 +46,17 @@ class Grounding(unittest.TestCase):
  def test_social_mode_cannot_hide_personal_claims(self):
   self.assertEqual(a['validate_grounded_reply'](json.dumps({'answer':"You're welcome!",'kind':'social','claims':[]}),{}),"You're welcome!")
   with self.assertRaises(RuntimeError):a['validate_grounded_reply'](json.dumps({'answer':'He is a NASA engineer.','kind':'social','claims':[]}),{})
+ def test_source_first_person_does_not_change_guide_identity(self):
+  sources={'f':{'text':'I designed the UI in Figma and built the portfolio.'}}
+  for text in ['I designed the UI in Figma.','My portfolio shows my love of design.','We built the portfolio.']:
+   reply={'kind':'grounded','claims':[{'text':text,'source_id':'f'}]}
+   with self.assertRaisesRegex(RuntimeError,'perspective'):a['validate_grounded_reply'](json.dumps(reply),sources)
+  for text in ['He designed the UI in Figma.',"I don't have his exact design rationale.","I can't book a call."]:
+   a['validate_guide_perspective'](text,sources)
+  voice=a['model_messages']('GROUNDING_REVIEW_TASK\ntest')[0]['content']
+  self.assertIn('never pretend to be Jamiu',voice)
+  self.assertIn('Do not paraphrase the same answer',voice)
+  self.assertIn('inventing personal motivations',voice)
  def test_generation_checks_prior_false_claim_without_duplicate_provider_calls(self):
   sources={'f':{'text':'Jamiu designed this portfolio in Figma.'}}
   prompt=a['build_prompt']('Which development team?',[{'role':'assistant','content':'A development team built it.'}], '', 'conversation',{})

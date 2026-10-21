@@ -3,7 +3,7 @@
 AGENT_PREVIEW_ACCESS_URL may contain a temporary Vercel share URL.
 python tests/evaluate_grounding.py --base-url https://preview.vercel.app --case 'academic status'
 """
-import argparse,http.cookiejar,json,os,sys,urllib.error,urllib.parse,urllib.request
+import argparse,http.cookiejar,json,os,re,sys,urllib.error,urllib.parse,urllib.request
 from pathlib import Path
 
 def evaluate(base_url,cases):
@@ -28,7 +28,13 @@ def evaluate(base_url,cases):
     answer=done['answer'];lower=answer.lower()
     missing=[group for group in turn['required_any'] if not any(word.lower() in lower for word in group)]
     forbidden=[phrase for phrase in turn['forbidden'] if phrase.lower() in lower]
-    rows.append({'question':turn['question'],'answer':answer,'pass':not missing and not forbidden,'missing':missing,'forbidden':forbidden})
+    prior=next((m.get('content',m.get('text','')) for m in reversed(history) if m['role']=='assistant'),'')
+    def trigrams(value):
+     words=re.findall(r"\w+",value.lower());return set(zip(words,words[1:],words[2:]))
+    new,old=trigrams(answer),trigrams(prior)
+    repeated=len(new&old)/max(1,len(new))
+    limit=turn.get('max_repeated_trigram_ratio',1.0)
+    rows.append({'question':turn['question'],'answer':answer,'pass':not missing and not forbidden and repeated<=limit,'missing':missing,'forbidden':forbidden,'repeated_trigram_ratio':round(repeated,3)})
     history.extend([{'role':'user','content':turn['question']},{'role':'assistant','content':answer}])
    except urllib.error.HTTPError as error:
     rows.append({'question':turn['question'],'error':'http_'+str(error.code)});break
