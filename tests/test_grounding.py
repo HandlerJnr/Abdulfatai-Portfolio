@@ -30,6 +30,8 @@ class Grounding(unittest.TestCase):
   sources={'f':{'text':'He designed this portfolio in Figma.'}}
   valid={'answer':'He designed it in Figma.','kind':'grounded','claims':[{'text':'He designed it in Figma.','source_id':'f','quote':'designed this portfolio in Figma'}]}
   self.assertEqual(a['validate_grounded_reply'](json.dumps(valid),sources),valid['answer'])
+  claim_only=dict(valid);claim_only.pop('answer')
+  self.assertEqual(a['validate_grounded_reply'](json.dumps(claim_only),sources),valid['answer'])
   for field,value in [('quote','a team of ten engineers'),('source_id','invented')]:
    bad=json.loads(json.dumps(valid));bad['claims'][0][field]=value
    with self.assertRaisesRegex(RuntimeError,'grounding_invalid'):a['validate_grounded_reply'](json.dumps(bad),sources)
