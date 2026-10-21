@@ -161,8 +161,10 @@ function shouldOfferContact(question){
  const q=String(question||'').toLowerCase();
  if(!q.trim())return false;
  // Respond to personal questions or invitations, not critiques of a project or website.
- const personalQuestion=/\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
-  &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
+ const personalQuestion=(
+  /\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
+  || /\b(?:where|how|what)\b.{0,65}\b(?:he|his|jamiu)\b.{0,40}\b(?:improve|grow|develop|work on)\b/i.test(q)
+ ) &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
  const directContact=/\b(contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
  return personalQuestion||directContact;
 }
