@@ -5,7 +5,7 @@ const classes=()=>({value:new Set(),toggle(k,on){on?this.value.add(k):this.value
 function fixture(desktop=true){
  const body={classList:classes(),style:{overflow:'hidden'}},dialog={open:true,inert:false,classList:classes(),style:{},getBoundingClientRect:()=>({left:100,top:100,width:600,height:600}),close(){this.open=false},show(){this.open=true;this.modal=false},showModal(){this.open=true;this.modal=true},contains:()=>true};
  const input={value:'A draft question',focus(){}},conversation={scrollTop:173};
- const context={dialog,profile:{scrollTop:55},dockViewport:{matches:desktop},chatView:'focused',savedOverflow:'',document:{body,activeElement:input},input,conversation,reduceAgentMotion:{matches:true},syncViewControl(){},positionDock(){},resizeComposer(){},saveConversation(){},profileScroll:0};
+ const context={dialog,profile:{scrollTop:55},dockViewport:{matches:desktop},chatView:'focused',savedOverflow:'',document:{body,activeElement:input},input,conversation,reduceAgentMotion:{matches:true},syncViewControl(){},positionDock(){},resizeComposer(){},saveConversation(){},profileScroll:0,fullScreenViewport:{matches:!desktop},lockAgentPage(){},updateAgentViewport(){}};
  vm.createContext(context);vm.runInContext(source.slice(start,end),context);return context;
 }
 const c=fixture();vm.runInContext("setChatView('docked')",c);
