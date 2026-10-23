@@ -12,3 +12,8 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 .overview-spark{display:inline-grid;width:21px;height:21px;place-items:center;background:none;color:inherit}.mini-spark{display:inline-grid;width:14px;height:14px;place-items:center;vertical-align:middle}.contact-actions a span svg{width:14px;height:14px}.upload-button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+/* Keep the composer outside the scrolling transcript. */
+.search-panel>.follow-up-form{flex:none;margin:12px 18px 18px;min-height:46px}.follow-up-form:focus-within{border-color:#5f6368}.follow-up-form textarea:focus-visible{outline:none}.ai-active .results-scroll{display:flex;flex-direction:column}.ai-active .ai-conversation{flex:1;display:flex;flex-direction:column;border-bottom:0;min-height:min-content}.ai-active .conversation-log:has(.chat-welcome){flex:1;align-content:center;min-height:240px}.ai-active .search-footer{display:none}.chat-welcome{text-align:center;color:var(--muted);padding:32px 12px;max-width:290px;justify-self:center}.chat-welcome img{display:block;width:64px;height:64px;object-fit:contain;margin:0 auto 22px;animation:agent-roll 12s linear infinite;filter:drop-shadow(0 0 12px #a8c7fa45)}.chat-welcome p{margin:0;font-size:14px;line-height:1.7}@keyframes agent-roll{to{transform:rotate(360deg)}}
+@media(max-width:740px){.search-panel.ai-active{height:100svh;min-height:0;overflow:hidden}.ai-active .results-scroll{overflow-y:auto;min-height:0}.search-panel>.follow-up-form{margin-bottom:max(14px,env(safe-area-inset-bottom));}.ai-active .search-header{position:relative;flex:none}}
+@media(prefers-reduced-motion:reduce){.chat-welcome img{animation:none}}
