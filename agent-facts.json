@@ -96,7 +96,7 @@
     {
       "id": "ui.navigation",
       "category": "interface",
-      "statement": "This portfolio's search homepage has a search bar, All / AI Mode / Images / Projects / Experience / Credentials tabs, AI answers, and links to existing project pages. On existing case-study pages the original left-docked chat remains available on desktop, and full-screen on mobile. The walkthrough and size-switch control have been removed.",
+      "statement": "This separate search-style portfolio uses the same dark search layout on every project and supporting page. Search and AI chat stay on the left; selecting a project, About, Brand, Logos, Systems or Credentials opens its content in the right panel. On mobile the selected page fills the screen and Close returns to the results. It does not navigate to the previous published portfolio. The walkthrough remains removed.",
       "status": "confirmed",
       "source": {
         "kind": "implementation_review"
@@ -114,7 +114,7 @@
     {
       "id": "ui.search-homepage",
       "category": "interface",
-      "statement": "On the search homepage, typing and submitting a query searches portfolio content and requests an AI answer. AI Mode supports follow-up chat, New chat, and Compare a role. Images opens actual project images and the suit portrait. Result links navigate to full portfolio pages. Phone and email links open the visitor's own apps. Microphone search depends on browser support and permission.",
+      "statement": "Search the portfolio using All, AI Mode, Images, Projects, Experience and Credentials. Project and supporting-page links stay inside this search-style portfolio. AI Mode has follow-up chat, New chat and Compare a role, with the input pinned at the bottom. The circular new-chat icon glows and rotates. Desktop visitors can drag the divider or use its arrow keys to resize the panels; double-click or Home restores the default split. Width preference is remembered locally. Phone and email links open the visitor's own apps. Voice search depends on browser support and permission.",
       "status": "confirmed",
       "source": {
         "kind": "implementation_review",
