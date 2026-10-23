@@ -1,16 +1,135 @@
 {
   "schema_version": 1,
   "facts": [
-    {"id":"contact.phone","category":"contact","statement":"Jamiu can be contacted at +44 7344 383739 using the Call Jamiu telephone link.","status":"confirmed","source":{"kind":"portfolio","record_id":"about"}},
-    {"id":"contact.email","category":"contact","statement":"Jamiu's email is aabdulfataijamiu@gmail.com. Email Jamiu opens an editable email draft.","status":"confirmed","source":{"kind":"portfolio","record_id":"about"}},
-    {"id":"education.bsc","category":"education","statement":"Jamiu holds a completed BSc (Hons) Physics, studied 2018–2023.","status":"confirmed","source":{"kind":"linkedin","record_id":"education","url":"https://www.linkedin.com/in/jamiudesign/"}},
-    {"id":"education.pgd","category":"education","statement":"Jamiu holds a completed PGD in Aerospace Engineering from Air Force Institute of Technology (AFIT), Kaduna. Its dates and grade are unspecified. A PGD is a postgraduate diploma, not a master's degree.","status":"confirmed","source":{"kind":"owner_confirmation","record_id":"education","confirmed_on":"2026-10-21"}},
-    {"id":"education.msc","category":"education","statement":"Jamiu is currently studying MSc User Experience Design at the University of Brighton; it is ongoing, not an awarded degree.","status":"ongoing","source":{"kind":"portfolio","record_id":"education"}},
-    {"id":"portfolio.authorship","category":"portfolio-build","statement":"Jamiu designed this portfolio UI in Figma, then used AI-assisted vibe coding with ChatGPT/Codex to build and ship it. He directs the design, architecture, structure and implementation. Source code is maintained in GitHub and deployed on Vercel.","status":"confirmed","source":{"kind":"owner_confirmation","record_id":"portfolio-build","confirmed_on":"2026-10-21"}},
-    {"id":"portfolio.engineering","category":"portfolio-build","statement":"In this portfolio workflow, Jamiu applies engineering judgement to translating designs into working interfaces, structuring implementation and reusable components, and connecting interactions. AI coding assistance is acknowledged; neither an unaided manual build nor a separate development team is documented.","status":"confirmed","source":{"kind":"owner_confirmation","record_id":"portfolio-build","confirmed_on":"2026-10-21"}},
-    {"id":"availability.current","category":"availability","statement":"Current employment status, live availability, work eligibility and response time have not been confirmed. Historical project dates do not establish any of these.","status":"unknown","source":{"kind":"knowledge_boundary"}},
-    {"id":"ui.contact","category":"interface","statement":"The interface offers telephone and email links. It has no embedded video calls, live-presence indicator, booking calendar or contact form. A displayed button does not confirm a call, message or booking took place.","status":"confirmed","source":{"kind":"implementation_review"}},
-    {"id":"ui.navigation","category":"interface","statement":"Desktop chat opens docked on the left while visitors browse the portfolio and select project cards. Mobile chat is full-screen. The walkthrough and size-switch control have been removed.","status":"confirmed","source":{"kind":"implementation_review"}},
-    {"id":"ui.role-comparison","category":"interface","statement":"Chat options includes Compare a role: visitors can paste a job description or upload a PDF or Word document, review the extracted text and compare requirements with documented experience. This is an evidence comparison, not a hiring verdict.","status":"confirmed","source":{"kind":"implementation_review"}}
+    {
+      "id": "contact.phone",
+      "category": "contact",
+      "statement": "Jamiu can be contacted at +44 7344 383739 using the Call Jamiu telephone link.",
+      "status": "confirmed",
+      "source": {
+        "kind": "portfolio",
+        "record_id": "about"
+      }
+    },
+    {
+      "id": "contact.email",
+      "category": "contact",
+      "statement": "Jamiu's email is aabdulfataijamiu@gmail.com. Email Jamiu opens an editable email draft.",
+      "status": "confirmed",
+      "source": {
+        "kind": "portfolio",
+        "record_id": "about"
+      }
+    },
+    {
+      "id": "education.bsc",
+      "category": "education",
+      "statement": "Jamiu holds a completed BSc (Hons) Physics, studied 2018–2023.",
+      "status": "confirmed",
+      "source": {
+        "kind": "linkedin",
+        "record_id": "education",
+        "url": "https://www.linkedin.com/in/jamiudesign/"
+      }
+    },
+    {
+      "id": "education.pgd",
+      "category": "education",
+      "statement": "Jamiu holds a completed PGD in Aerospace Engineering from Air Force Institute of Technology (AFIT), Kaduna. Its dates and grade are unspecified. A PGD is a postgraduate diploma, not a master's degree.",
+      "status": "confirmed",
+      "source": {
+        "kind": "owner_confirmation",
+        "record_id": "education",
+        "confirmed_on": "2026-10-21"
+      }
+    },
+    {
+      "id": "education.msc",
+      "category": "education",
+      "statement": "Jamiu is currently studying MSc User Experience Design at the University of Brighton; it is ongoing, not an awarded degree.",
+      "status": "ongoing",
+      "source": {
+        "kind": "portfolio",
+        "record_id": "education"
+      }
+    },
+    {
+      "id": "portfolio.authorship",
+      "category": "portfolio-build",
+      "statement": "Jamiu designed the original portfolio UI in Figma, then used AI-assisted vibe coding with ChatGPT/Codex to build and ship it. He directed its design, architecture, structure and implementation. Source code is maintained in GitHub and deployed on Vercel.",
+      "status": "confirmed",
+      "source": {
+        "kind": "owner_confirmation",
+        "record_id": "portfolio-build",
+        "confirmed_on": "2026-10-21"
+      }
+    },
+    {
+      "id": "portfolio.engineering",
+      "category": "portfolio-build",
+      "statement": "In this portfolio workflow, Jamiu applies engineering judgement to translating designs into working interfaces, structuring implementation and reusable components, and connecting interactions. AI coding assistance is acknowledged; neither an unaided manual build nor a separate development team is documented.",
+      "status": "confirmed",
+      "source": {
+        "kind": "owner_confirmation",
+        "record_id": "portfolio-build",
+        "confirmed_on": "2026-10-21"
+      }
+    },
+    {
+      "id": "availability.current",
+      "category": "availability",
+      "statement": "Current employment status, live availability, work eligibility and response time have not been confirmed. Historical project dates do not establish any of these.",
+      "status": "unknown",
+      "source": {
+        "kind": "knowledge_boundary"
+      }
+    },
+    {
+      "id": "ui.contact",
+      "category": "interface",
+      "statement": "The interface offers telephone and email links. It has no embedded video calls, live-presence indicator, booking calendar or contact form. A displayed button does not confirm a call, message or booking took place.",
+      "status": "confirmed",
+      "source": {
+        "kind": "implementation_review"
+      }
+    },
+    {
+      "id": "ui.navigation",
+      "category": "interface",
+      "statement": "This portfolio's search homepage has a search bar, All / AI Mode / Images / Projects / Experience / Credentials tabs, AI answers, and links to existing project pages. On existing case-study pages the original left-docked chat remains available on desktop, and full-screen on mobile. The walkthrough and size-switch control have been removed.",
+      "status": "confirmed",
+      "source": {
+        "kind": "implementation_review"
+      }
+    },
+    {
+      "id": "ui.role-comparison",
+      "category": "interface",
+      "statement": "Chat options includes Compare a role: visitors can paste a job description or upload a PDF or Word document, review the extracted text and compare requirements with documented experience. This is an evidence comparison, not a hiring verdict.",
+      "status": "confirmed",
+      "source": {
+        "kind": "implementation_review"
+      }
+    },
+    {
+      "id": "ui.search-homepage",
+      "category": "interface",
+      "statement": "On the search homepage, typing and submitting a query searches portfolio content and requests an AI answer. AI Mode supports follow-up chat, New chat, and Compare a role. Images opens actual project images and the suit portrait. Result links navigate to full portfolio pages. Phone and email links open the visitor's own apps. Microphone search depends on browser support and permission.",
+      "status": "confirmed",
+      "source": {
+        "kind": "implementation_review",
+        "confirmed_on": "2026-10-23"
+      }
+    },
+    {
+      "id": "portfolio.search-layout",
+      "category": "portfolio-build",
+      "statement": "The search-style homepage preview was adapted from a Google search UI reference supplied by Jamiu and implemented with AI coding assistance, reusing his existing portfolio content, suit portrait and agent. The original portfolio UI was designed in Figma; a Figma design step has not been documented for this new search-layout preview.",
+      "status": "confirmed",
+      "source": {
+        "kind": "owner_request_and_implementation_review",
+        "confirmed_on": "2026-10-23"
+      }
+    }
   ]
 }

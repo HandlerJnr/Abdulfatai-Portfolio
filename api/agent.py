@@ -379,6 +379,7 @@ def normalise_page_context(value):
     return {
         "page_id": page_id if record else "",
         "pathname": pathname,
+        "interface": "search" if raw.get("interface") == "search" else "portfolio",
         "hash": clip(raw.get("hash"), 120),
         "title": clip(raw.get("title"), 180),
         "record_title": record.get("title", "") if record else clip(raw.get("record_title"), 180),
