@@ -26,7 +26,15 @@
  function description(record,query){const tokens=terms(query);if(!tokens.length)return record.summary||'';const lines=String(record.text||'').split('\n').filter(line=>line.length>45&&!/^https?:/.test(line));const line=lines.find(line=>tokens.some(token=>line.toLowerCase().includes(token)))||record.summary||'';return line.length>235?line.slice(0,232).replace(/\s+\S*$/,'')+'…':line;}
  function recordUrl(record){if(record.id==='about')return '/about/';if(record.id==='ai-practice')return '/experience/';return record.url||'/works/';}
  function sourceRow(label,url,initial='J'){const row=node('div',undefined,'result-source');const icon=node('span',initial,'result-favicon');if(initial==='J'){icon.textContent='';const img=node('img');img.src='/assets/db99cb95c28524de.png';img.alt='';icon.append(img);}const copy=node('div',undefined,'result-source-copy');copy.append(node('div',label,'result-site'),node('div',url,'result-url'));row.append(icon,copy);return row;}
- function resultCard(record){const article=node('article',undefined,'result');const url=recordUrl(record);const external=String(url).startsWith('http');const display=external?new URL(url).hostname:'Portfolio'+(url==='/works/'?'':' › '+url.split('/').filter(Boolean).join(' › '));article.append(sourceRow('Jamiu Abdulfatai',display));if(record.image){const img=node('img',undefined,'result-image');img.src=record.image;img.alt='';img.loading='lazy';article.append(img);}const heading=node('h2');heading.append(link(record.id==='about'?'Jamiu Abdulfatai — Product Designer':record.title,url));article.append(heading,node('p',description(record,state.query),'result-description'));if(record.id==='about'){const links=node('div',undefined,'result-sitelinks');links.append(link('Projects','/works/'),link('Credentials','/credentials/'),link('LinkedIn','https://www.linkedin.com/in/jamiudesign/'));article.append(links);}return article;}
+ function resultCard(record){
+  const article=node('article',undefined,'result');const url=recordUrl(record);const project=url.startsWith('/work/');const visual=project&&state.tab==='projects';
+  if(visual)article.classList.add('visual-result');if(project&&normalPath(url)===state.page)article.classList.add('is-selected');
+  const display=String(url).startsWith('http')?new URL(url).hostname:'Portfolio'+(url==='/works/'?'':' › '+url.split('/').filter(Boolean).join(' › '));article.append(sourceRow('Jamiu Abdulfatai',display));
+  if(record.image){const media=link('',url,'result-media');media.setAttribute('aria-label','View '+record.title);const img=node('img',undefined,'result-image');img.src=record.image;img.alt='';img.loading='lazy';img.decoding='async';media.append(img);article.append(media);}
+  const heading=node('h2');heading.append(link(record.id==='about'?'Jamiu Abdulfatai — Product Designer':record.title,url));article.append(heading,node('p',description(record,state.query),'result-description'));
+  if(project){const first=pageCatalog[normalPath(url)]?.blocks.find(b=>b.type==='paragraph');if(first&&first.text.length<110)article.append(node('div',first.text+(normalPath(url)===state.page?' · Viewing now':''),'result-meta'));}
+  if(record.id==='about'){const links=node('div',undefined,'result-sitelinks');links.append(link('Projects','/works/'),link('Credentials','/credentials/'),link('LinkedIn','https://www.linkedin.com/in/jamiudesign/'));article.append(links);}return article;
+ }
  function emptyResults(){const box=node('div',undefined,'empty-state');box.append(node('strong','No portfolio pages matched this search.'),node('span','Try a project name or a skill. You can also ask the AI guide in your own words.'));const button=node('button','See all projects');button.type='button';button.addEventListener('click',()=>{state.query=DEFAULT_QUERY;setTab('projects');$('search-input').value=state.query;writeRoute();render();});box.append(node('br'),button);return box;}
  function renderResults(){const host=$('search-results');host.replaceChildren();if(!state.ready){host.append(node('div','Loading the portfolio…','loading-state'));return;}if(state.error){const box=node('div',undefined,'empty-state');box.append(node('strong','The portfolio couldn’t load.'),node('span','Please refresh to try again.'));host.append(box);return;}
   if(state.tab==='ai')return;
@@ -38,7 +46,7 @@
   let results=rank(state.query,candidates);
   if(state.tab==='all'&&broadQuery(state.query)){const first=state.records.find(r=>r.id==='about');results=[first,...candidates.filter(r=>r.id!=='about')].filter(Boolean);}
   if(!results.length){host.append(emptyResults());return;}
-  const list=state.tab==='all'?results.slice(0,8):results;for(const record of list)host.append(resultCard(record));
+  const list=state.tab==='all'?results.slice(0,8):results;if(state.tab==='projects'){const intro=node('div',undefined,'project-results-intro');intro.append(node('h2','The work, in focus'),node('p',list.length+' projects · Select one to explore the decisions behind it.'));host.append(intro);}for(const record of list)host.append(resultCard(record));
   if(state.tab==='all'&&broadQuery(state.query)){const social=node('article',undefined,'result');social.append(sourceRow('LinkedIn','linkedin.com › in › jamiudesign','in'));const h=node('h2');h.append(link('Jamiu Abdulfatai — LinkedIn','https://www.linkedin.com/in/jamiudesign/'));social.append(h,node('p','Professional experience, education, recommendations and updates.','result-description'));host.append(social);}
   announce(list.length+' portfolio results.');
  }
@@ -121,24 +129,26 @@
   const ask=node('button','Ask the AI about this '+(state.page.startsWith('/work/')?'project':'page'),'text-button reader-ask');ask.type='button';ask.addEventListener('click',()=>{setTab('ai');$('follow-up-input').placeholder='Ask about '+page.title+'…';$('follow-up-input').focus({preventScroll:true});});content.append(ask);
   if(page.image){const cover=node('button',undefined,'reader-image');cover.type='button';cover.setAttribute('aria-label','Expand '+page.title);const image=node('img');image.src=page.image;image.alt=page.title;cover.append(image);cover.addEventListener('click',()=>openImage({title:page.title,image:page.image,url:state.page},cover));content.append(cover);}
   const toc=node('nav',undefined,'reader-toc');toc.setAttribute('aria-label','On this page');
+  const projectPage=state.page.startsWith('/work/');const gallery=node('div',undefined,'reader-gallery');
   let section=0;
   for(const block of page.blocks){
    if(block.type==='heading'){
     if(block.text===page.title||block.text==='[More works]')continue;
-    const heading=node('h3',block.text);heading.id='page-section-'+section++;content.append(heading);
+    const heading=node('h3',block.text.replace(/^\[|\]$/g,''));heading.id='page-section-'+section++;content.append(heading);
     const jump=node('button',block.text,'text-button');jump.type='button';jump.addEventListener('click',()=>heading.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));toc.append(jump);
    }else if(block.type==='paragraph')content.append(...richText(block.text).childNodes);
    else if(block.type==='image'){if(block.src===page.image)continue;
-    const button=node('button',undefined,'reader-image');button.type='button';button.setAttribute('aria-label','Expand '+block.alt);const img=node('img');img.src=block.src;img.alt=block.alt;img.loading='lazy';button.append(img);button.addEventListener('click',()=>openImage({title:block.alt,image:block.src,url:state.page},button));content.append(button);
+    const button=node('button',undefined,'reader-image');button.type='button';button.setAttribute('aria-label','Expand '+block.alt);const img=node('img');img.src=block.src;img.alt=block.alt;img.loading='lazy';button.append(img);button.addEventListener('click',()=>openImage({title:block.alt,image:block.src,url:state.page},button));if(projectPage){const figure=node('figure');figure.append(button,node('figcaption',block.alt.replace(/^Preview /,'')));gallery.append(figure);}else content.append(button);
    }else if(block.type==='link'){
     let href=block.href;try{const u=new URL(href,location.origin);if(u.hostname==='jamiudesigns.vercel.app')href=u.pathname+u.search+u.hash;}catch{}
     if(/\.(jpg|png|webp)$/i.test(href))continue;
     content.append(link(block.text+' ↗',href,'reader-resource'));
    }
   }
+  if(gallery.childElementCount){content.append(node('h3','Explore the interface'),gallery);}
   if(toc.childElementCount>1){const details=node('details',undefined,'reader-contents');details.append(node('summary','On this page'),toc);content.insertBefore(details,ask.nextSibling);}
   const related=node('nav',undefined,'reader-related');related.setAttribute('aria-label','More portfolio pages');related.append(node('h3','Keep exploring'));
-  for(const other of state.records.filter(r=>r.url?.startsWith('/work/')&&r.id!==page.id).slice(0,3))related.append(link(other.title,recordUrl(other)));
+  for(const other of state.records.filter(r=>r.url?.startsWith('/work/')&&r.id!==page.id).slice(0,3)){const card=link('',recordUrl(other),'related-work');const img=node('img');img.src=other.image;img.alt='';img.loading='lazy';const copy=node('span');copy.append(node('strong',other.title),node('span',other.summary));card.append(img,copy);related.append(card);}
   content.append(related);reader.append(content);panel.scrollTop=0;
  }
  document.addEventListener('click',event=>{
