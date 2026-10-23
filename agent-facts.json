@@ -130,16 +130,6 @@
         "kind": "owner_request_and_implementation_review",
         "confirmed_on": "2026-10-23"
       }
-    },
-    {
-      "id": "ui.role-stickers",
-      "category": "interface",
-      "statement": "The suit portrait has five colourful, movable stickers: Product Designer, UX/UI Designer, Technical Director, AI Model Evaluator, and Design Systems. Visitors can drag them, click or press Enter to turn them, use arrow keys to move them, and choose Shuffle roles for a new arrangement. On phones, Play with the roles opens the interactive portrait; Close or Escape returns to the portfolio. Stickers are playful labels for documented roles and practice areas, not evidence of current employment or live availability.",
-      "status": "confirmed",
-      "source": {
-        "kind": "implementation_review",
-        "confirmed_on": "2026-10-23"
-      }
     }
   ]
 }

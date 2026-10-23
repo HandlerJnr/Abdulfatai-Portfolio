@@ -173,35 +173,6 @@
  divider.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home'].includes(event.key))return;event.preventDefault();applySplit(event.key==='Home'?39:split+(event.key==='ArrowLeft'?-2:2),true);});
  window.addEventListener('resize',()=>{if(innerWidth>740)applySplit(split);});if(innerWidth>740)applySplit(split);
 
-
- // A small, local playground on the portrait. Positions never leave the panel.
- const roleLayer=$('role-playground');
- const roleLabels=[['Product Designer','#c8b6ff'],['UX/UI Designer','#a9e4ca'],['Technical Director','#ffd19a'],['AI Model Evaluator','#abd8ff'],['Design Systems','#f5b8d4']];
- const roleItems=[];const slots=[[.03,.08],[.92,.23],[.03,.58],[.94,.75],[.26,.91]];let roleZ=3;
- function roleBounds(item){return {w:Math.max(0,roleLayer.clientWidth-item.el.offsetWidth-32),h:Math.max(0,roleLayer.clientHeight-item.el.offsetHeight-70)};}
- function placeRole(item,x,y){const b=roleBounds(item);item.x=Math.max(16,Math.min(b.w+16,x));item.y=Math.max(16,Math.min(b.h+16,y));item.el.style.left=item.x+'px';item.el.style.top=item.y+'px';}
- function shuffleRoles(){for(let i=0;i<roleItems.length;i++){const item=roleItems[i],b=roleBounds(item),slot=slots[i];item.angle=Math.round((Math.random()-.5)*24);item.el.style.setProperty('--role-angle',item.angle+'deg');placeRole(item,16+b.w*Math.max(0,Math.min(1,slot[0]+(Math.random()-.5)*.08)),16+b.h*Math.max(0,Math.min(1,slot[1]+(Math.random()-.5)*.08)));}}
- for(const [label,color] of roleLabels){
-  const el=node('button',label,'role-sticker');el.type='button';el.style.setProperty('--role-color',color);el.setAttribute('aria-describedby','role-play-help');el.setAttribute('aria-label',label+' — movable role sticker');roleLayer.append(el);
-  const item={el,x:16,y:16,angle:0,drag:null,suppress:false};roleItems.push(item);
-  el.addEventListener('pointerdown',event=>{if(event.button!==0||item.drag)return;event.preventDefault();el.focus({preventScroll:true});el.setPointerCapture(event.pointerId);item.drag={id:event.pointerId,x:event.clientX,y:event.clientY,startX:item.x,startY:item.y};item.suppress=false;el.style.zIndex=String(++roleZ);el.classList.add('is-grabbed');});
-  el.addEventListener('pointermove',event=>{const d=item.drag;if(!d||d.id!==event.pointerId)return;const dx=event.clientX-d.x,dy=event.clientY-d.y;if(Math.hypot(dx,dy)>3)item.suppress=true;placeRole(item,d.startX+dx,d.startY+dy);});
-  const finish=event=>{if(!item.drag||item.drag.id!==event.pointerId)return;item.drag=null;el.classList.remove('is-grabbed');if(el.hasPointerCapture(event.pointerId))el.releasePointerCapture(event.pointerId);};
-  el.addEventListener('pointerup',finish);el.addEventListener('pointercancel',finish);el.addEventListener('lostpointercapture',()=>{item.drag=null;el.classList.remove('is-grabbed');});
-  el.addEventListener('click',event=>{if(item.suppress&&event.detail!==0){item.suppress=false;return;}item.suppress=false;item.angle+=15;el.style.setProperty('--role-angle',item.angle+'deg');});
-  el.addEventListener('keydown',event=>{const step=event.shiftKey?30:10;const moves={ArrowLeft:[-step,0],ArrowRight:[step,0],ArrowUp:[0,-step],ArrowDown:[0,step]};if(moves[event.key]){event.preventDefault();const [dx,dy]=moves[event.key];placeRole(item,item.x+dx,item.y+dy);}});
- }
- $('shuffle-roles').addEventListener('click',shuffleRoles);
- const roleObserver=new ResizeObserver(()=>{if(!roleLayer.clientWidth)return;if(!roleLayer.dataset.arranged){roleLayer.dataset.arranged='true';shuffleRoles();}else for(const item of roleItems)placeRole(item,item.x,item.y);});roleObserver.observe(roleLayer);
-
-
- const mobileRolePlay=$('mobile-role-play'),closeRolePlay=$('close-role-play'),portraitPanel=document.querySelector('.portrait-panel');let previousPortraitOverflow='';
- function closePortraitPlay(){if(!portraitPanel.classList.contains('is-playing'))return;portraitPanel.classList.remove('is-playing');portraitPanel.removeAttribute('role');portraitPanel.removeAttribute('aria-modal');document.querySelector('.search-panel').inert=false;$('panel-divider').inert=false;document.body.style.overflow=previousPortraitOverflow;mobileRolePlay.focus({preventScroll:true});}
- mobileRolePlay.addEventListener('click',()=>{previousPortraitOverflow=document.body.style.overflow;document.body.style.overflow='hidden';portraitPanel.classList.add('is-playing');portraitPanel.setAttribute('role','dialog');portraitPanel.setAttribute('aria-modal','true');document.querySelector('.search-panel').inert=true;$('panel-divider').inert=true;shuffleRoles();closeRolePlay.focus({preventScroll:true});});
- closeRolePlay.addEventListener('click',closePortraitPlay);
- document.addEventListener('keydown',event=>{if(!portraitPanel.classList.contains('is-playing'))return;if(event.key==='Escape')closePortraitPlay();if(event.key==='Tab'){const targets=[closeRolePlay,...roleItems.map(item=>item.el),$('shuffle-roles'),...portraitPanel.querySelectorAll('.portrait-actions a')];const current=targets.indexOf(document.activeElement);if(event.shiftKey&&current===0){event.preventDefault();targets.at(-1).focus();}else if(!event.shiftKey&&current===targets.length-1){event.preventDefault();targets[0].focus();}}});
- window.addEventListener('resize',()=>{if(innerWidth>740&&portraitPanel.classList.contains('is-playing'))closePortraitPlay();});
-
  load();
 })();
 
