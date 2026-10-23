@@ -89,6 +89,31 @@
       "source": "/work/texture-generator",
       "destination": "/work/reporting-portal",
       "permanent": true
+    },
+    {
+      "source": "/search/ai",
+      "destination": "/search/experience/",
+      "permanent": true
+    },
+    {
+      "source": "/search/work/pay4me",
+      "destination": "/search/work/radius-pay4me",
+      "permanent": true
+    },
+    {
+      "source": "/search/work/vista-itss",
+      "destination": "/search/work/vista-digital-banking",
+      "permanent": true
+    },
+    {
+      "source": "/search/work/archi-tek",
+      "destination": "/search/work/architek",
+      "permanent": true
+    },
+    {
+      "source": "/search/work/project-management-dashboard",
+      "destination": "/search/work/reporting-portal",
+      "permanent": true
     }
   ],
   "functions": {

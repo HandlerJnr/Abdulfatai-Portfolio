@@ -1,0 +1,3641 @@
+{
+  "/work/vista-digital-banking/": {
+    "id": "vista-itss",
+    "title": "Vista Digital Banking",
+    "summary": "One shared UI language, adapted for four Vista subsidiaries.",
+    "image": "/assets/vista/main.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Digital banking · 2022–2024"
+      },
+      {
+        "type": "heading",
+        "text": "Vista Digital Banking"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Vista needed a recognisable banking experience across The Gambia, Guinea, Sierra Leone and Burkina Faso. The UI had to work in English and French while accommodating each subsidiary’s currency, regulatory copy and banking requirements. I helped design corporate and retail banking journeys across the four subsidiaries and built a shared design system that allowed local differences. I designed Vista’s debit card and the screens for its loan application flow. My work also covered onboarding, account views, transfers and approvals, alongside campaign graphics and HTML/CSS implementation review."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The banking design shipped across four localised subsidiaries using one shared system. The work brought a consistent Vista interface to English- and French-speaking markets while preserving the local information customers need. ITSS’s Most Outstanding Intern of the Year award names my Vista Bank UI/UX work. The four-subsidiary rollout is delivery scope; post-launch usage and task-completion results were not available to me."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Design systems HTML/CSS"
+      },
+      {
+        "type": "paragraph",
+        "text": "Delivery scope"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 West African markets"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Localised subsidiaries"
+      },
+      {
+        "type": "paragraph",
+        "text": "2 Languages"
+      },
+      {
+        "type": "paragraph",
+        "text": "Delivery scope: four subsidiaries, English and French, with local currency and regulatory copy. Supported by the project record and ITSS recognition."
+      },
+      {
+        "type": "link",
+        "href": "https://vistabankgroup.com/",
+        "text": "Live website"
+      },
+      {
+        "type": "link",
+        "href": "https://play.google.com/store/apps/details?id=com.temenos.OnlineBanking",
+        "text": "Google Play"
+      },
+      {
+        "type": "link",
+        "href": "https://apps.apple.com/app/vistabankgroup-vistaonline/id6720755333",
+        "text": "App Store"
+      },
+      {
+        "type": "paragraph",
+        "text": "Vista needed a recognisable banking experience across The Gambia, Guinea, Sierra Leone and Burkina Faso. The UI had to work in English and French while accommodating each subsidiary’s currency, regulatory copy and banking requirements."
+      },
+      {
+        "type": "paragraph",
+        "text": "UI/UX Designer & Front-End Developer · ITSS · May 2022–April 2024"
+      },
+      {
+        "type": "paragraph",
+        "text": "I helped design corporate and retail banking journeys across the four subsidiaries and built a shared design system that allowed local differences. I designed Vista’s debit card and the screens for its loan application flow. My work also covered onboarding, account views, transfers and approvals within the Temenos Infinity implementation, alongside campaign graphics and HTML/CSS implementation review."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep the design language consistent across subsidiaries. I used shared components and interaction patterns so each local experience remained recognisably Vista, while allowing language, currency and regulatory copy to vary."
+      },
+      {
+        "type": "paragraph",
+        "text": "Make language available at sign-in. English and French selection sits at the start of the journey, rather than being left inside settings after a customer has already had to log in."
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep local and company context visible. Currency stays with account balances, and the active legal entity appears beneath the user’s name so corporate users can see which company they are acting for."
+      },
+      {
+        "type": "paragraph",
+        "text": "Adapt the shared system to corporate banking. Pending approvals have their own counts and prominent placement. Account sorting, filters and custom views support people managing multiple accounts."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The banking design shipped across four localised subsidiaries using one shared system. The work brought a consistent Vista interface to English- and French-speaking markets while preserving the local information customers need."
+      },
+      {
+        "type": "paragraph",
+        "text": "ITSS’s Most Outstanding Intern of the Year award names my Vista Bank UI/UX work. The four-subsidiary rollout is delivery scope; post-launch usage and task-completion results were not available to me."
+      },
+      {
+        "type": "heading",
+        "text": "Contribution & evidence"
+      },
+      {
+        "type": "paragraph",
+        "text": "At ITSS, I helped adapt one Vista UI design language for four subsidiaries as part of the Temenos Infinity implementation. I designed Vista’s debit card and the screens for its loan application flow. Shared components and interaction patterns provided consistency; language, currency and local requirements shaped each subsidiary’s experience."
+      },
+      {
+        "type": "heading",
+        "text": "Recognition tied to the work"
+      },
+      {
+        "type": "paragraph",
+        "text": "“Your contribution to the Infinity UI/UX design for the Vista Bank Project and Jasper Report Design template differentiated you from your peers.” ITSS · Most Outstanding Intern of the Year, Nigeria Office 6 November 2023"
+      },
+      {
+        "type": "paragraph",
+        "text": "The letter recognises my Infinity UI/UX and report-template contributions, together with my commitment and teamwork."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/itss-most-outstanding-intern.pdf",
+        "text": "Read the ITSS recognition letter"
+      },
+      {
+        "type": "heading",
+        "text": "What is shown here"
+      },
+      {
+        "type": "paragraph",
+        "text": "Selected public-facing imagery is shown. Internal implementation screens are omitted to respect confidentiality. The images illustrate the product context; the letter supports the contribution described here."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/vista/main.webp",
+        "alt": "Vista Bank splash screen"
+      },
+      {
+        "type": "paragraph",
+        "text": "A shared Vista visual identity supports a consistent starting point across four subsidiaries."
+      },
+      {
+        "type": "image",
+        "src": "/assets/vista/dashboard.webp",
+        "alt": "Preview Vista Bank mobile dashboard"
+      },
+      {
+        "type": "image",
+        "src": "/assets/vista/signin.webp",
+        "alt": "Preview Vista Bank sign-in screen"
+      }
+    ]
+  },
+  "/work/radius-pay4me/": {
+    "id": "pay4me",
+    "title": "Radius / Pay4Me",
+    "summary": "Designing cross-border payments for the student and the person paying.",
+    "image": "/assets/pay4me/main.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Cross-border payments · 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Radius / Pay4Me"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Education and immigration payments have deadlines. A parent or relative may be paying for a student in another country, using another currency. I designed sponsored payments, verification, currency visibility, transaction tracking and support. On the website, I organised the information families need before trusting the service enough to install the app."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The design connects the website’s trust-building role to the mobile payment journey. Sponsored payments, verification and transaction status are treated as core parts of that experience. Radius, formerly Pay4Me, reports more than 120,000 registered users, more than 1,500 five-star reviews and average delivery of six hours on business days. These are company-level figures, not results attributed to my design work. Read the published figures ."
+      },
+      {
+        "type": "link",
+        "href": "https://withradius.com/",
+        "text": "Read the published figures"
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Payment journeys"
+      },
+      {
+        "type": "paragraph",
+        "text": "Company reported"
+      },
+      {
+        "type": "paragraph",
+        "text": "120,000 Registered users, company-reported"
+      },
+      {
+        "type": "paragraph",
+        "text": "1,500 Five-star reviews"
+      },
+      {
+        "type": "paragraph",
+        "text": "6 hours Average delivery on business days"
+      },
+      {
+        "type": "paragraph",
+        "text": "Radius publishes these as minimum counts (120K+ users and 1,500+ reviews) and an average delivery time. They describe the company, not a measured uplift from my design work. Source: Radius published figures, checked 19 October 2026"
+      },
+      {
+        "type": "link",
+        "href": "https://withradius.com/",
+        "text": "Source: Radius published figures, checked 19 October 2026"
+      },
+      {
+        "type": "link",
+        "href": "https://withradius.com/",
+        "text": "Live website"
+      },
+      {
+        "type": "link",
+        "href": "https://play.google.com/store/apps/details?id=app.pay4me.app",
+        "text": "Google Play"
+      },
+      {
+        "type": "link",
+        "href": "https://apps.apple.com/app/radius-tuition-fee-payments/id1627285676",
+        "text": "App Store"
+      },
+      {
+        "type": "paragraph",
+        "text": "Education and immigration payments have deadlines. A parent or relative may be paying for a student in another country, using another currency."
+      },
+      {
+        "type": "paragraph",
+        "text": "Product designer · mobile payment experience and marketing site · 2025"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed sponsored payments, verification, currency visibility, transaction tracking and support. On the website, I organised the information families need before trusting the service enough to install the app."
+      },
+      {
+        "type": "paragraph",
+        "text": "A personal note"
+      },
+      {
+        "type": "paragraph",
+        "text": "This project changed how I think about payment UX. Sometimes the person making the payment isn’t the person whose future depends on it."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Give the sponsor a clear payment route. I treated the payer and student as different people in the journey, rather than forcing sponsored payments into a personal transfer."
+      },
+      {
+        "type": "paragraph",
+        "text": "Put payment constraints before commitment. Currency appears with the balance, and verification status appears with identity, so both are visible before a payment starts."
+      },
+      {
+        "type": "paragraph",
+        "text": "Build trust before the download. The site uses named institutions, coverage, student testimonials and FAQs, followed by a QR-code handoff to the app."
+      },
+      {
+        "type": "paragraph",
+        "text": "Use the language of the task. Tuition, SEVIS, WES and visa payments are named directly, with tracking and support easy to reach."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The design connects the website’s trust-building role to the mobile payment journey. Sponsored payments, verification and transaction status are treated as core parts of that experience."
+      },
+      {
+        "type": "paragraph",
+        "text": "Radius, formerly Pay4Me, reports more than 120,000 registered users, more than 1,500 five-star reviews and average delivery of six hours on business days. These are company-level figures, not results attributed to my design work. Read the published figures ."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/pay4me/main.webp",
+        "alt": "Pay4Me mobile website with two ladies"
+      },
+      {
+        "type": "paragraph",
+        "text": "The website introduces education payments and builds confidence before the app download."
+      },
+      {
+        "type": "image",
+        "src": "/assets/pay4me/desktop.webp",
+        "alt": "Preview Pay4Me desktop landing page"
+      },
+      {
+        "type": "image",
+        "src": "/assets/pay4me/laptop.webp",
+        "alt": "Preview Pay4Me laptop interface"
+      },
+      {
+        "type": "image",
+        "src": "/assets/pay4me/mobile.webp",
+        "alt": "Preview Pay4Me mobile payment experience"
+      }
+    ]
+  },
+  "/work/horal/": {
+    "id": "horal",
+    "title": "Horal",
+    "summary": "Making marketplace safety visible from checkout to payout.",
+    "image": "/assets/horal/main.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Marketplace · 2026"
+      },
+      {
+        "type": "heading",
+        "text": "Horal"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Buyers need to trust independent sellers they may never meet. Sellers need the tools to fulfil those orders reliably. I designed the buyer and seller journeys together: product discovery, store verification, checkout, escrow status and chat, alongside seller onboarding, KYC, inventory, orders and payouts."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horal is live on the web, iOS and Android. The released product includes verified stores, escrow, chat, seller inventory, order management and payouts. Live releases confirm delivery. The published download count describes product adoption; it does not measure the effect of one design decision."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Seller operations Design systems"
+      },
+      {
+        "type": "paragraph",
+        "text": "Published product"
+      },
+      {
+        "type": "paragraph",
+        "text": "3 Live platforms"
+      },
+      {
+        "type": "paragraph",
+        "text": "2-sided Marketplace"
+      },
+      {
+        "type": "paragraph",
+        "text": "100 Google Play download threshold"
+      },
+      {
+        "type": "paragraph",
+        "text": "Google Play lists Horal in the 100+ download band. This is an app-store threshold, not an exact total or a measured design uplift. Source: Horal on Google Play, checked 19 October 2026"
+      },
+      {
+        "type": "link",
+        "href": "https://play.google.com/store/apps/details?id=ng.horal.app",
+        "text": "Source: Horal on Google Play, checked 19 October 2026"
+      },
+      {
+        "type": "link",
+        "href": "https://www.horal.ng/",
+        "text": "Live website"
+      },
+      {
+        "type": "link",
+        "href": "https://play.google.com/store/apps/details?id=ng.horal.app",
+        "text": "Google Play"
+      },
+      {
+        "type": "link",
+        "href": "https://apps.apple.com/app/horal/id6759718557",
+        "text": "App Store"
+      },
+      {
+        "type": "paragraph",
+        "text": "Buyers need to trust independent sellers they may never meet. Sellers need the tools to fulfil those orders reliably."
+      },
+      {
+        "type": "paragraph",
+        "text": "End-to-end product designer · mobile app and website · 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed the buyer and seller journeys together: product discovery, store verification, checkout, escrow status and chat, alongside seller onboarding, KYC, inventory, orders and payouts."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Show who the buyer is dealing with. I placed verification at store level, where buyers assess the seller before paying."
+      },
+      {
+        "type": "paragraph",
+        "text": "Explain what happens to the payment. I designed escrow around visible stages, from protected payment through delivery confirmation to release of funds."
+      },
+      {
+        "type": "paragraph",
+        "text": "Connect shopping to fulfilment. Seller stock, orders and wallet tools follow the same transaction lifecycle as the buyer journey."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horal is live on the web, iOS and Android. The released product includes verified stores, escrow, chat, seller inventory, order management and payouts."
+      },
+      {
+        "type": "paragraph",
+        "text": "Live releases confirm delivery. The published download count describes product adoption; it does not measure the effect of one design decision."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/horal/main.webp",
+        "alt": "Horal mobile marketplace mockup beside an orange X"
+      },
+      {
+        "type": "paragraph",
+        "text": "Buyer discovery and trust signals form the entry into the marketplace."
+      },
+      {
+        "type": "image",
+        "src": "/assets/horal/mobile.webp",
+        "alt": "Preview mobile product browsing"
+      },
+      {
+        "type": "image",
+        "src": "/assets/horal/desktop.webp",
+        "alt": "Preview desktop marketplace"
+      }
+    ]
+  },
+  "/work/bizinc/": {
+    "id": "bizinc",
+    "title": "Bizinc",
+    "summary": "One business profile, with clear control for owners and customers.",
+    "image": "/assets/bizinc/main.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Business marketplace · 2024–2026"
+      },
+      {
+        "type": "heading",
+        "text": "Bizinc"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "A business owner needs to manage their identity, services and offers. A customer needs to decide whether that business is right for them. Both journeys meet at the same profile. I mapped owner and customer journeys, designed Business Profile 2.0, marketplace and booking interfaces, and produced reusable components and development handoff. I later led designers and interns as UI/UX Manager."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Bizinc is live. The CEO reference documents my role in rebuilding the platform interface and my progression to UI/UX Manager. Profile requirements, journey maps, wireframes and components show the design work behind it. Project records report +38% retention, +45% dashboard activation, +23% customer growth and +12% service activity during the redesign period. Baselines and measurement methods are unpublished, so these are reported product results rather than isolated effects of my changes."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Journey mapping UI design Design systems Design leadership Handoff"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reported project results"
+      },
+      {
+        "type": "paragraph",
+        "text": "+38% Retention"
+      },
+      {
+        "type": "paragraph",
+        "text": "+45% Dashboard activation"
+      },
+      {
+        "type": "paragraph",
+        "text": "+23% Customer growth"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reported during the redesign period; also +12% service activity. Baselines, dates and measurement methods are unpublished, and individual design causality was not isolated."
+      },
+      {
+        "type": "link",
+        "href": "https://www.bizinc.io",
+        "text": "Live website"
+      },
+      {
+        "type": "paragraph",
+        "text": "A business owner needs to manage their identity, services and offers. A customer needs to decide whether that business is right for them. Both journeys meet at the same profile."
+      },
+      {
+        "type": "paragraph",
+        "text": "UI/UX Intern Product Designer UI/UX Manager · April 2024–May 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "I mapped owner and customer journeys, designed Business Profile 2.0, marketplace and booking interfaces, and produced reusable components and development handoff. I later led designers and interns as UI/UX Manager."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Separate management from the public profile. I mapped Business View and Client View separately, then brought them into one shared structure so owner controls stayed out of customer navigation."
+      },
+      {
+        "type": "paragraph",
+        "text": "Help customers compare before opening a profile. Discovery cards include service information, location, distance and open-now status alongside the route to the business profile."
+      },
+      {
+        "type": "paragraph",
+        "text": "Connect proposed AI discovery to a real next step. The Bizzy proposal moves from a service request to nearby businesses, availability and booking. It remains proposed work; a prototype confirmation is not a live booking integration."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "Bizinc is live. The CEO reference documents my role in rebuilding the platform interface and my progression to UI/UX Manager. Profile requirements, journey maps, wireframes and components show the design work behind it."
+      },
+      {
+        "type": "paragraph",
+        "text": "Project records report +38% retention, +45% dashboard activation, +23% customer growth and +12% service activity during the redesign period. Baselines and measurement methods are unpublished, so these are reported product results rather than isolated effects of my changes."
+      },
+      {
+        "type": "heading",
+        "text": "Contribution & evidence"
+      },
+      {
+        "type": "paragraph",
+        "text": "I redesigned Bizinc’s platform interface and later led designers and interns as UI/UX Manager. My project work connected business-owner controls with customer-facing profiles, discovery and booking journeys."
+      },
+      {
+        "type": "paragraph",
+        "text": "“One of his earliest contributions was the complete re-envisioning and redesign of our digital platform.” Michael Fulton II · Chief Executive Officer, Bizinc 9 December 2025"
+      },
+      {
+        "type": "paragraph",
+        "text": "Michael’s letter describes rebuilding the interface from scratch, aligning design work with business goals, and my progression from UI/UX Intern to UI/UX Designer and UI/UX Manager. It also recognises my leadership and delivery under pressure."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/bizinc-ceo-reference.pdf",
+        "text": "Read the full recommendation"
+      },
+      {
+        "type": "heading",
+        "text": "What the reference supports"
+      },
+      {
+        "type": "paragraph",
+        "text": "This reference supports my contribution and progression. The reported product metrics elsewhere in this project come from project records; the letter does not establish those figures or isolate the effect of individual design changes."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/bizinc/main.webp",
+        "alt": "Bizinc login and sign-up entry"
+      },
+      {
+        "type": "paragraph",
+        "text": "Sign-in and account creation are the starting points for the business and customer journeys."
+      },
+      {
+        "type": "image",
+        "src": "/assets/bizinc/discover.webp",
+        "alt": "Preview Bizinc business discovery"
+      },
+      {
+        "type": "image",
+        "src": "/assets/bizinc/nearby.webp",
+        "alt": "Preview Bizinc nearby businesses and map"
+      },
+      {
+        "type": "image",
+        "src": "/assets/bizinc/profile.webp",
+        "alt": "Preview Bizinc business profile and services"
+      },
+      {
+        "type": "image",
+        "src": "/assets/bizinc/manage.webp",
+        "alt": "Preview Bizinc business profile management"
+      }
+    ]
+  },
+  "/work/kremor-ai/": {
+    "id": "kremor-ai",
+    "title": "Kremor AI",
+    "summary": "Helping people turn a clothing idea into a design that can move toward production.",
+    "image": "/assets/kremor/dashboard.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "AI & commerce · 2024–2026"
+      },
+      {
+        "type": "heading",
+        "text": "Kremor AI"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Someone may know the occasion, textile or feeling they want without knowing how to prompt an AI tool. The generated idea also needs a route into the storefront and garment-production workflow. I led design across the generative workspace, storefront and role-based operations, using one shared system. I also worked on model benchmarking, annotation and qualitative evaluation across complex AI interaction tasks."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Three connected product surfaces share one design system. The founder’s reference confirms my combined UI/UX design and AI-evaluation work. This evaluation work concerned AI outputs, rather than participant usability sessions. The workshop role and permissions model still needs validation."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX research UI design AI evaluation Design systems"
+      },
+      {
+        "type": "paragraph",
+        "text": "Design & evaluation scope"
+      },
+      {
+        "type": "paragraph",
+        "text": "3 Connected surfaces"
+      },
+      {
+        "type": "paragraph",
+        "text": "5 Operational roles"
+      },
+      {
+        "type": "paragraph",
+        "text": "AI evaluation Benchmarking and output review"
+      },
+      {
+        "type": "paragraph",
+        "text": "Three designed surfaces and five operational roles. The founder’s reference supports my design and AI-evaluation responsibilities. Workshop permissions remain to be validated. Source: founder’s reference"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/kremor-founder-reference.pdf",
+        "text": "Source: founder’s reference"
+      },
+      {
+        "type": "link",
+        "href": "https://kremor-ai-clone.vercel.app/",
+        "text": "Working demo"
+      },
+      {
+        "type": "paragraph",
+        "text": "Someone may know the occasion, textile or feeling they want without knowing how to prompt an AI tool. The generated idea also needs a route into the storefront and garment-production workflow."
+      },
+      {
+        "type": "paragraph",
+        "text": "UI/UX Designer - Design & Research Lead · Kremor AI · June 2024–July 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "I led design across the generative workspace, storefront and role-based operations, using one shared system. I also worked on model benchmarking, annotation and qualitative evaluation across complex AI interaction tasks."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Offer a starting point before asking for a prompt. Quick actions and conversational examples help people describe an idea without specialist design vocabulary."
+      },
+      {
+        "type": "paragraph",
+        "text": "Name the textiles people are working with. The interface uses Ankara, Aso-Oke, Adire, Kente and Afro-fusion instead of a broad label that loses useful detail."
+      },
+      {
+        "type": "paragraph",
+        "text": "Connect creative work to operational roles. The design covers the handoff from an approved idea toward production. The five-role workshop permissions model is marked for validation with operating teams."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "Three connected product surfaces share one design system. The founder’s reference confirms my combined UI/UX design and AI-evaluation work."
+      },
+      {
+        "type": "paragraph",
+        "text": "This evaluation work concerned AI outputs, rather than participant usability sessions. The workshop role and permissions model still needs validation."
+      },
+      {
+        "type": "heading",
+        "text": "Contribution & evidence"
+      },
+      {
+        "type": "paragraph",
+        "text": "My contribution combined UI/UX design with AI model evaluation. I worked across the product’s connected surfaces while benchmarking, annotating and reviewing language-model and generative-image output."
+      },
+      {
+        "type": "paragraph",
+        "text": "“He has demonstrated exceptional expertise in forensic benchmarking, dataset annotation, and qualitative evaluation for both Large Language Models (LLMs) and generative image systems.” Saheed Alabi · Founder, Kremor AI 27 July 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "Saheed’s letter confirms my work as an AI Model Evaluator Consultant / UIUX Designer. It highlights AI safety, prompt alignment, multimodal output verification, product judgement and communication across disciplines."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/kremor-founder-reference.pdf",
+        "text": "Read the full recommendation"
+      },
+      {
+        "type": "heading",
+        "text": "What the reference supports"
+      },
+      {
+        "type": "paragraph",
+        "text": "The reference supports the combined design and evaluation role. The evaluation work concerned AI outputs, rather than participant usability sessions; the workshop permissions model still requires validation."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/kremor/dashboard.webp",
+        "alt": "Kremor AI operations dashboard"
+      },
+      {
+        "type": "paragraph",
+        "text": "Operational tools sit alongside the generative workspace and storefront in one design system."
+      },
+      {
+        "type": "image",
+        "src": "/assets/kremor/workspace.webp",
+        "alt": "Preview Kremor AI workspace"
+      },
+      {
+        "type": "image",
+        "src": "/assets/kremor/analytics.webp",
+        "alt": "Preview Kremor AI analytics and reports"
+      },
+      {
+        "type": "image",
+        "src": "/assets/kremor/main.webp",
+        "alt": "Preview Kremor AI mobile landing page"
+      }
+    ]
+  },
+  "/work/chalant-ai/": {
+    "id": "chalant-ai",
+    "title": "Chalant AI",
+    "summary": "Chalantwork: a live platform for sustainability data, evidence and review.",
+    "image": "/assets/chalant/hero.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Live sustainability platform · 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Chalant AI"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Sustainability reporting depends on more than entering figures. Teams need to connect the data to evidence, review it and use it across reporting and operational workflows. I worked on product journeys, interface design and a shared design system for Chalant. The live sustainability platform brings reporting, emissions management, verification, capital access and safety operations together."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Chalantwork is live, with email and Microsoft sign-in and enterprise access requests. Its published offering covers ESG reporting, emissions, verification, capital access and HSE operations. The live website confirms product access and published scope. Usage figures and measured design outcomes are not published."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Prototyping Design systems"
+      },
+      {
+        "type": "paragraph",
+        "text": "Live platform · published scope"
+      },
+      {
+        "type": "paragraph",
+        "text": "5 Sustainability pillars"
+      },
+      {
+        "type": "paragraph",
+        "text": "9 Abatement levers"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Industry groups"
+      },
+      {
+        "type": "paragraph",
+        "text": "These counts describe published product coverage, not measured design outcomes. Source: Chalantwork product coverage"
+      },
+      {
+        "type": "link",
+        "href": "https://www.chalantwork.com/",
+        "text": "Source: Chalantwork product coverage"
+      },
+      {
+        "type": "link",
+        "href": "https://www.chalantwork.com/",
+        "text": "Live website"
+      },
+      {
+        "type": "link",
+        "href": "https://www.chalantwork.com/auth",
+        "text": "Platform login"
+      },
+      {
+        "type": "paragraph",
+        "text": "Sustainability reporting depends on more than entering figures. Teams need to connect the data to evidence, review it and use it across reporting and operational workflows."
+      },
+      {
+        "type": "paragraph",
+        "text": "Lead product designer · UX, interface design and design systems"
+      },
+      {
+        "type": "paragraph",
+        "text": "I worked on product journeys, interface design and a shared design system for Chalant. The live sustainability platform brings reporting, emissions management, verification, capital access and safety operations together."
+      },
+      {
+        "type": "heading",
+        "text": "How the live platform is organised"
+      },
+      {
+        "type": "paragraph",
+        "text": "Connect data to evidence and review. The live platform links entered data with supporting evidence and maker-checker approval before it is used for reporting and action."
+      },
+      {
+        "type": "paragraph",
+        "text": "Organise related sustainability work together. ESG reporting, emissions tracking, verification, finance and HSE operations are presented as connected workflows, with industry-specific routes."
+      },
+      {
+        "type": "paragraph",
+        "text": "Give teams a clear access route. The website supports enterprise access requests, with email and Microsoft sign-in for existing accounts."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "Chalantwork is live, with email and Microsoft sign-in and enterprise access requests. Its published offering covers ESG reporting, emissions, verification, capital access and HSE operations."
+      },
+      {
+        "type": "paragraph",
+        "text": "The live website confirms product access and published scope. Usage figures and measured design outcomes are not published."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/chalant/hero.webp",
+        "alt": "Chalantwork desktop monitor mockup"
+      },
+      {
+        "type": "paragraph",
+        "text": "The current live platform introduces sustainability reporting, evidence and operational workflows."
+      },
+      {
+        "type": "image",
+        "src": "/assets/chalant/main.webp",
+        "alt": "Preview Chalantwork desktop landing page"
+      },
+      {
+        "type": "image",
+        "src": "/assets/chalant/login.webp",
+        "alt": "Preview Chalantwork login"
+      },
+      {
+        "type": "image",
+        "src": "/assets/chalant/signup.webp",
+        "alt": "Preview Chalantwork account registration"
+      },
+      {
+        "type": "image",
+        "src": "/assets/chalant/industries.webp",
+        "alt": "Preview Chalantwork industry solutions"
+      }
+    ]
+  },
+  "/work/shortlet-lagos/": {
+    "id": "shortlet-lagos",
+    "title": "Shortlet Lagos",
+    "summary": "Giving guests and property investors different routes into the same business.",
+    "image": "/assets/shortlet/shortlet-laptop.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Property platform · 2024"
+      },
+      {
+        "type": "heading",
+        "text": "Shortlet Lagos"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "A guest is choosing a place to stay. An investor is deciding what a property share means and what it costs. Combining those decisions would give each audience the wrong information. I designed responsive guest-booking and fractional-investment journeys, supported by research into how guests shortlist properties. The two experiences share a visual system while keeping their decisions separate."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Shortlet Lagos is live. The design provides distinct booking and investment routes within one responsive product. The interface shows how the two journeys are separated. Investor comprehension of fractional ownership remains a validation priority."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX research UI design"
+      },
+      {
+        "type": "paragraph",
+        "text": "Product & design scope"
+      },
+      {
+        "type": "paragraph",
+        "text": "2 Distinct audiences"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Booking search inputs"
+      },
+      {
+        "type": "paragraph",
+        "text": "₦50K Designed entry threshold"
+      },
+      {
+        "type": "paragraph",
+        "text": "Product and design scope. ₦50,000 is the designed entry threshold, not a return or adoption metric."
+      },
+      {
+        "type": "link",
+        "href": "https://www.shortlet-lagos.com",
+        "text": "Live website"
+      },
+      {
+        "type": "paragraph",
+        "text": "A guest is choosing a place to stay. An investor is deciding what a property share means and what it costs. Combining those decisions would give each audience the wrong information."
+      },
+      {
+        "type": "paragraph",
+        "text": "Product designer & researcher · 2024"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed responsive guest-booking and fractional-investment journeys, supported by research into how guests shortlist properties. The two experiences share a visual system while keeping their decisions separate."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Separate the entry points. Guests begin with stays; investors begin with property investment. Each route introduces the information needed for that decision."
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep the whole booking query together. Location, check-in, check-out and guest count sit in one search card so the query is visible and editable on mobile."
+      },
+      {
+        "type": "paragraph",
+        "text": "Explain the investment mechanic first. The investment experience introduces buying shares and the ₦50,000 entry threshold before discussing potential returns."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "Shortlet Lagos is live. The design provides distinct booking and investment routes within one responsive product."
+      },
+      {
+        "type": "paragraph",
+        "text": "The interface shows how the two journeys are separated. Investor comprehension of fractional ownership remains a validation priority."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/shortlet/shortlet-laptop.webp",
+        "alt": "Shortlet Lagos - Desktop booking experience"
+      },
+      {
+        "type": "paragraph",
+        "text": "Guest booking starts with location, dates and guest count in one search experience."
+      },
+      {
+        "type": "image",
+        "src": "/assets/shortlet/shortlet-phone.webp",
+        "alt": "Preview Mobile property browsing"
+      },
+      {
+        "type": "image",
+        "src": "/assets/shortlet/shortlet-invest-repaired.webp",
+        "alt": "Preview Property investment"
+      }
+    ]
+  },
+  "/work/synqit/": {
+    "id": "synqit",
+    "title": "Synqit",
+    "summary": "Making a partnership request the starting point for business conversations.",
+    "image": "/assets/synqit/synqit-laptop.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Business matchmaking · 2026"
+      },
+      {
+        "type": "heading",
+        "text": "Synqit"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Businesses and Web3 teams were finding potential partners across scattered social channels. Open messaging made it difficult to distinguish a credible partnership from unsolicited outreach. I interviewed founders, Web3 teams and investors, mapped the information architecture and designed profiles, matchmaking, requests, the dashboard and messaging. I also ran usability testing with businesses to refine the trust signals."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The designed workflow connects discovery, profile review, request acceptance and messaging. The flow replaces a scattered manual process with explicit steps for each user role. Discovery speed, partnership quality and acceptance rates still need measurement."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX research UI design"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reported project result"
+      },
+      {
+        "type": "paragraph",
+        "text": "Role-based Discovery & onboarding"
+      },
+      {
+        "type": "paragraph",
+        "text": "3 Role groups"
+      },
+      {
+        "type": "paragraph",
+        "text": "Request-first Messaging access"
+      },
+      {
+        "type": "paragraph",
+        "text": "The design separates three user roles and uses request-first messaging. No quantified improvement is claimed without a published benchmark."
+      },
+      {
+        "type": "paragraph",
+        "text": "Businesses and Web3 teams were finding potential partners across scattered social channels. Open messaging made it difficult to distinguish a credible partnership from unsolicited outreach."
+      },
+      {
+        "type": "paragraph",
+        "text": "Lead product designer · end to end · 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "I interviewed founders, Web3 teams and investors, mapped the information architecture and designed profiles, matchmaking, requests, the dashboard and messaging. I also ran usability testing with businesses to refine the trust signals."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Let people review a request before a conversation. Messaging unlocks after a partnership request is accepted, giving both sides control over who reaches their inbox."
+      },
+      {
+        "type": "paragraph",
+        "text": "Make relationship status visible. The dashboard organises requests by pending, accepted and declined so teams can see where each introduction stands."
+      },
+      {
+        "type": "paragraph",
+        "text": "Design for the three roles in the network. Profiles and journeys account for businesses seeking partners, investors assessing startups and teams managing partnerships."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The designed workflow connects discovery, profile review, request acceptance and messaging. The flow replaces a scattered manual process with explicit steps for each user role."
+      },
+      {
+        "type": "paragraph",
+        "text": "Discovery speed, partnership quality and acceptance rates still need measurement."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/synqit/synqit-laptop.webp",
+        "alt": "Synqit - Desktop platform"
+      },
+      {
+        "type": "paragraph",
+        "text": "The platform introduces business partnerships as a deliberate, request-first journey."
+      },
+      {
+        "type": "image",
+        "src": "/assets/synqit/synqit-desk.webp",
+        "alt": "Preview Mobile platform"
+      },
+      {
+        "type": "image",
+        "src": "/assets/synqit/synqit-user-journey.webp",
+        "alt": "Preview Partnership journey"
+      },
+      {
+        "type": "image",
+        "src": "/assets/synqit/synqit-deck-problem.webp",
+        "alt": "Preview Problem and solution"
+      },
+      {
+        "type": "image",
+        "src": "/assets/synqit/synqit-deck-mvp.webp",
+        "alt": "Preview MVP scope"
+      }
+    ]
+  },
+  "/work/arete/": {
+    "id": "arete",
+    "title": "Arete",
+    "summary": "Connecting the steps after a patient finds a doctor.",
+    "image": "/assets/arete/arete-cover.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Healthcare concept · 2026"
+      },
+      {
+        "type": "heading",
+        "text": "Arete"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "A patient’s journey continues through coverage, prescriptions, finding medication and follow-up. Those steps involve different organisations and can leave the patient without a clear next action. I designed the connected care journey across patient, provider, HMO and pharmacy experiences. The work covers onboarding, care discovery, consultation, coverage, prescriptions and continued care."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The designs connect seven care steps across four product surfaces, supported by documented requirements, interface states and a shared visual system. This is documented design work. Coverage comprehension and accessibility still need testing with patients in real conditions."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX strategy UI design UX writing Prototyping Design systems"
+      },
+      {
+        "type": "paragraph",
+        "text": "Design concept"
+      },
+      {
+        "type": "paragraph",
+        "text": "7 Care journey steps"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Connected care surfaces"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Design principles"
+      },
+      {
+        "type": "paragraph",
+        "text": "Design scope across patients, providers, HMO teams and pharmacies. Patient testing is still needed for coverage wording and accessibility."
+      },
+      {
+        "type": "paragraph",
+        "text": "A patient’s journey continues through coverage, prescriptions, finding medication and follow-up. Those steps involve different organisations and can leave the patient without a clear next action."
+      },
+      {
+        "type": "paragraph",
+        "text": "End-to-end product designer · 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed the connected care journey across patient, provider, HMO and pharmacy experiences. The work covers onboarding, care discovery, consultation, coverage, prescriptions and continued care."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep access possible without insurance details. A Skip for Now route lets the patient continue instead of treating missing coverage information as a dead end."
+      },
+      {
+        "type": "paragraph",
+        "text": "Design beyond the consultation. The seven-step journey continues into prescriptions, pharmacy access and follow-up rather than stopping at a booking."
+      },
+      {
+        "type": "paragraph",
+        "text": "Make coverage wording a design priority. Simple, accessible, localised and transparent are the four principles behind the interface. Coverage states must remain understandable without promising an insurer’s approval."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The designs connect seven care steps across four product surfaces, supported by documented requirements, interface states and a shared visual system."
+      },
+      {
+        "type": "paragraph",
+        "text": "This is documented design work. Coverage comprehension and accessibility still need testing with patients in real conditions."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-cover.webp",
+        "alt": "Arete - Healthcare app overview"
+      },
+      {
+        "type": "paragraph",
+        "text": "The healthcare experience connects care discovery with the steps that follow a consultation."
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-onboarding.webp",
+        "alt": "Preview Account onboarding"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-journey.webp",
+        "alt": "Preview Care journey"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-pharmacy.webp",
+        "alt": "Preview Pharmacy and prescriptions"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-hmo.webp",
+        "alt": "Preview Health coverage"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-states.webp",
+        "alt": "Preview Interface states"
+      },
+      {
+        "type": "image",
+        "src": "/assets/arete/arete-design-system.webp",
+        "alt": "Preview Design system"
+      }
+    ]
+  },
+  "/work/architek/": {
+    "id": "archi-tek",
+    "title": "Archi-Tek",
+    "summary": "Designing a route from an architectural brief to a reviewable output.",
+    "image": "/assets/architek/prompt-hands.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Architecture concept · 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Archi-Tek"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "A convincing building image is not the same as a file an architect can revise or hand to an engineer. The interface needs to make the intended output and its limits clear. I designed prompt entry, design-type selection, generated alternatives, preview and export flows, plus the proposed 3D-editor experience."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The interface design covers the path from a written brief through comparison, preview and proposed export. The mockups show these interaction decisions. The editor remains proposed, and editable CAD-export capability has not been verified. The presentation does not imply a working architecture engine."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Prototyping"
+      },
+      {
+        "type": "paragraph",
+        "text": "Interaction concept"
+      },
+      {
+        "type": "paragraph",
+        "text": "3 Fidelity modes"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Designed export formats"
+      },
+      {
+        "type": "paragraph",
+        "text": "Coming soon 3D editor"
+      },
+      {
+        "type": "paragraph",
+        "text": "Designed interaction scope: three fidelity modes and four proposed export formats. The editor is Coming soon; CAD capability remains unverified."
+      },
+      {
+        "type": "paragraph",
+        "text": "A convincing building image is not the same as a file an architect can revise or hand to an engineer. The interface needs to make the intended output and its limits clear."
+      },
+      {
+        "type": "paragraph",
+        "text": "Product designer · 2025"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed prompt entry, design-type selection, generated alternatives, preview and export flows, plus the proposed 3D-editor experience."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Help people start with a recognisable building brief. Examples such as a three-bedroom bungalow or duplex sit beside the prompt field, with sample designs to show what can be requested."
+      },
+      {
+        "type": "paragraph",
+        "text": "Let the user choose the output level. Concept Sketch, Schematic Plan and Detailed Model make fidelity an explicit choice rather than leaving the generator to guess."
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep alternatives and export choices visible. Named design options can be compared before choosing DWG, OBJ, SketchUp or PDF. The proposed editor is labelled Coming soon."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The interface design covers the path from a written brief through comparison, preview and proposed export. The mockups show these interaction decisions."
+      },
+      {
+        "type": "paragraph",
+        "text": "The editor remains proposed, and editable CAD-export capability has not been verified. The presentation does not imply a working architecture engine."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/architek/prompt-hands.webp",
+        "alt": "Archi-Tek prompt workspace - laptop held in hands"
+      },
+      {
+        "type": "paragraph",
+        "text": "Prompt examples help people begin with a recognisable building brief."
+      },
+      {
+        "type": "image",
+        "src": "/assets/architek/preview-stone.webp",
+        "alt": "Preview Archi-Tek design preview and export - laptop on stone"
+      },
+      {
+        "type": "image",
+        "src": "/assets/architek/editor-sculpture.webp",
+        "alt": "Preview Archi-Tek 3D editor - sculptural laptop presentation"
+      }
+    ]
+  },
+  "/work/loan-investment-app/": {
+    "id": "loan-investment-app",
+    "title": "Loan & Investment App",
+    "summary": "Bringing borrowing and investing together without hiding their differences.",
+    "image": "/assets/loan/loan-home.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Financial concept · 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Loan & Investment App"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "Five financial products need to fit into one app, but borrowing and investing have different consequences. A simpler dashboard must still explain what a financial decision involves. I designed the shared dashboard, loan and investment journeys, and interface system across banking, borrowing, investments, insurance and payments."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The design brings five financial products into a shared mobile system while keeping loan and investment decisions distinct. The screens document the design approach. Interpretation of projections and risk language needs user testing; no financial or adoption results are claimed."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design Design systems Prototyping"
+      },
+      {
+        "type": "paragraph",
+        "text": "Financial app concept"
+      },
+      {
+        "type": "paragraph",
+        "text": "5 Financial products"
+      },
+      {
+        "type": "paragraph",
+        "text": "₦100K Designed investment minimum"
+      },
+      {
+        "type": "paragraph",
+        "text": "1 Shared balance"
+      },
+      {
+        "type": "paragraph",
+        "text": "Design scope: five financial products and a designed ₦100,000 investment minimum. Adoption and financial outcomes have not been measured."
+      },
+      {
+        "type": "paragraph",
+        "text": "Five financial products need to fit into one app, but borrowing and investing have different consequences. A simpler dashboard must still explain what a financial decision involves."
+      },
+      {
+        "type": "paragraph",
+        "text": "Product designer · 2025"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed the shared dashboard, loan and investment journeys, and interface system across banking, borrowing, investments, insurance and payments."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Use one balance as the starting point. The dashboard places quick actions and pending tasks around a shared balance, with a reveal control for privacy."
+      },
+      {
+        "type": "paragraph",
+        "text": "Explain a loan before asking someone to request it. The empty state describes what borrowing is for and gives a clear Request Loan action instead of showing only a zero balance."
+      },
+      {
+        "type": "paragraph",
+        "text": "Show investment constraints before commitment. The minimum investment and wallet balance appear before the action. Projected values are labelled indicative and gross of withholding tax."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The design brings five financial products into a shared mobile system while keeping loan and investment decisions distinct."
+      },
+      {
+        "type": "paragraph",
+        "text": "The screens document the design approach. Interpretation of projections and risk language needs user testing; no financial or adoption results are claimed."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/loan/loan-home.webp",
+        "alt": "Loan & Investment App - Mobile financial dashboard"
+      },
+      {
+        "type": "paragraph",
+        "text": "One shared balance anchors the dashboard, with a reveal control for privacy."
+      },
+      {
+        "type": "image",
+        "src": "/assets/loan/loan-myloan.webp",
+        "alt": "Preview Loan management"
+      },
+      {
+        "type": "image",
+        "src": "/assets/loan/loan-equities.webp",
+        "alt": "Preview Equities portfolio"
+      }
+    ]
+  },
+  "/work/reporting-portal/": {
+    "id": "project-management-dashboard",
+    "title": "Reporting Portal",
+    "summary": "Helping a project manager see what needs attention today.",
+    "image": "/assets/reporting/pm-dashboard-laptop.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Dashboard concept · 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Reporting Portal"
+      },
+      {
+        "type": "heading",
+        "text": "[Brief]"
+      },
+      {
+        "type": "paragraph",
+        "text": "A project count gives context, but it does not show what is due, at risk or waiting for review. Managers need an actionable view when they are scanning between meetings. I designed the reporting dashboard, task board, milestones, filters and responsive layouts in light and dark themes."
+      },
+      {
+        "type": "heading",
+        "text": "[Outcome]"
+      },
+      {
+        "type": "paragraph",
+        "text": "The dashboard design combines four task states, four filter dimensions and two themes. The mobile layout preserves the key metrics and a focused board view. The screens demonstrate information hierarchy and responsive behaviour. Faster issue resolution and productivity improvements have not been measured."
+      },
+      {
+        "type": "heading",
+        "text": "[My contribution]"
+      },
+      {
+        "type": "paragraph",
+        "text": "UX design UI design"
+      },
+      {
+        "type": "paragraph",
+        "text": "Dashboard concept"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Task states"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 Filter dimensions"
+      },
+      {
+        "type": "paragraph",
+        "text": "2 Interface themes"
+      },
+      {
+        "type": "paragraph",
+        "text": "Designed dashboard coverage: four task states, four filter dimensions and two themes. Productivity outcomes are not yet measured."
+      },
+      {
+        "type": "paragraph",
+        "text": "A project count gives context, but it does not show what is due, at risk or waiting for review. Managers need an actionable view when they are scanning between meetings."
+      },
+      {
+        "type": "paragraph",
+        "text": "Product designer · 2025"
+      },
+      {
+        "type": "paragraph",
+        "text": "I designed the reporting dashboard, task board, milestones, filters and responsive layouts in light and dark themes."
+      },
+      {
+        "type": "heading",
+        "text": "The decisions behind the interface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Put urgent work beside the totals. Tasks due, at-risk and critical work sit in the metrics row so the overview points toward an action."
+      },
+      {
+        "type": "paragraph",
+        "text": "Show tasks and milestones together. The board and upcoming milestones share a view, connecting day-to-day work to delivery dates."
+      },
+      {
+        "type": "paragraph",
+        "text": "Make review a visible state. To Do, In Progress, Review and Done are separate columns. Project, team, date and status filters help narrow the work without leaving the view."
+      },
+      {
+        "type": "heading",
+        "text": "What was delivered"
+      },
+      {
+        "type": "paragraph",
+        "text": "The dashboard design combines four task states, four filter dimensions and two themes. The mobile layout preserves the key metrics and a focused board view."
+      },
+      {
+        "type": "paragraph",
+        "text": "The screens demonstrate information hierarchy and responsive behaviour. Faster issue resolution and productivity improvements have not been measured."
+      },
+      {
+        "type": "link",
+        "href": "mailto:aabdulfataijamiu@gmail.com",
+        "text": "Email"
+      },
+      {
+        "type": "link",
+        "href": "https://www.linkedin.com/in/jamiudesign/",
+        "text": "LinkedIn (opens in a new tab)"
+      },
+      {
+        "type": "image",
+        "src": "/assets/reporting/pm-dashboard-laptop.webp",
+        "alt": "Reporting Portal - Desktop reporting dashboard"
+      },
+      {
+        "type": "paragraph",
+        "text": "The reporting overview puts metrics, the task board and milestones in one view."
+      },
+      {
+        "type": "image",
+        "src": "/assets/reporting/pm-dashboard-light.webp",
+        "alt": "Preview Light theme dashboard"
+      },
+      {
+        "type": "image",
+        "src": "/assets/reporting/pm-dashboard-dark.webp",
+        "alt": "Preview Dark theme dashboard"
+      },
+      {
+        "type": "image",
+        "src": "/assets/reporting/pm-dashboard-phone.webp",
+        "alt": "Preview Mobile reporting dashboard"
+      }
+    ]
+  },
+  "/brand/": {
+    "id": "brand",
+    "title": "Brand & identity",
+    "summary": "Brand & identity from Jamiu’s portfolio.",
+    "image": null,
+    "blocks": [
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p01.jpg",
+        "alt": "Shortlet Lagos - Brand Guideline"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p02.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 2"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p03.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 3"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p04.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 4"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p05.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 5"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p06.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 6"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p07.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 7"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p08.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 8"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p09.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 9"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p10.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 10"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p11.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 11"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p12.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 12"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p13.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 13"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p14.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 14"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p15.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 15"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p16.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 16"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p17.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 17"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p18.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 18"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p19.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 19"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p20.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 20"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p21.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 21"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p22.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 22"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/shortlet-lagos-brand-guide/p23.jpg",
+        "alt": "Preview Shortlet Lagos - Brand Guideline image 23"
+      },
+      {
+        "type": "paragraph",
+        "text": "Shortlet Lagos · 23 PAGES"
+      },
+      {
+        "type": "heading",
+        "text": "Shortlet Lagos - Brand Guideline"
+      },
+      {
+        "type": "paragraph",
+        "text": "Purpose, vision, values and audience; icon-only and full logo variants with background, one-colour, clearspace and misuse rules; a partnership lock-up; primary and secondary palettes; the Lato type scale; business card and letterhead; and rules for placing the logo on photography."
+      },
+      {
+        "type": "link",
+        "href": "/brand/files/shortlet-lagos-brand-guide.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p01.jpg",
+        "alt": "Female Rise - Brand Guideline"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p02.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 2"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p03.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 3"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p04.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 4"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p05.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 5"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p06.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 6"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p07.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 7"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p08.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 8"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p09.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 9"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p10.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 10"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p11.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 11"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p12.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 12"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p13.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 13"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p14.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 14"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p15.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 15"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p16.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 16"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p17.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 17"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p18.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 18"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p19.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 19"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p20.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 20"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p21.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 21"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p22.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 22"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p23.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 23"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p24.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 24"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p25.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 25"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p26.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 26"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p27.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 27"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p28.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 28"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p29.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 29"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p30.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 30"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p31.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 31"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p32.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 32"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-brand-guide/p33.jpg",
+        "alt": "Preview Female Rise - Brand Guideline image 33"
+      },
+      {
+        "type": "paragraph",
+        "text": "Female Rise · 33 PAGES"
+      },
+      {
+        "type": "heading",
+        "text": "Female Rise - Brand Guideline"
+      },
+      {
+        "type": "paragraph",
+        "text": "Brand definition - values, voice and a Magician/Explorer archetype; a logo built from the female symbol and a sunrise, with variants, responsiveness and misuse; colour, gradients and Helvetica Now Display typography; business card, letterhead and ID card; a pattern and visual-element language with use cases; imagery direction; and brand giveaways."
+      },
+      {
+        "type": "link",
+        "href": "/brand/files/female-rise-brand-guide.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p01.jpg",
+        "alt": "Female Rise Capital - Investor deck"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p02.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 2"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p03.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 3"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p04.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 4"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p05.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 5"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p06.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 6"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p07.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 7"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p08.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 8"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p09.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 9"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p10.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 10"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/female-rise-pitch-deck/p11.jpg",
+        "alt": "Preview Female Rise Capital - Investor deck image 11"
+      },
+      {
+        "type": "paragraph",
+        "text": "Female Rise Capital · 11 PAGES"
+      },
+      {
+        "type": "heading",
+        "text": "Female Rise Capital - Investor deck"
+      },
+      {
+        "type": "paragraph",
+        "text": "Problem, solution, market opportunity, business model, competitive advantage, roadmap, projections, the ask and the founder - for a microfinance platform serving women-led SMEs in Africa."
+      },
+      {
+        "type": "link",
+        "href": "/brand/files/female-rise-pitch-deck.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p01.jpg",
+        "alt": "Coworthy Capital - Investor deck"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p02.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 2"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p03.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 3"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p04.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 4"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p05.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 5"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p06.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 6"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p07.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 7"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p08.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 8"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p09.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 9"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p10.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 10"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p11.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 11"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/coworthy-capital-pitch-deck/p12.jpg",
+        "alt": "Preview Coworthy Capital - Investor deck image 12"
+      },
+      {
+        "type": "paragraph",
+        "text": "Coworthy Capital · 12 PAGES"
+      },
+      {
+        "type": "heading",
+        "text": "Coworthy Capital - Investor deck"
+      },
+      {
+        "type": "paragraph",
+        "text": "Problem, opportunity, solution, how it works, investment model, member benefits, property criteria, business model, roadmap and team - for a real-estate investment cooperative built around Lagos shortlets."
+      },
+      {
+        "type": "link",
+        "href": "/brand/files/coworthy-capital-pitch-deck.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p01.jpg",
+        "alt": "Synqit - Pitch deck"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p02.jpg",
+        "alt": "Preview Synqit - Pitch deck image 2"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p03.jpg",
+        "alt": "Preview Synqit - Pitch deck image 3"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p04.jpg",
+        "alt": "Preview Synqit - Pitch deck image 4"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p05.jpg",
+        "alt": "Preview Synqit - Pitch deck image 5"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p06.jpg",
+        "alt": "Preview Synqit - Pitch deck image 6"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p07.jpg",
+        "alt": "Preview Synqit - Pitch deck image 7"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p08.jpg",
+        "alt": "Preview Synqit - Pitch deck image 8"
+      },
+      {
+        "type": "image",
+        "src": "/brand/pages/synqit-pitch-deck/p09.jpg",
+        "alt": "Preview Synqit - Pitch deck image 9"
+      },
+      {
+        "type": "paragraph",
+        "text": "Synqit · 9 PAGES"
+      },
+      {
+        "type": "heading",
+        "text": "Synqit - Pitch deck"
+      },
+      {
+        "type": "paragraph",
+        "text": "Problem and solution side by side, the MVP release, future features, roadmap, customer-acquisition strategy, revenue outlook and the team - for the Web3 partnership platform whose product design is a case study on this site."
+      },
+      {
+        "type": "link",
+        "href": "/brand/files/synqit-pitch-deck.pdf",
+        "text": "Open document"
+      }
+    ]
+  },
+  "/logos/": {
+    "id": "logos",
+    "title": "Logos & marks",
+    "summary": "Logos & marks from Jamiu’s portfolio.",
+    "image": null,
+    "blocks": [
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-cap.jpg",
+        "alt": "UXD · 2026/27"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-logo.jpg",
+        "alt": "Preview UXD · 2026/27 image 2"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-board.jpg",
+        "alt": "Preview UXD · 2026/27 image 3"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-merch.jpg",
+        "alt": "Preview UXD · 2026/27 image 4"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-tote.jpg",
+        "alt": "Preview UXD · 2026/27 image 5"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-badge.jpg",
+        "alt": "Preview UXD · 2026/27 image 6"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-shirt.jpg",
+        "alt": "Preview UXD · 2026/27 image 7"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-lanyard.jpg",
+        "alt": "Preview UXD · 2026/27 image 8"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-id.jpg",
+        "alt": "Preview UXD · 2026/27 image 9"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-social.jpg",
+        "alt": "Preview UXD · 2026/27 image 10"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/uxd-social-compact.jpg",
+        "alt": "Preview UXD · 2026/27 image 11"
+      },
+      {
+        "type": "paragraph",
+        "text": "Cohort identity · University of Brighton"
+      },
+      {
+        "type": "heading",
+        "text": "UXD · 2026/27"
+      },
+      {
+        "type": "paragraph",
+        "text": "An identity for the 2026/27 UX Design cohort at the University of Brighton. “26” and “27” sit beside a vertical UXD block. Peach and brown distinguish the two years, with black lettering and cream backgrounds. The system includes primary and compact marks, a cohort board, social graphics and merchandise application mockups."
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-studio.jpg",
+        "alt": "HERLUX"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-primary.jpg",
+        "alt": "Preview HERLUX image 2"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-reverse.jpg",
+        "alt": "Preview HERLUX image 3"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-wordmark-dark.jpg",
+        "alt": "Preview HERLUX image 4"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-wordmark-light.jpg",
+        "alt": "Preview HERLUX image 5"
+      },
+      {
+        "type": "image",
+        "src": "/logos/images/herlux-applications.jpg",
+        "alt": "Preview HERLUX image 6"
+      },
+      {
+        "type": "paragraph",
+        "text": "Logo & brand identity"
+      },
+      {
+        "type": "heading",
+        "text": "HERLUX"
+      },
+      {
+        "type": "paragraph",
+        "text": "A bold wordmark paired with an expressive line-drawn portrait. The original positive and reversed artwork sits alongside applications for social content, signage, bags, apparel and packaging. Black and white keep the mark adaptable; teal and charcoal give the wider communications a distinctive direction. The neutral canvas, paper and stone studio scene is a presentation concept."
+      },
+      {
+        "type": "link",
+        "href": "https://www.behance.net/gallery/235694499/Logo-Design-Brand-Identity",
+        "text": "View original artwork"
+      }
+    ]
+  },
+  "/system/": {
+    "id": "system",
+    "title": "Design systems",
+    "summary": "Design systems from Jamiu’s portfolio.",
+    "image": null,
+    "blocks": [
+      {
+        "type": "image",
+        "src": "/system/colors.jpg",
+        "alt": "Colour"
+      },
+      {
+        "type": "paragraph",
+        "text": "Design system"
+      },
+      {
+        "type": "heading",
+        "text": "Colour"
+      },
+      {
+        "type": "paragraph",
+        "text": "Ten-step ramps from 50 to 900 across primary, grey, success, danger, warning and info, plus black and white alpha scales for overlays and dividers."
+      },
+      {
+        "type": "link",
+        "href": "/system/colors.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/figma-semantic.jpg",
+        "alt": "Semantic styles, in the file"
+      },
+      {
+        "type": "heading",
+        "text": "Semantic styles, in the file"
+      },
+      {
+        "type": "paragraph",
+        "text": "The published styles as they exist in Figma: Brand Primary, Neutral, Error, Warning and Success as groups, a Body to Header text scale, and Shadow Sm through XL."
+      },
+      {
+        "type": "link",
+        "href": "/system/figma-semantic.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/font.jpg",
+        "alt": "Typeface"
+      },
+      {
+        "type": "heading",
+        "text": "Typeface"
+      },
+      {
+        "type": "paragraph",
+        "text": "Inter, with the reasoning recorded - variable weights, tall x-height, tabular numerals and a slashed zero for interfaces that display figures. Credited to its maker in the sheet."
+      },
+      {
+        "type": "link",
+        "href": "/system/font.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/shadow.jpg",
+        "alt": "Elevation"
+      },
+      {
+        "type": "heading",
+        "text": "Elevation"
+      },
+      {
+        "type": "paragraph",
+        "text": "A shadow scale used as depth hierarchy, so a dropdown, a card and a modal never sit at the same visual altitude."
+      },
+      {
+        "type": "link",
+        "href": "/system/shadow.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/figma-tokens.jpg",
+        "alt": "Token naming"
+      },
+      {
+        "type": "heading",
+        "text": "Token naming"
+      },
+      {
+        "type": "paragraph",
+        "text": "The colour and effect styles as named tokens - accent, dark and opacity tones on a numeric scale, with elevation as its own set."
+      },
+      {
+        "type": "link",
+        "href": "/system/figma-tokens.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/icons.jpg",
+        "alt": "Iconography"
+      },
+      {
+        "type": "heading",
+        "text": "Iconography"
+      },
+      {
+        "type": "paragraph",
+        "text": "The icon set organised into semantic categories - navigation, actions, media, design tools - so an icon is chosen by meaning rather than by scrolling."
+      },
+      {
+        "type": "link",
+        "href": "/system/icons.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/icons-set.jpg",
+        "alt": "Icon grid"
+      },
+      {
+        "type": "heading",
+        "text": "Icon grid"
+      },
+      {
+        "type": "paragraph",
+        "text": "Stroke weight, bounding box and optical sizing held constant across the set."
+      },
+      {
+        "type": "link",
+        "href": "/system/icons-set.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/button-group.jpg",
+        "alt": "Button group"
+      },
+      {
+        "type": "heading",
+        "text": "Button group"
+      },
+      {
+        "type": "paragraph",
+        "text": "Default, hover, focus, press, selected and disabled - crossed with giant, large and medium - plus segmented groups from five items down to two, and icon-only variants."
+      },
+      {
+        "type": "link",
+        "href": "/system/button-group.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/input.jpg",
+        "alt": "Input"
+      },
+      {
+        "type": "heading",
+        "text": "Input"
+      },
+      {
+        "type": "paragraph",
+        "text": "Empty, placeholder, focused, filled, success and error, each with label and helper text, so validation is designed rather than bolted on."
+      },
+      {
+        "type": "link",
+        "href": "/system/input.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/dropdown.jpg",
+        "alt": "Dropdown"
+      },
+      {
+        "type": "heading",
+        "text": "Dropdown"
+      },
+      {
+        "type": "paragraph",
+        "text": "Closed, open, selected and multi-select states with overflow behaviour."
+      },
+      {
+        "type": "link",
+        "href": "/system/dropdown.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/alert.jpg",
+        "alt": "Alert"
+      },
+      {
+        "type": "heading",
+        "text": "Alert"
+      },
+      {
+        "type": "paragraph",
+        "text": "Success, warning, error and information, with and without actions."
+      },
+      {
+        "type": "link",
+        "href": "/system/alert.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/card.jpg",
+        "alt": "Card"
+      },
+      {
+        "type": "heading",
+        "text": "Card"
+      },
+      {
+        "type": "paragraph",
+        "text": "Content, media and action layouts at each density."
+      },
+      {
+        "type": "link",
+        "href": "/system/card.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/list.jpg",
+        "alt": "List"
+      },
+      {
+        "type": "heading",
+        "text": "List"
+      },
+      {
+        "type": "paragraph",
+        "text": "Row anatomy - leading media, text block, trailing action, dividers and states."
+      },
+      {
+        "type": "link",
+        "href": "/system/list.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/tab.jpg",
+        "alt": "Tabs"
+      },
+      {
+        "type": "heading",
+        "text": "Tabs"
+      },
+      {
+        "type": "paragraph",
+        "text": "Underline and pill variants, with active, hover and disabled states."
+      },
+      {
+        "type": "link",
+        "href": "/system/tab.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/navbar-top.jpg",
+        "alt": "Top navigation"
+      },
+      {
+        "type": "heading",
+        "text": "Top navigation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Desktop and compact arrangements with search, actions and account."
+      },
+      {
+        "type": "link",
+        "href": "/system/navbar-top.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/navbar-bottom.jpg",
+        "alt": "Bottom navigation"
+      },
+      {
+        "type": "heading",
+        "text": "Bottom navigation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mobile bar at three, four and five items, with active and badged states."
+      },
+      {
+        "type": "link",
+        "href": "/system/navbar-bottom.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/context-menu.jpg",
+        "alt": "Context menu"
+      },
+      {
+        "type": "heading",
+        "text": "Context menu"
+      },
+      {
+        "type": "paragraph",
+        "text": "Grouped items, dividers, icons, shortcuts, submenus and destructive actions."
+      },
+      {
+        "type": "link",
+        "href": "/system/context-menu.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/action-sheet.jpg",
+        "alt": "Action sheet"
+      },
+      {
+        "type": "heading",
+        "text": "Action sheet"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mobile sheet with grouped and destructive actions and a cancel affordance."
+      },
+      {
+        "type": "link",
+        "href": "/system/action-sheet.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/popup.jpg",
+        "alt": "Dialog"
+      },
+      {
+        "type": "heading",
+        "text": "Dialog"
+      },
+      {
+        "type": "paragraph",
+        "text": "Confirmation, form and message dialogs with header, body and action rows."
+      },
+      {
+        "type": "link",
+        "href": "/system/popup.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/pagination.jpg",
+        "alt": "Pagination"
+      },
+      {
+        "type": "heading",
+        "text": "Pagination"
+      },
+      {
+        "type": "paragraph",
+        "text": "Numbered, truncated and compact variants with first, last and disabled edges."
+      },
+      {
+        "type": "link",
+        "href": "/system/pagination.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/page-control.jpg",
+        "alt": "Page control"
+      },
+      {
+        "type": "heading",
+        "text": "Page control"
+      },
+      {
+        "type": "paragraph",
+        "text": "Dot indicators at each count, with active and overflow handling."
+      },
+      {
+        "type": "link",
+        "href": "/system/page-control.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/breadcrumbs.jpg",
+        "alt": "Breadcrumbs"
+      },
+      {
+        "type": "heading",
+        "text": "Breadcrumbs"
+      },
+      {
+        "type": "paragraph",
+        "text": "Depth, truncation and the current-page state."
+      },
+      {
+        "type": "link",
+        "href": "/system/breadcrumbs.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/stepper.jpg",
+        "alt": "Stepper"
+      },
+      {
+        "type": "heading",
+        "text": "Stepper"
+      },
+      {
+        "type": "paragraph",
+        "text": "Incrementer with minimum, maximum and disabled bounds."
+      },
+      {
+        "type": "link",
+        "href": "/system/stepper.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/progress-bar.jpg",
+        "alt": "Progress"
+      },
+      {
+        "type": "heading",
+        "text": "Progress"
+      },
+      {
+        "type": "paragraph",
+        "text": "Determinate and indeterminate, with and without a value label."
+      },
+      {
+        "type": "link",
+        "href": "/system/progress-bar.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/loader.jpg",
+        "alt": "Loader"
+      },
+      {
+        "type": "heading",
+        "text": "Loader"
+      },
+      {
+        "type": "paragraph",
+        "text": "Spinner sizes and placement rules for inline and blocking waits."
+      },
+      {
+        "type": "link",
+        "href": "/system/loader.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/toggle.jpg",
+        "alt": "Toggle"
+      },
+      {
+        "type": "heading",
+        "text": "Toggle"
+      },
+      {
+        "type": "paragraph",
+        "text": "On, off, focused and disabled at each size."
+      },
+      {
+        "type": "link",
+        "href": "/system/toggle.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/radio.jpg",
+        "alt": "Radio"
+      },
+      {
+        "type": "heading",
+        "text": "Radio"
+      },
+      {
+        "type": "paragraph",
+        "text": "Selected, unselected, focused, disabled and error."
+      },
+      {
+        "type": "link",
+        "href": "/system/radio.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/avatar.jpg",
+        "alt": "Avatar"
+      },
+      {
+        "type": "heading",
+        "text": "Avatar"
+      },
+      {
+        "type": "paragraph",
+        "text": "Image, initial and fallback at each size, with status and grouped stacks."
+      },
+      {
+        "type": "link",
+        "href": "/system/avatar.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/tooltip.jpg",
+        "alt": "Tooltip"
+      },
+      {
+        "type": "heading",
+        "text": "Tooltip"
+      },
+      {
+        "type": "paragraph",
+        "text": "Placement on all four sides with arrow alignment and overflow."
+      },
+      {
+        "type": "link",
+        "href": "/system/tooltip.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/bizinc-local-deals.jpg",
+        "alt": "Bizinc - Local Deals, documented for front-end development"
+      },
+      {
+        "type": "heading",
+        "text": "Bizinc - Local Deals, documented for front-end development"
+      },
+      {
+        "type": "paragraph",
+        "text": "Handoff documentation rather than a component sheet: an overview, the components in play, numbered interaction specs, empty and error states, responsive behaviour across mobile and desktop, and a prototype link. Written so the build matches the design without a meeting."
+      },
+      {
+        "type": "link",
+        "href": "/system/bizinc-local-deals.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/bizinc-sidebar.jpg",
+        "alt": "Bizinc - Sidebar documentation"
+      },
+      {
+        "type": "heading",
+        "text": "Bizinc - Sidebar documentation"
+      },
+      {
+        "type": "paragraph",
+        "text": "V2 sub-components: vertical menu item and sidebar button across default, hover, active and focused, the menu at six through two items, and the collapsed and expanded states of the whole shell."
+      },
+      {
+        "type": "link",
+        "href": "/system/bizinc-sidebar.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/bizinc-style-guide.jpg",
+        "alt": "Bizinc - Style guide"
+      },
+      {
+        "type": "heading",
+        "text": "Bizinc - Style guide"
+      },
+      {
+        "type": "paragraph",
+        "text": "The product's own foundation: brand colour with hex values, a Poppins scale from H1 to small, and button variants annotated with border weights and fill rules for the developers building them."
+      },
+      {
+        "type": "link",
+        "href": "/system/bizinc-style-guide.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/chalant-components.jpg",
+        "alt": "Chalant AI - Navigation components"
+      },
+      {
+        "type": "heading",
+        "text": "Chalant AI - Navigation components"
+      },
+      {
+        "type": "paragraph",
+        "text": "Badge, nav item, logo, button, avatar and sidebar, each with expanded and collapsed variants - and the sidebar resolved three times for the learner, trainer and admin roles from one component."
+      },
+      {
+        "type": "link",
+        "href": "/system/chalant-components.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/figma-grid.jpg",
+        "alt": "Bizinc - Layout grid, applied"
+      },
+      {
+        "type": "heading",
+        "text": "Bizinc - Layout grid, applied"
+      },
+      {
+        "type": "paragraph",
+        "text": "The same page checked against the published web grid at three widths. Columns are a rule the layout is measured against, not a decoration."
+      },
+      {
+        "type": "link",
+        "href": "/system/figma-grid.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/system/figma-foundation.jpg",
+        "alt": "Shortlet Lagos - Foundation and input states"
+      },
+      {
+        "type": "heading",
+        "text": "Shortlet Lagos - Foundation and input states"
+      },
+      {
+        "type": "paragraph",
+        "text": "Input documented through placeholder, typing, filled, success and error, alongside the iconography foundation - heroicons, specified at 2px stroke and a 24×24 box with usage rules."
+      },
+      {
+        "type": "link",
+        "href": "/system/figma-foundation.jpg",
+        "text": "Open document"
+      }
+    ]
+  },
+  "/credentials/": {
+    "id": "credentials",
+    "title": "Certifications & awards",
+    "summary": "Certifications & awards from Jamiu’s portfolio.",
+    "image": null,
+    "blocks": [
+      {
+        "type": "image",
+        "src": "/credentials/previews/bizinc-ceo-reference.jpg",
+        "alt": "Letter of recommendation"
+      },
+      {
+        "type": "paragraph",
+        "text": "9 December 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Letter of recommendation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Michael Fulton II - Chief Executive Officer, Bizinc"
+      },
+      {
+        "type": "paragraph",
+        "text": "Covers the progression from UI/UX intern to designer to UI/UX Manager leading other designers and interns, and the rebuild of the Bizinc platform interface from scratch."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/bizinc-ceo-reference.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/kremor-founder-reference.jpg",
+        "alt": "Letter of recommendation"
+      },
+      {
+        "type": "paragraph",
+        "text": "27 July 2026"
+      },
+      {
+        "type": "paragraph",
+        "text": "Saheed Alabi - Founder, Kremor AI"
+      },
+      {
+        "type": "paragraph",
+        "text": "Covers the dual role - UI/UX design alongside AI model evaluation: forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative image output."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/kremor-founder-reference.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/academic-reference.jpg",
+        "alt": "Academic reference"
+      },
+      {
+        "type": "paragraph",
+        "text": "30 April 2026"
+      },
+      {
+        "type": "heading",
+        "text": "Academic reference"
+      },
+      {
+        "type": "paragraph",
+        "text": "Adamu Muhammad Aminu, MNIP - Department of Physics, Federal University Dutsin-Ma"
+      },
+      {
+        "type": "paragraph",
+        "text": "Seven years as academic mentor, covering the solar-powered drone final-year project and the move from physics into design and AI."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/academic-reference.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/itss-most-outstanding-intern.jpg",
+        "alt": "Most Outstanding Intern of the Year"
+      },
+      {
+        "type": "paragraph",
+        "text": "6 November 2023"
+      },
+      {
+        "type": "heading",
+        "text": "Most Outstanding Intern of the Year"
+      },
+      {
+        "type": "paragraph",
+        "text": "ITSS - Information Technology Solution Services, Geneva"
+      },
+      {
+        "type": "paragraph",
+        "text": "Names the Vista Bank project UI/UX work and the Jasper Report design template as the contributions it was awarded for."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/itss-most-outstanding-intern.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/synergy-africa-design-quest.jpg",
+        "alt": "Finalist - Synergy Africa Design Quest 2023"
+      },
+      {
+        "type": "paragraph",
+        "text": "25 October 2023"
+      },
+      {
+        "type": "heading",
+        "text": "Finalist - Synergy Africa Design Quest 2023"
+      },
+      {
+        "type": "paragraph",
+        "text": "Synergyy"
+      },
+      {
+        "type": "paragraph",
+        "text": "Independent design recognition, judged competition"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/synergy-africa-design-quest.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/hult-prize-runner-up.jpg",
+        "alt": "1st runner-up team - Hult Prize"
+      },
+      {
+        "type": "paragraph",
+        "text": "11 January 2021"
+      },
+      {
+        "type": "heading",
+        "text": "1st runner-up team - Hult Prize"
+      },
+      {
+        "type": "paragraph",
+        "text": "Hult Prize Foundation, Federal University Dutsin-Ma"
+      },
+      {
+        "type": "paragraph",
+        "text": "Team placement in an international entrepreneurship competition"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/hult-prize-runner-up.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/zidio-uiux-internship.jpg",
+        "alt": "UI/UX Design internship programme"
+      },
+      {
+        "type": "paragraph",
+        "text": "15 Feb – 15 Mar 2024"
+      },
+      {
+        "type": "heading",
+        "text": "UI/UX Design internship programme"
+      },
+      {
+        "type": "paragraph",
+        "text": "Zidio Development"
+      },
+      {
+        "type": "paragraph",
+        "text": "Completed structured UI/UX design programme"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/zidio-uiux-internship.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/alison-ui-design-figma.jpg",
+        "alt": "User Interface Design with Figma"
+      },
+      {
+        "type": "paragraph",
+        "text": "24 March 2024"
+      },
+      {
+        "type": "heading",
+        "text": "User Interface Design with Figma"
+      },
+      {
+        "type": "paragraph",
+        "text": "Alison - CPD certified"
+      },
+      {
+        "type": "paragraph",
+        "text": "Assessed competence in the primary design tool"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/alison-ui-design-figma.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/alison-uiux-adobe-xd.jpg",
+        "alt": "UI/UX Design using Adobe XD"
+      },
+      {
+        "type": "heading",
+        "text": "UI/UX Design using Adobe XD"
+      },
+      {
+        "type": "paragraph",
+        "text": "Assessed competence in UI/UX tooling"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/alison-uiux-adobe-xd.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/great-learning-css.jpg",
+        "alt": "Front-End Development - CSS"
+      },
+      {
+        "type": "paragraph",
+        "text": "March 2024"
+      },
+      {
+        "type": "heading",
+        "text": "Front-End Development - CSS"
+      },
+      {
+        "type": "paragraph",
+        "text": "Great Learning Academy"
+      },
+      {
+        "type": "paragraph",
+        "text": "Front-end fluency behind the HTML/CSS handoff work"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/great-learning-css.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/files/mercor-introduction-to-agents.jpg",
+        "alt": "Introduction to Agents"
+      },
+      {
+        "type": "paragraph",
+        "text": "7 October 2026"
+      },
+      {
+        "type": "heading",
+        "text": "Introduction to Agents"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mercor"
+      },
+      {
+        "type": "paragraph",
+        "text": "Course completion recognising rigour, calibration and clarity in AI agent evaluation."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/mercor-introduction-to-agents.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/udemy-ai-voice-agents.jpg",
+        "alt": "AI Voice Agents: Automation with Vapi, ElevenLabs, n8n & MCP"
+      },
+      {
+        "type": "paragraph",
+        "text": "19 October 2025"
+      },
+      {
+        "type": "heading",
+        "text": "AI Voice Agents: Automation with Vapi, ElevenLabs, n8n & MCP"
+      },
+      {
+        "type": "paragraph",
+        "text": "Udemy - 12.5 hours"
+      },
+      {
+        "type": "paragraph",
+        "text": "Applied grounding for the AI product work"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/udemy-ai-voice-agents.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/udemy-langflow.jpg",
+        "alt": "Build AI Apps Fast: Master Langflow Step by Step"
+      },
+      {
+        "type": "paragraph",
+        "text": "3 October 2025"
+      },
+      {
+        "type": "heading",
+        "text": "Build AI Apps Fast: Master Langflow Step by Step"
+      },
+      {
+        "type": "paragraph",
+        "text": "Udemy - 3.5 hours"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/udemy-langflow.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/udemy-vibe-coding.jpg",
+        "alt": "Vibe Coding Bootcamp: Build Any App, Game or Website with AI"
+      },
+      {
+        "type": "heading",
+        "text": "Vibe Coding Bootcamp: Build Any App, Game or Website with AI"
+      },
+      {
+        "type": "paragraph",
+        "text": "Udemy - 4 hours"
+      },
+      {
+        "type": "paragraph",
+        "text": "Applied grounding for AI-assisted build workflows"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/udemy-vibe-coding.jpg",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/project-management-foundations.jpg",
+        "alt": "Project Management Foundations"
+      },
+      {
+        "type": "paragraph",
+        "text": "4 June 2024"
+      },
+      {
+        "type": "heading",
+        "text": "Project Management Foundations"
+      },
+      {
+        "type": "paragraph",
+        "text": "LinkedIn Learning - 3h 32m"
+      },
+      {
+        "type": "paragraph",
+        "text": "Delivery and stakeholder practice behind the manager role"
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/project-management-foundations.pdf",
+        "text": "Open document"
+      },
+      {
+        "type": "image",
+        "src": "/credentials/previews/efset-english-c1.jpg",
+        "alt": "English - C1 Advanced (63/100)"
+      },
+      {
+        "type": "paragraph",
+        "text": "29 March 2026"
+      },
+      {
+        "type": "heading",
+        "text": "English - C1 Advanced (63/100)"
+      },
+      {
+        "type": "paragraph",
+        "text": "EF SET"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reading C2, Writing C1, Listening and Speaking B2."
+      },
+      {
+        "type": "link",
+        "href": "/credentials/files/efset-english-c1.pdf",
+        "text": "Open document"
+      }
+    ]
+  },
+  "/about/": {
+    "id": "about",
+    "title": "About Jamiu Abdulfatai",
+    "summary": "Product designer working across fintech, AI products and complex workflows.",
+    "image": "/assets/portraits/suit.webp",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "I design clear interfaces for payments, banking and complex workflows."
+      },
+      {
+        "type": "paragraph",
+        "text": "I work across web and mobile, from cross-border payments to banking across four subsidiaries. I’m studying MSc User Experience Design at the University of Brighton."
+      },
+      {
+        "type": "paragraph",
+        "text": "I’m usually drawn to the part of a product where things get complicated. That’s where I find the most interesting design problems."
+      },
+      {
+        "type": "paragraph",
+        "text": "I like untangling the things that make digital products difficult to use. Sometimes that means questioning a business rule; sometimes it means finding a simpler way to explain what’s happening."
+      },
+      {
+        "type": "paragraph",
+        "text": "I enjoy the design process, but I also like understanding how things are built. It helps me make decisions that work beyond the Figma file, and gives me more useful conversations with engineers."
+      },
+      {
+        "type": "paragraph",
+        "text": "At Brighton, I’m developing my research practice and spending more time questioning the decisions behind interfaces, especially how research and AI can help us design more responsibly. My AI practice is part of that exploration."
+      },
+      {
+        "type": "paragraph",
+        "text": "When I’m not thinking about interfaces, there’s a good chance I’m somewhere playing football."
+      },
+      {
+        "type": "paragraph",
+        "text": "Phone: +44 7344 383739 (telephone link: tel:+447344383739)."
+      },
+      {
+        "type": "paragraph",
+        "text": "Email: aabdulfataijamiu@gmail.com (mailto:aabdulfataijamiu@gmail.com)."
+      },
+      {
+        "type": "paragraph",
+        "text": "Visitors may call or email directly using the portfolio assistant’s contact options. A call starts only if their device initiates it, and an email is an editable draft they choose whether to send."
+      }
+    ]
+  },
+  "/experience/": {
+    "id": "ai-practice",
+    "title": "AI practice",
+    "summary": "Product UX, model evaluation and working prototypes.",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Product design, model evaluation and working prototypes."
+      },
+      {
+        "type": "paragraph",
+        "text": "My interest in AI starts with what people actually need to do. At Kremor AI I worked on generated fashion, human review and the operational steps behind production. My evaluation work separately examined model output rather than treating it as user research."
+      },
+      {
+        "type": "paragraph",
+        "text": "Evaluate the output before designing around it."
+      },
+      {
+        "type": "paragraph",
+        "text": "At Kremor AI I worked across forensic benchmarking, dataset annotation and qualitative evaluation of LLM and generative-image output, covering complex AI interaction tasks. This was model evaluation alongside product design, not participant usability research."
+      },
+      {
+        "type": "paragraph",
+        "text": "Keep hypotheses separate from findings."
+      },
+      {
+        "type": "paragraph",
+        "text": "I use AI to explore options and organise research, then check the source material. I use official guidance to ground early models before testing them with people. I label what is sourced, what is hypothesised and what needs validation."
+      },
+      {
+        "type": "paragraph",
+        "text": "Pattern: was the behaviour repeatable?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Risk: what happens when it is wrong?"
+      },
+      {
+        "type": "paragraph",
+        "text": "For Kremor AI, I designed prompt scaffolding, conversational starting points and the connected storefront-to-production workflow. Five operational roles, confirmation gates, permissions and audit history make an open-ended AI experience more controllable."
+      },
+      {
+        "type": "paragraph",
+        "text": "Chalantwork connects AI-assisted sustainability work to evidence and maker-checker review. Its live platform brings reporting and operational decisions into a governed workflow."
+      },
+      {
+        "type": "paragraph",
+        "text": "Connect conversation to a real task."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Bizinc assistant-to-booking concept explores conversational discovery. It remains a proposal until business relevance, live availability and booking impact are validated."
+      },
+      {
+        "type": "paragraph",
+        "text": "Does the person know what the system did, what still needs their approval and what to do when the answer is wrong?"
+      },
+      {
+        "type": "paragraph",
+        "text": "My technical practice includes LangGraph for graph-based agent flows, Hugging Face for open-source model and agent integration, and React.js for front-end implementation awareness. These support the product design rather than replace it."
+      },
+      {
+        "type": "paragraph",
+        "text": "I built a personal plugin experiment for careful academic editing: minimal changes, preserved citations and author approval before substantial rewrites. It returns edited text, significant changes and questions to review. It does not promise AI-detector scores."
+      },
+      {
+        "type": "paragraph",
+        "text": "I built a page-aware portfolio agent that connects a visitor’s question to the current route, conversation context, project knowledge and supporting evidence. That work informs how I structure context for AI-assisted products."
+      },
+      {
+        "type": "paragraph",
+        "text": "I use Claude, ChatGPT, Codex and Google Antigravity around research synthesis, design exploration, functional prototypes and workflow automation, with human review before output becomes a claim or a shipped experience."
+      }
+    ]
+  }
+}
