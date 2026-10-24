@@ -94,4 +94,16 @@ class Grounding(unittest.TestCase):
   self.assertEqual([e['type'] for e in events],['status','status','delta','done'])
   self.assertEqual(events[-1]['answer'],'Checked reply.')
 
+class ContactReplies(unittest.TestCase):
+ def test_contact_reply_never_denies_verified_linkedin(self):
+  for q in ['give me all his contants, linkedin, facebook or any social media handle','How can I contact him?','His LinkedIn?']:
+   answer=a['verified_contact_reply'](q)
+   self.assertIn('LinkedIn',answer)
+   self.assertIn('Facebook',answer)
+   self.assertNotIn('not provided',answer)
+  self.assertIn('post',a['verified_contact_reply']('all his social media'))
+  self.assertIsNone(a['verified_contact_reply']('Explain Vista banking'))
+  self.assertIsNone(a['verified_contact_reply']('How do customers contact the support team?'))
+
 if __name__=='__main__':unittest.main()
+

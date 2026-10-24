@@ -170,6 +170,18 @@ PORTFOLIO_MAP = "\n\n---\n\n".join(
 )
 
 
+def verified_contact_reply(question):
+    """Contact destinations are owner-supplied facts, not model deductions."""
+    q = str(question or "").lower()
+    contact = re.search(r"\b(contact(?:s)?|contants|e-?mail|phone|linkedin|linked in|facebook|social(?:s| media)?|get in touch|reach him|connect with)\b", q)
+    if not contact or re.search(r"\b(customer|support team|users?|customers?)\b", q):
+        return None
+    answer = "You can connect with Jamiu on LinkedIn or Facebook, send him an email, or call him using the links below."
+    if re.search(r"\b(twitter|x|social(?:s| media)?|all)\b", q):
+        answer += " The supplied X link is a post, so I can’t confirm it as his profile link."
+    return answer
+
+
 def model_endpoint():
     groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
@@ -911,6 +923,10 @@ class handler(BaseHTTPRequestHandler):
                 "intent": "clarification",
                 "page_id": page_context.get("page_id", ""),
             })
+
+        contact_answer = verified_contact_reply(question) if not job_description else None
+        if contact_answer:
+            return json_response(self, 200, {"answer": contact_answer, "source_ids": [], "support_ids": [], "intent": "contact", "page_id": page_context.get("page_id", "")})
 
         intent = "job-fit" if job_description else response_intent(question, history, page_context)
         try:

@@ -40,7 +40,7 @@ for(const [question,expected] of [
 }
 const card=renderContactActions();
 assert.equal(card.attrs['aria-label'],'Contact Jamiu');
-assert.equal(card.children[1].children.length,3);
+assert.equal(card.children[1].children.length,4);
 const [phone,email]=card.children[1].children;
 assert.equal(phone.href,'tel:+447344383739');
 assert(email.href.startsWith('mailto:aabdulfataijamiu@gmail.com?subject='));

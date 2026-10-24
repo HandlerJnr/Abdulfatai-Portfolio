@@ -140,6 +140,28 @@
         "kind": "implementation_review",
         "confirmed_on": "2026-10-23"
       }
+    },
+    {
+      "id": "contact.linkedin",
+      "category": "contact",
+      "statement": "Jamiu’s Linkedin profile is https://www.linkedin.com/in/jamiudesign/. The interface provides a clickable contact card for it.",
+      "status": "confirmed",
+      "source": {
+        "kind": "portfolio",
+        "record_id": "linkedin",
+        "url": "https://www.linkedin.com/in/jamiudesign/"
+      }
+    },
+    {
+      "id": "contact.facebook",
+      "category": "contact",
+      "statement": "Jamiu’s Facebook profile is https://www.facebook.com/Handler.Jnr/. The interface provides a clickable contact card for it.",
+      "status": "confirmed",
+      "source": {
+        "kind": "portfolio",
+        "record_id": "community",
+        "url": "https://www.facebook.com/Handler.Jnr/"
+      }
     }
   ]
 }

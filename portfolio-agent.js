@@ -132,10 +132,11 @@ function appendInline(parent,value){
     }else{
       const anchor=document.createElement('a');
       const href=match[3]||match[4];
-      anchor.href=/^[^:@\s]+@/.test(href)?'mailto:'+href:href;
+      anchor.href=/^[^:@\s]+@/.test(href)?'mailto:'+href:href.replace(/[.,;)]+$/,'');
+      anchor.className='agent-response-link';
       anchor.target='_blank';
       anchor.rel='noopener';
-      anchor.textContent=match[2]||match[4];
+      anchor.textContent=match[2]||(/@/.test(href)&&!href.startsWith('http')?'Email Jamiu':href.startsWith('tel:')?'Call Jamiu':new URL(anchor.href,location.origin).hostname.replace(/^www\./,''));
       parent.append(anchor);
     }
     cursor=pattern.lastIndex;
@@ -155,15 +156,16 @@ function shouldOfferContact(question){
   /\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
   || /\b(?:where|how|what)\b.{0,65}\b(?:he|his|jamiu)\b.{0,40}\b(?:improve|grow|develop|work on)\b/i.test(q)
  ) &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
- const directContact=/\b(linkedin|linked in|social(?:s| media)?|contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
+ const directContact=/\b(facebook|twitter|linkedin|linked in|social(?:s| media)?|contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
  return personalQuestion||directContact;
 }
 function contactActionContent(kind,label,detail){
  const icon=text('span','','agent-contact-icon');
  icon.setAttribute('aria-hidden','true');
- const path=kind==='phone'
+ const brandPaths={linkedin:'<path d="M5 9v10M5 5v.1M10 19V9h4v2c1-3 6-3 6 1v7M10 13c0-4 4-4 4 0v6"/>',facebook:'<path d="M14 21v-8h3l1-4h-4V7c0-1 1-2 2-2h2V1h-3c-4 0-6 2-6 6v2H6v4h3v8"/>'};
+ const path=brandPaths[kind]||(kind==='phone' 
   ?'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.79a2 2 0 0 1-.45 2.11L8.09 9.89a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.57 2.79.69A2 2 0 0 1 22 16.92Z"/>'
-  :'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>';
+  :'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>');
  icon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true">'+path+'</svg>';
  const copy=text('span','','agent-contact-copy');
  copy.append(text('strong',label),text('span',detail,'agent-contact-detail'));
@@ -182,9 +184,10 @@ function renderContactActions(){
  mail.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Enquiry from Jamiu’s portfolio');
  mail.setAttribute('aria-label','Email Jamiu at '+CONTACT_EMAIL);
  mail.append(...contactActionContent('email','Email Jamiu',CONTACT_EMAIL));
- const linkedin=text('a','LinkedIn ↗','agent-contact-link');
+ const linkedin=text('a','','agent-contact-link');linkedin.append(...contactActionContent('linkedin','LinkedIn','jamiudesign'));
  linkedin.href='https://www.linkedin.com/in/jamiudesign/';linkedin.target='_blank';linkedin.rel='noopener noreferrer';
- actions.append(phone,mail,linkedin);block.append(actions);
+ const facebook=text('a','','agent-contact-link');facebook.href='https://www.facebook.com/Handler.Jnr/';facebook.target='_blank';facebook.rel='noopener noreferrer';facebook.append(...contactActionContent('facebook','Facebook','Handler.Jnr'));
+ actions.append(phone,mail,linkedin,facebook);block.append(actions);
  return block;
 }
 
