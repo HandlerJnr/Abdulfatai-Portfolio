@@ -176,10 +176,7 @@ def verified_contact_reply(question):
     contact = re.search(r"\b(contact(?:s)?|contants|e-?mail|phone|linkedin|linked in|facebook|social(?:s| media)?|get in touch|reach him|connect with)\b", q)
     if not contact or re.search(r"\b(customer|support team|users?|customers?)\b", q):
         return None
-    answer = "You can connect with Jamiu on LinkedIn or Facebook, send him an email, or call him using the links below."
-    if re.search(r"\b(twitter|x|social(?:s| media)?|all)\b", q):
-        answer += " The supplied X link is a post, so I can’t confirm it as his profile link."
-    return answer
+    return "Connect with Jamiu:"
 
 
 def model_endpoint():

@@ -22,7 +22,7 @@
   const pattern=/\*\*([^*]+)\*\*|\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^)]+)\)|((?:https?:\/\/|mailto:|tel:)[^\s]+|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi;
   let cursor=0,match;while((match=pattern.exec(value))){parent.append(document.createTextNode(value.slice(cursor,match.index)));if(match[1])parent.append(node('strong',match[1]));else{const raw=match[3]||match[4];const clean=raw.replace(/[.,;)]+$/,'');const href=/^[^:@\s]+@/.test(clean)?'mailto:'+clean:clean;const label=match[2]||(href.startsWith('mailto:')?'Email Jamiu':href.startsWith('tel:')?'Call Jamiu':new URL(href,location.origin).hostname.replace(/^www\./,''));parent.append(link(label,href,'response-link-card'));}cursor=pattern.lastIndex;}parent.append(document.createTextNode(value.slice(cursor)));
  }
- function richText(value){const fragment=document.createDocumentFragment();for(const paragraph of String(value||'').split(/\n\s*\n/)){const p=node('p');appendInline(p,paragraph);fragment.append(p);}return fragment;}
+ function richText(value){const fragment=document.createDocumentFragment();if(/^(?:Connect with Jamiu:?$|You can connect with Jamiu on LinkedIn or Facebook,)/i.test(String(value||'').trim()))return fragment;for(const paragraph of String(value||'').split(/\n\s*\n/)){const p=node('p');appendInline(p,paragraph);fragment.append(p);}return fragment;}
  function wantsContact(value){return /\b(contact|facebook|twitter|linkedin|linked in|socials?|e-?mail|phone|call|reach|get in touch|connect|hire|hiring)\b/i.test(value||'');}
  function contactLinks(){
   const section=node('section',undefined,'search-contact');section.setAttribute('aria-label','Connect with Jamiu');section.append(node('p','Connect with Jamiu:','contact-title'));

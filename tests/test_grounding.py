@@ -98,10 +98,9 @@ class ContactReplies(unittest.TestCase):
  def test_contact_reply_never_denies_verified_linkedin(self):
   for q in ['give me all his contants, linkedin, facebook or any social media handle','How can I contact him?','His LinkedIn?']:
    answer=a['verified_contact_reply'](q)
-   self.assertIn('LinkedIn',answer)
-   self.assertIn('Facebook',answer)
+   self.assertEqual(answer,'Connect with Jamiu:')
    self.assertNotIn('not provided',answer)
-  self.assertIn('post',a['verified_contact_reply']('all his social media'))
+  self.assertEqual(a['verified_contact_reply']('all his social media'),'Connect with Jamiu:')
   self.assertIsNone(a['verified_contact_reply']('Explain Vista banking'))
   self.assertIsNone(a['verified_contact_reply']('How do customers contact the support team?'))
 
