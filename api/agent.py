@@ -213,10 +213,11 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt):
+def call_model(prompt, model=None):
     endpoint, token, provider = model_endpoint()
+    selected_model = model or MODEL
     body = {
-        "model": MODEL,
+        "model": selected_model,
         "messages": model_messages(prompt),
         "temperature": 0.35,
         "max_completion_tokens": 1100 if prompt.startswith("GROUNDING_REVIEW_TASK\n") else 500,
@@ -224,7 +225,7 @@ def call_model(prompt):
     if prompt.startswith("GROUNDING_REVIEW_TASK\n"):
         body["response_format"] = {"type": "json_object"}
         body["temperature"] = 0.1
-    if provider == "groq" and MODEL.startswith("openai/gpt-oss"):
+    if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
     request = urllib.request.Request(
         endpoint,
@@ -238,7 +239,7 @@ def call_model(prompt):
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=22) as response:
             data = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
         # Return only classified diagnostics, never provider bodies or credentials.
@@ -261,6 +262,13 @@ def call_model(prompt):
                 detail = "provider_request_blocked"
             elif "<html" in raw.lower():
                 detail = "provider_http_page"
+        # One alternate model attempt handles model-specific throttling. The reply
+        # still passes the same evidence validator before it reaches the visitor.
+        if error.code == 429 and provider == "groq" and model is None:
+            fallback = "llama-3.3-70b-versatile" if selected_model != "llama-3.3-70b-versatile" else "llama-3.1-8b-instant"
+            error.close()
+            print("portfolio_agent_model_fallback: rate_limit")
+            return call_model(prompt, model=fallback)
         classified = RuntimeError(provider + "_http_" + str(error.code) + "_" + detail)
         if error.code == 429:
             classified.retry_after = 30
