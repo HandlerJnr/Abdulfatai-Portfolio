@@ -980,8 +980,9 @@ class handler(BaseHTTPRequestHandler):
             print("portfolio_agent_checked_reply_error:", diagnostic if re.fullmatch(r"[a-z0-9_]+", diagnostic) else type(error).__name__)
             try:
                 if "_http_429" in diagnostic:
-                    send({"type": "error", "error": "Chat is busy right now. Please wait a moment before retrying.", "code": "rate_limit", "retry_after": getattr(error, "retry_after", 30)})
+                    send({"type": "error", "error": "I couldn’t complete that reply. Please retry.", "code": "rate_limit", "retry_after": getattr(error, "retry_after", 30)})
                 else:
                     send({"type": "error", "error": "I couldn’t verify that reply. Please retry.", "code": "grounding_unavailable"})
             except (BrokenPipeError, ConnectionResetError):
                 pass
+

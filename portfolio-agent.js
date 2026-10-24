@@ -693,7 +693,7 @@ async function ask(q){
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
       stopped=activeRequest.stopped;interrupted=true;retryAfter=Math.max(0,Math.min(60,Number(error.retryAfter)||0));
-      answer=activeRequest.partial||(stopped?'Response stopped.':retryAfter?'Chat is busy right now. Please wait a moment, then retry.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
+      answer=activeRequest.partial||(stopped?'Response stopped.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
       response.dataset.agentError=stopped?'stopped':error?.code||'agent-unavailable';
     }
 
