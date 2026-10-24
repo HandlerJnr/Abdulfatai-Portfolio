@@ -40,7 +40,7 @@ for(const [question,expected] of [
 }
 const card=renderContactActions();
 assert.equal(card.attrs['aria-label'],'Contact Jamiu');
-assert.equal(card.children[1].children.length,2);
+assert.equal(card.children[1].children.length,3);
 const [phone,email]=card.children[1].children;
 assert.equal(phone.href,'tel:+447344383739');
 assert(email.href.startsWith('mailto:aabdulfataijamiu@gmail.com?subject='));
@@ -53,3 +53,4 @@ assert(script.includes('shouldOfferContact(previousQuestion)'),'Contact links su
 assert(script.includes('contact:offerContact'),'Contact visibility is saved per reply');
 assert(knowledge.find(r=>r.id==='about').text.includes(CONTACT_PHONE));
 console.log('Contextual call and email links, mobile actions, and restored messages passed.');
+

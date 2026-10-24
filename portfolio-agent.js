@@ -120,7 +120,7 @@ function cleanAgentOutput(value){
 
 function appendInline(parent,value){
   const input=String(value||'').replace(/\*\*\s*\*\*/g,'');
-  const pattern=/\*\*([^*]+)\*\*|\[([^\]]+)\]\((https?:\/\/[^)]+)\)|(https?:\/\/[^\s]+)/g;
+  const pattern=/\*\*([^*]+)\*\*|\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^)]+)\)|((?:https?:\/\/|mailto:|tel:)[^\s]+|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi;
   let cursor=0;
   let match;
   while((match=pattern.exec(input))){
@@ -131,7 +131,8 @@ function appendInline(parent,value){
       parent.append(strong);
     }else{
       const anchor=document.createElement('a');
-      anchor.href=match[3]||match[4];
+      const href=match[3]||match[4];
+      anchor.href=/^[^:@\s]+@/.test(href)?'mailto:'+href:href;
       anchor.target='_blank';
       anchor.rel='noopener';
       anchor.textContent=match[2]||match[4];
@@ -154,7 +155,7 @@ function shouldOfferContact(question){
   /\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
   || /\b(?:where|how|what)\b.{0,65}\b(?:he|his|jamiu)\b.{0,40}\b(?:improve|grow|develop|work on)\b/i.test(q)
  ) &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
- const directContact=/\b(contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
+ const directContact=/\b(linkedin|linked in|social(?:s| media)?|contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
  return personalQuestion||directContact;
 }
 function contactActionContent(kind,label,detail){
@@ -171,7 +172,7 @@ function contactActionContent(kind,label,detail){
 function renderContactActions(){
  const block=text('section','','agent-contact');
  block.setAttribute('aria-label','Contact Jamiu');
- block.append(text('p','Would you like to call Jamiu now or send him an email?','agent-contact-prompt'));
+ block.append(text('p','Connect with Jamiu:','agent-contact-prompt'));
  const actions=text('div','','agent-contact-links');
  const phone=text('a','','agent-contact-link');
  phone.href='tel:'+CONTACT_PHONE;
@@ -181,7 +182,9 @@ function renderContactActions(){
  mail.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Enquiry from Jamiu’s portfolio');
  mail.setAttribute('aria-label','Email Jamiu at '+CONTACT_EMAIL);
  mail.append(...contactActionContent('email','Email Jamiu',CONTACT_EMAIL));
- actions.append(phone,mail);block.append(actions);
+ const linkedin=text('a','LinkedIn ↗','agent-contact-link');
+ linkedin.href='https://www.linkedin.com/in/jamiudesign/';linkedin.target='_blank';linkedin.rel='noopener noreferrer';
+ actions.append(phone,mail,linkedin);block.append(actions);
  return block;
 }
 
@@ -914,8 +917,9 @@ dialog.addEventListener('close',()=>{
   if(dialog.open)return; // Switching views queues a close event before reopening.
   if(chatView==='docked'&&profile)profile.scrollTop=profileScroll;
   chatView='focused';dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');syncViewControl();
-  document.body.style.overflow=savedOverflow;
   unlockAgentPage();
+  document.body.style.overflow=savedOverflow;
+  window.ltLenis?.start();
   dialog.classList.remove('has-virtual-keyboard');
   saveConversation();
   input.blur();
@@ -1068,6 +1072,7 @@ document.querySelectorAll('[data-agent-open]').forEach(button=>button.addEventLi
   window.portfolioAgent.open();
 }));
 })();
+
 
 
 
