@@ -7,3 +7,4 @@
 .project-card_copy>p{font-size:15px;line-height:1.65}.project-card_status{font-size:12px;line-height:1.6}.section_feed .text-style-label{font-size:12px}
 @media(max-width:767px){.section_feed>.project-column-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;gap:3px;padding:10px 0;margin-bottom:22px}.project-column-nav a{padding:11px 12px;font-size:13px}.project-card_copy>p{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.project-column-nav a{transition:none}}
+@media(max-width:767px){.section_feed>.project-column-nav{width:calc(100% - 52px);box-sizing:border-box}}
