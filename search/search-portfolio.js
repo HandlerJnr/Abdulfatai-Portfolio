@@ -173,9 +173,9 @@
   if(url.hash&&path===normalPath(stripBase(location.pathname)))return;
   event.preventDefault();if($('image-viewer').open)$('image-viewer').close();$('profile-menu').hidden=true;navigatePage(path);
  });
- const divider=$('panel-divider'),frame=document.querySelector('.portfolio-frame');let split=52;
- const splitKey='jamiu-search-panel-width-v1';try{split=Number(localStorage.getItem(splitKey))||52;}catch{}
- if(split===39)split=52;
+ const divider=$('panel-divider'),frame=document.querySelector('.portfolio-frame');let split=60;
+ const splitKey='jamiu-search-panel-width-v1';try{split=Number(localStorage.getItem(splitKey))||60;}catch{}
+ if(split===39||split===52)split=60;
  function applySplit(value,persist=false){
   const width=frame.getBoundingClientRect().width;const min=Math.max(28,Math.ceil(330/width*100));const max=Math.min(72,Math.floor((width-340)/width*100));
   split=Math.max(min,Math.min(max,value));frame.style.setProperty('--panel-width',split+'%');divider.setAttribute('aria-valuenow',String(Math.round(split)));divider.setAttribute('aria-valuemin',String(min));divider.setAttribute('aria-valuemax',String(max));if(persist)try{localStorage.setItem(splitKey,String(split));}catch{}
@@ -185,8 +185,8 @@
  function finishResize(event){if(divider.hasPointerCapture(event.pointerId))divider.releasePointerCapture(event.pointerId);frame.classList.remove('is-resizing');applySplit(split,true);}
  divider.addEventListener('pointerup',finishResize);divider.addEventListener('pointercancel',finishResize);
  divider.addEventListener('lostpointercapture',()=>frame.classList.remove('is-resizing'));
- divider.addEventListener('dblclick',()=>applySplit(52,true));
- divider.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home'].includes(event.key))return;event.preventDefault();applySplit(event.key==='Home'?52:split+(event.key==='ArrowLeft'?-2:2),true);});
+ divider.addEventListener('dblclick',()=>applySplit(60,true));
+ divider.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home'].includes(event.key))return;event.preventDefault();applySplit(event.key==='Home'?60:split+(event.key==='ArrowLeft'?-2:2),true);});
  window.addEventListener('resize',()=>{if(innerWidth>740)applySplit(split);});if(innerWidth>740)applySplit(split);
 
 

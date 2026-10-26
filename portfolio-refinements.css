@@ -8,3 +8,11 @@
 @media(max-width:767px){.section_feed>.project-column-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;gap:3px;padding:10px 0;margin-bottom:22px}.project-column-nav a{padding:11px 12px;font-size:13px}.project-card_copy>p{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.project-column-nav a{transition:none}}
 @media(max-width:767px){.section_feed>.project-column-nav{width:calc(100% - 52px);box-sizing:border-box}}
+
+/* The existing hamburger sits at the far right of the pinned project toolbar. */
+.section_feed>.project-column-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;min-width:0;padding:12px 0;margin:0 0 24px;border-bottom:1px solid var(--_colors---border--primary,#b8b8b3);background:var(--_colors---background--primary,#f5f5f3)}
+.project-column-bar>.project-column-nav{display:flex;align-items:center;flex:1;min-width:0;gap:4px;overflow-x:auto;scrollbar-width:thin;white-space:nowrap}
+.project-column-bar>.portfolio-navigation{position:static!important;flex:0 0 44px;margin-left:auto;align-self:center}
+.project-column-bar .portfolio-navigation-anchor{display:none}
+.portfolio-menu-is-open .project-column-bar{z-index:1001}
+@media(max-width:767px){.section_feed>.project-column-bar{gap:8px;padding:10px 0;margin-bottom:22px}.project-column-bar>.project-column-nav{gap:3px}.project-column-bar .portfolio-menu-toggle{height:40px;min-height:40px}}
