@@ -16,3 +16,5 @@
 .project-column-bar .portfolio-navigation-anchor{display:none}
 .portfolio-menu-is-open .project-column-bar{z-index:1001}
 @media(max-width:767px){.section_feed>.project-column-bar{gap:8px;padding:10px 0;margin-bottom:22px}.project-column-bar>.project-column-nav{gap:3px}.project-column-bar .portfolio-menu-toggle{height:40px;min-height:40px}}
+
+@media(max-width:767px){.section_feed>.project-column-bar{padding-right:52px;box-sizing:border-box}}
