@@ -16,7 +16,8 @@ from llama_index.retrievers.bm25 import BM25Retriever
 ROOT = Path(__file__).resolve().parent.parent
 KNOWLEDGE_PATH = ROOT / "portfolio-knowledge.json"
 TECHNICAL_PATH = ROOT / "technical-capabilities.json"
-MODEL = os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
+GEMINI_TRIAL = os.environ.get("VERCEL_ENV") == "preview" and bool(os.environ.get("GEMINI_API_KEY", "").strip())
+MODEL = "gemini-3.1-flash-lite" if GEMINI_TRIAL else os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
 MAX_HISTORY = 10
 FACTS_PATH = ROOT / "agent-facts.json"
 with FACTS_PATH.open(encoding="utf-8") as handle:
@@ -180,6 +181,8 @@ def verified_contact_reply(question):
 
 
 def model_endpoint():
+    if os.environ.get("VERCEL_ENV") == "preview" and os.environ.get("GEMINI_API_KEY", "").strip():
+        return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", os.environ["GEMINI_API_KEY"].strip(), "gemini"
     groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
         return "https://api.groq.com/openai/v1/chat/completions", groq_key, "groq"
@@ -257,6 +260,9 @@ def call_model(prompt, model=None):
         body["temperature"] = 0.1
     if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
+    if provider == "gemini":
+        body["max_tokens"] = body.pop("max_completion_tokens")
+        body["reasoning_effort"] = "minimal"
     request = urllib.request.Request(
         endpoint,
         data=json.dumps(body).encode("utf-8"),
@@ -275,6 +281,7 @@ def call_model(prompt, model=None):
         # Return only classified diagnostics, never provider bodies or credentials.
         raw = error.read(16384).decode("utf-8", errors="replace")
         detail = "unspecified"
+        payload = {}
         try:
             payload = json.loads(raw)
             issue = payload.get("error", {})
@@ -292,6 +299,15 @@ def call_model(prompt, model=None):
                 detail = "provider_request_blocked"
             elif "<html" in raw.lower():
                 detail = "provider_http_page"
+        if provider == "gemini" and error.code == 429:
+            try:
+                violations = []
+                for item in payload.get("error", {}).get("details", []):
+                    for violation in item.get("violations", []):
+                        violations.append({k: violation[k] for k in ("quotaMetric", "quotaId", "quotaValue", "quotaDimensions") if k in violation})
+                print("portfolio_agent_gemini_quota:", json.dumps(violations))
+            except (TypeError, AttributeError):
+                pass
         # One alternate model attempt handles model-specific throttling. The reply
         # still passes the same evidence validator before it reaches the visitor.
         if error.code in (404, 429, 502, 503) and provider == "groq" and model is None:
@@ -306,6 +322,9 @@ def call_model(prompt, model=None):
     except Exception as error:
         raise RuntimeError("model_network") from error
 
+    if provider == "gemini":
+        usage = data.get("usage", {})
+        print("portfolio_agent_gemini_usage:", json.dumps({k: usage[k] for k in ("prompt_tokens", "completion_tokens", "total_tokens") if k in usage}))
     message = ((data.get("choices") or [{}])[0].get("message") or {})
     content = clip(message.get("content"), 7000)
     if not content:
@@ -933,7 +952,7 @@ def build_job_fit_prompt(description, question):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Safe health check: reveals capability state, never secret values.
-        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN"))
+        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN") or (os.environ.get("VERCEL_ENV") == "preview" and os.environ.get("GEMINI_API_KEY")))
         return json_response(
             self,
             200,
@@ -1058,7 +1077,7 @@ class handler(BaseHTTPRequestHandler):
                   "support_ids": support_ids,
                   "source_ids": select_proof_ids(answer, used_ids, question, intent),
                   "evidence_links": evidence_links(question, history, intent),
-                  "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL})
+                  "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL, "provider": _provider})
         except (BrokenPipeError, ConnectionResetError):
             pass
         except Exception as error:
