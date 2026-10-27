@@ -870,6 +870,12 @@ def published_reply(question, history, sources):
     stop = {"what", "about", "does", "that", "this", "with", "from", "have", "jamiu", "would", "could", "tell", "more", "please", "there", "they", "their", "which"}
     query = question + " " + " ".join(m.get("content", "") for m in history if m.get("role") == "user")[-700:]
     terms = set(re.findall(r"[a-z]{4,}", query.lower())) - stop
+    current_terms = set(re.findall(r"[a-z]{4,}", question.lower())) - stop
+    if re.search(r"design systems?", question, re.I):
+        current_terms.update(("component", "library", "tokens", "system"))
+    def relevance(text):
+        lower = text.lower()
+        return 3 * sum(term in lower for term in current_terms) + sum(term in lower for term in terms)
     if re.search(r"\blanguages?\b", query, re.I):
         terms.update(("english", "french", "language"))
     candidates = []
@@ -877,19 +883,19 @@ def published_reply(question, history, sources):
         if source_id == "boundary" or source.get("status") == "unknown":
             continue
         text = source.get("text", "").strip()
-        overlap = sum(term in text.lower() for term in terms)
+        overlap = relevance(text)
         if overlap:
             candidates.append((overlap, source_id, text))
     if not candidates:
         return ("You can explore his projects, experience and contact details here. Which would you like to see?", "portfolio", [])
     _, source_id, passage = max(candidates, key=lambda item: item[0])
     sentences = re.split(r"(?<=[.!?])\\s+", passage)
-    ranked = sorted(enumerate(sentences), key=lambda item: -sum(term in item[1].lower() for term in terms))
+    ranked = sorted(enumerate(sentences), key=lambda item: -relevance(item[1]))
     selected = sorted(ranked[:2])
     excerpt = " ".join(sentence for _, sentence in selected)
     if len(excerpt) > 1100:
         excerpt = excerpt[:1100].rsplit(" ", 1)[0] + "…"
-    return ("From the published portfolio:\\n\\n“" + excerpt + "”", "portfolio", [source_id])
+    return ("From the published portfolio: “" + excerpt + "”", "portfolio", [source_id])
 
 def resilient_answer(prompt, sources, question, history, intent, on_review=None):
     try:
