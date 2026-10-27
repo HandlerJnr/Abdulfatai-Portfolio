@@ -236,7 +236,7 @@ def call_model(prompt, model=None):
     }
     if prompt.startswith("GROUNDING_REVIEW_TASK\n"):
         body["response_format"] = {"type": "json_object"}
-        if provider == "groq" and selected_model in ("openai/gpt-oss-120b", "openai/gpt-oss-20b"):
+        if provider == "gemini" or (provider == "groq" and selected_model in ("openai/gpt-oss-120b", "openai/gpt-oss-20b")):
             body["response_format"] = {
                 "type": "json_schema",
                 "json_schema": {
