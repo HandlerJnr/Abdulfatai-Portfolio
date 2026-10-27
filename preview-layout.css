@@ -19,8 +19,8 @@
 /* Product feed cards share the moderate 3:2 presentation ratio. */
 .section_feed[data-collection="products"] .feed_card,.section_feed[data-collection="works"] .feed_card{height:auto;aspect-ratio:3/2}
 .section_feed[data-collection="products"] .feed_card>.horal-cover,.section_feed[data-collection="works"] .feed_card>.horal-cover{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
-@media(min-width:992px){[data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}}
-@media(max-width:991px){
+@media(min-width:1200px){[data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}}
+@media(max-width:1199px){
  [data-feed-modal] .feed-modal_panel{height:90dvh;max-height:90dvh}
  [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1.36fr) minmax(0,1fr);padding:1em;gap:1em}
  [data-feed-modal] .horal-thumbnails{max-height:3.75em;gap:.35em}
@@ -28,18 +28,19 @@
  [data-feed-modal] .collection-gallery .horal-thumbnail{flex-basis:3.5em;max-width:3.5em}
  [data-feed-modal] .feed-detail_info{gap:1.25em;padding-right:.35em}
 }
-/* Selected mockups fit in full inside the fixed preview area. */
-[data-feed-modal] .horal-gallery-image,[data-feed-modal] .horal-thumbnail img{object-fit:contain;object-position:center}
+/* Product imagery fills its frame; document sheets remain uncropped. */
+[data-feed-modal] .horal-gallery-image,[data-feed-modal] .horal-thumbnail img{object-fit:cover;object-position:center}
+[data-feed-modal] .collection-gallery .horal-gallery-image,[data-feed-modal] .collection-gallery .horal-thumbnail img{object-fit:contain}
 [data-feed-modal] .horal-product-preview{background:var(--_colors---background--secondary,#efefec);overflow:hidden}
 [data-feed-modal] .horal-product-preview>.chalant-mockup{container-type:size}
 [data-feed-modal] .horal-product-preview .chalant-screen-frame{width:min(82cqw,150cqh);max-height:90%}
 [data-feed-modal] .chalant-mockup:has(img[src$="/hero.webp"]) .chalant-screen-frame{max-height:100%}
-[data-feed-modal] .chalant-screen-crop img[src$="/hero.webp"]{object-fit:contain!important}
+[data-feed-modal] .chalant-screen-crop img[src$="/hero.webp"]{object-fit:cover!important}
 /* Keep only the browser-chrome crop on the original Chalant screenshots. */
 [data-feed-modal] .chalant-screen-crop img:not([src$="/hero.webp"]){position:absolute;display:block;width:106.7879%;height:auto;max-height:none;max-width:none;left:-3.39394%;top:-14.12556%;object-fit:initial;aspect-ratio:auto}
 
 /* Give the explanation at least as much space as the retained project image. */
-@media(min-width:992px){
+@media(min-width:1200px){
  [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:2em}
  [data-feed-modal] .feed-detail_info{gap:1.1em;padding:0 .75em 2em .25em;font-size:16px}
 }
@@ -51,13 +52,21 @@
 .project-reading .project-facts{margin:0;padding:1em;border:1px solid var(--_colors---border--primary);border-radius:.5em}
 .project-reading .project-metrics strong{font-size:1.25em}
 [data-feed-modal] .feed-detail_tools{padding-top:1em;border-top:1px solid var(--_colors---border--primary)}
-@media(max-width:991px){
+@media(max-width:1199px){
  /* One scroll surface avoids two small, competing reading panes on phones. */
  [data-feed-modal] .feed-modal_body{display:block;overflow-y:auto;overscroll-behavior:contain}
  [data-feed-modal] .feed-detail_component{display:flex;flex-direction:column;height:auto;overflow:visible;gap:1.25em}
- [data-feed-modal] .feed-detail_gallery{height:26dvh;min-height:160px;flex:none;width:100%}
+ [data-feed-modal] .feed-detail_gallery{height:auto;min-height:0;flex:none;width:100%;overflow:visible}
+ [data-feed-modal] .horal-product-preview{flex:none;height:auto;min-height:0;aspect-ratio:16/9}
+ [data-feed-modal] .horal-gallery-image{width:100%;height:100%}
+ [data-feed-modal] .horal-thumbnails{flex:none;max-height:none}
+ [data-feed-modal] .horal-thumbnail{flex:0 0 5em;height:auto;max-height:none}
+ [data-feed-modal] .horal-thumbnail img{aspect-ratio:3/2}
+ [data-feed-modal] .collection-gallery .horal-product-preview{aspect-ratio:4/3}
+ [data-feed-modal] .horal-product-preview>.chalant-mockup{position:absolute;inset:0}
+ [data-feed-modal] .horal-product-preview:has(>.chalant-mockup){position:relative}
  [data-feed-modal] .feed-detail_info{height:auto;overflow:visible;min-height:0;gap:1em;padding:0 0 1em}
- [data-feed-modal] .horal-product-gallery{height:100%}
+ [data-feed-modal] .horal-product-gallery{height:auto}
  [data-feed-modal] .gallery-caption{font-size:12px;line-height:1.4}
  .project-reading .feed-detail_text{font-size:15px}
 }
