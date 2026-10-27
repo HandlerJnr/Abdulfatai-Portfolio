@@ -19,10 +19,27 @@ class Fallback(unittest.TestCase):
   with patch.object(urllib.request,'urlopen',side_effect=request):
    answer,provider=ctx['call_model']('GROUNDING_REVIEW_TASK\ntest')
   self.assertEqual(len(calls),2)
-  self.assertEqual(calls[1]['model'],'llama-3.3-70b-versatile')
-  self.assertEqual(calls[1]['response_format'],{'type':'json_object'})
-  self.assertNotIn('reasoning_effort',calls[1])
+  self.assertEqual(calls[1]['model'],'openai/gpt-oss-20b')
+  self.assertEqual(calls[1]['response_format']['type'],'json_schema')
+  self.assertTrue(calls[1]['response_format']['json_schema']['strict'])
+  self.assertEqual(calls[1]['reasoning_effort'],'low')
   self.assertEqual(json.loads(answer)['answer'],'Hello!')
+ def test_unavailable_primary_uses_supported_backup(self):
+  calls=[]
+  class Response:
+   def __enter__(self):return self
+   def __exit__(self,*args):pass
+   def read(self):return json.dumps({'choices':[{'message':{'content':'Hello!'}}]}).encode()
+  def request(req,timeout):
+   calls.append(json.loads(req.data)['model'])
+   if len(calls)==1:raise urllib.error.HTTPError(req.full_url,404,'not found',{},io.BytesIO(b'{}'))
+   return Response()
+  with patch.object(urllib.request,'urlopen',side_effect=request):ctx['call_model']('test')
+  self.assertEqual(calls,['openai/gpt-oss-120b','openai/gpt-oss-20b'])
+ def test_auth_failure_is_not_retried(self):
+  with patch.object(urllib.request,'urlopen',side_effect=urllib.error.HTTPError('https://api.groq.com',401,'auth',{},io.BytesIO(b'{}'))) as mock:
+   with self.assertRaisesRegex(RuntimeError,'groq_http_401'):ctx['call_model']('test')
+   self.assertEqual(mock.call_count,1)
  def test_both_rate_limited_stop_after_two_attempts(self):
   def request(req,timeout):raise urllib.error.HTTPError(req.full_url,429,'rate limited',{},io.BytesIO(b'{}'))
   with patch.object(urllib.request,'urlopen',side_effect=request) as mock:

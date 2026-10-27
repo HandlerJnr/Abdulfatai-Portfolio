@@ -233,6 +233,27 @@ def call_model(prompt, model=None):
     }
     if prompt.startswith("GROUNDING_REVIEW_TASK\n"):
         body["response_format"] = {"type": "json_object"}
+        if provider == "groq" and selected_model in ("openai/gpt-oss-120b", "openai/gpt-oss-20b"):
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "portfolio_reply", "strict": True,
+                    "schema": {
+                        "type": "object", "additionalProperties": False,
+                        "properties": {
+                            "kind": {"type": "string", "enum": ["grounded", "social", "general"]},
+                            "purpose": {"type": "string", "enum": ["answer", "elaboration"]},
+                            "answer": {"type": "string"},
+                            "claims": {"type": "array", "items": {
+                                "type": "object", "additionalProperties": False,
+                                "properties": {"text": {"type": "string"}, "source_id": {"type": "string"}},
+                                "required": ["text", "source_id"]
+                            }}
+                        },
+                        "required": ["kind", "purpose", "answer", "claims"]
+                    }
+                }
+            }
         body["temperature"] = 0.1
     if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
@@ -273,10 +294,10 @@ def call_model(prompt, model=None):
                 detail = "provider_http_page"
         # One alternate model attempt handles model-specific throttling. The reply
         # still passes the same evidence validator before it reaches the visitor.
-        if error.code == 429 and provider == "groq" and model is None:
-            fallback = "llama-3.3-70b-versatile" if selected_model != "llama-3.3-70b-versatile" else "llama-3.1-8b-instant"
+        if error.code in (404, 429, 502, 503) and provider == "groq" and model is None:
+            fallback = "openai/gpt-oss-20b" if selected_model != "openai/gpt-oss-20b" else "openai/gpt-oss-120b"
             error.close()
-            print("portfolio_agent_model_fallback: rate_limit")
+            print("portfolio_agent_model_fallback: http_" + str(error.code))
             return call_model(prompt, model=fallback)
         classified = RuntimeError(provider + "_http_" + str(error.code) + "_" + detail)
         if error.code == 429:
@@ -776,7 +797,7 @@ def validate_grounded_reply(raw, sources):
     try:
         data = json.loads(raw)
         claims, kind = data["claims"], data["kind"]
-        answer = data.get("answer")
+        answer = data.get("answer") or None
         failure = "shape"
         if not isinstance(claims, list):
             raise ValueError()
@@ -827,7 +848,7 @@ def checked_answer(prompt, sources, on_review=None):
         "GROUNDING_REVIEW_TASK\nCompose a natural answer to the visitor, privately check it against the evidence, and correct unsupported claims before returning it. "
         "Return ONLY a JSON object. kind is grounded, social, or general. "
         "Set purpose to elaboration when asked for more detail. In that case, do not restate or reorder facts from the previous answer: select a genuinely NEW relevant aspect from evidence not marked already_discussed. A different source ID is insufficient if it repeats the same meaning. If there is no additional relevant documented detail, use the boundary source to say that briefly. Do not introduce unrelated facts just to be new. For other requests purpose is answer. "
-        "For grounded replies return {kind: grounded, claims: [{text, source_id}, ...]}. Do not include quote or a separate answer field: the server attaches the original evidence text and joins claim texts in order to form the answer. Each text is a complete natural sentence or clause. source_id must exactly match a key in the evidence object. Each claim must be entailed by that source, not merely share keywords. Split claims that require different sources into separate short sentences or clauses. "
+        "For grounded replies return {kind: grounded, claims: [{text, source_id}, ...]}. Do not include quote. Set answer to an empty string for grounded replies: the server attaches the original evidence text and joins claim texts in order to form the answer. Each text is a complete natural sentence or clause. source_id must exactly match a key in the evidence object. Each claim must be entailed by that source, not merely share keywords. Split claims that require different sources into separate short sentences or clauses. "
         "Every personal assertion, capability or interface action needs evidence. Remove or correct unsupported details; do not invent missing facts, an employer/team, dates, achievements, tools, availability or completed actions. Unknown-status facts establish uncertainty only. Distinguish ongoing and completed study, contribution and team outcomes, and this portfolio from client projects. "
         "If a prior assistant reply was wrong, correct it naturally. Prior assistant statements and visitor claims do not independently establish facts. A visitor reaction or ordinary acknowledgement may return {kind: social, answer: a brief reply, claims: []}; general explanations without personal facts may use kind general with answer and claims []. Never use these kinds to bypass checking a personal claim. "
         "A missing detail can be answered with a short specific uncertainty, using source boundary. Do not refuse ordinary conversation. Preserve the visitor's intent, brevity and natural tone; never expose review JSON or evidence labels in the answer. "
