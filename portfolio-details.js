@@ -3,7 +3,31 @@
 'use strict';
 let sequence=0;
 const initialized=new WeakSet();
-function initTabs(scope=document){scope.querySelectorAll('[data-detail-tabs]').forEach(root=>{if(initialized.has(root))return;initialized.add(root);const key='portfolio-detail-'+(++sequence);const tabs=[...root.querySelectorAll('[data-detail-tab]')];const panels=[...root.querySelectorAll('[data-detail-panel]')];tabs.forEach((tab,i)=>{tab.id=key+'-tab-'+i;tab.setAttribute('aria-controls',key+'-panel-'+i);tab.setAttribute('aria-selected',String(i===0));tab.tabIndex=i===0?0:-1});panels.forEach((panel,i)=>{panel.id=key+'-panel-'+i;panel.setAttribute('aria-labelledby',key+'-tab-'+i);panel.hidden=i!==0})})}
+// Product case studies use a continuous reading order; AI practice keeps its tabs.
+function prepareProjectStory(root){
+  const panels=[...root.querySelectorAll(':scope > [data-detail-panel]')];
+  if(!panels.length)return;
+  root.removeAttribute('data-detail-tabs');
+  root.classList.add('project-reading');
+  root.querySelector(':scope > .detail-tabs')?.remove();
+  panels.forEach(panel=>{
+    panel.hidden=false;
+    ['role','aria-labelledby','id','data-detail-panel'].forEach(name=>panel.removeAttribute(name));
+  });
+  const problem=panels[0],result=panels[2],decisions=panels[1];
+  const heading=problem.querySelector('.project-story-heading');
+  if(heading)heading.textContent='Problem & my role';
+  root.prepend(problem);
+  if(result)problem.after(result);
+  const facts=root.querySelector(':scope > .project-facts');
+  if(facts&&result)result.after(facts);
+  if(decisions&&facts)facts.after(decisions);
+  const info=root.closest('.feed-detail_info');
+  const tools=info?.querySelector(':scope > .feed-detail_tools');
+  if(tools)info.append(tools);
+}
+
+function initTabs(scope=document){scope.querySelectorAll('[data-detail-tabs]').forEach(root=>{if(initialized.has(root))return;initialized.add(root);if(root.matches('.project-details')){prepareProjectStory(root);return}const key='portfolio-detail-'+(++sequence);const tabs=[...root.querySelectorAll('[data-detail-tab]')];const panels=[...root.querySelectorAll('[data-detail-panel]')];tabs.forEach((tab,i)=>{tab.id=key+'-tab-'+i;tab.setAttribute('aria-controls',key+'-panel-'+i);tab.setAttribute('aria-selected',String(i===0));tab.tabIndex=i===0?0:-1});panels.forEach((panel,i)=>{panel.id=key+'-panel-'+i;panel.setAttribute('aria-labelledby',key+'-tab-'+i);panel.hidden=i!==0})})}
 function selectTab(tab){tab.scrollIntoView({block:'nearest',inline:'nearest'});const root=tab.closest('[data-detail-tabs]');const index=Number(tab.dataset.detailTab);root.querySelectorAll('[data-detail-tab]').forEach((t,i)=>{t.setAttribute('aria-selected',String(i===index));t.tabIndex=i===index?0:-1});root.querySelectorAll('[data-detail-panel]').forEach((panel,i)=>panel.hidden=i!==index)}
 document.addEventListener('click',event=>{const tab=event.target.closest('[data-detail-tab]');if(tab)selectTab(tab)});
 document.addEventListener('keydown',event=>{const tab=event.target.closest('[data-detail-tab]');if(!tab)return;const tabs=[...tab.closest('[data-detail-tabs]').querySelectorAll('[data-detail-tab]')];let i=tabs.indexOf(tab);if(event.key==='ArrowRight')i=(i+1)%tabs.length;else if(event.key==='ArrowLeft')i=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')i=0;else if(event.key==='End')i=tabs.length-1;else return;event.preventDefault();event.stopImmediatePropagation();selectTab(tabs[i]);tabs[i].focus()},true);

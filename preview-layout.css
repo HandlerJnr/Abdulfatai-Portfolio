@@ -37,3 +37,27 @@
 [data-feed-modal] .chalant-screen-crop img[src$="/hero.webp"]{object-fit:contain!important}
 /* Keep only the browser-chrome crop on the original Chalant screenshots. */
 [data-feed-modal] .chalant-screen-crop img:not([src$="/hero.webp"]){position:absolute;display:block;width:106.7879%;height:auto;max-height:none;max-width:none;left:-3.39394%;top:-14.12556%;object-fit:initial;aspect-ratio:auto}
+
+/* Give the explanation at least as much space as the retained project image. */
+@media(min-width:992px){
+ [data-feed-modal] .feed-detail_component{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:2em}
+ [data-feed-modal] .feed-detail_info{gap:1.1em;padding:0 .75em 2em .25em;font-size:16px}
+}
+[data-feed-modal] .project-reading{display:flex;flex-direction:column;gap:1.5em}
+.project-reading>.detail-tabpanel{display:flex!important;gap:.75em;padding-top:1.25em;border-top:1px solid var(--_colors---border--primary)}
+.project-reading>.detail-tabpanel:first-child{border-top:0;padding-top:0}
+.project-reading .feed-detail_text{font-size:15px;line-height:1.7}
+.project-reading .project-role{font-size:14px;line-height:1.65;color:var(--_colors---text--primary);font-weight:500}
+.project-reading .project-facts{margin:0;padding:1em;border:1px solid var(--_colors---border--primary);border-radius:.5em}
+.project-reading .project-metrics strong{font-size:1.25em}
+[data-feed-modal] .feed-detail_tools{padding-top:1em;border-top:1px solid var(--_colors---border--primary)}
+@media(max-width:991px){
+ /* One scroll surface avoids two small, competing reading panes on phones. */
+ [data-feed-modal] .feed-modal_body{display:block;overflow-y:auto;overscroll-behavior:contain}
+ [data-feed-modal] .feed-detail_component{display:flex;flex-direction:column;height:auto;overflow:visible;gap:1.25em}
+ [data-feed-modal] .feed-detail_gallery{height:26dvh;min-height:160px;flex:none;width:100%}
+ [data-feed-modal] .feed-detail_info{height:auto;overflow:visible;min-height:0;gap:1em;padding:0 0 1em}
+ [data-feed-modal] .horal-product-gallery{height:100%}
+ [data-feed-modal] .gallery-caption{font-size:12px;line-height:1.4}
+ .project-reading .feed-detail_text{font-size:15px}
+}

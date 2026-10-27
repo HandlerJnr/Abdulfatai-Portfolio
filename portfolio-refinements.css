@@ -18,3 +18,8 @@
 @media(max-width:767px){.section_feed>.project-column-bar{gap:8px;padding:10px 0;margin-bottom:22px}.project-column-bar>.project-column-nav{gap:3px}.project-column-bar .portfolio-menu-toggle{height:40px;min-height:40px}}
 
 @media(max-width:767px){.section_feed>.project-column-bar{padding-right:52px;box-sizing:border-box}}
+
+/* Selected work is the main route; specialist collections remain in the menu. */
+.project-column-nav>a:nth-child(n+3):not([aria-current=page]){display:none}
+.project-column-nav>a:first-child{font-weight:600}
+.project-column-nav>a:not([aria-current=page]){color:var(--_colors---text--secondary,#666)}
