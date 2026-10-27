@@ -84,7 +84,19 @@ class Grounding(unittest.TestCase):
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None
   h.stream_reply('prompt',[],'q',[],'conversation',{}, {})
   events=[json.loads(l) for l in h.wfile.getvalue().splitlines()]
-  self.assertEqual(events[-1]['type'],'error');self.assertFalse(any(e['type'] in ('delta','done') for e in events))
+  self.assertEqual(events[-1]['type'],'done')
+  self.assertNotIn('grounding_invalid',events[-1]['answer'])
+  self.assertIn('Which would you like to see?',events[-1]['answer'])
+ def test_provider_failure_returns_labelled_published_evidence(self):
+  a['checked_answer']=Mock(side_effect=RuntimeError('groq_http_429'))
+  sources={'passage:vista:1':{'text':'Vista supports English and French. Local currency remains visible.','status':'documented'}}
+  answer,provider,refs=a['resilient_answer']('prompt',sources,'Which languages?',[], 'conversation')
+  self.assertEqual(provider,'portfolio');self.assertEqual(refs,['passage:vista:1'])
+  self.assertTrue(answer.startswith('From the published portfolio:'))
+  self.assertIn('Vista supports English and French.',answer)
+ def test_role_comparison_does_not_masquerade_as_excerpt(self):
+  a['checked_answer']=Mock(side_effect=RuntimeError('groq_http_429'))
+  with self.assertRaises(RuntimeError):a['resilient_answer']('prompt',{},'Compare this role',[], 'job-fit')
  def test_successful_checked_answer_uses_existing_client_protocol(self):
   def checked(prompt,sources,on_review):on_review();return ('Checked reply.','test',[])
   a.update(checked_answer=checked,select_proof_ids=lambda *args:[],evidence_links=lambda *args:[])
