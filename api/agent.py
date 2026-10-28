@@ -150,6 +150,13 @@ def conversation_query(question, history):
     for previous in reversed(users):
         if topic_record_ids(previous) or re.search(fresh, previous, re.I):
             return current + " " + previous
+    for message in reversed(history):
+        if message.get("role") != "assistant":
+            continue
+        for ref in message.get("support_ids", []):
+            for record in RECORD_LIST:
+                if ref.startswith("passage:" + record["id"] + ":"):
+                    return current + " " + record.get("title", record["id"])
     return " ".join([current] + users[-1:]).strip()
 
 
@@ -237,7 +244,7 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt, model=None, _timeout=12):
+def call_model(prompt, model=None, _timeout=6):
     endpoint, token, provider = model_endpoint()
     original_prompt = prompt
     selected_model = model or MODEL
@@ -380,6 +387,9 @@ def call_model(prompt, model=None, _timeout=12):
             classified.retry_after = 30
         raise classified from error
     except Exception as error:
+        if provider == "gemini" and model is None:
+            print("portfolio_agent_gemini_recovery: network")
+            return call_model(original_prompt, model=selected_model, _timeout=4)
         raise RuntimeError("model_network") from error
 
     if provider == "gemini":
@@ -389,6 +399,8 @@ def call_model(prompt, model=None, _timeout=12):
         if source_aliases and generated:
             try:
                 result = json.loads(generated)
+                if result.get("kind") == "grounded":
+                    result.pop("answer", None)  # Only validated claims are ever displayed.
                 for claim in result.get("claims", []):
                     claim["source_id"] = source_aliases.get(claim.get("source_id"), claim.get("source_id"))
                 generated = json.dumps(result, ensure_ascii=False)
@@ -729,6 +741,9 @@ def retrieve(question, history, intent, page_context):
         for node in RECORD_NODES.get(current_page_id, [])[:18]:
             add_node(node)
 
+    if re.search(r"\b(tools?|coding|programming|technical skills)\b", question, re.I):
+        for node in RECORD_NODES.get("technical-skills", []):
+            add_node(node)
     # Keep project reasoning ahead of generic profile material.
     for record_id in topic_record_ids(query):
         words = set(re.findall(r"[a-z]{4,}", question.lower())) - {"what", "about", "jamiu", "does", "that", "this", "with", "have", "more"}
@@ -972,6 +987,8 @@ def published_reply(question, history, sources):
     query = conversation_query(question, history)
     terms = set(re.findall(r"[a-z]{4,}", query.lower())) - stop
     current_terms = set(re.findall(r"[a-z]{4,}", question.lower())) - stop
+    if re.search(r"tools?|coding|programming", question, re.I):
+        current_terms.update(("figma", "react", "javascript", "python", "langgraph", "hugging face"))
     if re.search(r"design systems?", question, re.I):
         current_terms.update(("component", "library", "tokens", "system"))
     def relevance(text):

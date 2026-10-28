@@ -18,7 +18,7 @@ class GeminiTrial(unittest.TestCase):
   class Response:
    def __enter__(self):return self
    def __exit__(self,*args):pass
-   def read(self):return json.dumps({"candidates":[{"content":{"parts":[{"text":json.dumps({"kind":"grounded","purpose":"answer","answer":"","claims":[{"text":"He uses Figma.","source_id":"e0"}]})}]}}],"usageMetadata":{"promptTokenCount":20,"candidatesTokenCount":10,"totalTokenCount":30}}).encode()
+   def read(self):return json.dumps({"candidates":[{"content":{"parts":[{"text":json.dumps({"kind":"grounded","purpose":"answer","answer":"Unchecked duplicate text.","claims":[{"text":"He uses Figma.","source_id":"e0"}]})}]}}],"usageMetadata":{"promptTokenCount":20,"candidatesTokenCount":10,"totalTokenCount":30}}).encode()
   def request(req,timeout):requests.append(req);return Response()
   prompt="GROUNDING_REVIEW_TASK\nInstructions\n"+json.dumps({"evidence":{"passage:long-original-id":{"text":"He uses Figma."}}})
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=request):
@@ -30,6 +30,7 @@ class GeminiTrial(unittest.TestCase):
   self.assertEqual(config["thinkingConfig"],{"thinkingLevel":"minimal"})
   self.assertNotIn("enum",config["responseJsonSchema"]["properties"]["claims"]["items"]["properties"]["source_id"])
   self.assertEqual(json.loads(answer)["claims"][0]["source_id"],"passage:long-original-id")
+  self.assertNotIn("answer",json.loads(answer))
   self.assertIn('"e0"',body["contents"][0]["parts"][0]["text"])
   self.assertEqual(provider,"gemini")
  def test_gemini_quota_never_calls_other_provider(self):
@@ -43,10 +44,10 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=fail) as request:
    with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[12,4])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[6,4])
  def test_timeout_is_bounded_and_no_retry_storm(self):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")
-   self.assertEqual(request.call_count,1)
-   self.assertEqual(request.call_args.kwargs["timeout"],12)
+   self.assertEqual(request.call_count,2)
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[6,4])
 if __name__=="__main__":unittest.main()
