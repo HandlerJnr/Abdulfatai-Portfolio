@@ -16,7 +16,7 @@ from llama_index.retrievers.bm25 import BM25Retriever
 ROOT = Path(__file__).resolve().parent.parent
 KNOWLEDGE_PATH = ROOT / "portfolio-knowledge.json"
 TECHNICAL_PATH = ROOT / "technical-capabilities.json"
-GEMINI_TRIAL = os.environ.get("VERCEL_ENV") == "preview" and bool(os.environ.get("GEMINI_API_KEY", "").strip())
+GEMINI_TRIAL = bool(os.environ.get("GEMINI_API_KEY", "").strip())
 MODEL = "gemini-3.1-flash-lite" if GEMINI_TRIAL else os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
 MAX_HISTORY = 10
 FACTS_PATH = ROOT / "agent-facts.json"
@@ -181,7 +181,7 @@ def verified_contact_reply(question):
 
 
 def model_endpoint():
-    if os.environ.get("VERCEL_ENV") == "preview" and os.environ.get("GEMINI_API_KEY", "").strip():
+    if os.environ.get("GEMINI_API_KEY", "").strip():
         return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", os.environ["GEMINI_API_KEY"].strip(), "gemini"
     groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
@@ -228,6 +228,17 @@ def model_messages(prompt):
 def call_model(prompt, model=None):
     endpoint, token, provider = model_endpoint()
     selected_model = model or MODEL
+    source_aliases = {}
+    # Short stable citation labels avoid a large changing schema on each turn.
+    if provider == "gemini" and prompt.startswith("GROUNDING_REVIEW_TASK\n"):
+        try:
+            preamble, evidence_json = prompt.rsplit("\n", 1)
+            task = json.loads(evidence_json)
+            source_aliases = {"e" + str(i): key for i, key in enumerate(task["evidence"])}
+            task["evidence"] = {alias: task["evidence"][key] for alias, key in source_aliases.items()}
+            prompt = preamble + "\n" + json.dumps(task, ensure_ascii=False, separators=(",", ":"))
+        except (ValueError, KeyError, TypeError):
+            pass
     body = {
         "model": selected_model,
         "messages": model_messages(prompt),
@@ -260,27 +271,29 @@ def call_model(prompt, model=None):
         body["temperature"] = 0.1
     if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
-    if provider == "gemini" and prompt.startswith("GROUNDING_REVIEW_TASK\n"):
-        try:
-            source_ids = list(json.loads(prompt.rsplit("\n", 1)[-1])["evidence"])
-            if source_ids:
-                body["response_format"]["json_schema"]["schema"]["properties"]["claims"]["items"]["properties"]["source_id"]["enum"] = source_ids
-        except (ValueError, KeyError, TypeError):
-            pass
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json", "User-Agent": "JamiuPortfolio/1.0"}
     if provider == "gemini":
-        body["max_tokens"] = body.pop("max_completion_tokens")
-        body["reasoning_effort"] = "minimal"
-    request = urllib.request.Request(
-        endpoint,
-        data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "User-Agent": "JamiuPortfolio/1.0",
-        },
-        method="POST",
-    )
+        config = {
+            "temperature": body["temperature"],
+            "maxOutputTokens": body["max_completion_tokens"],
+            "thinkingConfig": {"thinkingLevel": "minimal"}
+        }
+        if "response_format" in body:
+            config["responseMimeType"] = "application/json"
+            schema = body["response_format"]["json_schema"]["schema"]
+            if source_aliases:
+                schema["properties"]["claims"]["items"]["properties"]["source_id"]["enum"] = list(source_aliases)
+            config["responseJsonSchema"] = schema
+        messages = body["messages"]
+        body = {
+            "systemInstruction": {"parts": [{"text": "\n".join(m["content"] for m in messages if m["role"] == "system")}]},
+            "contents": [{"role": "user", "parts": [{"text": m["content"]}]} for m in messages if m["role"] != "system"],
+            "generationConfig": config
+        }
+        endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + urllib.parse.quote(selected_model, safe="") + ":generateContent"
+        headers.pop("Authorization")
+        headers["x-goog-api-key"] = token
+    request = urllib.request.Request(endpoint, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
     try:
         with urllib.request.urlopen(request, timeout=22) as response:
             data = json.loads(response.read().decode("utf-8"))
@@ -330,6 +343,22 @@ def call_model(prompt, model=None):
         raise RuntimeError("model_network") from error
 
     if provider == "gemini":
+        native_usage = data.get("usageMetadata", {})
+        native_parts = ((data.get("candidates") or [{}])[0].get("content") or {}).get("parts", [])
+        generated = "".join(part.get("text", "") for part in native_parts if not part.get("thought"))
+        if source_aliases and generated:
+            try:
+                result = json.loads(generated)
+                for claim in result.get("claims", []):
+                    claim["source_id"] = source_aliases.get(claim.get("source_id"), claim.get("source_id"))
+                generated = json.dumps(result, ensure_ascii=False)
+            except (ValueError, TypeError, AttributeError):
+                pass
+        data = {"choices": [{"message": {"content": generated}}], "usage": {
+            "prompt_tokens": native_usage.get("promptTokenCount", 0),
+            "completion_tokens": native_usage.get("candidatesTokenCount", 0),
+            "total_tokens": native_usage.get("totalTokenCount", 0)
+        }}
         usage = data.get("usage", {})
         print("portfolio_agent_gemini_usage:", json.dumps({k: usage[k] for k in ("prompt_tokens", "completion_tokens", "total_tokens") if k in usage}))
     message = ((data.get("choices") or [{}])[0].get("message") or {})
@@ -959,13 +988,13 @@ def build_job_fit_prompt(description, question):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Safe health check: reveals capability state, never secret values.
-        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN") or (os.environ.get("VERCEL_ENV") == "preview" and os.environ.get("GEMINI_API_KEY")))
+        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN") or os.environ.get("GEMINI_API_KEY"))
         return json_response(
             self,
             200,
             {
                 "ok": True,
-                "engine": "llamaindex-bm25+gpt-oss-120b",
+                "engine": "llamaindex-bm25+grounded-model",
                 "model": MODEL,
                 "auth_configured": auth,
                 "records": len(RECORD_LIST),
