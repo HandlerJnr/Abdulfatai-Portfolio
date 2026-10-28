@@ -220,6 +220,14 @@ def verified_knowledge_reply(question, history):
         if all(term in text for term in ("HTML", "CSS", "React.js", "Python", "LangGraph", "Hugging Face")):
             return ("His front-end tools are HTML, CSS, JavaScript and React.js. C# and Python are beginner-level; his AI work includes LangGraph and Hugging Face.", ["record:technical-skills"])
     projects = topic_record_ids(conversation_query(question, history))
+    if projects and re.search(r"what.{0,20}role|his role|what.{0,20}contribution|what did he own", q):
+        record = RECORDS.get(projects[0], {})
+        lines = [line.strip() for line in record.get("text", "").splitlines() if line.strip()]
+        for index, line in enumerate(lines):
+            if re.search(r"(designer|developer).*·", line, re.I):
+                contribution = next((part for part in lines[index + 1:] if re.match(r"I (designed|built|led|worked|helped)", part)), "")
+                contribution = re.sub(r"^I\b", "He", contribution)
+                return ("His role: " + line.rstrip(".") + ". " + contribution, ["record:" + projects[0]])
     if "vista-itss" in projects:
         text = RECORDS.get("vista-itss", {}).get("text", "")
         if re.search(r"language|english|french|sign.?in", q) and re.search(r"^(what about|and |why make|why put|where|which languages|what languages)", q) and all(term in text.lower() for term in ("english", "french", "sign-in")):
@@ -761,7 +769,7 @@ def retrieve(question, history, intent, page_context):
     seen = set()
 
     def add_node(node):
-        key = node.node_id
+        key = str(node.metadata.get("record_id", "")) + ":" + re.sub(r"\s+", " ", node.text).strip().lower()
         if key in seen:
             return
         seen.add(key)
@@ -779,7 +787,8 @@ def retrieve(question, history, intent, page_context):
     # Keep project reasoning ahead of generic profile material.
     for record_id in topic_record_ids(query):
         words = set(re.findall(r"[a-z]{4,}", question.lower())) - {"what", "about", "jamiu", "does", "that", "this", "with", "have", "more"}
-        ordered = sorted(RECORD_NODES.get(record_id, []), key=lambda n: -sum(word in n.text.lower() for word in words))
+        meaningful = [n for n in RECORD_NODES.get(record_id, []) if len(clean_section(n.text)) >= 24]
+        ordered = sorted(meaningful, key=lambda n: -sum(word in n.text.lower() for word in words))
         for node in ordered[:8]:
             add_node(node)
     if re.search(r"\b(education|qualification|degree|msc|study|studying|graduate)\b", question, re.I):

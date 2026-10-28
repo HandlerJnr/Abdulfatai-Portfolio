@@ -41,6 +41,17 @@ class Continuity(unittest.TestCase):
   authorship=a['verified_knowledge_reply']('Did he build this portfolio himself?',history)
   self.assertIn('Figma',authorship[0])
   self.assertIsNone(a['verified_knowledge_reply']('Compare his experience for this role',history))
+ def test_real_project_role_survives_short_headers(self):
+  record=next(r for r in a['RECORD_LIST'] if r['id']=='horal')
+  nodes=[SimpleNamespace(node_id=str(i),text=line,metadata={'record_id':'horal','label':'section'}) for i,line in enumerate(record['text'].splitlines()) if line.strip()]
+  a['RECORD_NODES']={'horal':nodes}
+  a['GLOBAL_RETRIEVER']=SimpleNamespace(retrieve=lambda q:[])
+  retrieved,_=a['retrieve']('What was his role?',[{'role':'user','content':'Tell me about Horal'}],'conversation',{})
+  sources=a['grounding_sources'](retrieved)
+  self.assertTrue(any('End-to-end product designer' in source['text'] for source in sources.values()))
+  reply=a['verified_knowledge_reply']('What was his role in that project?',[{'role':'user','content':'Tell me about Horal'}])
+  self.assertIn('End-to-end product designer',reply[0])
+  self.assertIn('He designed',reply[0])
  def test_project_specific_unknown_tools_are_not_replaced_by_general_skills(self):
   self.assertIsNone(a['verified_knowledge_reply']('What tools did he use on Vista?',[]))
  def test_fast_answer_can_anchor_later_followups(self):
