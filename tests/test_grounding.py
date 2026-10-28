@@ -94,6 +94,25 @@ class Grounding(unittest.TestCase):
   a['call_model']=Mock(return_value=(json.dumps(raw),'test'))
   answer,_,_=a['checked_answer'](a['build_prompt']('How was it built?',[], '', 'conversation',{}),sources)
   self.assertEqual(answer,'He designed it in Figma.');self.assertNotIn('NASA',answer)
+ def test_complete_reply_is_not_cut_to_two_claims(self):
+  sources={str(i):{'text':t} for i,t in enumerate(['He designs payment interfaces.','He holds BSc Physics.','He holds a PGD Aerospace Engineering.','He is studying MSc UX Design at Brighton.'])}
+  claims=[{'text':source['text'],'source_id':key} for key,source in sources.items()]
+  a['call_model']=Mock(return_value=(json.dumps({'kind':'grounded','detail':'brief','claims':claims}),'test'))
+  answer,_,refs=a['checked_answer'](a['build_prompt']('Who is Jamiu?',[], '', 'conversation',{}),sources)
+  self.assertEqual(len(refs),4)
+  self.assertIn('PGD',answer);self.assertIn('studying MSc',answer)
+ def test_generated_overview_cannot_silently_omit_qualifications(self):
+  sources=a['grounding_sources']('',[], 'Who is Jamiu?')
+  incomplete={'kind':'grounded','scope':'specific','claims':[{'text':'He holds BSc Physics.','source_id':'fact:education.bsc'}]}
+  with self.assertRaisesRegex(RuntimeError,'introduction_missing_qualifications'):
+   a['validate_grounded_reply'](json.dumps(incomplete),sources)
+ def test_irrelevant_ui_context_is_omitted_but_qualifications_remain(self):
+  sources=a['grounding_sources']('',[], 'What kind of designer is Jamiu?')
+  self.assertIn('profile:qualifications',sources)
+  for term in ['BSc','PGD','MSc','ongoing']: self.assertIn(term,sources['profile:qualifications']['text'])
+  self.assertNotIn('fact:ui.search-homepage',sources);self.assertNotIn('fact:portfolio.authorship',sources)
+  build=a['grounding_sources']('',[], 'How did he build this portfolio?')
+  self.assertIn('fact:portfolio.authorship',build)
  def test_no_draft_or_review_failure_leaks_to_stream(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('grounding_invalid'))
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None

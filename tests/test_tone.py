@@ -20,7 +20,7 @@ class Tone(unittest.TestCase):
   prompt=a['build_prompt']('What did he speak about?',history,'Certificate: keynote on AI automation and youth innovation.','conversation',{})
   self.assertIn('Visitor: Tell me about his OAU keynote',prompt)
   self.assertIn('Agent: He spoke at OAU.',prompt)
-  self.assertIn('15-45 words',prompt)
+  self.assertIn('Adapt the length',prompt)
   self.assertIn('CURRENT VISITOR MESSAGE\nWhat did he speak about?',prompt)
   self.assertIn('Never invent',prompt)
   self.assertIn('do not reintroduce or define Jamiu',prompt)
@@ -30,3 +30,4 @@ class Tone(unittest.TestCase):
   for q in ['', '  ', '\t\n']:
    self.assertTrue(a['needs_clarification'](q),repr(q))
 if __name__=='__main__':unittest.main()
+
