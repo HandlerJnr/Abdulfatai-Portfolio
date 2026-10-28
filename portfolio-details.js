@@ -7,6 +7,7 @@ const initialized=new WeakSet();
 function prepareProjectStory(root){
   const panels=[...root.querySelectorAll(':scope > [data-detail-panel]')];
   if(!panels.length)return;
+  root.setAttribute('data-project-id',root.getAttribute('data-detail-tabs'));
   root.removeAttribute('data-detail-tabs');
   root.classList.add('project-reading');
   root.querySelector(':scope > .detail-tabs')?.remove();
