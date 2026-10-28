@@ -92,7 +92,7 @@ class Grounding(unittest.TestCase):
   sources={'passage:vista:1':{'text':'Vista supports English and French. Local currency remains visible.','status':'documented'}}
   answer,provider,refs=a['resilient_answer']('prompt',sources,'Which languages?',[], 'conversation')
   self.assertEqual(provider,'portfolio');self.assertEqual(refs,['passage:vista:1'])
-  self.assertTrue(answer.startswith('From the published portfolio:'))
+  self.assertTrue(answer.startswith('His portfolio puts it this way:'))
   self.assertIn('Vista supports English and French.',answer)
  def test_role_comparison_does_not_masquerade_as_excerpt(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('groq_http_429'))

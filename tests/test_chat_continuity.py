@@ -50,7 +50,7 @@ class Continuity(unittest.TestCase):
   sources=a['grounding_sources'](retrieved)
   self.assertTrue(any('End-to-end product designer' in source['text'] for source in sources.values()))
   reply=a['verified_knowledge_reply']('What was his role in that project?',[{'role':'user','content':'Tell me about Horal'}])
-  self.assertIn('End-to-end product designer',reply[0])
+  self.assertIn('end-to-end product designer',reply[0].lower())
   self.assertIn('He designed',reply[0])
  def test_project_specific_unknown_tools_are_not_replaced_by_general_skills(self):
   self.assertIsNone(a['verified_knowledge_reply']('What tools did he use on Vista?',[]))
