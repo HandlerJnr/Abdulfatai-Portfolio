@@ -41,6 +41,8 @@ class Continuity(unittest.TestCase):
   authorship=a['verified_knowledge_reply']('Did he build this portfolio himself?',history)
   self.assertIn('Figma',authorship[0])
   self.assertIsNone(a['verified_knowledge_reply']('Compare his experience for this role',history))
+ def test_project_specific_unknown_tools_are_not_replaced_by_general_skills(self):
+  self.assertIsNone(a['verified_knowledge_reply']('What tools did he use on Vista?',[]))
  def test_fast_answer_can_anchor_later_followups(self):
   query=a['conversation_query']('Why that approach?',[{'role':'assistant','content':'Earlier answer','support_ids':['record:vista-itss']}])
   self.assertIn('Vista',query)

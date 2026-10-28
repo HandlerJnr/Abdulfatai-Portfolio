@@ -215,16 +215,16 @@ def verified_knowledge_reply(question, history):
         return fact_reply("portfolio.authorship")
     if re.search(r"\bmsc\b", q) and re.search(r"finished|completed|ongoing|studying|graduated|awarded|done", q):
         return fact_reply("education.msc")
-    if re.search(r"what tools|which tools|tech stack|technical skills|coding skills|programming languages", q):
+    if re.search(r"what tools|which tools|tech stack|technical skills|coding skills|programming languages", q) and not topic_record_ids(q) and not re.search(r"that project|this project|for it|in it", q):
         text = RECORDS.get("technical-skills", {}).get("text", "")
         if all(term in text for term in ("HTML", "CSS", "React.js", "Python", "LangGraph", "Hugging Face")):
             return ("His front-end tools are HTML, CSS, JavaScript and React.js. C# and Python are beginner-level; his AI work includes LangGraph and Hugging Face.", ["record:technical-skills"])
     projects = topic_record_ids(conversation_query(question, history))
     if "vista-itss" in projects:
         text = RECORDS.get("vista-itss", {}).get("text", "")
-        if re.search(r"language|english|french|sign.?in", q) and all(term in text.lower() for term in ("english", "french", "sign-in")):
+        if re.search(r"language|english|french|sign.?in", q) and re.search(r"^(what about|and |why make|why put|where|which languages|what languages)", q) and all(term in text.lower() for term in ("english", "french", "sign-in")):
             return ("He made English and French selection available at sign-in, rather than leaving it in settings after customers had already logged in.", ["record:vista-itss"])
-        if re.search(r"currenc|local money", q) and "currency" in text.lower():
+        if re.search(r"what about.{0,20}currenc|how.{0,30}(handle|show|display).{0,15}currenc", q) and "currency" in text.lower():
             return ("Local currency stays visible with account balances. Shared components keep the interface consistent while allowing language, currency and regulatory copy to vary by subsidiary.", ["record:vista-itss"])
     return None
 
