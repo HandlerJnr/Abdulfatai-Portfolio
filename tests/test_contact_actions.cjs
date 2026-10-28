@@ -18,8 +18,8 @@ function node(tag,value,className){
 const context={text:node};
 vm.createContext(context);
 vm.runInContext(script.slice(begin,end)+
- 'globalThis.contact={shouldOfferContact,renderContactActions,CONTACT_PHONE,CONTACT_EMAIL}',context);
-const {shouldOfferContact,renderContactActions,CONTACT_PHONE,CONTACT_EMAIL}=context.contact;
+ 'globalThis.contact={shouldOfferContact,renderContactActions,isContactReply,CONTACT_PHONE,CONTACT_EMAIL}',context);
+const {shouldOfferContact,renderContactActions,isContactReply,CONTACT_PHONE,CONTACT_EMAIL}=context.contact;
 assert.equal(CONTACT_PHONE,'+447344383739');
 assert.equal(CONTACT_EMAIL,'aabdulfataijamiu@gmail.com');
 
@@ -27,6 +27,8 @@ for(const [question,expected] of [
  ["What are his weaknesses?",true],
  ["Where could he improve?",true],
  ["How do I contact Jamiu?",true],
+ ["what about his contacts?",true],
+ ["give me all his contants",true],
  ["Can I call him?",true],
  ["May I send him an email?",true],
  ["Is he available for freelance projects?",true],
@@ -54,3 +56,14 @@ assert(script.includes('contact:offerContact'),'Contact visibility is saved per 
 assert(knowledge.find(r=>r.id==='about').text.includes(CONTACT_PHONE));
 console.log('Contextual call and email links, mobile actions, and restored messages passed.');
 
+
+assert(isContactReply('Connect with Jamiu:'));
+assert(!isContactReply('He designs banking products.'));
+assert(script.includes('shouldOfferContact(q)||isContactReply(answer)'));
+assert(script.includes('shouldOfferContact(previousQuestion)||isContactReply(turn.text)'));
+const searchScript=fs.readFileSync(path.join(__dirname,'../search/search-portfolio.js'),'utf8');
+const contactMatcher=searchScript.match(/function wantsContact\(value\)\{[^\n]+/)[0];
+const searchContext={};vm.createContext(searchContext);vm.runInContext(contactMatcher+';globalThis.wants=wantsContact;',searchContext);
+assert(searchContext.wants('what about his contacts?'));
+assert(searchContext.wants('give me all his contants'));
+assert(searchScript.includes('isContactReply(turn.text)'));

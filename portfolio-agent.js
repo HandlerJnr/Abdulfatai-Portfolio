@@ -71,7 +71,7 @@ function restoreConversation(){
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
       if(turn.role==='user'){previousQuestion=turn.text;conversation.append(text('p',turn.text,'search-question'));}
-      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion))response.append(renderContactActions());conversation.append(response);}
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion)||isContactReply(turn.text))response.append(renderContactActions());conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
@@ -156,7 +156,7 @@ function shouldOfferContact(question){
   /\b(weakness(?:es)?|shortcomings?|blind spots?|growth areas?|areas? (?:for|to) improv(?:e|ement)|things? (?:he|jamiu) (?:could|should) improve|limitations?|development areas?)\b/i.test(q)
   || /\b(?:where|how|what)\b.{0,65}\b(?:he|his|jamiu)\b.{0,40}\b(?:improve|grow|develop|work on)\b/i.test(q)
  ) &&!/\b(this (?:project|website|page|screen|design)|(?:the|this) (?:interface|ui|website)|website (?:weakness|issue)|design (?:weakness|issue))\b/i.test(q);
- const directContact=/\b(facebook|twitter|linkedin|linked in|social(?:s| media)?|contact|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
+ const directContact=/\b(facebook|twitter|linkedin|linked in|social(?:s| media)?|contacts?|contants|reach (?:him|jamiu|you|out)|get in touch|e-?mail|phone|call|ring him|speak (?:to|with)|talk (?:to|with)|meet (?:with|him)|schedule|book (?:a )?(?:chat|call)|interview|hire|hiring|availability|available for|collaborat(?:e|ion|ing)|freelanc(?:e|ing)|work with him|opportunit(?:y|ies))\b/i.test(q);
  return personalQuestion||directContact;
 }
 function contactActionContent(kind,label,detail){
@@ -171,6 +171,7 @@ function contactActionContent(kind,label,detail){
  copy.append(text('strong',label),text('span',detail,'agent-contact-detail'));
  return [icon,copy];
 }
+function isContactReply(value){return /^Connect with Jamiu:?$/i.test(String(value||'').trim());}
 function renderContactActions(){
  const block=text('section','','agent-contact');
  block.setAttribute('aria-label','Contact Jamiu');
@@ -741,7 +742,7 @@ async function ask(q){
       response.append(sourceCards(evidenceCards));
     }
 
-    const offerContact=shouldOfferContact(q);
+    const offerContact=shouldOfferContact(q)||isContactReply(answer);
     if(offerContact)response.append(renderContactActions());
     turns.push({role:'assistant',text:answer,evidenceLinks:links,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
     dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));
