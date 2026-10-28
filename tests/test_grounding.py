@@ -79,6 +79,21 @@ class Grounding(unittest.TestCase):
   answer,_,refs=a['checked_answer'](prompt,sources)
   self.assertNotIn('development team',answer);self.assertEqual(model.call_count,1)
   self.assertIn('A development team built it.',model.call_args.args[0])
+ def test_corrected_structure_is_generated_once_without_leaking_bad_claims(self):
+  sources={'f':{'text':'He designed this portfolio in Figma.'}}
+  bad={'kind':'social','answer':'He is a NASA engineer.','claims':[]}
+  good={'kind':'grounded','claims':[{'text':'He designed it in Figma.','source_id':'f'}]}
+  model=Mock(side_effect=[(json.dumps(bad),'test'),(json.dumps(good),'test')]);a['call_model']=model
+  prompt=a['build_prompt']('Tell me more',[], '', 'conversation',{})
+  answer,_,refs=a['checked_answer'](prompt,sources)
+  self.assertNotIn('NASA',answer);self.assertIn('Figma',answer)
+  self.assertEqual(model.call_count,2);self.assertIn('validation_feedback',model.call_args.args[0])
+ def test_only_checked_claims_are_displayed_when_redundant_answer_differs(self):
+  sources={'f':{'text':'He designed this portfolio in Figma.'}}
+  raw={'kind':'grounded','answer':'He works at NASA.','claims':[{'text':'He designed it in Figma.','source_id':'f'}]}
+  a['call_model']=Mock(return_value=(json.dumps(raw),'test'))
+  answer,_,_=a['checked_answer'](a['build_prompt']('How was it built?',[], '', 'conversation',{}),sources)
+  self.assertEqual(answer,'He designed it in Figma.');self.assertNotIn('NASA',answer)
  def test_no_draft_or_review_failure_leaks_to_stream(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('grounding_invalid'))
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None

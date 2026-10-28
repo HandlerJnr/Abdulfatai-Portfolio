@@ -947,7 +947,7 @@ def validate_guide_perspective(text, sources):
     for match in re.finditer(r"\b(?:i|my|mine|we|our|ours)\b", plain):
         # The guide may acknowledge uncertainty or describe its own help.
         rest = plain[match.start():]
-        if match.group() == "i" and re.match(r"i(?: (?:don't|do not|can't|cannot|can help|can show|can explain|can point|am not sure|wouldn't guess)\b|'m not sure\b)", rest):
+        if match.group() == "i" and re.match(r"i(?: (?:don't|do not|can't|cannot|can help|can show|can explain|can point|am not sure|am glad|am happy|am here|get what you mean|see what you mean|wouldn't guess)\b|'m (?:not sure|glad|happy|here)\b)", rest):
             continue
         raise RuntimeError("grounding_invalid_perspective")
 
@@ -1020,7 +1020,34 @@ def checked_answer(prompt, sources, on_review=None):
                     "evidence": {key: {field: value for field, value in source.items() if field in ("text", "status", "already_discussed", "covered_text")} for key, source in sources.items()}}, ensure_ascii=False, separators=(",", ":"))
     )
     reviewed, provider = call_model(review)
-    answer = validate_grounded_reply(reviewed, sources)
+    def claims_only(raw):
+        try:
+            data = json.loads(raw)
+            if data.get("kind") == "grounded":
+                data.pop("answer", None)
+                return json.dumps(data)
+        except (ValueError, TypeError, AttributeError):
+            pass
+        return raw
+    reviewed = claims_only(reviewed)
+    try:
+        answer = validate_grounded_reply(reviewed, sources)
+    except RuntimeError as error:
+        # Repair structure once, privately; never show an unchecked draft.
+        if not str(error).startswith("grounding_invalid"):
+            raise
+        task = json.loads(review.rsplit("\n", 1)[-1])
+        task["validation_feedback"] = {
+            "failure": str(error),
+            "instruction": "Compose a corrected conversational reply. Social acknowledgements need no personal claims: use social with empty claims. If making any claim about Jamiu, use grounded with a valid evidence key for every claim. Keep the latest topic and do not repeat a biography. Grounded answer must be empty; only claims are displayed."
+        }
+        repair = review.rsplit("\n", 1)[0] + "\n" + json.dumps(task, ensure_ascii=False)
+        if os.environ.get("GROQ_API_KEY", "").strip():
+            reviewed, provider = call_model(repair, model="openai/gpt-oss-120b", _timeout=3, _provider="groq")
+        else:
+            reviewed, provider = call_model(repair, model=MODEL, _timeout=3)
+        reviewed = claims_only(reviewed)
+        answer = validate_grounded_reply(reviewed, sources)
     refs = list(dict.fromkeys(claim["source_id"] for claim in json.loads(reviewed).get("claims", [])))
     return answer, provider, refs
 
@@ -1043,7 +1070,7 @@ def published_reply(question, history, sources):
         terms.update(("english", "french", "language"))
     candidates = []
     for source_id, source in sources.items():
-        if source_id == "boundary" or source.get("status") == "unknown":
+        if source_id == "boundary" or source.get("status") == "unknown" or (source_id.startswith("fact:contact.") and not verified_contact_reply(question)):
             continue
         text = source.get("text", "").strip()
         overlap = relevance(text)
