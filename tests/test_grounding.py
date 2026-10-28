@@ -1,7 +1,7 @@
 import ast,hashlib,io,json,os,re,urllib.request,urllib.error,urllib.parse,unittest
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 ROOT=Path(__file__).resolve().parents[1]
 tree=ast.parse((ROOT/'api/agent.py').read_text())
 tree.body=[n for n in tree.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
@@ -109,6 +109,14 @@ class Grounding(unittest.TestCase):
   self.assertEqual(provider,'portfolio');self.assertEqual(refs,['passage:vista:1'])
   self.assertTrue(answer.startswith('His portfolio puts it this way:'))
   self.assertIn('Vista supports English and French.',answer)
+ def test_provider_failure_recovers_with_same_evidence_and_history(self):
+  sources={'f':{'text':'He uses Figma.'}}
+  model=Mock(side_effect=[RuntimeError('groq_http_429'),('He uses Figma.','gemini',['f'])]);a['checked_answer']=model
+  with patch.dict(os.environ,{'GEMINI_API_KEY':'test-only'}):
+   result=a['resilient_answer']('original conversation',sources,'What tools?',[], 'conversation')
+  self.assertEqual(result,('He uses Figma.','gemini',['f']))
+  self.assertEqual(model.call_args.args,('original conversation',sources))
+  self.assertEqual(model.call_args.kwargs,{'model':'gemini-2.5-flash-lite'})
  def test_role_comparison_does_not_masquerade_as_excerpt(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('groq_http_429'))
   with self.assertRaises(RuntimeError):a['resilient_answer']('prompt',{},'Compare this role',[], 'job-fit')

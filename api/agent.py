@@ -344,7 +344,7 @@ def call_model(prompt, model=None, _timeout=5, _provider=None):
         config = {
             "temperature": body["temperature"],
             "maxOutputTokens": 900 if "ROLE COMPARISON TASK" in prompt else 450,
-            "thinkingConfig": {"thinkingLevel": "minimal"}
+            "thinkingConfig": {"thinkingBudget": 0} if selected_model.startswith("gemini-2.5") else {"thinkingLevel": "minimal"}
         }
         if "response_format" in body:
             config["responseMimeType"] = "application/json"
@@ -1010,7 +1010,7 @@ def validate_grounded_reply(raw, sources):
         raise RuntimeError("grounding_invalid_" + failure) from None
 
 
-def checked_answer(prompt, sources, on_review=None):
+def checked_answer(prompt, sources, on_review=None, model=None):
     if on_review:
         on_review()
     review = (
@@ -1027,7 +1027,7 @@ def checked_answer(prompt, sources, on_review=None):
                     "visitor_request": prompt.split("\nCURRENT VISITOR MESSAGE\n", 1)[-1],
                     "evidence": {key: {field: value for field, value in source.items() if field in ("text", "status", "already_discussed", "covered_text")} for key, source in sources.items()}}, ensure_ascii=False, separators=(",", ":"))
     )
-    reviewed, provider = call_model(review)
+    reviewed, provider = call_model(review, model=model, _timeout=4) if model else call_model(review)
     def claims_only(raw):
         try:
             data = json.loads(raw)
@@ -1059,7 +1059,7 @@ def checked_answer(prompt, sources, on_review=None):
         }
         repair = review.rsplit("\n", 1)[0] + "\n" + json.dumps(task, ensure_ascii=False)
         if os.environ.get("GEMINI_API_KEY", "").strip():
-            reviewed, provider = call_model(repair, model=MODEL, _timeout=5)
+            reviewed, provider = call_model(repair, model=model or MODEL, _timeout=5)
         elif os.environ.get("GROQ_API_KEY", "").strip():
             reviewed, provider = call_model(repair, model="openai/gpt-oss-120b", _timeout=3, _provider="groq")
         else:
@@ -1113,6 +1113,13 @@ def resilient_answer(prompt, sources, question, history, intent, on_review=None)
             raise
         diagnostic = str(error)
         print("portfolio_agent_published_recovery:", diagnostic if re.fullmatch(r"[a-z0-9_]+", diagnostic) else "unavailable")
+        # A stable free-tier model can recover when the newer model is overloaded
+        # and the Groq backup has exhausted its minute quota. Same prompt/evidence.
+        if os.environ.get("GEMINI_API_KEY", "").strip():
+            try:
+                return checked_answer(prompt, sources, model="gemini-2.5-flash-lite")
+            except RuntimeError as recovery_error:
+                print("portfolio_agent_stable_recovery_failed:", type(recovery_error).__name__)
         return published_reply(question, history, sources)
 
 

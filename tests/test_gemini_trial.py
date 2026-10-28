@@ -33,6 +33,16 @@ class GeminiTrial(unittest.TestCase):
   self.assertNotIn("answer",json.loads(answer))
   self.assertIn('"e0"',body["contents"][0]["parts"][0]["text"])
   self.assertEqual(provider,"gemini")
+ def test_stable_recovery_model_uses_budget_instead_of_thinking_level(self):
+  requests=[]
+  class Response:
+   def __enter__(self):return self
+   def __exit__(self,*args):pass
+   def read(self):return json.dumps({"candidates":[{"content":{"parts":[{"text":"hello"}]}}]}).encode()
+  def request(req,timeout):requests.append(req);return Response()
+  with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=request):
+   ctx["call_model"]("test",model="gemini-2.5-flash-lite")
+  self.assertEqual(json.loads(requests[0].data)["generationConfig"]["thinkingConfig"],{"thinkingBudget":0})
  def test_gemini_quota_never_calls_other_provider(self):
   error=urllib.error.HTTPError("https://generativelanguage.googleapis.com",429,"quota",{},io.BytesIO(b'{"error":{"details":[]}}'))
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key","GROQ_API_KEY":"groq-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=error) as request:
