@@ -26,9 +26,9 @@ class GeminiTrial(unittest.TestCase):
   req=requests[0];body=json.loads(req.data);config=body["generationConfig"]
   self.assertTrue(req.full_url.endswith("/models/gemini-3.1-flash-lite:generateContent"))
   self.assertNotIn("Authorization",req.headers)
-  self.assertEqual(config["maxOutputTokens"],1100)
+  self.assertEqual(config["maxOutputTokens"],450)
   self.assertEqual(config["thinkingConfig"],{"thinkingLevel":"minimal"})
-  self.assertEqual(config["responseJsonSchema"]["properties"]["claims"]["items"]["properties"]["source_id"]["enum"],["e0"])
+  self.assertNotIn("enum",config["responseJsonSchema"]["properties"]["claims"]["items"]["properties"]["source_id"])
   self.assertEqual(json.loads(answer)["claims"][0]["source_id"],"passage:long-original-id")
   self.assertIn('"e0"',body["contents"][0]["parts"][0]["text"])
   self.assertEqual(provider,"gemini")
@@ -43,10 +43,10 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=fail) as request:
    with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[22,8])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[12,4])
  def test_timeout_is_bounded_and_no_retry_storm(self):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,1)
-   self.assertEqual(request.call_args.kwargs["timeout"],22)
+   self.assertEqual(request.call_args.kwargs["timeout"],12)
 if __name__=="__main__":unittest.main()

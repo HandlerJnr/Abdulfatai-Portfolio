@@ -66,7 +66,7 @@ function restoreConversation(){
   try{
     const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');
     if(!saved||saved.version!==1||Date.now()-saved.updated>86400000)return;
-    history=Array.isArray(saved.history)?saved.history.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-8):[];
+    history=Array.isArray(saved.history)?saved.history.filter(t=>['user','assistant'].includes(t.role)&&(typeof t.text==='string'||typeof t.content==='string')).map(t=>({...t,text:t.text||t.content})).slice(-10):[];
     turns=Array.isArray(saved.turns)?saved.turns.filter(t=>['user','assistant'].includes(t.role)&&typeof t.text==='string').slice(-24):[];
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
@@ -532,7 +532,8 @@ function normaliseCurrentPath(value){
 function activeProjectPath(){
  const open=document.querySelector('[data-feed-modal]');
  if(!open||open.getAttribute('aria-hidden')==='true'||getComputedStyle(open).display==='none')return '';
- const slug=open.querySelector('[data-detail-tabs]')?.getAttribute('data-detail-tabs');
+ const details=open.querySelector('[data-project-id], [data-detail-tabs]');
+ const slug=details?.getAttribute('data-project-id')||details?.getAttribute('data-detail-tabs');
  return slug?'/work/'+slug+'/':'';
 }
 function currentPageRecord(){
@@ -640,7 +641,7 @@ function showInputClarification(q){
   const response=text('div','','search-answer');
   response.append(renderAgentAnswer(INPUT_CLARIFICATION));
   conversation.append(response);
-  turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-8);saveConversation();
+  turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-10);saveConversation();
   conversation.scrollTop=response.offsetTop-conversation.offsetTop;
   input.focus({preventScroll:true});
 }
@@ -674,7 +675,7 @@ async function ask(q){
       input.value=q;
       response.classList.remove('is-thinking');
       response.replaceChildren(renderAgentAnswer(INPUT_CLARIFICATION));
-      turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-8);saveConversation();
+      turns.push({role:'assistant',text:INPUT_CLARIFICATION});history.push({role:'user',text:q},{role:'assistant',text:INPUT_CLARIFICATION});history=history.slice(-10);saveConversation();
       input.focus({preventScroll:true});
       return;
     }
@@ -748,7 +749,7 @@ async function ask(q){
     // Search excerpts are not model replies and must not steer later conversation.
     if(usedAgent){
       history.push({role:'user',text:q},{role:'assistant',text:answer,support_ids:supportIds});
-      history=history.slice(-8);
+      history=history.slice(-10);
     }
   }catch{
     response.classList.remove('is-thinking');
