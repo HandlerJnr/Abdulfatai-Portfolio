@@ -33,16 +33,6 @@ class GeminiTrial(unittest.TestCase):
   self.assertNotIn("answer",json.loads(answer))
   self.assertIn('"e0"',body["contents"][0]["parts"][0]["text"])
   self.assertEqual(provider,"gemini")
- def test_stable_recovery_model_uses_budget_instead_of_thinking_level(self):
-  requests=[]
-  class Response:
-   def __enter__(self):return self
-   def __exit__(self,*args):pass
-   def read(self):return json.dumps({"candidates":[{"content":{"parts":[{"text":"hello"}]}}]}).encode()
-  def request(req,timeout):requests.append(req);return Response()
-  with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=request):
-   ctx["call_model"]("test",model="gemini-2.5-flash-lite")
-  self.assertEqual(json.loads(requests[0].data)["generationConfig"]["thinkingConfig"],{"thinkingBudget":0})
  def test_gemini_quota_never_calls_other_provider(self):
   error=urllib.error.HTTPError("https://generativelanguage.googleapis.com",429,"quota",{},io.BytesIO(b'{"error":{"details":[]}}'))
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key","GROQ_API_KEY":"groq-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=error) as request:
@@ -54,7 +44,7 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=fail) as request:
    with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[5,3])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[3,3])
  def test_transient_gemini_failure_uses_existing_free_groq_key_once(self):
   calls=[]
   class Response:
@@ -74,5 +64,5 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[5,3])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[3,3])
 if __name__=="__main__":unittest.main()

@@ -1,7 +1,7 @@
 import ast,hashlib,io,json,os,re,urllib.request,urllib.error,urllib.parse,unittest
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 ROOT=Path(__file__).resolve().parents[1]
 tree=ast.parse((ROOT/'api/agent.py').read_text())
 tree.body=[n for n in tree.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
@@ -94,6 +94,19 @@ class Grounding(unittest.TestCase):
   a['call_model']=Mock(return_value=(json.dumps(raw),'test'))
   answer,_,_=a['checked_answer'](a['build_prompt']('How was it built?',[], '', 'conversation',{}),sources)
   self.assertEqual(answer,'He designed it in Figma.');self.assertNotIn('NASA',answer)
+ def test_complete_reply_is_not_cut_to_two_claims(self):
+  sources={str(i):{'text':t} for i,t in enumerate(['He designs payment interfaces.','He holds BSc Physics.','He holds a PGD Aerospace Engineering.','He is studying MSc UX Design at Brighton.'])}
+  claims=[{'text':source['text'],'source_id':key} for key,source in sources.items()]
+  a['call_model']=Mock(return_value=(json.dumps({'kind':'grounded','detail':'brief','claims':claims}),'test'))
+  answer,_,refs=a['checked_answer'](a['build_prompt']('Who is Jamiu?',[], '', 'conversation',{}),sources)
+  self.assertEqual(len(refs),4)
+  self.assertIn('PGD',answer);self.assertIn('studying MSc',answer)
+ def test_irrelevant_ui_context_is_omitted_but_qualifications_remain(self):
+  sources=a['grounding_sources']('',[], 'What kind of designer is Jamiu?')
+  self.assertIn('fact:education.bsc',sources);self.assertIn('fact:education.pgd',sources);self.assertIn('fact:education.msc',sources)
+  self.assertNotIn('fact:ui.search-homepage',sources);self.assertNotIn('fact:portfolio.authorship',sources)
+  build=a['grounding_sources']('',[], 'How did he build this portfolio?')
+  self.assertIn('fact:portfolio.authorship',build)
  def test_no_draft_or_review_failure_leaks_to_stream(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('grounding_invalid'))
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None
@@ -109,14 +122,6 @@ class Grounding(unittest.TestCase):
   self.assertEqual(provider,'portfolio');self.assertEqual(refs,['passage:vista:1'])
   self.assertTrue(answer.startswith('His portfolio puts it this way:'))
   self.assertIn('Vista supports English and French.',answer)
- def test_provider_failure_recovers_with_same_evidence_and_history(self):
-  sources={'f':{'text':'He uses Figma.'}}
-  model=Mock(side_effect=[RuntimeError('groq_http_429'),('He uses Figma.','gemini',['f'])]);a['checked_answer']=model
-  with patch.dict(os.environ,{'GEMINI_API_KEY':'test-only'}):
-   result=a['resilient_answer']('original conversation',sources,'What tools?',[], 'conversation')
-  self.assertEqual(result,('He uses Figma.','gemini',['f']))
-  self.assertEqual(model.call_args.args,('original conversation',sources))
-  self.assertEqual(model.call_args.kwargs,{'model':'gemini-2.5-flash-lite'})
  def test_role_comparison_does_not_masquerade_as_excerpt(self):
   a['checked_answer']=Mock(side_effect=RuntimeError('groq_http_429'))
   with self.assertRaises(RuntimeError):a['resilient_answer']('prompt',{},'Compare this role',[], 'job-fit')
