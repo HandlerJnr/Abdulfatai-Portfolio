@@ -1047,12 +1047,20 @@ def checked_answer(prompt, sources, on_review=None):
         if not str(error).startswith("grounding_invalid"):
             raise
         task = json.loads(review.rsplit("\n", 1)[-1])
+        try:
+            previous = json.loads(reviewed)
+            draft_text = previous.get("answer") or " ".join(c.get("text", "") for c in previous.get("claims", []))
+        except (ValueError, TypeError, AttributeError):
+            draft_text = ""
         task["validation_feedback"] = {
             "failure": str(error),
-            "instruction": "Compose a corrected conversational reply. Social acknowledgements need no personal claims: use social with empty claims. If making any claim about Jamiu, use grounded with a valid evidence key for every claim. Keep the latest topic and do not repeat a biography. Grounded answer must be empty; only claims are displayed."
+            "draft_to_correct": draft_text,
+            "instruction": "Correct this draft rather than starting another biography. You are Jamiu's GUIDE, not Jamiu: any owner biography written as I/my must become he/his, without adding facts. Social acknowledgements with no personal claims should use social, answer, empty claims. Grounded replies need evidence keys and empty answer. Keep it conversational, relevant and brief."
         }
         repair = review.rsplit("\n", 1)[0] + "\n" + json.dumps(task, ensure_ascii=False)
-        if os.environ.get("GROQ_API_KEY", "").strip():
+        if os.environ.get("GEMINI_API_KEY", "").strip():
+            reviewed, provider = call_model(repair, model=MODEL, _timeout=5)
+        elif os.environ.get("GROQ_API_KEY", "").strip():
             reviewed, provider = call_model(repair, model="openai/gpt-oss-120b", _timeout=3, _provider="groq")
         else:
             reviewed, provider = call_model(repair, model=MODEL, _timeout=3)
