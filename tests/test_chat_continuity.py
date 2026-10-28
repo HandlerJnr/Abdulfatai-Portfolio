@@ -57,6 +57,13 @@ class Continuity(unittest.TestCase):
  def test_education_followup_keeps_the_previous_subject(self):
   history=[{'role':'user','content':'who is Jamiu?'},{'role':'assistant','content':'His degrees include Physics and Aerospace Engineering.','support_ids':['fact:education.pgd']}]
   self.assertIn('education',a['conversation_query']('Really? Tell me more',history).lower())
+ def test_friendly_intro_and_reactions_do_not_become_qualification_lists(self):
+  intro=a['verified_knowledge_reply']('Who is Jamiu?',[])
+  self.assertIn('product designer',intro[0])
+  self.assertNotIn('PGD',intro[0])
+  reaction=a['verified_knowledge_reply']('That’s pretty cool',[{'role':'assistant','content':intro[0]}])
+  self.assertNotIn('Physics',reaction[0]);self.assertNotIn('portfolio:',reaction[0])
+  self.assertEqual(a['verified_knowledge_reply']('Thanks!',[])[0],'You’re welcome!')
  def test_fast_answer_can_anchor_later_followups(self):
   query=a['conversation_query']('Why that approach?',[{'role':'assistant','content':'Earlier answer','support_ids':['record:vista-itss']}])
   self.assertIn('Vista',query)

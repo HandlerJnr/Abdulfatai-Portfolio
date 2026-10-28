@@ -213,8 +213,15 @@ def verified_knowledge_reply(question, history):
         return None
     if re.search(r"\bwho (?:is|’s|'s) jamiu\b|^tell me about jamiu[?.! ]*$|^introduce jamiu", q) and not topic_record_ids(q):
         about = RECORDS.get("about", {})
-        if "product designer" in about.get("summary", "").lower() and "Brighton" in about.get("summary", ""):
+        if "product designer" in about.get("summary", "").lower() and "Brighton" in (about.get("summary", "") + about.get("text", "")):
             return ("He’s a product designer based in Brighton. His work spans fintech, AI products and complex workflows, across web and mobile.", ["record:about"])
+    reaction = q.replace("’", "'").strip(" .!?")
+    if re.fullmatch(r"(?:thanks|thank you|cheers)(?: a lot| so much)?", reaction):
+        return ("You’re welcome!", [])
+    if re.fullmatch(r"(?:that'?s|that is|thats|thatis)?\s*(?:pretty|really|so|very)?\s*(?:cool|nice|awesome|interesting|crazy)(?: yunno| you know)?", reaction):
+        return ("I get what you mean." if "crazy" in reaction else "Glad it caught your interest!", [])
+    if re.fullmatch(r"ok|okay|got it|understood|makes sense|fair enough", reaction):
+        return ("Got you.", [])
     facts = {fact["id"]: fact for fact in globals().get("FACT_CATALOG", [])}
     def fact_reply(key):
         fact = facts.get(key)
@@ -1063,6 +1070,16 @@ def checked_answer(prompt, sources, on_review=None):
                     "evidence": {key: {field: value for field, value in source.items() if field in ("text", "status", "already_discussed", "covered_text")} for key, source in sources.items()}}, ensure_ascii=False, separators=(",", ":"))
     )
     reviewed, provider = call_model(review)
+    current = prompt.split("\nCURRENT VISITOR MESSAGE\n", 1)[-1].split("\n", 1)[0].strip()
+    if re.fullmatch(r"(?:really[?!., ]*)?(?:tell me more|go on|say more)[?!. ]*", current, re.I):
+        try:
+            data = json.loads(reviewed)
+        except (ValueError, TypeError):
+            data = {}
+        if data.get("kind") == "grounded" and isinstance(data.get("claims"), list):
+            data["claims"] = data["claims"][:2]
+            data.pop("answer", None)
+            reviewed = json.dumps(data)
     answer = validate_grounded_reply(reviewed, sources)
     refs = list(dict.fromkeys(claim["source_id"] for claim in json.loads(reviewed).get("claims", [])))
     return answer, provider, refs
