@@ -225,8 +225,9 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt, model=None):
+def call_model(prompt, model=None, _timeout=22):
     endpoint, token, provider = model_endpoint()
+    original_prompt = prompt
     selected_model = model or MODEL
     source_aliases = {}
     # Short stable citation labels avoid a large changing schema on each turn.
@@ -295,7 +296,7 @@ def call_model(prompt, model=None):
         headers["x-goog-api-key"] = token
     request = urllib.request.Request(endpoint, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
     try:
-        with urllib.request.urlopen(request, timeout=22) as response:
+        with urllib.request.urlopen(request, timeout=_timeout) as response:
             data = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
         # Return only classified diagnostics, never provider bodies or credentials.
@@ -328,6 +329,11 @@ def call_model(prompt, model=None):
                 print("portfolio_agent_gemini_quota:", json.dumps(violations))
             except (TypeError, AttributeError):
                 pass
+        # One short recovery for transient Gemini availability, never for quota/auth.
+        if provider == "gemini" and error.code in (502, 503) and model is None:
+            error.close()
+            print("portfolio_agent_gemini_recovery: transient")
+            return call_model(original_prompt, model=selected_model, _timeout=8)
         # One alternate model attempt handles model-specific throttling. The reply
         # still passes the same evidence validator before it reaches the visitor.
         if error.code in (404, 429, 502, 503) and provider == "groq" and model is None:

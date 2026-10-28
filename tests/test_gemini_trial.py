@@ -37,6 +37,13 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key","GROQ_API_KEY":"groq-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=error) as request:
    with self.assertRaisesRegex(RuntimeError,"gemini_http_429"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,1)
+ def test_transient_failure_gets_one_short_recovery(self):
+  def fail(req,timeout):
+   raise urllib.error.HTTPError(req.full_url,503,"temporary",{},io.BytesIO(b"{}"))
+  with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=fail) as request:
+   with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
+   self.assertEqual(request.call_count,2)
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[22,8])
  def test_timeout_is_bounded_and_no_retry_storm(self):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")
