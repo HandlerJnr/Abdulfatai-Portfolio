@@ -45,6 +45,21 @@ class GeminiTrial(unittest.TestCase):
    with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
    self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[6,4])
+ def test_transient_gemini_failure_uses_existing_free_groq_key_once(self):
+  calls=[]
+  class Response:
+   def __enter__(self):return self
+   def __exit__(self,*args):pass
+   def read(self):return json.dumps({"choices":[{"message":{"content":"Hello!"}}]}).encode()
+  def request(req,timeout):
+   calls.append((req.full_url,timeout))
+   if len(calls)==1:raise TimeoutError()
+   return Response()
+  with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key","GROQ_API_KEY":"test-groq"},clear=True),patch.object(urllib.request,"urlopen",side_effect=request):
+   answer,provider=ctx["call_model"]("test")
+  self.assertEqual(provider,"groq");self.assertEqual(answer,"Hello!")
+  self.assertEqual(len(calls),2)
+  self.assertIn("api.groq.com",calls[1][0]);self.assertEqual(calls[1][1],4)
  def test_timeout_is_bounded_and_no_retry_storm(self):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")

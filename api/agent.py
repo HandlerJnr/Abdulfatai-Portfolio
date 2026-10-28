@@ -155,7 +155,7 @@ def conversation_query(question, history):
             continue
         for ref in message.get("support_ids", []):
             for record in RECORD_LIST:
-                if ref.startswith("passage:" + record["id"] + ":"):
+                if ref.startswith("passage:" + record["id"] + ":") or ref == "record:" + record["id"]:
                     return current + " " + record.get("title", record["id"])
     return " ".join([current] + users[-1:]).strip()
 
@@ -197,6 +197,36 @@ def verified_contact_reply(question):
     if not contact or re.search(r"\b(customer|support team|users?|customers?)\b", q):
         return None
     return "Connect with Jamiu:"
+
+
+
+def verified_knowledge_reply(question, history):
+    """Fast factual answers from reviewed owner knowledge; no generated claims."""
+    q = str(question or "").lower()
+    if re.search(r"\b(show|open|prove|evidence|reference|compare|recommend)\b", q):
+        return None
+    facts = {fact["id"]: fact for fact in globals().get("FACT_CATALOG", [])}
+    def fact_reply(key):
+        fact = facts.get(key)
+        if not fact:
+            return None
+        return re.sub(r"^Jamiu\b", "He", fact["statement"]), ["fact:" + key]
+    if re.search(r"(?:build|built|create|created|develop|developed).{0,35}(?:this|his|the) portfolio|development team|(?:this|his) portfolio.{0,25}(?:build|built|made)", q):
+        return fact_reply("portfolio.authorship")
+    if re.search(r"\bmsc\b", q) and re.search(r"finished|completed|ongoing|studying|graduated|awarded|done", q):
+        return fact_reply("education.msc")
+    if re.search(r"what tools|which tools|tech stack|technical skills|coding skills|programming languages", q):
+        text = RECORDS.get("technical-skills", {}).get("text", "")
+        if all(term in text for term in ("HTML", "CSS", "React.js", "Python", "LangGraph", "Hugging Face")):
+            return ("His front-end tools are HTML, CSS, JavaScript and React.js. C# and Python are beginner-level; his AI work includes LangGraph and Hugging Face.", ["record:technical-skills"])
+    projects = topic_record_ids(conversation_query(question, history))
+    if "vista-itss" in projects:
+        text = RECORDS.get("vista-itss", {}).get("text", "")
+        if re.search(r"language|english|french|sign.?in", q) and all(term in text.lower() for term in ("english", "french", "sign-in")):
+            return ("He made English and French selection available at sign-in, rather than leaving it in settings after customers had already logged in.", ["record:vista-itss"])
+        if re.search(r"currenc|local money", q) and "currency" in text.lower():
+            return ("Local currency stays visible with account balances. Shared components keep the interface consistent while allowing language, currency and regulatory copy to vary by subsidiary.", ["record:vista-itss"])
+    return None
 
 
 def model_endpoint():
@@ -244,8 +274,10 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt, model=None, _timeout=6):
+def call_model(prompt, model=None, _timeout=6, _provider=None):
     endpoint, token, provider = model_endpoint()
+    if _provider == "groq" and os.environ.get("GROQ_API_KEY", "").strip():
+        endpoint, token, provider = "https://api.groq.com/openai/v1/chat/completions", os.environ["GROQ_API_KEY"].strip(), "groq"
     original_prompt = prompt
     selected_model = model or MODEL
     source_aliases = {}
@@ -374,7 +406,7 @@ def call_model(prompt, model=None, _timeout=6):
         if provider == "gemini" and error.code in (502, 503) and model is None:
             error.close()
             print("portfolio_agent_gemini_recovery: transient")
-            return call_model(original_prompt, model=selected_model, _timeout=4)
+            return call_model(original_prompt, model="openai/gpt-oss-120b" if os.environ.get("GROQ_API_KEY", "").strip() else selected_model, _timeout=4, _provider="groq" if os.environ.get("GROQ_API_KEY", "").strip() else None)
         # One alternate model attempt handles model-specific throttling. The reply
         # still passes the same evidence validator before it reaches the visitor.
         if error.code in (404, 429, 502, 503) and provider == "groq" and model is None:
@@ -389,7 +421,7 @@ def call_model(prompt, model=None, _timeout=6):
     except Exception as error:
         if provider == "gemini" and model is None:
             print("portfolio_agent_gemini_recovery: network")
-            return call_model(original_prompt, model=selected_model, _timeout=4)
+            return call_model(original_prompt, model="openai/gpt-oss-120b" if os.environ.get("GROQ_API_KEY", "").strip() else selected_model, _timeout=4, _provider="groq" if os.environ.get("GROQ_API_KEY", "").strip() else None)
         raise RuntimeError("model_network") from error
 
     if provider == "gemini":
@@ -1107,6 +1139,11 @@ class handler(BaseHTTPRequestHandler):
         contact_answer = verified_contact_reply(question) if not job_description else None
         if contact_answer:
             return json_response(self, 200, {"answer": contact_answer, "source_ids": [], "support_ids": [], "intent": "contact", "page_id": page_context.get("page_id", "")})
+
+        known_reply = verified_knowledge_reply(question, history) if not job_description else None
+        if known_reply:
+            answer, support_ids = known_reply
+            return json_response(self, 200, {"answer": answer, "support_ids": support_ids, "source_ids": [], "intent": "conversation", "page_id": page_context.get("page_id", ""), "provider": "knowledge"})
 
         intent = "job-fit" if job_description else response_intent(question, history, page_context)
         try:

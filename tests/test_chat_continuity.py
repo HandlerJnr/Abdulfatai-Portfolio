@@ -33,6 +33,17 @@ class Continuity(unittest.TestCase):
   sources={'old':{'text':'Vista banking journeys support English and French across four subsidiaries.','status':'documented'}}
   answer,_,refs=a['published_reply']('What tools does he use?',[{'role':'user','content':'Tell me about Vista Digital Banking'}],sources)
   self.assertNotIn('Vista',answer);self.assertEqual(refs,[])
+ def test_established_facts_are_answered_without_a_model(self):
+  history=[{'role':'user','content':'Tell me about Vista Digital Banking'}]
+  language=a['verified_knowledge_reply']('What about English and French?',history)
+  self.assertIn('sign-in',language[0])
+  self.assertEqual(language[1],['record:vista-itss'])
+  authorship=a['verified_knowledge_reply']('Did he build this portfolio himself?',history)
+  self.assertIn('Figma',authorship[0])
+  self.assertIsNone(a['verified_knowledge_reply']('Compare his experience for this role',history))
+ def test_fast_answer_can_anchor_later_followups(self):
+  query=a['conversation_query']('Why that approach?',[{'role':'assistant','content':'Earlier answer','support_ids':['record:vista-itss']}])
+  self.assertIn('Vista',query)
  def test_prompt_keeps_restored_conversation(self):
   history=[{'role':'user','content':'Tell me about Vista Digital Banking'},{'role':'assistant','content':'He built a shared design system.'}]
   prompt=a['build_prompt']('Why that approach?',history,'','conversation',{})
