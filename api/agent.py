@@ -16,7 +16,8 @@ from llama_index.retrievers.bm25 import BM25Retriever
 ROOT = Path(__file__).resolve().parent.parent
 KNOWLEDGE_PATH = ROOT / "portfolio-knowledge.json"
 TECHNICAL_PATH = ROOT / "technical-capabilities.json"
-MODEL = os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
+GEMINI_TRIAL = bool(os.environ.get("GEMINI_API_KEY", "").strip())
+MODEL = "gemini-3.1-flash-lite" if GEMINI_TRIAL else os.environ.get("PORTFOLIO_AGENT_MODEL", "openai/gpt-oss-120b")
 MAX_HISTORY = 10
 FACTS_PATH = ROOT / "agent-facts.json"
 with FACTS_PATH.open(encoding="utf-8") as handle:
@@ -180,6 +181,8 @@ def verified_contact_reply(question):
 
 
 def model_endpoint():
+    if os.environ.get("GEMINI_API_KEY", "").strip():
+        return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", os.environ["GEMINI_API_KEY"].strip(), "gemini"
     groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
         return "https://api.groq.com/openai/v1/chat/completions", groq_key, "groq"
@@ -222,9 +225,21 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt, model=None):
+def call_model(prompt, model=None, _timeout=22):
     endpoint, token, provider = model_endpoint()
+    original_prompt = prompt
     selected_model = model or MODEL
+    source_aliases = {}
+    # Short stable citation labels avoid a large changing schema on each turn.
+    if provider == "gemini" and prompt.startswith("GROUNDING_REVIEW_TASK\n"):
+        try:
+            preamble, evidence_json = prompt.rsplit("\n", 1)
+            task = json.loads(evidence_json)
+            source_aliases = {"e" + str(i): key for i, key in enumerate(task["evidence"])}
+            task["evidence"] = {alias: task["evidence"][key] for alias, key in source_aliases.items()}
+            prompt = preamble + "\n" + json.dumps(task, ensure_ascii=False, separators=(",", ":"))
+        except (ValueError, KeyError, TypeError):
+            pass
     body = {
         "model": selected_model,
         "messages": model_messages(prompt),
@@ -233,7 +248,7 @@ def call_model(prompt, model=None):
     }
     if prompt.startswith("GROUNDING_REVIEW_TASK\n"):
         body["response_format"] = {"type": "json_object"}
-        if provider == "groq" and selected_model in ("openai/gpt-oss-120b", "openai/gpt-oss-20b"):
+        if provider == "gemini" or (provider == "groq" and selected_model in ("openai/gpt-oss-120b", "openai/gpt-oss-20b")):
             body["response_format"] = {
                 "type": "json_schema",
                 "json_schema": {
@@ -257,24 +272,37 @@ def call_model(prompt, model=None):
         body["temperature"] = 0.1
     if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
-    request = urllib.request.Request(
-        endpoint,
-        data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "User-Agent": "JamiuPortfolio/1.0",
-        },
-        method="POST",
-    )
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json", "User-Agent": "JamiuPortfolio/1.0"}
+    if provider == "gemini":
+        config = {
+            "temperature": body["temperature"],
+            "maxOutputTokens": body["max_completion_tokens"],
+            "thinkingConfig": {"thinkingLevel": "minimal"}
+        }
+        if "response_format" in body:
+            config["responseMimeType"] = "application/json"
+            schema = body["response_format"]["json_schema"]["schema"]
+            if source_aliases:
+                schema["properties"]["claims"]["items"]["properties"]["source_id"]["enum"] = list(source_aliases)
+            config["responseJsonSchema"] = schema
+        messages = body["messages"]
+        body = {
+            "systemInstruction": {"parts": [{"text": "\n".join(m["content"] for m in messages if m["role"] == "system")}]},
+            "contents": [{"role": "user", "parts": [{"text": m["content"]}]} for m in messages if m["role"] != "system"],
+            "generationConfig": config
+        }
+        endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + urllib.parse.quote(selected_model, safe="") + ":generateContent"
+        headers.pop("Authorization")
+        headers["x-goog-api-key"] = token
+    request = urllib.request.Request(endpoint, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
     try:
-        with urllib.request.urlopen(request, timeout=22) as response:
+        with urllib.request.urlopen(request, timeout=_timeout) as response:
             data = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
         # Return only classified diagnostics, never provider bodies or credentials.
         raw = error.read(16384).decode("utf-8", errors="replace")
         detail = "unspecified"
+        payload = {}
         try:
             payload = json.loads(raw)
             issue = payload.get("error", {})
@@ -292,6 +320,20 @@ def call_model(prompt, model=None):
                 detail = "provider_request_blocked"
             elif "<html" in raw.lower():
                 detail = "provider_http_page"
+        if provider == "gemini" and error.code == 429:
+            try:
+                violations = []
+                for item in payload.get("error", {}).get("details", []):
+                    for violation in item.get("violations", []):
+                        violations.append({k: violation[k] for k in ("quotaMetric", "quotaId", "quotaValue", "quotaDimensions") if k in violation})
+                print("portfolio_agent_gemini_quota:", json.dumps(violations))
+            except (TypeError, AttributeError):
+                pass
+        # One short recovery for transient Gemini availability, never for quota/auth.
+        if provider == "gemini" and error.code in (502, 503) and model is None:
+            error.close()
+            print("portfolio_agent_gemini_recovery: transient")
+            return call_model(original_prompt, model=selected_model, _timeout=8)
         # One alternate model attempt handles model-specific throttling. The reply
         # still passes the same evidence validator before it reaches the visitor.
         if error.code in (404, 429, 502, 503) and provider == "groq" and model is None:
@@ -306,6 +348,25 @@ def call_model(prompt, model=None):
     except Exception as error:
         raise RuntimeError("model_network") from error
 
+    if provider == "gemini":
+        native_usage = data.get("usageMetadata", {})
+        native_parts = ((data.get("candidates") or [{}])[0].get("content") or {}).get("parts", [])
+        generated = "".join(part.get("text", "") for part in native_parts if not part.get("thought"))
+        if source_aliases and generated:
+            try:
+                result = json.loads(generated)
+                for claim in result.get("claims", []):
+                    claim["source_id"] = source_aliases.get(claim.get("source_id"), claim.get("source_id"))
+                generated = json.dumps(result, ensure_ascii=False)
+            except (ValueError, TypeError, AttributeError):
+                pass
+        data = {"choices": [{"message": {"content": generated}}], "usage": {
+            "prompt_tokens": native_usage.get("promptTokenCount", 0),
+            "completion_tokens": native_usage.get("candidatesTokenCount", 0),
+            "total_tokens": native_usage.get("totalTokenCount", 0)
+        }}
+        usage = data.get("usage", {})
+        print("portfolio_agent_gemini_usage:", json.dumps({k: usage[k] for k in ("prompt_tokens", "completion_tokens", "total_tokens") if k in usage}))
     message = ((data.get("choices") or [{}])[0].get("message") or {})
     content = clip(message.get("content"), 7000)
     if not content:
@@ -933,13 +994,13 @@ def build_job_fit_prompt(description, question):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Safe health check: reveals capability state, never secret values.
-        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN"))
+        auth = bool(os.environ.get("GROQ_API_KEY") or os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("VERCEL_OIDC_TOKEN") or os.environ.get("GEMINI_API_KEY"))
         return json_response(
             self,
             200,
             {
                 "ok": True,
-                "engine": "llamaindex-bm25+gpt-oss-120b",
+                "engine": "llamaindex-bm25+grounded-model",
                 "model": MODEL,
                 "auth_configured": auth,
                 "records": len(RECORD_LIST),
@@ -1058,7 +1119,7 @@ class handler(BaseHTTPRequestHandler):
                   "support_ids": support_ids,
                   "source_ids": select_proof_ids(answer, used_ids, question, intent),
                   "evidence_links": evidence_links(question, history, intent),
-                  "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL})
+                  "intent": intent, "page_id": page_context.get("page_id", ""), "model": MODEL, "provider": _provider})
         except (BrokenPipeError, ConnectionResetError):
             pass
         except Exception as error:
