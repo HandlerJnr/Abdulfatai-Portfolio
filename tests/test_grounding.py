@@ -108,7 +108,8 @@ class Grounding(unittest.TestCase):
    a['validate_grounded_reply'](json.dumps(incomplete),sources)
  def test_irrelevant_ui_context_is_omitted_but_qualifications_remain(self):
   sources=a['grounding_sources']('',[], 'What kind of designer is Jamiu?')
-  self.assertIn('fact:education.bsc',sources);self.assertIn('fact:education.pgd',sources);self.assertIn('fact:education.msc',sources)
+  self.assertIn('profile:qualifications',sources)
+  for term in ['BSc','PGD','MSc','ongoing']: self.assertIn(term,sources['profile:qualifications']['text'])
   self.assertNotIn('fact:ui.search-homepage',sources);self.assertNotIn('fact:portfolio.authorship',sources)
   build=a['grounding_sources']('',[], 'How did he build this portfolio?')
   self.assertIn('fact:portfolio.authorship',build)
