@@ -54,6 +54,9 @@ class Continuity(unittest.TestCase):
   self.assertIn('He designed',reply[0])
  def test_project_specific_unknown_tools_are_not_replaced_by_general_skills(self):
   self.assertIsNone(a['verified_knowledge_reply']('What tools did he use on Vista?',[]))
+ def test_education_followup_keeps_the_previous_subject(self):
+  history=[{'role':'user','content':'who is Jamiu?'},{'role':'assistant','content':'His degrees include Physics and Aerospace Engineering.','support_ids':['fact:education.pgd']}]
+  self.assertIn('education',a['conversation_query']('Really? Tell me more',history).lower())
  def test_fast_answer_can_anchor_later_followups(self):
   query=a['conversation_query']('Why that approach?',[{'role':'assistant','content':'Earlier answer','support_ids':['record:vista-itss']}])
   self.assertIn('Vista',query)
