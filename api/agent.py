@@ -260,6 +260,13 @@ def call_model(prompt, model=None):
         body["temperature"] = 0.1
     if provider == "groq" and selected_model.startswith("openai/gpt-oss"):
         body["reasoning_effort"] = "low"
+    if provider == "gemini" and prompt.startswith("GROUNDING_REVIEW_TASK\n"):
+        try:
+            source_ids = list(json.loads(prompt.rsplit("\n", 1)[-1])["evidence"])
+            if source_ids:
+                body["response_format"]["json_schema"]["schema"]["properties"]["claims"]["items"]["properties"]["source_id"]["enum"] = source_ids
+        except (ValueError, KeyError, TypeError):
+            pass
     if provider == "gemini":
         body["max_tokens"] = body.pop("max_completion_tokens")
         body["reasoning_effort"] = "minimal"
