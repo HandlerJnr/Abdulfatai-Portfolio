@@ -101,6 +101,11 @@ class Grounding(unittest.TestCase):
   answer,_,refs=a['checked_answer'](a['build_prompt']('Who is Jamiu?',[], '', 'conversation',{}),sources)
   self.assertEqual(len(refs),4)
   self.assertIn('PGD',answer);self.assertIn('studying MSc',answer)
+ def test_generated_overview_cannot_silently_omit_qualifications(self):
+  sources=a['grounding_sources']('',[], 'Who is Jamiu?')
+  incomplete={'kind':'grounded','scope':'introduction','claims':[{'text':'He holds BSc Physics.','source_id':'fact:education.bsc'}]}
+  with self.assertRaisesRegex(RuntimeError,'introduction_missing_qualifications'):
+   a['validate_grounded_reply'](json.dumps(incomplete),sources)
  def test_irrelevant_ui_context_is_omitted_but_qualifications_remain(self):
   sources=a['grounding_sources']('',[], 'What kind of designer is Jamiu?')
   self.assertIn('fact:education.bsc',sources);self.assertIn('fact:education.pgd',sources);self.assertIn('fact:education.msc',sources)
