@@ -31,4 +31,11 @@ class RecruiterKnowledge(unittest.TestCase):
   text,_=a['retrieve']('What does Horal show about his strengths?',[],'conversation',{})
   self.assertIn('Demonstrated capability:',text);self.assertIn('Horal is live',text)
   self.assertEqual(a['topic_record_ids']('Horal'),['horal'])
+ def test_provider_outage_never_quotes_interview_questions_as_owner_evidence(self):
+  sources={'passage:interview-disagreement:x':{'text':'Questions: Describe a disagreement with an engineer.'}}
+  answer,_,refs=a['published_reply']('Describe a disagreement he had with an engineer.',[],sources)
+  self.assertNotIn('Questions:',answer);self.assertIn('Jamiu',answer);self.assertIn('directly',answer);self.assertEqual(refs,['boundary'])
+ def test_project_overview_is_not_forced_into_a_personal_qualification_intro(self):
+  sources=a['grounding_sources']('',[],'What kind of designer does Horal show he is?')
+  self.assertNotIn('profile:qualifications',sources)
 if __name__=='__main__':unittest.main()

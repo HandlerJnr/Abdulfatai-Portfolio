@@ -27,11 +27,11 @@
           "evidence": "Keep the design language consistent across subsidiaries. I used shared components and interaction patterns so each local experience remained recognisably Vista, while allowing language, currency and regulatory copy to vary."
         },
         {
-          "capability": "Making financial context visible",
+          "capability": "Making language access part of sign-in",
           "evidence": "Make language available at sign-in. English and French selection sits at the start of the journey, rather than being left inside settings after a customer has already had to log in."
         },
         {
-          "capability": "Design-system thinking",
+          "capability": "Keeping account and legal-entity context visible",
           "evidence": "Keep local and company context visible. Currency stays with account balances, and the active legal entity appears beneath the user’s name so corporate users can see which company they are acting for."
         }
       ],
