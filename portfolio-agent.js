@@ -12,12 +12,12 @@ document.body.append(launcher);
 const dialog=document.createElement('dialog');
 dialog.className='portfolio-search';
 dialog.setAttribute('aria-labelledby','portfolio-search-title');
-dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-lenis-prevent role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><textarea id="portfolio-question" rows="1" maxlength="700" placeholder="Ask anything about Jamiu’s work" autocomplete="off" enterkeyhint="send" aria-label="Message the portfolio agent"></textarea><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
+dialog.innerHTML='<header class="search-heading"><div><span class="search-kicker">[A guide to the work]</span><h2 id="portfolio-search-title">Ask about Jamiu.</h2></div><button type="button" class="search-close" aria-label="Close portfolio agent"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button></header><p class="search-mode"><span class="agent-dot" aria-hidden="true"></span><span>AI guide to the published portfolio.</span></p><div class="search-conversation" data-scroll-region role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions"><p class="search-welcome">A question is a good place to start.</p></div><form class="search-form"><label for="portfolio-question">Ask about the work, the decisions or the person behind it.</label><div><textarea id="portfolio-question" rows="1" maxlength="700" placeholder="Ask anything about Jamiu’s work" autocomplete="off" enterkeyhint="send" aria-label="Message the portfolio agent"></textarea><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div></form>';
 document.body.append(dialog);
 
 const conversation=dialog.querySelector('.search-conversation');
 const input=dialog.querySelector('textarea');
-input.setAttribute('data-lenis-prevent','');
+input.setAttribute('data-scroll-region','');
 const form=dialog.querySelector('form');
 const submit=form.querySelector('button');
 let records;
@@ -831,7 +831,7 @@ function lockAgentPage(){
  mobileScrollLock={htmlOverflow:html.style.overflow,bodyOverflow:body.style.overflow};
  html.style.overflow='hidden';body.style.overflow='hidden';
  body.classList.add('agent-mobile-active');html.classList.add('agent-mobile-active');
- window.ltLenis?.stop();
+ window.portfolioScroll?.stop();
 }
 function unlockAgentPage(){
  if(!mobileScrollLock)return;
@@ -839,7 +839,7 @@ function unlockAgentPage(){
  mobileScrollLock=null;
  html.style.overflow=prior.htmlOverflow;body.style.overflow=prior.bodyOverflow;
  body.classList.remove('agent-mobile-active');html.classList.remove('agent-mobile-active');
- window.ltLenis?.start();
+ window.portfolioScroll?.start();
 }
 function updateAgentViewport(){
  if(!dialog.open)return;
@@ -925,7 +925,7 @@ dialog.addEventListener('close',()=>{
   chatView='focused';dialog.classList.remove('is-docked');document.body.classList.remove('agent-is-docked');syncViewControl();
   unlockAgentPage();
   document.body.style.overflow=savedOverflow;
-  window.ltLenis?.start();
+  window.portfolioScroll?.start();
   dialog.classList.remove('has-virtual-keyboard');
   saveConversation();
   input.blur();
@@ -957,7 +957,7 @@ actionToggle.addEventListener('click',event=>{
 chatActions.addEventListener('click',event=>{if(event.target.closest('button'))setActionsOpen(false)});
 document.addEventListener('pointerdown',event=>{if(!chatActions.hidden&&!actionHost.contains(event.target))setActionsOpen(false)});
 actionHost.append(actionToggle,chatActions);windowControls.insertBefore(actionHost,closeButton);
-const rolePanel=text('section','','role-fit-panel');rolePanel.hidden=true;rolePanel.setAttribute('aria-label','Job description comparison');rolePanel.setAttribute('data-lenis-prevent','');
+const rolePanel=text('section','','role-fit-panel');rolePanel.hidden=true;rolePanel.setAttribute('aria-label','Job description comparison');rolePanel.setAttribute('data-scroll-region','');
 rolePanel.innerHTML='<div class="role-fit-heading"><h3>Compare a role</h3><button type="button" data-role-cancel aria-label="Return to chat">Back to chat</button></div><p>Paste the job description, or upload it and check the extracted text before comparing.</p><div class="role-fit-file-row"><button type="button" data-role-upload>Upload PDF or Word</button><span>PDF or .docx · Up to 2 MB</span><input type="file" accept=".pdf,.docx" hidden></div><label for="role-description">Job description</label><textarea id="role-description" maxlength="12000" placeholder="Paste the role and its main requirements here…"></textarea><p class="role-fit-status" role="status" aria-live="polite"></p><p class="role-fit-privacy">Files are processed for text extraction and aren’t saved by this site. When you compare, the reviewed text is sent to the AI provider. Please leave out confidential or personal information.</p><div class="role-fit-buttons"><button type="button" data-role-remove hidden>Remove role</button><button type="button" data-role-compare disabled>Compare with Jamiu’s work</button></div>';
 const roleText=rolePanel.querySelector('textarea'),roleFile=rolePanel.querySelector('input[type=file]'),roleStatus=rolePanel.querySelector('.role-fit-status'),compareRole=rolePanel.querySelector('[data-role-compare]'),uploadRole=rolePanel.querySelector('[data-role-upload]');
 let parsingRole=false,roleFileToken=0;
@@ -991,9 +991,9 @@ compareRole.addEventListener('click',async()=>{
  roleDescription=description;updateRoleAction();closeRolePanel();await ask('Compare this job description with Jamiu’s published experience.');
 });
 const workspace=text('div','','agent-workspace');
-const library=text('nav','','agent-library');library.setAttribute('aria-label','Portfolio pages and projects');library.setAttribute('data-lenis-prevent','');
+const library=text('nav','','agent-library');library.setAttribute('aria-label','Portfolio pages and projects');library.setAttribute('data-scroll-region','');
 const centre=text('section','','agent-chat-column');centre.setAttribute('aria-label','Chat');
-const proof=text('aside','','agent-proof');proof.setAttribute('aria-label','Selected work preview');proof.setAttribute('data-lenis-prevent','');
+const proof=text('aside','','agent-proof');proof.setAttribute('aria-label','Selected work preview');proof.setAttribute('data-scroll-region','');
 centre.append(conversation,rolePanel,form);workspace.append(library,centre,proof);dialog.append(workspace);
 proof.append(text('p','[Preview]','search-kicker'),text('p','Select a project to see its work.','agent-proof-empty'));
 function clearProofForSuggestions(){

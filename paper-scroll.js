@@ -7,7 +7,7 @@ const params=new URLSearchParams(location.search);
 const status={supported:supportsHtmlInCanvas(),active:false,reason:'unsupported'};
 window.portfolioPaperScroll=status;
 if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')!=='off'){
- let instance,host,content,source,output,previousLenis,adapter,stopped=false,restored=false;
+ let instance,host,content,source,output,adapter,stopped=false,restored=false;
  const initialY=scrollY;
  function wheelScroll(event){
   if(stopped||event.ctrlKey||event.metaKey)return;
@@ -24,7 +24,7 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   if(event.key==='Home'||event.key==='End'){event.preventDefault();content.scrollTop=event.key==='Home'?0:content.scrollHeight}
   else if(event.key in moves){event.preventDefault();content.scrollTop+=moves[event.key]}
  }
- const notify=()=>{window.dispatchEvent(new Event('scroll'));window.ScrollTrigger?.update()};
+ const notify=()=>window.dispatchEvent(new Event('scroll'));
  function restore(reason){
   if(restored)return;restored=true;
   const y=content?.scrollTop||0;
@@ -34,10 +34,8 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   content?.removeEventListener('keydown',keyScroll);
   if(host?.parentNode){host.before(content?.querySelector('.section_feed')||root);host.remove()}
   document.documentElement.classList.remove('has-paper-scroll');
-  if(window.ltLenis===adapter)window.ltLenis=null;
-  window.ScrollTrigger?.scrollerProxy(window,null);
+  if(window.portfolioScroll===adapter)window.portfolioScroll=null;
   window.scrollTo({top:y,behavior:'instant'});
-  window.ScrollTrigger?.refresh();
   status.active=false;status.reason=reason;
  }
  try{
@@ -51,8 +49,6 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   document.documentElement.classList.add('has-paper-scroll');
   instance=createBend({source,content,output},{zone:100,angle:32,rounding:90,perspective:1500,ease:160,smoothing:.14,tumble:0,tilt:0,direction:'in',top:true,bottom:true});
   if(!instance)throw Error('Bend renderer unavailable');
-  previousLenis=window.ltLenis;
-  previousLenis?.destroy?.();
   adapter={
    scrollTo(target,options={}){
     if(stopped&&!options.force)return;
@@ -67,13 +63,7 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
    resize(){instance?.resize()},
    get scroll(){return content.scrollTop}
   };
-  window.ltLenis=adapter;
-  window.ScrollTrigger?.scrollerProxy(window,{
-   scrollTop(value){if(arguments.length)content.scrollTop=value;return content.scrollTop},
-   scrollLeft(value){if(arguments.length)content.scrollLeft=value;return content.scrollLeft},
-   getBoundingClientRect(){return{top:0,left:0,width:innerWidth,height:innerHeight}},
-   scrollHeight(){return content.scrollHeight},pinType:'fixed'
-  });
+  window.portfolioScroll=adapter;
   content.scrollTop=initialY;
   content.addEventListener('scroll',notify,{passive:true});
   host.addEventListener('wheel',wheelScroll,{capture:true,passive:false});
@@ -84,7 +74,6 @@ if(root&&desktop.matches&&status.supported&&!motion.matches&&params.get('paper')
   desktop.addEventListener('change',()=>{if(!desktop.matches)restore('single-column-layout')});
   motion.addEventListener('change',()=>{if(motion.matches)restore('reduced-motion')});
   output.addEventListener('webglcontextlost',()=>restore('graphics-context-lost'),{once:true});
-  window.ScrollTrigger?.refresh();
   status.active=true;status.reason='active';
   const hash=location.hash.slice(1);if(hash){const target=document.getElementById(decodeURIComponent(hash));if(target)adapter.scrollTo(target,{immediate:true})}
  }catch(error){restore('renderer-fallback');console.info('Paper scroll kept the standard layout:',error.message)}

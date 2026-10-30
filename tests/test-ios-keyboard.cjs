@@ -13,7 +13,7 @@ const body={style:{overflow:'visible'},classList:classes()};
 const html={style:{overflow:'visible'},classList:classes()};
 let stops=0,starts=0;
 const viewport={height:430,offsetTop:175,addEventListener(){}};
-const win={visualViewport:viewport,innerHeight:850,ltLenis:{stop(){stops++},start(){starts++}},addEventListener(){}};
+const win={visualViewport:viewport,innerHeight:850,portfolioScroll:{stop(){stops++},start(){starts++}},addEventListener(){}};
 const dialog={open:true,style:{setProperty(k,v){props.set(k,v)},removeProperty(k){props.delete(k)}},classList:{toggle(k,v){this[k]=v},remove(k){this[k]=false}}};
 const context={window:win,document:{body,documentElement:html},fullScreenViewport:{matches:true,addEventListener(){}},dialog,input:{addEventListener(){}},resizeComposer(){},requestAnimationFrame(fn){return 1}};
 vm.createContext(context);

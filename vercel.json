@@ -31,66 +31,6 @@
       "permanent": true
     },
     {
-      "source": "/work/agentic",
-      "destination": "/work/horal",
-      "permanent": true
-    },
-    {
-      "source": "/work/div-supply-sticker",
-      "destination": "/work/radius-pay4me",
-      "permanent": true
-    },
-    {
-      "source": "/work/mt-1",
-      "destination": "/work/vista-digital-banking",
-      "permanent": true
-    },
-    {
-      "source": "/work/brewbot",
-      "destination": "/work/bizinc",
-      "permanent": true
-    },
-    {
-      "source": "/work/journey-desk",
-      "destination": "/work/kremor-ai",
-      "permanent": true
-    },
-    {
-      "source": "/work/div-supply-landing",
-      "destination": "/work/chalant-ai",
-      "permanent": true
-    },
-    {
-      "source": "/work/desktop-portfolio",
-      "destination": "/work/arete",
-      "permanent": true
-    },
-    {
-      "source": "/work/smooov",
-      "destination": "/work/shortlet-lagos",
-      "permanent": true
-    },
-    {
-      "source": "/work/journey-retro",
-      "destination": "/work/synqit",
-      "permanent": true
-    },
-    {
-      "source": "/work/puffer-asterisk",
-      "destination": "/work/architek",
-      "permanent": true
-    },
-    {
-      "source": "/work/fullstack",
-      "destination": "/work/loan-investment-app",
-      "permanent": true
-    },
-    {
-      "source": "/work/texture-generator",
-      "destination": "/work/reporting-portal",
-      "permanent": true
-    },
-    {
       "source": "/search/ai",
       "destination": "/search/experience/",
       "permanent": true

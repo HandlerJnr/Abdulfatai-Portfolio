@@ -15,3 +15,14 @@ are excluded. The analytics dashboard must remain enabled in the Vercel project.
 No custom identity, form values or project-modal events are collected.
 
 The previous portfolio is preserved in the Git archive branch.
+
+## Portfolio runtime
+
+`portfolio-runtime.js` owns theme persistence, the Brighton clock, portrait rotation,
+and accessible project dialogs without an exported site-builder runtime. Layout
+styles live in `portfolio-base.css`; project-specific components keep their own
+stylesheets. The asterisk favicon and chat icons are intentional branding.
+
+Run `python3 tests/test_template_cleanup.py` for asset, metadata and residue checks.
+The DOM interaction test (`tests/test_portfolio_runtime.cjs`) additionally needs
+`linkedom` available to Node (for example through a temporary `NODE_PATH`).
