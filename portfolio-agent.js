@@ -71,7 +71,7 @@ function restoreConversation(){
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
       if(turn.role==='user'){previousQuestion=turn.text;conversation.append(text('p',turn.text,'search-question'));}
-      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion)||isContactReply(turn.text))response.append(renderContactActions());conversation.append(response);}
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion)||isContactReply(turn.text)||contactHandoff(turn.text))response.append(renderContactActions());conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
@@ -171,6 +171,7 @@ function contactActionContent(kind,label,detail){
  copy.append(text('strong',label),text('span',detail,'agent-contact-detail'));
  return [icon,copy];
 }
+function contactHandoff(value){return /\b(?:connect with|contact|reach out to|speak (?:with|to)) Jamiu\b|\bJamiu\b[^.!?]{0,100}\bdirectly\b|\b(?:not|isn['’]t|aren['’]t|is not|are not)\s+(?:documented|recorded|listed|known|shared|specified|available)\b|\b(?:don['’]t|do not) have\b/i.test(String(value||''));}
 function isContactReply(value){return /^Connect with Jamiu:?$/i.test(String(value||'').trim());}
 function renderContactActions(){
  const block=text('section','','agent-contact');
@@ -742,7 +743,7 @@ async function ask(q){
       response.append(sourceCards(evidenceCards));
     }
 
-    const offerContact=shouldOfferContact(q)||isContactReply(answer);
+    const offerContact=shouldOfferContact(q)||isContactReply(answer)||contactHandoff(answer);
     if(offerContact)response.append(renderContactActions());
     turns.push({role:'assistant',text:answer,evidenceLinks:links,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
     dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));

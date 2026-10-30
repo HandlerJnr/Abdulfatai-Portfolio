@@ -13,3 +13,13 @@ Run local checks with `python3 -m unittest discover -s tests -p 'test_*.py'`. Ru
 The conversation suite includes ownership follow-ups, academic status, contact actions, unknown details, slang, topic changes, correction of a prior invented team and prompt injection. Phrase assertions are regression signals; inspect the generated answers for meaning as well.
 
 All generation paths share the guide's voice; first-person portfolio copy does not change the assistant's identity. A perspective guard rejects unquoted personal ownership claims such as “I designed”. The client retains supporting evidence IDs with assistant history. Passage IDs are content-stable across retrieval order, so later replies can identify discussed material. Elaboration requests should add a new relevant aspect, not reuse the same sources; a knowledge-boundary response remains valid when no more detail is available. Source novelty is a useful check, not a guarantee of semantic novelty, so the live conversation suite also checks and reviews repeated answers.
+
+
+`recruiter-knowledge.json` adds project evidence dossiers and recruiter discussion
+coverage. Strengths are interpretations tied to exact portfolio decision excerpts;
+they are not new claims of research, performance, or personality. The original
+portfolio record remains the authority for ownership, scope, delivery and limits.
+Recruiter topics describe what evidence is needed; they are not scripted answers.
+Missing personal anecdotes are handled with a short specific answer and an offer
+to contact Jamiu through the existing cards. No invented interview evidence is
+added to make a dossier appear complete.

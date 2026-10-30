@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "record_id": "vista-itss",
+      "title": "Vista Digital Banking",
+      "url": "/work/vista-digital-banking/",
+      "summary": "One shared UI language, adapted for four Vista subsidiaries.",
+      "problem_role_contribution": [
+        "Vista needed a recognisable banking experience across The Gambia, Guinea, Sierra Leone and Burkina Faso. The UI had to work in English and French while accommodating each subsidiary’s currency, regulatory copy and banking requirements.",
+        "UI/UX Designer & Front-End Developer · ITSS · May 2022–April 2024",
+        "I helped design corporate and retail banking journeys across the four subsidiaries and built a shared design system that allowed local differences. I designed Vista’s debit card and the screens for its loan application flow. My work also covered onboarding, account views, transfers and approvals within the Temenos Infinity implementation, alongside campaign graphics and HTML/CSS implementation review."
+      ],
+      "decisions": [
+        "Keep the design language consistent across subsidiaries. I used shared components and interaction patterns so each local experience remained recognisably Vista, while allowing language, currency and regulatory copy to vary.",
+        "Make language available at sign-in. English and French selection sits at the start of the journey, rather than being left inside settings after a customer has already had to log in.",
+        "Keep local and company context visible. Currency stays with account balances, and the active legal entity appears beneath the user’s name so corporate users can see which company they are acting for.",
+        "Adapt the shared system to corporate banking. Pending approvals have their own counts and prominent placement. Account sorting, filters and custom views support people managing multiple accounts."
+      ],
+      "delivery_and_outcome_context": [
+        "The banking design shipped across four localised subsidiaries using one shared system. The work brought a consistent Vista interface to English- and French-speaking markets while preserving the local information customers need.",
+        "ITSS’s Most Outstanding Intern of the Year award names my Vista Bank UI/UX work. The four-subsidiary rollout is delivery scope; post-launch usage and task-completion results were not available to me."
+      ],
+      "strengths": [
+        {
+          "capability": "Localisation and consistency across markets",
+          "evidence": "Keep the design language consistent across subsidiaries. I used shared components and interaction patterns so each local experience remained recognisably Vista, while allowing language, currency and regulatory copy to vary."
+        },
+        {
+          "capability": "Making language access part of sign-in",
+          "evidence": "Make language available at sign-in. English and French selection sits at the start of the journey, rather than being left inside settings after a customer has already had to log in."
+        },
+        {
+          "capability": "Keeping account and legal-entity context visible",
+          "evidence": "Keep local and company context visible. Currency stays with account balances, and the active legal entity appears beneath the user’s name so corporate users can see which company they are acting for."
+        }
+      ],
+      "source_record_id": "vista-itss"
+    },
+    {
+      "record_id": "pay4me",
+      "title": "Radius / Pay4Me",
+      "url": "/work/radius-pay4me/",
+      "summary": "Designing cross-border payments for the student and the person paying.",
+      "problem_role_contribution": [
+        "I designed sponsored payments, verification, currency visibility, transaction tracking and support. On the website, I organised the information families need before trusting the service enough to install the app.",
+        "A personal note",
+        "This project changed how I think about payment UX. Sometimes the person making the payment isn’t the person whose future depends on it."
+      ],
+      "decisions": [
+        "Give the sponsor a clear payment route. I treated the payer and student as different people in the journey, rather than forcing sponsored payments into a personal transfer.",
+        "Put payment constraints before commitment. Currency appears with the balance, and verification status appears with identity, so both are visible before a payment starts.",
+        "Build trust before the download. The site uses named institutions, coverage, student testimonials and FAQs, followed by a QR-code handoff to the app.",
+        "Use the language of the task. Tuition, SEVIS, WES and visa payments are named directly, with tracking and support easy to reach."
+      ],
+      "delivery_and_outcome_context": [
+        "The design connects the website’s trust-building role to the mobile payment journey. Sponsored payments, verification and transaction status are treated as core parts of that experience.",
+        "Radius, formerly Pay4Me, reports more than 120,000 registered users, more than 1,500 five-star reviews and average delivery of six hours on business days. These are company-level figures, not results attributed to my design work. Read the published figures ."
+      ],
+      "strengths": [
+        {
+          "capability": "Designing trust into financial journeys",
+          "evidence": "Give the sponsor a clear payment route. I treated the payer and student as different people in the journey, rather than forcing sponsored payments into a personal transfer."
+        },
+        {
+          "capability": "Supporting multiple payer roles",
+          "evidence": "Put payment constraints before commitment. Currency appears with the balance, and verification status appears with identity, so both are visible before a payment starts."
+        },
+        {
+          "capability": "Connecting acquisition and product UX",
+          "evidence": "Build trust before the download. The site uses named institutions, coverage, student testimonials and FAQs, followed by a QR-code handoff to the app."
+        }
+      ],
+      "source_record_id": "pay4me"
+    },
+    {
+      "record_id": "horal",
+      "title": "Horal",
+      "url": "/work/horal/",
+      "summary": "Making marketplace safety visible from checkout to payout.",
+      "problem_role_contribution": [
+        "Buyers need to trust independent sellers they may never meet. Sellers need the tools to fulfil those orders reliably.",
+        "End-to-end product designer · mobile app and website · 2026",
+        "I designed the buyer and seller journeys together: product discovery, store verification, checkout, escrow status and chat, alongside seller onboarding, KYC, inventory, orders and payouts."
+      ],
+      "decisions": [
+        "Show who the buyer is dealing with. I placed verification at store level, where buyers assess the seller before paying.",
+        "Explain what happens to the payment. I designed escrow around visible stages, from protected payment through delivery confirmation to release of funds.",
+        "Connect shopping to fulfilment. Seller stock, orders and wallet tools follow the same transaction lifecycle as the buyer journey."
+      ],
+      "delivery_and_outcome_context": [
+        "Horal is live on the web, iOS and Android. The released product includes verified stores, escrow, chat, seller inventory, order management and payouts.",
+        "Live releases confirm delivery. The published download count describes product adoption; it does not measure the effect of one design decision."
+      ],
+      "strengths": [
+        {
+          "capability": "Marketplace trust and safety",
+          "evidence": "Show who the buyer is dealing with. I placed verification at store level, where buyers assess the seller before paying."
+        },
+        {
+          "capability": "Explaining payment and escrow states",
+          "evidence": "Explain what happens to the payment. I designed escrow around visible stages, from protected payment through delivery confirmation to release of funds."
+        },
+        {
+          "capability": "Connecting buyer and seller operations",
+          "evidence": "Connect shopping to fulfilment. Seller stock, orders and wallet tools follow the same transaction lifecycle as the buyer journey."
+        }
+      ],
+      "source_record_id": "horal"
+    },
+    {
+      "record_id": "bizinc",
+      "title": "Bizinc",
+      "url": "/work/bizinc/",
+      "summary": "One business profile, with clear control for owners and customers.",
+      "problem_role_contribution": [
+        "A business owner needs to manage their identity, services and offers. A customer needs to decide whether that business is right for them. Both journeys meet at the same profile.",
+        "UI/UX Intern Product Designer UI/UX Manager · April 2024–May 2026",
+        "I mapped owner and customer journeys, designed Business Profile 2.0, marketplace and booking interfaces, and produced reusable components and development handoff. I later led designers and interns as UI/UX Manager."
+      ],
+      "decisions": [
+        "Separate management from the public profile. I mapped Business View and Client View separately, then brought them into one shared structure so owner controls stayed out of customer navigation.",
+        "Help customers compare before opening a profile. Discovery cards include service information, location, distance and open-now status alongside the route to the business profile.",
+        "Connect proposed AI discovery to a real next step. The Bizzy proposal moves from a service request to nearby businesses, availability and booking. It remains proposed work; a prototype confirmation is not a live booking integration."
+      ],
+      "delivery_and_outcome_context": [
+        "Bizinc is live. The CEO reference documents my role in rebuilding the platform interface and my progression to UI/UX Manager. Profile requirements, journey maps, wireframes and components show the design work behind it.",
+        "Project records report +38% retention, +45% dashboard activation, +23% customer growth and +12% service activity during the redesign period. Baselines and measurement methods are unpublished, so these are reported product results rather than isolated effects of my changes."
+      ],
+      "strengths": [
+        {
+          "capability": "Structuring role-specific business controls",
+          "evidence": "Separate management from the public profile. I mapped Business View and Client View separately, then brought them into one shared structure so owner controls stayed out of customer navigation."
+        },
+        {
+          "capability": "Supporting customer discovery",
+          "evidence": "Help customers compare before opening a profile. Discovery cards include service information, location, distance and open-now status alongside the route to the business profile."
+        },
+        {
+          "capability": "Connecting proposed AI discovery to next steps",
+          "evidence": "Connect proposed AI discovery to a real next step. The Bizzy proposal moves from a service request to nearby businesses, availability and booking. It remains proposed work; a prototype confirmation is not a live booking integration."
+        }
+      ],
+      "source_record_id": "bizinc"
+    },
+    {
+      "record_id": "kremor-ai",
+      "title": "Kremor AI",
+      "url": "/work/kremor-ai/",
+      "summary": "Helping people turn a clothing idea into a design that can move toward production.",
+      "problem_role_contribution": [
+        "Someone may know the occasion, textile or feeling they want without knowing how to prompt an AI tool. The generated idea also needs a route into the storefront and garment-production workflow.",
+        "UI/UX Designer - Design & Research Lead · Kremor AI · June 2024–July 2026",
+        "I led design across the generative workspace, storefront and role-based operations, using one shared system. I also worked on model benchmarking, annotation and qualitative evaluation across complex AI interaction tasks."
+      ],
+      "decisions": [
+        "Offer a starting point before asking for a prompt. Quick actions and conversational examples help people describe an idea without specialist design vocabulary.",
+        "Name the textiles people are working with. The interface uses Ankara, Aso-Oke, Adire, Kente and Afro-fusion instead of a broad label that loses useful detail.",
+        "Connect creative work to operational roles. The design covers the handoff from an approved idea toward production. The five-role workshop permissions model is marked for validation with operating teams."
+      ],
+      "delivery_and_outcome_context": [
+        "Three connected product surfaces share one design system. The founder’s reference confirms my combined UI/UX design and AI-evaluation work.",
+        "This evaluation work concerned AI outputs, rather than participant usability sessions. The workshop role and permissions model still needs validation."
+      ],
+      "strengths": [
+        {
+          "capability": "Scaffolding open-ended AI interactions",
+          "evidence": "Offer a starting point before asking for a prompt. Quick actions and conversational examples help people describe an idea without specialist design vocabulary."
+        },
+        {
+          "capability": "Using domain-specific language",
+          "evidence": "Name the textiles people are working with. The interface uses Ankara, Aso-Oke, Adire, Kente and Afro-fusion instead of a broad label that loses useful detail."
+        },
+        {
+          "capability": "Connecting creative and operational workflows",
+          "evidence": "Connect creative work to operational roles. The design covers the handoff from an approved idea toward production. The five-role workshop permissions model is marked for validation with operating teams."
+        }
+      ],
+      "source_record_id": "kremor-ai"
+    },
+    {
+      "record_id": "chalant-ai",
+      "title": "Chalant AI",
+      "url": "/work/chalant-ai/",
+      "summary": "Chalantwork: a live platform for sustainability data, evidence and review.",
+      "problem_role_contribution": [
+        "Sustainability reporting depends on more than entering figures. Teams need to connect the data to evidence, review it and use it across reporting and operational workflows.",
+        "Lead product designer · UX, interface design and design systems",
+        "I worked on product journeys, interface design and a shared design system for Chalant. The live sustainability platform brings reporting, emissions management, verification, capital access and safety operations together."
+      ],
+      "decisions": [
+        "Connect data to evidence and review. The live platform links entered data with supporting evidence and maker-checker approval before it is used for reporting and action.",
+        "Organise related sustainability work together. ESG reporting, emissions tracking, verification, finance and HSE operations are presented as connected workflows, with industry-specific routes.",
+        "Give teams a clear access route. The website supports enterprise access requests, with email and Microsoft sign-in for existing accounts."
+      ],
+      "delivery_and_outcome_context": [
+        "Chalantwork is live, with email and Microsoft sign-in and enterprise access requests. Its published offering covers ESG reporting, emissions, verification, capital access and HSE operations.",
+        "The live website confirms product access and published scope. Usage figures and measured design outcomes are not published."
+      ],
+      "strengths": [
+        {
+          "capability": "Evidence-led review workflows",
+          "evidence": "Connect data to evidence and review. The live platform links entered data with supporting evidence and maker-checker approval before it is used for reporting and action."
+        },
+        {
+          "capability": "Connected sustainability workflows",
+          "evidence": "Organise related sustainability work together. ESG reporting, emissions tracking, verification, finance and HSE operations are presented as connected workflows, with industry-specific routes."
+        },
+        {
+          "capability": "Clear enterprise access routes",
+          "evidence": "Give teams a clear access route. The website supports enterprise access requests, with email and Microsoft sign-in for existing accounts."
+        }
+      ],
+      "source_record_id": "chalant-ai"
+    },
+    {
+      "record_id": "shortlet-lagos",
+      "title": "Shortlet Lagos",
+      "url": "/work/shortlet-lagos/",
+      "summary": "Giving guests and property investors different routes into the same business.",
+      "problem_role_contribution": [
+        "A guest is choosing a place to stay. An investor is deciding what a property share means and what it costs. Combining those decisions would give each audience the wrong information.",
+        "Product designer & researcher · 2024",
+        "I designed responsive guest-booking and fractional-investment journeys, supported by research into how guests shortlist properties. The two experiences share a visual system while keeping their decisions separate."
+      ],
+      "decisions": [
+        "Separate the entry points. Guests begin with stays; investors begin with property investment. Each route introduces the information needed for that decision.",
+        "Keep the whole booking query together. Location, check-in, check-out and guest count sit in one search card so the query is visible and editable on mobile.",
+        "Explain the investment mechanic first. The investment experience introduces buying shares and the ₦50,000 entry threshold before discussing potential returns."
+      ],
+      "delivery_and_outcome_context": [
+        "Shortlet Lagos is live. The design provides distinct booking and investment routes within one responsive product.",
+        "The interface shows how the two journeys are separated. Investor comprehension of fractional ownership remains a validation priority."
+      ],
+      "strengths": [
+        {
+          "capability": "Separating audiences and their goals",
+          "evidence": "Separate the entry points. Guests begin with stays; investors begin with property investment. Each route introduces the information needed for that decision."
+        },
+        {
+          "capability": "Explaining property-booking journeys",
+          "evidence": "Keep the whole booking query together. Location, check-in, check-out and guest count sit in one search card so the query is visible and editable on mobile."
+        },
+        {
+          "capability": "Structuring investment information",
+          "evidence": "Explain the investment mechanic first. The investment experience introduces buying shares and the ₦50,000 entry threshold before discussing potential returns."
+        }
+      ],
+      "source_record_id": "shortlet-lagos"
+    },
+    {
+      "record_id": "synqit",
+      "title": "Synqit",
+      "url": "/work/synqit/",
+      "summary": "Making a partnership request the starting point for business conversations.",
+      "problem_role_contribution": [
+        "Businesses and Web3 teams were finding potential partners across scattered social channels. Open messaging made it difficult to distinguish a credible partnership from unsolicited outreach.",
+        "Lead product designer · end to end · 2026",
+        "I interviewed founders, Web3 teams and investors, mapped the information architecture and designed profiles, matchmaking, requests, the dashboard and messaging. I also ran usability testing with businesses to refine the trust signals."
+      ],
+      "decisions": [
+        "Let people review a request before a conversation. Messaging unlocks after a partnership request is accepted, giving both sides control over who reaches their inbox.",
+        "Make relationship status visible. The dashboard organises requests by pending, accepted and declined so teams can see where each introduction stands.",
+        "Design for the three roles in the network. Profiles and journeys account for businesses seeking partners, investors assessing startups and teams managing partnerships."
+      ],
+      "delivery_and_outcome_context": [
+        "The designed workflow connects discovery, profile review, request acceptance and messaging. The flow replaces a scattered manual process with explicit steps for each user role.",
+        "Discovery speed, partnership quality and acceptance rates still need measurement."
+      ],
+      "strengths": [
+        {
+          "capability": "Making multi-step collaboration explicit",
+          "evidence": "Let people review a request before a conversation. Messaging unlocks after a partnership request is accepted, giving both sides control over who reaches their inbox."
+        },
+        {
+          "capability": "Connecting discovery and relationship workflows",
+          "evidence": "Make relationship status visible. The dashboard organises requests by pending, accepted and declined so teams can see where each introduction stands."
+        },
+        {
+          "capability": "Designing transitions between user roles",
+          "evidence": "Design for the three roles in the network. Profiles and journeys account for businesses seeking partners, investors assessing startups and teams managing partnerships."
+        }
+      ],
+      "source_record_id": "synqit"
+    },
+    {
+      "record_id": "arete",
+      "title": "Arete",
+      "url": "/work/arete/",
+      "summary": "Connecting the steps after a patient finds a doctor.",
+      "problem_role_contribution": [
+        "A patient’s journey continues through coverage, prescriptions, finding medication and follow-up. Those steps involve different organisations and can leave the patient without a clear next action.",
+        "End-to-end product designer · 2026",
+        "I designed the connected care journey across patient, provider, HMO and pharmacy experiences. The work covers onboarding, care discovery, consultation, coverage, prescriptions and continued care."
+      ],
+      "decisions": [
+        "Keep access possible without insurance details. A Skip for Now route lets the patient continue instead of treating missing coverage information as a dead end.",
+        "Design beyond the consultation. The seven-step journey continues into prescriptions, pharmacy access and follow-up rather than stopping at a booking.",
+        "Make coverage wording a design priority. Simple, accessible, localised and transparent are the four principles behind the interface. Coverage states must remain understandable without promising an insurer’s approval."
+      ],
+      "delivery_and_outcome_context": [
+        "The designs connect seven care steps across four product surfaces, supported by documented requirements, interface states and a shared visual system.",
+        "This is documented design work. Coverage comprehension and accessibility still need testing with patients in real conditions."
+      ],
+      "strengths": [
+        {
+          "capability": "Avoiding onboarding dead ends",
+          "evidence": "Keep access possible without insurance details. A Skip for Now route lets the patient continue instead of treating missing coverage information as a dead end."
+        },
+        {
+          "capability": "Keeping care journeys connected",
+          "evidence": "Design beyond the consultation. The seven-step journey continues into prescriptions, pharmacy access and follow-up rather than stopping at a booking."
+        },
+        {
+          "capability": "Making coverage information understandable",
+          "evidence": "Make coverage wording a design priority. Simple, accessible, localised and transparent are the four principles behind the interface. Coverage states must remain understandable without promising an insurer’s approval."
+        }
+      ],
+      "source_record_id": "arete"
+    },
+    {
+      "record_id": "archi-tek",
+      "title": "Archi-Tek",
+      "url": "/work/architek/",
+      "summary": "Designing a route from an architectural brief to a reviewable output.",
+      "problem_role_contribution": [
+        "A convincing building image is not the same as a file an architect can revise or hand to an engineer. The interface needs to make the intended output and its limits clear.",
+        "Product designer · 2025",
+        "I designed prompt entry, design-type selection, generated alternatives, preview and export flows, plus the proposed 3D-editor experience."
+      ],
+      "decisions": [
+        "Help people start with a recognisable building brief. Examples such as a three-bedroom bungalow or duplex sit beside the prompt field, with sample designs to show what can be requested.",
+        "Let the user choose the output level. Concept Sketch, Schematic Plan and Detailed Model make fidelity an explicit choice rather than leaving the generator to guess.",
+        "Keep alternatives and export choices visible. Named design options can be compared before choosing DWG, OBJ, SketchUp or PDF. The proposed editor is labelled Coming soon."
+      ],
+      "delivery_and_outcome_context": [
+        "The interface design covers the path from a written brief through comparison, preview and proposed export. The mockups show these interaction decisions.",
+        "The editor remains proposed, and editable CAD-export capability has not been verified. The presentation does not imply a working architecture engine."
+      ],
+      "strengths": [
+        {
+          "capability": "Structuring an AI-assisted creative workflow",
+          "evidence": "Help people start with a recognisable building brief. Examples such as a three-bedroom bungalow or duplex sit beside the prompt field, with sample designs to show what can be requested."
+        },
+        {
+          "capability": "Supporting comparison and review",
+          "evidence": "Let the user choose the output level. Concept Sketch, Schematic Plan and Detailed Model make fidelity an explicit choice rather than leaving the generator to guess."
+        },
+        {
+          "capability": "Keeping proposed editor capability distinct from delivered UI",
+          "evidence": "Keep alternatives and export choices visible. Named design options can be compared before choosing DWG, OBJ, SketchUp or PDF. The proposed editor is labelled Coming soon."
+        }
+      ],
+      "source_record_id": "archi-tek"
+    },
+    {
+      "record_id": "loan-investment-app",
+      "title": "Loan & Investment App",
+      "url": "/work/loan-investment-app/",
+      "summary": "Bringing borrowing and investing together without hiding their differences.",
+      "problem_role_contribution": [
+        "Five financial products need to fit into one app, but borrowing and investing have different consequences. A simpler dashboard must still explain what a financial decision involves.",
+        "Product designer · 2025",
+        "I designed the shared dashboard, loan and investment journeys, and interface system across banking, borrowing, investments, insurance and payments."
+      ],
+      "decisions": [
+        "Use one balance as the starting point. The dashboard places quick actions and pending tasks around a shared balance, with a reveal control for privacy.",
+        "Explain a loan before asking someone to request it. The empty state describes what borrowing is for and gives a clear Request Loan action instead of showing only a zero balance.",
+        "Show investment constraints before commitment. The minimum investment and wallet balance appear before the action. Projected values are labelled indicative and gross of withholding tax."
+      ],
+      "delivery_and_outcome_context": [
+        "The design brings five financial products into a shared mobile system while keeping loan and investment decisions distinct.",
+        "The screens document the design approach. Interpretation of projections and risk language needs user testing; no financial or adoption results are claimed."
+      ],
+      "strengths": [
+        {
+          "capability": "Separating financial decisions within one system",
+          "evidence": "Use one balance as the starting point. The dashboard places quick actions and pending tasks around a shared balance, with a reveal control for privacy."
+        },
+        {
+          "capability": "Making product states understandable",
+          "evidence": "Explain a loan before asking someone to request it. The empty state describes what borrowing is for and gives a clear Request Loan action instead of showing only a zero balance."
+        },
+        {
+          "capability": "Communicating financial projections and risk",
+          "evidence": "Show investment constraints before commitment. The minimum investment and wallet balance appear before the action. Projected values are labelled indicative and gross of withholding tax."
+        }
+      ],
+      "source_record_id": "loan-investment-app"
+    },
+    {
+      "record_id": "project-management-dashboard",
+      "title": "Reporting Portal",
+      "url": "/work/reporting-portal/",
+      "summary": "Helping a project manager see what needs attention today.",
+      "problem_role_contribution": [
+        "A project count gives context, but it does not show what is due, at risk or waiting for review. Managers need an actionable view when they are scanning between meetings.",
+        "Product designer · 2025",
+        "I designed the reporting dashboard, task board, milestones, filters and responsive layouts in light and dark themes."
+      ],
+      "decisions": [
+        "Put urgent work beside the totals. Tasks due, at-risk and critical work sit in the metrics row so the overview points toward an action.",
+        "Show tasks and milestones together. The board and upcoming milestones share a view, connecting day-to-day work to delivery dates.",
+        "Make review a visible state. To Do, In Progress, Review and Done are separate columns. Project, team, date and status filters help narrow the work without leaving the view."
+      ],
+      "delivery_and_outcome_context": [
+        "The dashboard design combines four task states, four filter dimensions and two themes. The mobile layout preserves the key metrics and a focused board view.",
+        "The screens demonstrate information hierarchy and responsive behaviour. Faster issue resolution and productivity improvements have not been measured."
+      ],
+      "strengths": [
+        {
+          "capability": "Information hierarchy for operational decisions",
+          "evidence": "Put urgent work beside the totals. Tasks due, at-risk and critical work sit in the metrics row so the overview points toward an action."
+        },
+        {
+          "capability": "Organising tasks and filters",
+          "evidence": "Show tasks and milestones together. The board and upcoming milestones share a view, connecting day-to-day work to delivery dates."
+        },
+        {
+          "capability": "Maintaining a focused responsive experience",
+          "evidence": "Make review a visible state. To Do, In Progress, Review and Done are separate columns. Project, team, date and status filters help narrow the work without leaving the view."
+        }
+      ],
+      "source_record_id": "project-management-dashboard"
+    }
+  ],
+  "recruiter_topics": [
+    {
+      "id": "ownership",
+      "question_examples": [
+        "What did he personally do?",
+        "What did the team do?",
+        "Was he the only designer?"
+      ],
+      "evidence_guidance": "Separate the recorded personal responsibilities from product scope and team outcomes. Do not name collaborators or claim sole delivery unless the source says so."
+    },
+    {
+      "id": "decision-impact",
+      "question_examples": [
+        "Which decision mattered most?",
+        "How do you know it worked?"
+      ],
+      "evidence_guidance": "Explain a concrete design choice and its rationale. Distinguish shipped functionality, reported company metrics and measured design impact."
+    },
+    {
+      "id": "research",
+      "question_examples": [
+        "Did he conduct user research?",
+        "How many users did he interview?",
+        "What changed because of user feedback?"
+      ],
+      "evidence_guidance": "Use actual research activities, participants, methods and findings only when recorded. AI-model evaluation is not participant usability research. Do not infer interviews from journey maps, prototypes or polished screens."
+    },
+    {
+      "id": "mistakes",
+      "question_examples": [
+        "What did he get wrong?",
+        "What was his biggest failure?"
+      ],
+      "evidence_guidance": "Do not turn a known validation gap into a claimed personal mistake. A real mistake, its consequences and response need his own account."
+    },
+    {
+      "id": "reflection",
+      "question_examples": [
+        "What would he do differently today?",
+        "What is weak about this project?"
+      ],
+      "evidence_guidance": "Discuss concrete project limitations and sensible next evaluation steps as recommendations. Do not attribute a new opinion or retrospective to him without his account."
+    },
+    {
+      "id": "tradeoffs",
+      "question_examples": [
+        "What did he sacrifice to meet a deadline?",
+        "Which alternatives did he reject?"
+      ],
+      "evidence_guidance": "Explain documented constraints and chosen alternatives. Do not create deadlines, discarded prototypes, budgets or stakeholder pressures."
+    },
+    {
+      "id": "disagreement",
+      "question_examples": [
+        "Describe a disagreement with an engineer.",
+        "How did he persuade a stakeholder?"
+      ],
+      "evidence_guidance": "Use an actual recorded collaboration example. A difficult conversation, what was said and its resolution need his own account."
+    },
+    {
+      "id": "metrics",
+      "question_examples": [
+        "Can he substantiate these metrics?",
+        "Did his design increase conversion?"
+      ],
+      "evidence_guidance": "Keep company adoption, project-reported results and individual causation separate. Preserve known source dates and measurement limitations."
+    },
+    {
+      "id": "ai-use",
+      "question_examples": [
+        "How much of this was AI generated?",
+        "Did AI do the work?"
+      ],
+      "evidence_guidance": "Use portfolio-build and technical-skills evidence: distinguish his design direction, architecture and implementation decisions from AI assistance. Do not invent percentages of AI-generated work."
+    },
+    {
+      "id": "coding",
+      "question_examples": [
+        "Can he code or just design?",
+        "Could he build this without AI?"
+      ],
+      "evidence_guidance": "Describe the documented HTML, CSS, JavaScript and React capabilities and beginner-level C#/Python. Explain the actual AI-assisted build workflow; do not claim independent expertise or languages beyond the record."
+    },
+    {
+      "id": "accessibility",
+      "question_examples": [
+        "How did he address accessibility?",
+        "Is this WCAG compliant?"
+      ],
+      "evidence_guidance": "Identify specific interface choices and recorded checks. Do not claim an accessibility audit, standards compliance or testing with disabled participants without evidence."
+    },
+    {
+      "id": "role-fit",
+      "question_examples": [
+        "Why hire him?",
+        "What makes him different?",
+        "Which project fits our company?"
+      ],
+      "evidence_guidance": "Match the role requirements to concrete project decisions and delivered work. Explain strengths through examples, without guarantees or an unsupported best-candidate verdict."
+    },
+    {
+      "id": "academic-background",
+      "question_examples": [
+        "How does Physics help his design?",
+        "Why move from Aerospace Engineering to UX?"
+      ],
+      "evidence_guidance": "State the completed BSc Physics, completed PGD Aerospace Engineering and ongoing MSc UX Design accurately. Connect systems thinking to actual design examples as an interpretation; personal motivations need his account."
+    },
+    {
+      "id": "availability",
+      "question_examples": [
+        "When can he start?",
+        "What are his placement requirements?",
+        "Can he work full time?"
+      ],
+      "evidence_guidance": "Use only current owner-confirmed availability and placement facts. Do not infer work permission, visa conditions, sponsorship needs or a start date."
+    },
+    {
+      "id": "leadership",
+      "question_examples": [
+        "Has he managed designers?",
+        "How does he give feedback?"
+      ],
+      "evidence_guidance": "Use Bizinc progression and the CEO reference for documented leadership. Do not create management rituals, headcounts or feedback conversations."
+    },
+    {
+      "id": "confidentiality",
+      "question_examples": [
+        "Can he share the source files?",
+        "Is any work under NDA?"
+      ],
+      "evidence_guidance": "Refer to public portfolio evidence. Source-file permission, client confidentiality and private materials require his confirmation."
+    },
+    {
+      "id": "strengths",
+      "question_examples": [
+        "What does this project show he is good at?",
+        "Give an overview of this project."
+      ],
+      "evidence_guidance": "Combine the problem, personal role, selected decisions, demonstrated strengths and delivery. Explain why the decisions support the strengths. Do not insert qualifications into a narrow project overview unless relevant."
+    }
+  ],
+  "handoff": {
+    "preferred_action": "Use the existing Connect with Jamiu cards when inviting a recruiter to clarify a missing personal detail.",
+    "voice": "Answer known parts directly. For an absent detail, use a brief specific sentence and offer direct contact; avoid stock verification jargon, invented anecdotes or a blanket refusal."
+  }
+}
