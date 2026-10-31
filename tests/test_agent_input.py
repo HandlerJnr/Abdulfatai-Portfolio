@@ -9,7 +9,7 @@ from unittest.mock import Mock
 ROOT = Path(__file__).resolve().parents[1]
 # Load the actual handler and routing functions without heavyweight retrieval imports.
 tree = ast.parse((ROOT / 'api/agent.py').read_text())
-names = {'INPUT_CLARIFICATION', 'FRAGMENT_WORDS', 'MODEL', 'MAX_HISTORY', 'DOMAIN_PROOF_ROUTES', 'INPUT_VOCABULARY'}
+names = {'INPUT_CLARIFICATION', 'FRAGMENT_WORDS', 'MODEL', 'MAX_HISTORY', 'DOMAIN_PROOF_ROUTES', 'INPUT_VOCABULARY', 'GEMINI_TRIAL'}
 tree.body = [node for node in tree.body if isinstance(node, (ast.FunctionDef, ast.ClassDef))
              or isinstance(node, ast.Expr) and isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute) and isinstance(node.value.func.value, ast.Name) and node.value.func.value.id == 'INPUT_VOCABULARY'
              or isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in names for t in node.targets)]

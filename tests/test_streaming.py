@@ -4,7 +4,7 @@ from http.server import BaseHTTPRequestHandler
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 t=ast.parse((ROOT/'api/agent.py').read_text());t.body=[n for n in t.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
-a=dict(json=json,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test-model')
+a=dict(json=json,os=os,re=re,urllib=__import__('urllib'),BaseHTTPRequestHandler=BaseHTTPRequestHandler,MODEL='test-model', RECORDS={}, FACT_CATALOG=[], MAX_HISTORY=12)
 exec(compile(t,'agent.py','exec'),a)
 originals=a.copy()
 class Upstream(io.BytesIO):
@@ -32,7 +32,7 @@ class Tests(unittest.TestCase):
   self.assertEqual(request.call_args.args[0].get_header('User-agent'),'JamiuPortfolio/1.0')
  def test_rate_limit_does_not_show_draft_or_repeat_requests(self):
   issue=RuntimeError('groq_http_429_rate_limit_exceeded');issue.retry_after=12
-  a['checked_answer']=lambda *args: (_ for _ in ()).throw(issue)
+  a['resilient_answer']=lambda *args: (_ for _ in ()).throw(issue)
   h=a['handler'].__new__(a['handler']);h.wfile=io.BytesIO();h.send_response=lambda *args:None;h.send_header=lambda *args:None;h.end_headers=lambda:None
   h.stream_reply('prompt',[],'q',[],'conversation',{})
   events=[json.loads(line) for line in h.wfile.getvalue().splitlines()]

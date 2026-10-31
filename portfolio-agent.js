@@ -71,7 +71,7 @@ function restoreConversation(){
     input.value=typeof saved.draft==='string'?saved.draft.slice(0,700):'';resizeComposer();
     if(turns.length){dialog.classList.add('has-conversation');conversation.querySelector('.search-welcome-state')?.remove();conversation.replaceChildren();let previousQuestion='';turns.forEach(turn=>{
       if(turn.role==='user'){previousQuestion=turn.text;conversation.append(text('p',turn.text,'search-question'));}
-      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length)response.append(renderEvidenceLinks(turn.evidenceLinks));if(turn.contact||shouldOfferContact(previousQuestion)||isContactReply(turn.text)||contactHandoff(turn.text))response.append(renderContactActions());conversation.append(response);}
+      else{const response=text('div','','search-answer');response.append(renderAgentAnswer(turn.text));if(turn.meta&&!/^(?:Connect with Jamiu|You can connect with Jamiu)/i.test(turn.text))response.append(text('p',turn.meta,'search-answer-meta'));const found=(turn.sourceIds||[]).map(id=>getRecord(id)).filter(Boolean);if(found.length)response.append(sourceCards(found));if(turn.evidenceLinks?.length||turn.references?.length)response.append(renderEvidenceLinks([...(turn.references||[]),...(turn.evidenceLinks||[])]));if(turn.contact||shouldOfferContact(previousQuestion)||isContactReply(turn.text)||contactHandoff(turn.text))response.append(renderContactActions());conversation.append(response);}
     });conversation.scrollTop=conversation.scrollHeight;}
   }catch{}
 }
@@ -596,7 +596,7 @@ async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
     if(!response.ok){const data=await response.json().catch(()=>({}));throw Object.assign(new Error(data.error||'Agent unavailable'),{code:data.code||'agent-unavailable'});}
     if(!(response.headers.get('content-type')||'').includes('application/x-ndjson')){
       const data=await response.json();if(!data.answer)throw Error('Empty answer');
-      return {answer:data.answer,sourceIds:data.source_ids||[],supportIds:data.support_ids||[],evidenceLinks:data.evidence_links||[],intent:data.intent||'',conversationContext:data.conversation_context||{}};
+      return {answer:data.answer,sourceIds:data.source_ids||[],supportIds:data.support_ids||[],evidenceLinks:data.evidence_links||[],intent:data.intent||'',conversationContext:data.conversation_context||{},references:data.references||[]};
     }
     const reader=response.body.getReader(),decoder=new TextDecoder();
     let buffer='',answer='',result=null;
@@ -606,7 +606,7 @@ async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
       if(event.type==='status'&&typeof event.message==='string')onStatus(event.message);
       if(event.type==='delta'&&typeof event.text==='string'){answer+=event.text;request.partial=answer;onDelta(answer);}
       if(event.type==='error')throw Object.assign(new Error(event.error||'Reply interrupted'),{code:event.code,retryAfter:event.retry_after});
-      if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],supportIds:event.support_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||'',conversationContext:event.conversation_context||{}};
+      if(event.type==='done')result={answer:event.answer,sourceIds:event.source_ids||[],supportIds:event.support_ids||[],evidenceLinks:event.evidence_links||[],intent:event.intent||'',conversationContext:event.conversation_context||{},references:event.references||[]};
     }
     try{
       while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let at;while((at=buffer.indexOf('\n'))>=0){accept(buffer.slice(0,at));buffer=buffer.slice(at+1);}if(done)break;}
@@ -618,7 +618,7 @@ async function askAgent(question,onDelta=()=>{},onStatus=()=>{}){
 }
 function renderEvidenceLinks(links){
  const block=text('div','','agent-evidence-links');block.setAttribute('aria-label','Supporting sources');
- for(const source of (links||[]).slice(0,2)){
+ for(const source of (links||[]).slice(0,3)){
   try{const url=new URL(source.url);if(url.protocol!=='https:')continue;const link=text('a',String(source.label||'Supporting source'));link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';block.append(link);}catch{}
  }
  return block;
@@ -686,12 +686,12 @@ async function ask(q){
     const fallback=localAnswer(fallbackRecords,q);
     let answer=fallback;
     let usedAgent=false;
-    let evidenceCards=[];let supportIds=[];let replyIntent="";let replyContext={};let links=[],interrupted=false,stopped=false,retryAfter=0;
+    let evidenceCards=[];let supportIds=[];let replyIntent="";let replyContext={};let referenceLinks=[];let links=[],interrupted=false,stopped=false,retryAfter=0;
 
     try{
       if(activeRequest.stopped)throw new DOMException('Stopped','AbortError');
       const result=await askAgent(q,()=>{},message=>{thinking.textContent=message;});
-      replyIntent=result.intent||"";replyContext=result.conversationContext||{};answer=result.answer;links=result.evidenceLinks||[];supportIds=result.supportIds||[];
+      replyIntent=result.intent||"";replyContext=result.conversationContext||{};referenceLinks=result.references||[];answer=result.answer;links=result.evidenceLinks||[];supportIds=result.supportIds||[];
       if(!isContactReply(answer)){
         const {typeText}=await import('/typing-response.js').catch(()=>({}));
         if(typeText){
@@ -704,7 +704,7 @@ async function ask(q){
         }
       }
       usedAgent=true;
-      evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
+      evidenceCards=uniqueRecords([...result.sourceIds.map(id=>getRecord(id)),...referenceLinks.map(ref=>getRecord(ref.record_id))].filter(Boolean)).slice(0,3);
     }catch(error){
       stopped=activeRequest.stopped;interrupted=true;retryAfter=Math.max(0,Math.min(60,Number(error.retryAfter)||0));
       answer=activeRequest.partial||(stopped?'Response stopped.':roleDescription?'I couldn’t complete the role comparison. Your description is still available. Please retry.':'I couldn’t complete that reply. Please retry.');
@@ -713,7 +713,7 @@ async function ask(q){
 
     // Multiple suggestions remain choices; an explicit single project can preview.
     const mentionedProjects=projectsInAnswer(answer);
-    if(usedAgent&&mentionedProjects.length)evidenceCards=mentionedProjects;
+    if(usedAgent&&mentionedProjects.length&&!referenceLinks.length)evidenceCards=mentionedProjects;
     // Clear the preview when the visitor is offered several different projects.
     if(evidenceCards.length>1&&evidenceCards.some(record=>record.url.startsWith('/work/'))&&dockViewport.matches&&chatView==='focused')
       clearProofForSuggestions();
@@ -721,7 +721,9 @@ async function ask(q){
     response.replaceChildren();
     response.append(renderAgentAnswer(answer));
     if(usedAgent)contextualPreview(q,answer);
-    if(links.length)response.append(renderEvidenceLinks(links));
+    const shownURLs=new Set(evidenceCards.map(r=>new URL(r.url,location.origin).href));
+    const extraReferences=referenceLinks.filter(r=>!shownURLs.has(new URL(r.url,location.origin).href));
+    if(links.length||extraReferences.length)response.append(renderEvidenceLinks([...extraReferences,...links]));
     const hasEvidence=usedAgent&&evidenceCards.length>0;
     const meta=text(
       'p',
@@ -752,7 +754,7 @@ async function ask(q){
 
     const offerContact=shouldOfferContact(q)||isContactReply(answer)||contactHandoff(answer);
     if(offerContact)response.append(renderContactActions());
-    turns.push({role:'assistant',text:answer,evidenceLinks:links,sourceIds:evidenceCards.map(r=>r.id),meta:meta.textContent,contact:offerContact});
+    turns.push({role:'assistant',text:answer,evidenceLinks:links,sourceIds:evidenceCards.map(r=>r.id),references:extraReferences,meta:meta.textContent,contact:offerContact});
     dialog.dispatchEvent(new CustomEvent('agent-answer',{detail:{answer,usedAgent}}));
 
     // Search excerpts are not model replies and must not steer later conversation.

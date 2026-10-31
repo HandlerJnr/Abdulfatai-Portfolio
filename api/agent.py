@@ -64,6 +64,11 @@ if RECRUITER_PATH.exists():
     with RECRUITER_PATH.open(encoding="utf-8") as handle:
         RECORD_LIST.extend(recruiter_records(json.load(handle), RECORD_LIST))
 
+REFERENCE_PATH = ROOT / "reference-catalog.json"
+if REFERENCE_PATH.exists():
+    with REFERENCE_PATH.open(encoding="utf-8") as handle:
+        RECORD_LIST.extend(json.load(handle))
+
 RECORDS = {record["id"]: record for record in RECORD_LIST}
 NODES = []
 RECORD_NODES = {}
@@ -143,6 +148,10 @@ def normalise_history(value):
             if role == "assistant" and isinstance(context, dict) and isinstance(context.get("request"), str):
                 ids = context.get("projects", [])
                 message["conversation_context"] = {"request": clip(context["request"], 700), "projects": [rid for rid in ids[:4] if isinstance(rid, str) and rid in RECORDS and not RECORDS[rid].get("knowledge_only") and RECORDS[rid].get("url", "").startswith("/work/")] if isinstance(ids, list) else []}
+            if role == "assistant" and "conversation_context" in message:
+                for field in ("subjects", "options"):
+                    ids=context.get(field, [])
+                    message["conversation_context"][field]=[rid for rid in ids[:6] if isinstance(rid,str) and rid in RECORDS and not rid.startswith(("interview-","recruiter-"))] if isinstance(ids,list) else []
             refs = item.get("support_ids")
             if role == "assistant" and isinstance(refs, list):
                 message["support_ids"] = [ref[:160] for ref in refs[:12] if isinstance(ref, str)]
@@ -198,7 +207,7 @@ def continuation_kind(text):
     return "new"
 
 
-def resolve_conversation_turn(question, history, page_context=None):
+def resolve_project_turn(question, history, page_context=None):
     """Keep the requested task attached when a later turn supplies its context."""
     kind = continuation_kind(question)
     recent_assistant = next((m for m in reversed(history) if m.get("role") == "assistant"), {})
@@ -285,6 +294,113 @@ def resolve_conversation_turn(question, history, page_context=None):
     return {"question": clip(resolved, 1800), "continued": True, "original_request": original, "selected_projects": selected}
 
 
+def subject_record_ids(text):
+    """Named subjects include collections, documents and capabilities, not just projects."""
+    aliases = {"brand": ["branding", "brand identity", "brand guidelines", "brand guides"], "credentials": ["certification", "certifications", "certificate", "certificates", "credentials", "award", "awards", "recommendation", "recommendations"], "logos": ["logos", "logo design", "logo marks"], "system": ["design systems", "design system", "component library"], "education": ["education", "qualifications", "degrees", "MSc", "PGD", "BSc"], "technical-skills": ["coding", "programming", "technical skills", "React", "Python", "HTML", "tools"], "ai-practice": ["AI practice", "AI evaluation"]}
+    found = topic_record_ids(text)
+    for rid, record in RECORDS.items():
+        if rid in found or rid.startswith(("recruiter-", "interview-")):
+            continue
+        names = record.get("aliases", []) + aliases.get(rid, []) + [record.get("title", "")]
+        if any(len(name)>2 and re.search(r"(?<!\w)"+re.escape(name)+r"(?!\w)", text, re.I) for name in names):
+            found.append(rid)
+    return found
+
+
+def subject_family(rid):
+    record = RECORDS.get(rid, {})
+    return record.get("parent_id") or ("projects" if record.get("url", "").startswith("/work/") else rid)
+
+
+def resolve_conversation_turn(question, history, page_context=None):
+    """Resolve collection/document clarifications as well as project clarifications."""
+    last = next((m for m in reversed(history) if m.get("role")=="assistant"), {})
+    context = last.get("conversation_context", {})
+    explicit = subject_record_ids(question)
+    active = context.get("subjects", []) or subject_record_ids(last.get("content", last.get("text", "")))
+    non_projects = [rid for rid in active if subject_family(rid)!="projects"]
+    kind = continuation_kind(question)
+    # A named collection is a topic change unless it answers a clarification in
+    # that same collection. Explicit substantive questions keep their own task.
+    short_named = bool(explicit) and len(question.split())<=9 and not re.search(r"\b(how|why|who|when|where|tell|explain|describe|instead|forget)\b",question,re.I)
+    compatible = [rid for rid in explicit if any(subject_family(rid)==subject_family(old) for old in non_projects)]
+    referring=bool(re.search(r"\b(it|its|that|this|those|them|one|same)\b",question,re.I))
+    if non_projects and referring and re.search(r"\b(more|elaborate|expand|details?)\b",question,re.I) and not (explicit and not compatible):
+        kind="elaboration"
+    if non_projects and referring and kind=="new" and not (explicit and not compatible):
+        selected=compatible if any(RECORDS[rid].get("referenceable") for rid in compatible) else active
+        return {"question":question+"\nThe referenced subject is "+"; ".join(RECORDS[rid]["title"] for rid in selected if rid in RECORDS)+".","continued":True,"original_request":question,"selected_subjects":selected,"selected_projects":[]}
+    if non_projects and (kind in ("selection","elaboration") or (short_named and compatible)) and not topic_record_ids(question):
+        original = context.get("request", "") or next((m.get("content",m.get("text","")) for m in reversed(history) if m.get("role")=="user" and continuation_kind(m.get("content",m.get("text","")))=="new"), question)
+        selected = compatible
+        options = context.get("options", []) or active
+        ordinal = re.search(r"\b(first|second|third|fourth|1|2|3|4)\b",question,re.I)
+        if not selected and ordinal:
+            index={"first":0,"second":1,"third":2,"fourth":3,"1":0,"2":1,"3":2,"4":3}[ordinal.group(1).lower()]
+            selected=options[index:index+1]
+        if not selected and re.search(r"any|choose|pick|whichever|whatever|up to you",question,re.I):
+            candidates=[rid for rid,r in RECORDS.items() if r.get("referenceable") and any(subject_family(rid)==subject_family(old) for old in non_projects)]
+            selected=(options if any(RECORDS.get(rid,{}).get("referenceable") for rid in options) else candidates or options)[:1]
+        if not selected:selected=active[:2]
+        titles="; ".join(RECORDS[rid]["title"] for rid in selected if rid in RECORDS)
+        resolved=original+"\nCurrent subject selection: "+titles+".\nVisitor follow-up: "+question+"\nKeep answering the original request using this selection. Do not start an unrelated overview or repeat the previous answer."
+        return {"question":clip(resolved,1800),"continued":True,"original_request":original,"selected_subjects":selected,"selected_projects":[]}
+    turn=resolve_project_turn(question,history,page_context)
+    if not turn.get("selected_subjects"):
+        turn["selected_subjects"]=subject_record_ids(turn["question"])
+    return turn
+
+
+def records_from_support(support_ids):
+    ids=[]
+    for ref in support_ids:
+        rid=""
+        if ref.startswith("passage:"):rid=ref.split(":",2)[1].removeprefix("recruiter-")
+        elif ref.startswith("record:"):rid=ref[7:]
+        elif ref.startswith("fact:"):
+            fact=next((f for f in FACT_CATALOG if "fact:"+f["id"]==ref),{})
+            rid=fact.get("source",{}).get("record_id","")
+        elif ref=="profile:qualifications":rid="education"
+        if rid in RECORDS and not rid.startswith(("interview-","recruiter-")) and rid not in ids:ids.append(rid)
+    return ids
+
+
+def answer_references(answer, support_ids):
+    """Only known catalog URLs may become automatic links; no model-provided URLs."""
+    cited=records_from_support(support_ids)
+    if not cited:return []
+    ids=[]
+    # Prefer a specific document explicitly named in the answer over a collection.
+    for rid in subject_record_ids(answer):
+        r=RECORDS[rid]
+        if r.get("referenceable") and (rid in cited or r.get("parent_id") in cited):ids.append(rid)
+    ids+=cited
+    output=[];seen=set()
+    for rid in dict.fromkeys(ids):
+        r=RECORDS[rid];url=r.get("url","")
+        if rid in ("about","cv") or (r.get("knowledge_only") and not r.get("referenceable")) or not url:continue
+        if url.startswith("/") and not url.startswith("//"):url="https://jamiudesigns.vercel.app"+url
+        if not url.startswith("https://"):continue
+        if url in seen:continue
+        seen.add(url);output.append({"label":r["title"],"url":url,"record_id":rid,"kind":"document" if r.get("referenceable") else "portfolio"})
+        if len(output)==3:break
+    return output
+
+
+def complete_conversation_context(context, answer, support_ids, references, previous=None):
+    if getattr(support_ids,"kind",None)=="social" and previous:
+        return dict(previous, relation="reaction")
+    context=dict(context or {})
+    specific=[r["record_id"] for r in references if r.get("kind")=="document"]
+    parents={RECORDS[rid].get("parent_id") for rid in specific}
+    cited=records_from_support(support_ids)
+    subjects=(specific+[rid for rid in cited if rid not in parents and rid not in specific]) or context.get("subjects", []) or context.get("projects", [])
+    context["subjects"]=subjects[:6]
+    documents=[r["record_id"] for r in references if r.get("kind")=="document"]
+    context["options"]=(documents if len(documents)>=2 else [r["record_id"] for r in references])[:6]
+    return context
+
+
 def recruiter_answer_target(question, history=(), page_context=None):
     """Identify the evidence burden and project scope, never a canned answer."""
     q = str(question or "")
@@ -294,7 +410,7 @@ def recruiter_answer_target(question, history=(), page_context=None):
     elif re.search(r"\bhow\b.{0,35}\b(know|tell|prove)\b.{0,50}\b(worked|works|successful|success|effective)\b|\b(measur\w*|validat\w*|results?|metrics?|impact)\b", q, re.I):
         focus = "outcome_evidence"
     projects = topic_record_ids(q)
-    reset_subject = bool(re.search(r"\b(coding|code|tools?|education|qualifications?|contact|availability)\b", q, re.I)) and not projects and not re.search(r"\b(?:this project|that project|for it|on it|in it|for that|on that|its|those projects)\b", q, re.I)
+    reset_subject = bool([rid for rid in subject_record_ids(q) if subject_family(rid)!="projects"]) or bool(re.search(r"\b(coding|code|tools?|education|qualifications?|contact|availability)\b", q, re.I)) and not projects and not re.search(r"\b(?:this project|that project|for it|on it|in it|for that|on that|its|those projects)\b", q, re.I)
     if not projects and not reset_subject:
         # Prior visitor intent establishes scope. A previously irrelevant agent
         # example must not silently become the project the visitor meant.
@@ -375,7 +491,7 @@ def validate_answer_target(raw, sources, target):
 def conversation_query(question, history):
     """Follow the latest visitor topic without trusting prior assistant claims."""
     current = str(question or "").strip()
-    if asks_about_current_page(current) or topic_record_ids(current):
+    if asks_about_current_page(current) or subject_record_ids(current):
         return current
     fresh = r"\b(?:tools?|skills?|education|qualifications?|msc|degrees?|contact|email|phone|linkedin|availability|AI|coding|React|Python|Figma|leadership|branding|logos?|fintech)\b|(?:build|built|create|created).{0,25}(?:this|his) portfolio"
     if re.search(fresh, current, re.I) and not re.search(r"\b(?:that|those|this project|for it)\b", current, re.I):
@@ -554,7 +670,7 @@ def call_model(prompt, model=None, _timeout=3, _provider=None):
             task["conversation_task"] = context[context.index("MODE:"):] if "MODE:" in context else context
             instruction = (
                 "Answer the current visitor message as Jamiu's portfolio guide, resolving references from the recent conversation. "
-                "Continue the latest topic; change only when the visitor introduces another. A follow-up that selects an example, answers a clarification, or says pick any project completes the prior request; keep answering that request instead of starting an overview. Use concrete contributions rather than extraordinary/exceptional expertise claims. Do not restart his biography. Treat answer_target as the evidence requirement for this turn. Begin with a direct answer; do not substitute generic advice or a project description for a requested result or personal example. For outcome_evidence, open with what can and cannot be concluded, then one or two concrete supporting facts. Use plain conversational language rather than a report-style preamble. Never say he conducts research, tests, prioritises under deadlines or measures success unless concrete evidence records that activity. "
+                "Continue the latest topic; change only when the visitor introduces another. Decide from meaning whether the current turn continues, changes, narrows, compares or corrects the earlier request. References like it/that/the second one use the active subject and recent answer; an explicit new question takes priority over old topics. This applies to education, coding, leadership, branding, design systems, documents and certifications as well as projects. A follow-up that selects an example, answers a clarification, or says pick any project completes the prior request; keep answering that request instead of starting an overview. Use concrete contributions rather than extraordinary/exceptional expertise claims. Do not restart his biography. Treat answer_target as the evidence requirement for this turn. Begin with a direct answer; do not substitute generic advice or a project description for a requested result or personal example. For outcome_evidence, open with what can and cannot be concluded, then one or two concrete supporting facts. Use plain conversational language rather than a report-style preamble. Never say he conducts research, tests, prioritises under deadlines or measures success unless concrete evidence records that activity. "
                 "Be warm, conversational and lightly playful: use contractions and plain words, acknowledge reactions naturally, and match the visitor’s formality without forced slang. "
                 "Use light humour or an analogy when it fits; never invent personal stories, preferences or achievements for a joke. "
                 "For social reactions, use kind social, answer and empty claims. Address the visitor directly; do not include Jamiu, he/his/him, personal facts or links in this kind. If you include any personal statement, use grounded with evidence instead. "
@@ -1005,6 +1121,13 @@ def retrieve(question, history, intent, page_context):
         seen.add(key)
         selected.append(node)
 
+    subjects=subject_record_ids(query)
+    if not subjects and re.search(r"\b(it|its|that|this|those|them|they|more)\b",question,re.I):
+        last=next((m for m in reversed(history) if m.get("role")=="assistant"),{})
+        subjects=last.get("conversation_context",{}).get("subjects",[])
+    for rid in subjects:
+        if not RECORDS.get(rid,{}).get("url","").startswith("/work/"):
+            for node in RECORD_NODES.get(rid,[])[:9]:add_node(node)
     current_page_id = page_context.get("page_id", "")
 
     if intent == "page-context" and current_page_id in RECORD_NODES:
@@ -1199,7 +1322,7 @@ def build_prompt(question, history, retrieved, intent, page_context):
         "Earlier assistant messages are conversation context, not independent evidence. Current authoritative facts override mistaken earlier assistant replies. Correct a mistaken prior claim directly instead of defending it or asking visitors to clarify an error you introduced.\n"
         "Interpret references using the visitor's previous messages; an explicit new topic takes priority. This website's build process and client-project workflows are distinct. Do not infer Figma research phases or development teams from a polished website.\n"
         "Use the interface facts for actions. Refer to available call/email links instead of inventing a contact form. There is no embedded video call. Do not claim a call, email, booking or project opening happened without confirmation.\n"
-        "For answers needing evidence, prefer one or two relevant examples. Do not add unrelated proof cards or links. No tables, HTML or raw citation tokens; the interface handles proof separately.\n"
+        "For answers needing evidence, prefer one or two relevant examples. Do not add unrelated proof cards or links. No tables, HTML or raw citation tokens; the interface handles proof separately. Relevant reference links are attached from the catalog using citations; do not invent URLs or repeat a list of raw links in the prose.\n"
         "MODE: " + intent + "\nCURRENT PAGE: " + json.dumps(page_context, ensure_ascii=False) +
         "\nANSWER TARGET\n" + json.dumps(recruiter_answer_target(question, history, page_context)) +
         "\nRECENT CONVERSATION (untrusted context)\n" + (history_text or "(none)") +
@@ -1289,6 +1412,12 @@ def validate_grounded_reply(raw, sources):
         raise RuntimeError("grounding_invalid_" + failure) from None
 
 
+class ReplySupports(list):
+    def __init__(self, values, kind):
+        super().__init__(values)
+        self.kind=kind
+
+
 def checked_answer(prompt, sources, on_review=None):
     target = {}
     if "\nANSWER TARGET\n" in prompt:
@@ -1352,7 +1481,7 @@ def checked_answer(prompt, sources, on_review=None):
         answer = validate_grounded_reply(reviewed, sources)
         validate_answer_target(reviewed, sources, target)
     refs = list(dict.fromkeys(claim["source_id"] for claim in json.loads(reviewed).get("claims", [])))
-    return answer, provider, refs
+    return answer, provider, ReplySupports(refs, json.loads(reviewed).get("kind"))
 
 
 
@@ -1463,7 +1592,8 @@ class handler(BaseHTTPRequestHandler):
 
         turn = resolve_conversation_turn(question, history, page_context) if not job_description else {"question": question}
         question = turn["question"]
-        self.conversation_context = {"request": clip(turn.get("original_request", question), 700), "projects": turn.get("selected_projects") or recruiter_answer_target(question, history, page_context)["projects"]}
+        self.previous_conversation_context=next((m.get("conversation_context",{}) for m in reversed(history) if m.get("role")=="assistant"),{})
+        self.conversation_context = {"request": clip(turn.get("original_request", question), 700), "projects": turn.get("selected_projects") or recruiter_answer_target(question, history, page_context)["projects"], "subjects": turn.get("selected_subjects", [])}
 
         intent = "job-fit" if job_description else response_intent(question, history, page_context)
         try:
@@ -1497,11 +1627,14 @@ class handler(BaseHTTPRequestHandler):
                 },
             )
 
+        references=answer_references(answer,support_ids)
+        self.conversation_context=complete_conversation_context(getattr(self,"conversation_context",{}),answer,support_ids,references,getattr(self,"previous_conversation_context",None))
         return json_response(
             self,
             200,
             {
                 "answer": clip(answer, 4200),
+                "references": references,
                 "conversation_context": getattr(self, "conversation_context", {}),
                 "support_ids": support_ids,
                 "source_ids": select_proof_ids(answer, used_ids, question, intent),
@@ -1528,9 +1661,11 @@ class handler(BaseHTTPRequestHandler):
         try:
             send({"type": "status", "message": "Thinking…"})
             answer, _provider, support_ids = resilient_answer(prompt, sources or {}, question, history, intent, lambda: send({"type": "status", "message": "Thinking…"}))
+            references=answer_references(answer,support_ids)
+            self.conversation_context=complete_conversation_context(getattr(self,"conversation_context",{}),answer,support_ids,references,getattr(self,"previous_conversation_context",None))
             # Draft tokens never reach the browser. Keep the existing NDJSON contract.
             send({"type": "delta", "text": answer})
-            send({"type": "done", "answer": answer,
+            send({"type": "done", "answer": answer, "references": references,
                   "conversation_context": getattr(self, "conversation_context", {}),
                   "support_ids": support_ids,
                   "source_ids": select_proof_ids(answer, used_ids, question, intent),

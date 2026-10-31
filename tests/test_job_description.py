@@ -31,9 +31,9 @@ class DocumentTests(unittest.TestCase):
         with self.assertRaises(ValueError):parser.extract_description('role.docx',stream.getvalue())
     def test_comparison_request_uses_reviewed_description(self):
         description='Design a retail banking application, including debit cards and loan journeys. Credit-card experience preferred.'
-        model=Mock(return_value=('Vista supports debit-card and loan-flow experience. Credit-card work is not evidenced.','test'))
+        model=Mock(return_value=('Vista supports debit-card and loan-flow experience. Credit-card work is not evidenced.','test', []))
         retrieve=Mock(return_value=('Vista published ownership',['vista-itss']))
-        response=Mock();agent.update(call_model=model,retrieve=retrieve,json_response=response)
+        response=Mock();agent.update(resilient_answer=model,retrieve=retrieve,json_response=response)
         request=agent['handler'].__new__(agent['handler'])
         body=json.dumps({'question':'Compare this role','job_description':description}).encode()
         request.headers={'content-length':str(len(body))};request.rfile=io.BytesIO(body);request.do_POST()

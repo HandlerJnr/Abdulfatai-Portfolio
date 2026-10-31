@@ -47,3 +47,16 @@ This preserves intent across clarification turns, restored sessions and history
 truncation; it never promotes prior assistant prose into factual evidence.
 Explicit new questions reset the request, while acknowledgements remain social.
 Unsupported superlatives are rejected in grounded claims and repaired privately.
+
+Conversation state also tracks validated collection/document subjects and the
+order of offered choices. Pronouns retain the subject while substantive new
+questions replace the task; explicit topic changes reset both. Social replies
+retain the previous task. This applies to branding, credentials, education,
+technical capabilities and project work. Prior assistant answers remain context,
+never evidence.
+
+`reference-catalog.json` indexes the existing brand and credential documents.
+Automatic references derive from validated citations and catalog URLs, with
+specific named documents preferred over their collection. Both portfolio views
+render and retain these references, including restored conversations and the
+Google-inspired overview-to-chat transition. No model-generated URL is trusted.
