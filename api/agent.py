@@ -137,6 +137,12 @@ def normalise_history(value):
         content = clip(item.get("text", item.get("content", "")), 1200)
         if content:
             message = {"role": role, "content": content}
+            if role == "assistant" and item.get("intent") in ("clarification", "conversation", "evidence", "domain-evidence", "contact"):
+                message["intent"] = item["intent"]
+            context = item.get("conversation_context")
+            if role == "assistant" and isinstance(context, dict) and isinstance(context.get("request"), str):
+                ids = context.get("projects", [])
+                message["conversation_context"] = {"request": clip(context["request"], 700), "projects": [rid for rid in ids[:4] if isinstance(rid, str) and rid in RECORDS and not RECORDS[rid].get("knowledge_only") and RECORDS[rid].get("url", "").startswith("/work/")] if isinstance(ids, list) else []}
             refs = item.get("support_ids")
             if role == "assistant" and isinstance(refs, list):
                 message["support_ids"] = [ref[:160] for ref in refs[:12] if isinstance(ref, str)]
@@ -146,7 +152,7 @@ def normalise_history(value):
 
 def topic_record_ids(question):
     q = str(question or "").lower()
-    aliases = {"vista-itss": ["vista"], "pay4me": ["radius", "pay4me"], "archi-tek": ["archi-tek", "architek"]}
+    aliases = {"vista-itss": ["vista"], "pay4me": ["radius", "pay4me", "payforme", "pay for me"], "archi-tek": ["archi-tek", "architek"]}
     found = []
     for record in RECORD_LIST:
         if record.get("knowledge_only") or not str(record.get("url", "")).startswith("/work/"):
@@ -155,6 +161,128 @@ def topic_record_ids(question):
         if any(name and len(name) > 3 and re.search(r"(?<!\w)" + re.escape(name) + r"(?!\w)", q) for name in names):
             found.append(record["id"])
     return found
+
+
+def project_names(record):
+    aliases = {"vista-itss": ["vista"], "pay4me": ["radius", "pay4me", "payforme", "pay for me"], "archi-tek": ["architek", "archi-tek"]}
+    return [record.get("title", ""), record["id"].replace("-", " ")] + aliases.get(record["id"], [])
+
+
+def ordered_project_ids(text):
+    ids = topic_record_ids(text)
+    def position(rid):
+        offsets = [m.start() for name in project_names(RECORDS[rid]) for m in re.finditer(r"(?<!\w)" + re.escape(name) + r"(?!\w)", text, re.I)]
+        return min(offsets) if offsets else len(text)
+    return sorted(ids, key=position)
+
+
+def continuation_kind(text):
+    q = str(text or "").strip()
+    if re.search(r"\b(?:forget|instead|new topic|change (?:the )?(?:subject|topic)|start over)\b", q, re.I):
+        return "new"
+    followup = re.sub(r"^(?:really|okay|ok|right)[?!,. ]+(?=tell|can|could|more|explain|elaborate)", "", q, flags=re.I)
+    if re.fullmatch(r"(?:(?:can|could|would) you (?:please )?|please )?(?:and |also )?(?:tell me (?:a bit )?more(?: about (?:it|that))?|more(?: details)?(?: on (?:it|that))?|anything else|what else|and then|go on|continue|elaborate(?: on that)?|expand(?: on that)?|why(?: is that)?|how so|explain (?:that|more)|what do you mean|what|huh|pardon|come again)[?!. ]*", followup, re.I):
+        return "elaboration"
+    if re.search(r"\bcompare\b.*\b(?:them|both|the two)\b", q, re.I) and not topic_record_ids(q):
+        return "comparison"
+    if re.search(r"\b(?:how|why|who|when|where|explain|describe|summari\w*|overview|tell me)\b", q, re.I) or (re.search(r"\b(?:what|which)\b", q, re.I) and not re.match(r"(?:and )?what about\b", q, re.I)):
+        return "new"
+    if re.search(r"\b(?:deadline|sacrific\w*|results?|metrics?|impact|research|roles?|skills?|tools?|education|qualifications?|strengths?|responsibilit\w*)\b", q, re.I):
+        return "new"
+    if re.search(r"\b(?:pick|choose|select|use|take)\b.{0,35}\b(?:any|one|whichever|a project|an example)\b|\b(?:you (?:choose|pick)|up to you|whichever|whatever|any(?:one)?|another one|different one|the other one|surprise me)\b", q, re.I):
+        return "selection"
+    if re.fullmatch(r"(?:yes|yeah|yep|sure|no|nope|first|second|third|fourth|1|2|3|4|the first one|the second one|the third one|that one|this one|the other one)[?!. ]*", q, re.I):
+        return "selection"
+    if topic_record_ids(q) and len(q.split()) <= 9:
+        return "selection"
+    return "new"
+
+
+def resolve_conversation_turn(question, history, page_context=None):
+    """Keep the requested task attached when a later turn supplies its context."""
+    kind = continuation_kind(question)
+    recent_assistant = next((m for m in reversed(history) if m.get("role") == "assistant"), {})
+    recent_text = recent_assistant.get("content", recent_assistant.get("text", ""))
+    clarifying = recent_assistant.get("intent") == "clarification" or ("?" in recent_text and re.search(r"which|do you mean|would you like to know|clarify|be more specific", recent_text, re.I))
+    if kind == "new" and clarifying and len(question.split()) <= 8 and not re.search(r"\b(how|why|what|who|when|where|tell|explain|describe|instead|forget)\b", question, re.I):
+        words = set(re.findall(r"[a-z]{4,}", question.lower())) - {"please", "part", "more", "that", "this"}
+        if words and any(word in recent_text.lower() for word in words):
+            kind = "selection"
+    if kind == "selection" and re.fullmatch(r"(?:yes|yeah|yep|sure|no|nope)[?!. ]*", question, re.I) and not clarifying and "?" not in recent_text:
+        return {"question": question, "continued": False}
+    immediate_choice = re.search(r"\b(?:pick|choose|select|use|take)\b.{0,25}\b(?:any|one|a project|an example)\b", question, re.I) and re.search(r"project|example|case study", question, re.I)
+    if (not history or kind == "new") and immediate_choice:
+        options = [r for r in RECORD_LIST if not r.get("knowledge_only") and r.get("url", "").startswith("/work/")]
+        if options:
+            return {"question": question + "\nUse " + options[0]["title"] + " as the selected example.", "continued": bool(history), "original_request": question, "selected_projects": [options[0]["id"]]}
+    if not history or kind == "new":
+        return {"question": question, "continued": False}
+    assistants = [m for m in history if m.get("role") == "assistant"]
+    users = [m for m in history if m.get("role") == "user"]
+    def content(message):
+        return message.get("content", message.get("text", ""))
+    if kind == "comparison":
+        ids = []
+        for message in reversed(history):
+            candidates = ordered_project_ids(content(message))
+            for rid in candidates:
+                if rid not in ids:
+                    ids.append(rid)
+            if len(ids) >= 2:
+                break
+        if len(ids) >= 2:
+            return {"question": question + ": " + " and ".join(RECORDS[rid]["title"] for rid in ids[:2]), "continued": True}
+        return {"question": question, "continued": False}
+    original = next((content(m) for m in reversed(users) if continuation_kind(content(m)) == "new"), "")
+    prior_context = assistants[-1].get("conversation_context", {}) if assistants else {}
+    if not original:
+        original = prior_context.get("request", "")
+    if not original:
+        return {"question": question, "continued": False}
+    selected = ordered_project_ids(question)
+    last_answer = content(assistants[-1]) if assistants else ""
+    project_slot = bool(re.search(r"project|redesign|case study|case-study", last_answer, re.I)) or bool(prior_context.get("projects"))
+    delegated = bool(re.search(r"\b(?:any(?:one)?|whichever|whatever|you (?:choose|pick)|up to you|another one|different one|the other one|surprise me)\b|\b(?:pick|choose|select|use|take)\b.{0,25}\b(?:one|a project|an example)\b", question, re.I))
+    ordinal = re.search(r"\b(first|second|third|fourth|1|2|3|4)\b", question, re.I)
+    if not selected and ordinal:
+        index = {"first": 0, "second": 1, "third": 2, "fourth": 3, "1": 0, "2": 1, "3": 2, "4": 3}[ordinal.group(1).lower()]
+        for message in reversed(assistants):
+            options = ordered_project_ids(content(message))
+            if len(options) > index:
+                selected = [options[index]]
+                break
+    if not selected and re.fullmatch(r"(?:yes|yeah|yep|sure)[?!. ]*", question, re.I):
+        options = ordered_project_ids(last_answer)
+        if len(options) == 1:
+            selected = options
+    if not selected and delegated and project_slot:
+        options = ordered_project_ids(last_answer) or prior_context.get("projects", []) or ordered_project_ids(original)
+        if not options:
+            options = [r["id"] for r in RECORD_LIST if not r.get("knowledge_only") and r.get("url", "").startswith("/work/")]
+        if re.search(r"another|different|other one", question, re.I):
+            excluded = set(prior_context.get("projects", []) or ordered_project_ids(last_answer)[:1])
+            for message in reversed(assistants):
+                earlier_options = ordered_project_ids(content(message))
+                if len(earlier_options) >= 2:
+                    options = earlier_options
+                    break
+            options = [rid for rid in options if rid not in excluded] or [r["id"] for r in RECORD_LIST if not r.get("knowledge_only") and r.get("url", "").startswith("/work/") and r["id"] not in excluded]
+        selected = options[:1]
+    if not selected and kind == "elaboration":
+        selected = prior_context.get("projects", []) or ordered_project_ids(last_answer) or ordered_project_ids(original)
+    # A project-only response changes the subject of the task, not the task itself.
+    resolved = original
+    if selected:
+        title = RECORDS[selected[0]]["title"]
+        names = sorted({name for rid in topic_record_ids(original) for name in project_names(RECORDS[rid])}, key=len, reverse=True)
+        if names:
+            resolved = re.sub(r"(?<!\w)(?:" + "|".join(re.escape(n) for n in names) + r")(?!\w)", lambda m: title, resolved, flags=re.I)
+        resolved += "\nApply this request to " + " and ".join(RECORDS[rid]["title"] for rid in selected) + "."
+    resolved += "\nVisitor follow-up: " + question
+    resolved += "\nContinue answering the original request with this context; do not replace it with a biography or project overview."
+    if kind == "elaboration":
+        resolved += " Add a useful explanation or new supported detail rather than repeating the previous answer."
+    return {"question": clip(resolved, 1800), "continued": True, "original_request": original, "selected_projects": selected}
 
 
 def recruiter_answer_target(question, history=(), page_context=None):
@@ -166,7 +294,8 @@ def recruiter_answer_target(question, history=(), page_context=None):
     elif re.search(r"\bhow\b.{0,35}\b(know|tell|prove)\b.{0,50}\b(worked|works|successful|success|effective)\b|\b(measur\w*|validat\w*|results?|metrics?|impact)\b", q, re.I):
         focus = "outcome_evidence"
     projects = topic_record_ids(q)
-    if not projects:
+    reset_subject = bool(re.search(r"\b(coding|code|tools?|education|qualifications?|contact|availability)\b", q, re.I)) and not projects
+    if not projects and not reset_subject:
         # Prior visitor intent establishes scope. A previously irrelevant agent
         # example must not silently become the project the visitor meant.
         for message in reversed(history):
@@ -177,8 +306,16 @@ def recruiter_answer_target(question, history=(), page_context=None):
             if projects:
                 break
             if re.search(r"\b(coding|code|tools?|education|qualification|contact|availability)\b", previous, re.I):
+                reset_subject = True
                 break
-    if not projects and page_context:
+        if not projects and not reset_subject:
+            for message in reversed(history):
+                if message.get("role") == "assistant":
+                    ids = message.get("conversation_context", {}).get("projects", [])
+                    projects = [rid for rid in ids if rid in RECORDS and RECORDS[rid].get("url", "").startswith("/work/")]
+                    if projects:
+                        break
+    if not projects and not reset_subject and page_context:
         rid = page_context.get("page_id", "")
         record = RECORDS.get(rid)
         if record and not record.get("knowledge_only") and record.get("url", "").startswith("/work/"):
@@ -417,7 +554,7 @@ def call_model(prompt, model=None, _timeout=3, _provider=None):
             task["conversation_task"] = context[context.index("MODE:"):] if "MODE:" in context else context
             instruction = (
                 "Answer the current visitor message as Jamiu's portfolio guide, resolving references from the recent conversation. "
-                "Continue the latest topic; change only when the visitor introduces another. Do not restart his biography. Treat answer_target as the evidence requirement for this turn. Begin with a direct answer; do not substitute generic advice or a project description for a requested result or personal example. For outcome_evidence, open with what can and cannot be concluded, then one or two concrete supporting facts. Use plain conversational language rather than a report-style preamble. Never say he conducts research, tests, prioritises under deadlines or measures success unless concrete evidence records that activity. "
+                "Continue the latest topic; change only when the visitor introduces another. A follow-up that selects an example, answers a clarification, or says pick any project completes the prior request; keep answering that request instead of starting an overview. Use concrete contributions rather than extraordinary/exceptional expertise claims. Do not restart his biography. Treat answer_target as the evidence requirement for this turn. Begin with a direct answer; do not substitute generic advice or a project description for a requested result or personal example. For outcome_evidence, open with what can and cannot be concluded, then one or two concrete supporting facts. Use plain conversational language rather than a report-style preamble. Never say he conducts research, tests, prioritises under deadlines or measures success unless concrete evidence records that activity. "
                 "Be warm, conversational and lightly playful: use contractions and plain words, acknowledge reactions naturally, and match the visitor’s formality without forced slang. "
                 "Use light humour or an analogy when it fits; never invent personal stories, preferences or achievements for a joke. "
                 "For social reactions, use kind social, answer and empty claims. Address the visitor directly; do not include Jamiu, he/his/him, personal facts or links in this kind. If you include any personal statement, use grounded with evidence instead. "
@@ -1131,6 +1268,9 @@ def validate_grounded_reply(raw, sources):
                 if source_id == "profile:qualifications" and sources[source_id].get("required_in_answer"):
                     if not all(re.search(pattern, text, re.I) for pattern in [r"Physics", r"Aerospace", r"MSc|master", r"Brighton", r"studying|pursuing|currently|ongoing|enrolled"]):
                         raise RuntimeError("grounding_invalid_introduction_missing_qualifications")
+                praise = re.search(r"extraordinary|exceptional|unmatched|unparalleled|world[- ]class|best[- ]in[- ]class|industry[- ]leading", text, re.I)
+                if praise and praise.group().lower() not in sources[source_id]["text"].lower():
+                    raise RuntimeError("grounding_invalid_unsupported_superlative")
                 checked_text.append(text)
             # Every displayed word must belong to a reviewed claim, in order.
             failure = "coverage"
@@ -1197,7 +1337,7 @@ def checked_answer(prompt, sources, on_review=None):
         task["validation_feedback"] = {
             "failure": str(error),
             "draft_to_correct": draft_text,
-            "instruction": "Correct this draft rather than starting another biography. If introduction_missing_qualifications, add the missing BSc, PGD and ongoing MSc using profile:qualifications when available, otherwise their respective fact:education keys; do not drop the design focus or repeat facts. You are Jamiu's GUIDE, not Jamiu: any owner biography written as I/my must become he/his, without adding facts. Social acknowledgements with no personal claims should use social, answer, empty claims. Grounded replies need evidence keys and empty answer. Address the answer_target requirement explicitly. For missing_deadline_evidence, remove the unrelated design description and explain the missing deadline account with a direct contact handoff. For missing_outcome_evidence, answer with recorded delivery, evaluation or metrics and their limits, not general design methods. Keep it conversational, relevant and brief."
+            "instruction": "Correct this draft rather than starting another biography. If introduction_missing_qualifications, add the missing BSc, PGD and ongoing MSc using profile:qualifications when available, otherwise their respective fact:education keys; do not drop the design focus or repeat facts. You are Jamiu's GUIDE, not Jamiu: any owner biography written as I/my must become he/his, without adding facts. Social acknowledgements with no personal claims should use social, answer, empty claims. Grounded replies need evidence keys and empty answer. For unsupported_superlative, remove inflated praise and state the concrete contribution instead. Address the answer_target requirement explicitly. For missing_deadline_evidence, remove the unrelated design description and explain the missing deadline account with a direct contact handoff. For missing_outcome_evidence, answer with recorded delivery, evaluation or metrics and their limits, not general design methods. Keep it conversational, relevant and brief."
         }
         repair = review.rsplit("\n", 1)[0] + "\n" + json.dumps(task, ensure_ascii=False)
         if provider == "groq" and os.environ.get("GROQ_API_KEY", "").strip():
@@ -1321,6 +1461,10 @@ class handler(BaseHTTPRequestHandler):
         if contact_answer:
             return json_response(self, 200, {"answer": contact_answer, "source_ids": [], "support_ids": [], "intent": "contact", "page_id": page_context.get("page_id", "")})
 
+        turn = resolve_conversation_turn(question, history, page_context) if not job_description else {"question": question}
+        question = turn["question"]
+        self.conversation_context = {"request": clip(turn.get("original_request", question), 700), "projects": turn.get("selected_projects") or recruiter_answer_target(question, history, page_context)["projects"]}
+
         intent = "job-fit" if job_description else response_intent(question, history, page_context)
         try:
             retrieved, used_ids = retrieve(question + (" " + job_description[:6000] if job_description else ""), history, "evidence" if job_description else intent, page_context)
@@ -1329,7 +1473,7 @@ class handler(BaseHTTPRequestHandler):
 
         clarification = contextual_clarification(question, history, page_context)
         if clarification:
-            return json_response(self, 200, {"answer": clarification, "source_ids": [], "intent": "clarification"})
+            return json_response(self, 200, {"answer": clarification, "source_ids": [], "intent": "clarification", "conversation_context": self.conversation_context})
 
         sources = grounding_sources(retrieved, history, question)
         prompt = build_prompt(question, history, retrieved, intent, page_context)
@@ -1358,6 +1502,7 @@ class handler(BaseHTTPRequestHandler):
             200,
             {
                 "answer": clip(answer, 4200),
+                "conversation_context": getattr(self, "conversation_context", {}),
                 "support_ids": support_ids,
                 "source_ids": select_proof_ids(answer, used_ids, question, intent),
                 "evidence_links": evidence_links(question, history, intent),
@@ -1386,6 +1531,7 @@ class handler(BaseHTTPRequestHandler):
             # Draft tokens never reach the browser. Keep the existing NDJSON contract.
             send({"type": "delta", "text": answer})
             send({"type": "done", "answer": answer,
+                  "conversation_context": getattr(self, "conversation_context", {}),
                   "support_ids": support_ids,
                   "source_ids": select_proof_ids(answer, used_ids, question, intent),
                   "evidence_links": evidence_links(question, history, intent),
