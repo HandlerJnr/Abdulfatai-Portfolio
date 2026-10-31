@@ -23,3 +23,17 @@ Recruiter topics describe what evidence is needed; they are not scripted answers
 Missing personal anecdotes are handled with a short specific answer and an offer
 to contact Jamiu through the existing cards. No invented interview evidence is
 added to make a dossier appear complete.
+
+
+Concrete recruiter questions carry an answer target: project scope plus the
+kind of evidence required. Deadline questions need an actual account of what
+was cut or postponed; ordinary product decisions cannot stand in for one.
+Results questions need recorded delivery/evaluation/results and their limits,
+not generic descriptions of good design practice. Ambiguous project questions
+ask for the project instead of adopting an unrelated assistant example.
+
+Provider/validation failure never quotes a keyword-selected portfolio excerpt
+as if it answered the question. It offers a bounded, honest contact/recovery
+path. This replaces the former extractive fallback that could select unrelated
+project descriptions. Regression tests include the deadline/garment-workflow
+failure and success-evidence questions without recorded user research.
