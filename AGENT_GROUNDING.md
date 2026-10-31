@@ -60,3 +60,7 @@ Automatic references derive from validated citations and catalog URLs, with
 specific named documents preferred over their collection. Both portfolio views
 render and retain these references, including restored conversations and the
 Google-inspired overview-to-chat transition. No model-generated URL is trusted.
+
+The primary completion window is bounded at five seconds; provider recovery
+remains one short attempt. A provider outage preserves the resolved subject
+and request rather than erasing conversation state.

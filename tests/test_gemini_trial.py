@@ -44,7 +44,7 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=fail) as request:
    with self.assertRaisesRegex(RuntimeError,"gemini_http_503"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[3,3])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[5,3])
  def test_transient_gemini_failure_uses_existing_free_groq_key_once(self):
   calls=[]
   class Response:
@@ -64,5 +64,5 @@ class GeminiTrial(unittest.TestCase):
   with patch.dict(os.environ,{"GEMINI_API_KEY":"test-key"},clear=True),patch.object(urllib.request,"urlopen",side_effect=TimeoutError()) as request:
    with self.assertRaisesRegex(RuntimeError,"model_network"):ctx["call_model"]("test")
    self.assertEqual(request.call_count,2)
-   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[3,3])
+   self.assertEqual([c.kwargs["timeout"] for c in request.call_args_list],[5,3])
 if __name__=="__main__":unittest.main()
