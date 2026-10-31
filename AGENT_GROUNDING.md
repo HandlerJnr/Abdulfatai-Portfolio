@@ -37,3 +37,13 @@ as if it answered the question. It offers a bounded, honest contact/recovery
 path. This replaces the former extractive fallback that could select unrelated
 project descriptions. Regression tests include the deadline/garment-workflow
 failure and success-evidence questions without recorded user research.
+
+
+The server resolves elliptical turns before retrieval: a project selection,
+ordinal answer or delegated choice completes the active request rather than
+replacing it. Each response carries compact `conversation_context` (the visitor
+request and validated subject IDs), which both clients retain with history.
+This preserves intent across clarification turns, restored sessions and history
+truncation; it never promotes prior assistant prose into factual evidence.
+Explicit new questions reset the request, while acknowledgements remain social.
+Unsupported superlatives are rejected in grounded claims and repaired privately.
