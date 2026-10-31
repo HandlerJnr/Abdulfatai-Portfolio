@@ -33,6 +33,17 @@ class GeneralDialogue(unittest.TestCase):
   supports=a['ReplySupports']([],'social');refs=a['answer_references']('Glad that helps!',supports)
   ctx=a['complete_conversation_context']({'request':'thanks'},'Glad that helps!',supports,refs,prev)
   self.assertEqual(refs,[]);self.assertEqual(ctx['request'],prev['request']);self.assertEqual(ctx['subjects'],prev['subjects'])
+ def test_collection_retrieval_keeps_actual_certificates_within_evidence_budget(self):
+  from types import SimpleNamespace
+  import ast
+  tree=ast.parse((ROOT/'api/agent.py').read_text())
+  a['DOMAIN_PROOF_ROUTES']=ast.literal_eval(next(n.value for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='DOMAIN_PROOF_ROUTES' for t in n.targets)))
+  a['GLOBAL_RETRIEVER']=SimpleNamespace(retrieve=lambda query:[])
+  a['RECORD_NODES']={rid:[SimpleNamespace(metadata={'record_id':rid,'label':'document'},text=r.get('text',''))] for rid,r in a['RECORDS'].items()}
+  text,ids=a['retrieve']('What other certifications does he hold?',[],'evidence',{})
+  sources=a['grounding_sources'](text,[],'What other certifications does he hold?')
+  self.assertTrue(any('reference-project-management-foundations' in key for key in sources))
+  self.assertTrue(any('reference-efset-english-c1' in key for key in sources))
  def test_comparison_resolves_document_choices(self):
   ids=['reference-efset-english-c1','reference-project-management-foundations']
   t=a['resolve_conversation_turn']('Compare them',self.history(ids),{})
