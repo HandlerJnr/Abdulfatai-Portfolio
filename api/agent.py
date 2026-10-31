@@ -294,7 +294,7 @@ def recruiter_answer_target(question, history=(), page_context=None):
     elif re.search(r"\bhow\b.{0,35}\b(know|tell|prove)\b.{0,50}\b(worked|works|successful|success|effective)\b|\b(measur\w*|validat\w*|results?|metrics?|impact)\b", q, re.I):
         focus = "outcome_evidence"
     projects = topic_record_ids(q)
-    reset_subject = bool(re.search(r"\b(coding|code|tools?|education|qualifications?|contact|availability)\b", q, re.I)) and not projects
+    reset_subject = bool(re.search(r"\b(coding|code|tools?|education|qualifications?|contact|availability)\b", q, re.I)) and not projects and not re.search(r"\b(?:this project|that project|for it|on it|in it|for that|on that|its|those projects)\b", q, re.I)
     if not projects and not reset_subject:
         # Prior visitor intent establishes scope. A previously irrelevant agent
         # example must not silently become the project the visitor meant.
@@ -305,7 +305,7 @@ def recruiter_answer_target(question, history=(), page_context=None):
             projects = topic_record_ids(previous)
             if projects:
                 break
-            if re.search(r"\b(coding|code|tools?|education|qualification|contact|availability)\b", previous, re.I):
+            if re.search(r"\b(coding|code|tools?|education|qualification|contact|availability)\b", previous, re.I) and not re.search(r"\b(?:this project|that project|for it|on it|in it|for that|on that|its|those projects)\b", previous, re.I):
                 reset_subject = True
                 break
         if not projects and not reset_subject:

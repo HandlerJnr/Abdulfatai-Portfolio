@@ -48,6 +48,11 @@ class ConversationState(unittest.TestCase):
   h=[{'role':'assistant','text':'Here are the details.','conversation_context':{'request':'Tell me about Horal','projects':['horal']}}]
   target=a['recruiter_answer_target']('How do you know it worked?',a['normalise_history'](h))
   self.assertEqual(target['projects'],['horal'])
+ def test_project_tools_followup_keeps_subject_while_general_tools_reset(self):
+  h=[{'role':'assistant','text':'That is Horal.','conversation_context':{'request':'Tell me about Horal','projects':['horal']}}]
+  h=a['normalise_history'](h)
+  self.assertEqual(a['recruiter_answer_target']('What tools did he use for that project?',h)['projects'],['horal'])
+  self.assertEqual(a['recruiter_answer_target']('What tools does he know?',h)['projects'],[])
  def test_request_handler_passes_resolved_intent_to_generation(self):
   a['retrieve']=Mock(return_value=('',[]));a['checked_answer']=Mock(return_value=('Jamiu can explain the deadline decision directly.','test',['boundary']));a['json_response']=Mock();a['DOMAIN_PROOF_ROUTES']=()
   payload=json.dumps({'question':'pick any of his project','history':self.pending(),'page_context':{'page_id':'about'}}).encode()
