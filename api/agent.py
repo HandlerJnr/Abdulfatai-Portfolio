@@ -322,7 +322,7 @@ def resolve_conversation_turn(question, history, page_context=None):
     kind = continuation_kind(question)
     # A named collection is a topic change unless it answers a clarification in
     # that same collection. Explicit substantive questions keep their own task.
-    short_named = bool(explicit) and len(question.split())<=9 and not re.search(r"\b(how|why|who|when|where|tell|explain|describe|instead|forget)\b",question,re.I)
+    short_named = bool(explicit) and len(question.split())<=9 and not re.search(r"\b(how|why|who|when|where|tell|explain|describe|instead|forget)\b|\bwhat\b(?!\s+about\b)",question,re.I)
     compatible = [rid for rid in explicit if any(subject_family(rid)==subject_family(old) for old in non_projects)]
     referring=bool(re.search(r"\b(it|its|that|this|those|them|one|same)\b",question,re.I))
     if non_projects and referring and re.search(r"\b(more|elaborate|expand|details?)\b",question,re.I) and not (explicit and not compatible):

@@ -25,6 +25,9 @@ class GeneralDialogue(unittest.TestCase):
  def test_explicit_new_collection_resets_the_task(self):
   t=a['resolve_conversation_turn']('Tell me about his branding work',self.history(['reference-efset-english-c1']),{})
   self.assertEqual(t['question'],'Tell me about his branding work');self.assertIn('brand',t['selected_subjects'])
+ def test_explicit_new_question_about_same_collection_keeps_its_own_task(self):
+  t=a['resolve_conversation_turn']('What other certifications does he hold?',self.history(['reference-efset-english-c1']),{})
+  self.assertEqual(t['question'],'What other certifications does he hold?')
  def test_social_response_preserves_context_without_spamming_links(self):
   prev={'request':'Explain his certifications','projects':[],'subjects':['reference-efset-english-c1'],'options':['reference-efset-english-c1']}
   supports=a['ReplySupports']([],'social');refs=a['answer_references']('Glad that helps!',supports)
