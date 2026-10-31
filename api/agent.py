@@ -620,7 +620,7 @@ def model_messages(prompt):
     return [{"role": "system", "content": voice}, {"role": "user", "content": prompt}]
 
 
-def call_model(prompt, model=None, _timeout=3, _provider=None):
+def call_model(prompt, model=None, _timeout=5, _provider=None):
     endpoint, token, provider = model_endpoint()
     if _provider == "groq" and os.environ.get("GROQ_API_KEY", "").strip():
         endpoint, token, provider = "https://api.groq.com/openai/v1/chat/completions", os.environ["GROQ_API_KEY"].strip(), "groq"
