@@ -46,7 +46,7 @@ class Continuity(unittest.TestCase):
         sources = {'old': {'text': 'Vista banking journeys support English and French across four subsidiaries.', 'status': 'documented'}}
         answer, _, refs = a['published_reply']('What tools does he use?', [{'role': 'user', 'content': 'Tell me about Vista Digital Banking'}], sources)
         self.assertNotIn('Vista', answer)
-        self.assertEqual(refs, [])
+        self.assertEqual(refs, ['boundary'])
 
     def test_real_project_role_survives_short_headers(self):
         record = next((r for r in a['RECORD_LIST'] if r['id'] == 'horal'))
