@@ -1136,7 +1136,13 @@ def retrieve(question, history, intent, page_context):
     if not subjects and re.search(r"\b(it|its|that|this|those|them|they|more)\b",question,re.I):
         last=next((m for m in reversed(history) if m.get("role")=="assistant"),{})
         subjects=last.get("conversation_context",{}).get("subjects",[])
-    for rid in subjects:
+    # Collection questions need the actual document contents before broad
+    # collection boilerplate consumes the grounding budget.
+    specific=[rid for rid in subjects if RECORDS.get(rid,{}).get("referenceable")]
+    children=[] if specific else [rid for rid,r in RECORDS.items() if r.get("referenceable") and r.get("parent_id") in subjects]
+    if children:
+        children.sort(key=lambda rid: -int(bool(re.search(r"certif|course|c1 advanced|outstanding|quest",RECORDS[rid].get("text", ""),re.I))))
+    for rid in list(dict.fromkeys(specific+children+subjects)):
         if not RECORDS.get(rid,{}).get("url","").startswith("/work/"):
             for node in RECORD_NODES.get(rid,[])[:9]:add_node(node)
     current_page_id = page_context.get("page_id", "")
