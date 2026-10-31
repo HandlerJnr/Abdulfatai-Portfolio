@@ -325,6 +325,14 @@ def resolve_conversation_turn(question, history, page_context=None):
     short_named = bool(explicit) and len(question.split())<=9 and not re.search(r"\b(how|why|who|when|where|tell|explain|describe|instead|forget)\b|\bwhat\b(?!\s+about\b)",question,re.I)
     compatible = [rid for rid in explicit if any(subject_family(rid)==subject_family(old) for old in non_projects)]
     referring=bool(re.search(r"\b(it|its|that|this|those|them|one|same)\b",question,re.I))
+    if non_projects and kind=="comparison" and not explicit:
+        selected=list(dict.fromkeys(context.get("options", [])+active))
+        if len(selected)<2:
+            for message in reversed(history):
+                selected+= [rid for rid in message.get("conversation_context",{}).get("subjects",[]) if rid not in selected and any(subject_family(rid)==subject_family(old) for old in non_projects)]
+                if len(selected)>=2:break
+        if len(selected)>=2:
+            return {"question":question+"\nCompare these subjects: "+"; ".join(RECORDS[rid]["title"] for rid in selected[:2])+".","continued":True,"original_request":question,"selected_subjects":selected[:2],"selected_projects":[]}
     if non_projects and referring and re.search(r"\b(more|elaborate|expand|details?)\b",question,re.I) and not (explicit and not compatible):
         kind="elaboration"
     if non_projects and referring and kind=="new" and not (explicit and not compatible):
@@ -341,6 +349,9 @@ def resolve_conversation_turn(question, history, page_context=None):
         if not selected and re.search(r"any|choose|pick|whichever|whatever|up to you",question,re.I):
             candidates=[rid for rid,r in RECORDS.items() if r.get("referenceable") and any(subject_family(rid)==subject_family(old) for old in non_projects)]
             selected=(options if any(RECORDS.get(rid,{}).get("referenceable") for rid in options) else candidates or options)[:1]
+        if not selected and re.search(r"\b(another|different|other one)\b",question,re.I):
+            candidates=[rid for rid,r in RECORDS.items() if r.get("referenceable") and rid not in active and any(subject_family(rid)==subject_family(old) for old in non_projects)]
+            selected=([rid for rid in options if rid not in active] or candidates)[:1]
         if not selected:selected=active[:2]
         titles="; ".join(RECORDS[rid]["title"] for rid in selected if rid in RECORDS)
         resolved=original+"\nCurrent subject selection: "+titles+".\nVisitor follow-up: "+question+"\nKeep answering the original request using this selection. Do not start an unrelated overview or repeat the previous answer."

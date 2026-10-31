@@ -33,6 +33,13 @@ class GeneralDialogue(unittest.TestCase):
   supports=a['ReplySupports']([],'social');refs=a['answer_references']('Glad that helps!',supports)
   ctx=a['complete_conversation_context']({'request':'thanks'},'Glad that helps!',supports,refs,prev)
   self.assertEqual(refs,[]);self.assertEqual(ctx['request'],prev['request']);self.assertEqual(ctx['subjects'],prev['subjects'])
+ def test_comparison_resolves_document_choices(self):
+  ids=['reference-efset-english-c1','reference-project-management-foundations']
+  t=a['resolve_conversation_turn']('Compare them',self.history(ids),{})
+  self.assertEqual(t['selected_subjects'],ids);self.assertEqual(t['original_request'],'Compare them')
+ def test_another_document_changes_the_subject_not_the_task(self):
+  t=a['resolve_conversation_turn']('another one',self.history(['reference-efset-english-c1']),{})
+  self.assertNotIn('reference-efset-english-c1',t['selected_subjects']);self.assertEqual(t['selected_projects'],[])
  def test_provider_recovery_preserves_followup_context(self):
   prev={'request':'Explain his certification','subjects':['reference-efset-english-c1'],'projects':[]}
   ctx=a['complete_conversation_context']({'request':'Tell me more'},'Please retry.',['boundary'],[],prev)
