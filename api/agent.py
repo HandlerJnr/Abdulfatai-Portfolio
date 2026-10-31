@@ -388,7 +388,7 @@ def answer_references(answer, support_ids):
 
 
 def complete_conversation_context(context, answer, support_ids, references, previous=None):
-    if getattr(support_ids,"kind",None)=="social" and previous:
+    if previous and (getattr(support_ids,"kind",None)=="social" or (not records_from_support(support_ids) and (continuation_kind(context.get("request", ""))!="new" or re.fullmatch(r"(?:thanks?(?: you)?|thank you|cheers|okay|ok|got it|nice|cool)[!., ]*",context.get("request", ""),re.I)))):
         return dict(previous, relation="reaction")
     context=dict(context or {})
     specific=[r["record_id"] for r in references if r.get("kind")=="document"]
@@ -1487,6 +1487,8 @@ def checked_answer(prompt, sources, on_review=None):
 
 def published_reply(question, history, sources):
     """An outage must not turn a keyword match into a purported answer."""
+    if re.fullmatch(r"(?:thanks?(?: you)?|thank you|cheers)[!., ]*",question,re.I):
+        return ("You’re welcome!", "portfolio", ReplySupports([], "social"))
     target = recruiter_answer_target(question, history)
     projects = target["projects"]
     if target["focus"] == "deadline_tradeoff":

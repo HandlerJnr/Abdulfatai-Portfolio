@@ -33,6 +33,13 @@ class GeneralDialogue(unittest.TestCase):
   supports=a['ReplySupports']([],'social');refs=a['answer_references']('Glad that helps!',supports)
   ctx=a['complete_conversation_context']({'request':'thanks'},'Glad that helps!',supports,refs,prev)
   self.assertEqual(refs,[]);self.assertEqual(ctx['request'],prev['request']);self.assertEqual(ctx['subjects'],prev['subjects'])
+ def test_provider_recovery_preserves_followup_context(self):
+  prev={'request':'Explain his certification','subjects':['reference-efset-english-c1'],'projects':[]}
+  ctx=a['complete_conversation_context']({'request':'Tell me more'},'Please retry.',['boundary'],[],prev)
+  self.assertEqual(ctx['subjects'],prev['subjects'])
+ def test_acknowledgement_has_a_safe_social_recovery(self):
+  answer,provider,refs=a['published_reply']('Thanks!',[],{})
+  self.assertEqual(refs.kind,'social');self.assertIn('welcome',answer)
  def test_project_overview_gets_a_reference_without_navigation_intent(self):
   refs=a['answer_references']('Horal is a marketplace.',['passage:recruiter-horal:abc'])
   self.assertEqual(refs[0]['url'],'https://jamiudesigns.vercel.app/work/horal/')
