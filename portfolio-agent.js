@@ -690,12 +690,19 @@ async function ask(q){
 
     try{
       if(activeRequest.stopped)throw new DOMException('Stopped','AbortError');
-      const result=await askAgent(q,partial=>{
-        const nearBottom=conversation.scrollHeight-conversation.scrollTop-conversation.clientHeight<100;
-        response.classList.remove('is-thinking');response.replaceChildren(text('p',partial,'agent-stream-text'));
-        if(nearBottom)conversation.scrollTop=conversation.scrollHeight;
-      },message=>{thinking.textContent=message;});
+      const result=await askAgent(q,()=>{},message=>{thinking.textContent=message;});
       answer=result.answer;links=result.evidenceLinks||[];supportIds=result.supportIds||[];
+      if(!isContactReply(answer)){
+        const {typeText}=await import('/typing-response.js').catch(()=>({}));
+        if(typeText){
+          const stream=text('p','','agent-stream-text');stream.setAttribute('aria-hidden','true');
+          response.classList.remove('is-thinking');response.replaceChildren(stream);activeRequest.partial='';
+          await typeText(answer,{signal:activeRequest.controller.signal,onUpdate:visible=>{
+            const nearBottom=conversation.scrollHeight-conversation.scrollTop-conversation.clientHeight<100;
+            activeRequest.partial=visible;stream.textContent=visible;if(nearBottom)conversation.scrollTop=conversation.scrollHeight;
+          }});
+        }
+      }
       usedAgent=true;
       evidenceCards=result.sourceIds.map(id=>getRecord(id)).filter(Boolean).slice(0,2);
     }catch(error){
