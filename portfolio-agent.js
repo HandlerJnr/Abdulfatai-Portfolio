@@ -784,9 +784,14 @@ const profile=document.querySelector('.home-panel_component');
 let profileScroll=0;
 const windowControls=text('div','','search-window-controls');
 const closeButton=dialog.querySelector('.search-close');
-windowControls.append(closeButton);dialog.querySelector('.search-heading').append(windowControls);
+const viewButton=text('button','Undock ↗','search-view-toggle');viewButton.type='button';viewButton.setAttribute('aria-label','Undock portfolio assistant');viewButton.title='Expand portfolio assistant';
+windowControls.append(viewButton,closeButton);dialog.querySelector('.search-heading').append(windowControls);
 function syncViewControl(){
  const docked=chatView==='docked';
+ viewButton.textContent=docked?'Undock ↗':'Dock';
+ viewButton.setAttribute('aria-label',docked?'Undock portfolio assistant':'Return portfolio assistant to its compact dock');
+ viewButton.title=docked?'Expand portfolio assistant':'Return to compact assistant';
+ viewButton.hidden=!dockViewport.matches||!profile||document.body.hasAttribute('data-digital-card');
  document.querySelectorAll('[data-feed-modal]').forEach(modal=>modal.setAttribute('aria-modal',String(!docked)));
 }
 function positionDock(){
@@ -800,7 +805,7 @@ function positionDock(){
  document.body.style.setProperty('--agent-project-left',Math.max(0,rect.right)+'px');
 }
 function setChatView(next){
- if(next==='docked'&&!dockViewport.matches)next='focused';
+ if(next==='docked'&&(!dockViewport.matches||!profile||document.body.hasAttribute('data-digital-card')))next='focused';
  if(next===chatView||!dialog.open){syncViewControl();return;}
  const before=dialog.getBoundingClientRect(),focus=document.activeElement,conversationScroll=conversation.scrollTop;
  // Reopen the same dialog without rebuilding it: draft, messages and scroll survive.
@@ -896,12 +901,13 @@ function closeAgent(){
   exit.finished.catch(()=>{}).then(()=>{if(dialog.open)dialog.close();closingAgent=false});
 }
 
+viewButton.addEventListener('click',()=>setChatView(chatView==='docked'?'focused':'docked'));
 launcher.addEventListener('click',()=>{
   if(dialog.open){input.focus({preventScroll:true});return;}
   document.querySelector('.portfolio-navigation button[aria-expanded=\"true\"]')?.click();
   dialog.inert=false;
   input.disabled=false;input.readOnly=false;
-  savedOverflow=document.body.style.overflow;chatView=dockViewport.matches?'docked':'focused';
+  savedOverflow=document.body.style.overflow;chatView=dockViewport.matches&&profile&&!document.body.hasAttribute('data-digital-card')?'docked':'focused';
   const docked=chatView==='docked';
   dialog.classList.toggle('is-docked',docked);document.body.classList.toggle('agent-is-docked',docked);
   if(docked){
