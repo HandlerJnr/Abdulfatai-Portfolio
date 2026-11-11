@@ -31,7 +31,7 @@
 .recruiter-cta a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 .recruiter-cta .portfolio-inline-icon{width:15px;height:15px}
 .project-column-nav{scrollbar-width:none}.project-column-nav::-webkit-scrollbar{display:none}
-@media(max-width:767px){.home-panel_text.personal-philosophy{display:none}.recruiter-cta{margin-top:18px}.recruiter-cta a{flex:1 1 auto;justify-content:center}}
+@media(max-width:767px){.recruiter-cta{margin-top:18px}.recruiter-cta a{flex:1 1 auto;justify-content:center}}
 @media(prefers-reduced-motion:reduce){.recruiter-cta a{transition:none}}
 #feed-heading{scroll-margin-top:96px}
 /* Accent colour: one brand colour for actions, links and the active section */
