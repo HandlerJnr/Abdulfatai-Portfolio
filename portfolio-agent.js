@@ -1077,7 +1077,8 @@ async function showProof(record){
   details.removeAttribute('aria-busy');setOpenAction();
  }catch{if(token===proofRequest){details.removeAttribute('aria-busy');details.append(text('p','The full page is available through the link below.','agent-proof-role'))}}
 }
-const ready=getRecords().then(()=>{initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
+const whenIdle=()=>new Promise(r=>('requestIdleCallback' in window)?requestIdleCallback(()=>r(),{timeout:4000}):setTimeout(r,2500));
+const ready=(document.readyState==='complete'?whenIdle():new Promise(r=>addEventListener('load',()=>whenIdle().then(r),{once:true}))).then(getRecords).then(()=>{initWorkspaceNavigation();restoreConversation();}).catch(()=>{library.append(text('p','Project list could not load.'))});
 window.portfolioAgent={open:async(question='')=>{
   if(!dialog.open)launcher.click();
   await ready;

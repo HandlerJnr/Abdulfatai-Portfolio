@@ -65,5 +65,25 @@
       "maxDuration": 30,
       "excludeFiles": "{assets/**,vendor/**,academic-proofreader/**,brand/**,logos/**,credentials/**,system/**,work/**,works/**,**/*.html,**/*.css,**/*.js,tests/**,README.md}"
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)\\.(webp|jpg|jpeg|png|svg|woff2|pdf)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(css|js|json)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600, stale-while-revalidate=86400"
+        }
+      ]
+    }
+  ]
 }

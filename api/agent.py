@@ -1323,7 +1323,7 @@ def grounding_sources(retrieved, history=(), question=""):
                 "text": passage, "status": "documented", "source": {"kind": "portfolio_record", "record_id": record_id}
             }
             budget -= len(passage)
-    sources["boundary"] = {"text": "Missing evidence means a detail is unknown, not that Jamiu lacks it. Do not infer current employment, availability or undocumented achievements. Recruiters can contact Jamiu directly using the existing Connect with Jamiu call, email and LinkedIn cards to discuss details not recorded here.", "status": "knowledge_boundary"}
+    sources["boundary"] = {"text": "Missing evidence means a detail is unknown, not that Jamiu lacks it. Do not infer current employment, availability or undocumented achievements. Only when the visitor asks for something not recorded here, mention that the Connect with Jamiu call, email and LinkedIn cards can cover it; otherwise do not add a contact suggestion.", "status": "knowledge_boundary"}
     discussed = {ref for message in history if message.get("role") == "assistant" for ref in message.get("support_ids", [])}
     for source_id, source in sources.items():
         source["already_discussed"] = source_id in discussed

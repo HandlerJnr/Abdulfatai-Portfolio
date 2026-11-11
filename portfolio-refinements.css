@@ -20,6 +20,17 @@
 @media(max-width:767px){.section_feed>.project-column-bar{padding-right:52px;box-sizing:border-box}}
 
 /* Selected work is the main route; specialist collections remain in the menu. */
-.project-column-nav>a:nth-child(n+3):not([aria-current=page]){display:none}
 .project-column-nav>a:first-child{font-weight:600}
 .project-column-nav>a:not([aria-current=page]){color:var(--_colors---text--secondary,#666)}
+.recruiter-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.recruiter-cta a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;font-size:14px;font-weight:500;line-height:1;text-decoration:none;transition:background .15s ease,color .15s ease,border-color .15s ease}
+.recruiter-cta_primary{background:var(--_colors---text--primary,#222);color:var(--_colors---background--primary,#f5f5f3);border:1px solid transparent}
+.recruiter-cta_primary:hover{opacity:.88}
+.recruiter-cta_secondary{border:1px solid var(--_colors---border--primary,#b8b8b3);color:var(--_colors---text--primary,#222)}
+.recruiter-cta_secondary:hover{background:var(--_colors---background--secondary,#e8e8e3)}
+.recruiter-cta a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.recruiter-cta .portfolio-inline-icon{width:15px;height:15px}
+.project-column-nav{scrollbar-width:none}.project-column-nav::-webkit-scrollbar{display:none}
+@media(max-width:767px){.home-panel_text.personal-philosophy{display:none}.recruiter-cta{margin-top:18px}.recruiter-cta a{flex:1 1 auto;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.recruiter-cta a{transition:none}}
+#feed-heading{scroll-margin-top:96px}
