@@ -34,3 +34,17 @@
 @media(max-width:767px){.home-panel_text.personal-philosophy{display:none}.recruiter-cta{margin-top:18px}.recruiter-cta a{flex:1 1 auto;justify-content:center}}
 @media(prefers-reduced-motion:reduce){.recruiter-cta a{transition:none}}
 #feed-heading{scroll-margin-top:96px}
+/* Accent colour: one brand colour for actions, links and the active section */
+:root{--accent:#2b55e6;--accent-ink:#fff;--accent-soft:rgba(43,85,230,.1)}
+html[data-theme=dark],.theme-dark{--accent:#8ea6ff;--accent-ink:#0b0b0b;--accent-soft:rgba(142,166,255,.14)}
+::selection{background:var(--accent);color:var(--accent-ink)}
+.recruiter-cta_primary{background:var(--accent);color:var(--accent-ink)}
+.recruiter-cta_secondary:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.home-panel_link{text-decoration-color:var(--accent);border-color:var(--accent)}
+.home-panel_link:hover,.home-panel_text a:hover,.project-links a:hover,.project-evidence-link:hover,.portfolio-menu a:hover{color:var(--accent)}
+.project-links a,.project-evidence-link{color:var(--accent)}
+.project-column-nav>a:first-child,.project-column-nav>a[aria-current=page]{color:var(--accent);background:var(--accent-soft)}
+.project-column-nav:has(a[aria-current=page])>a:first-child:not([aria-current=page]){color:var(--_colors---text--secondary,#666);background:none}
+.project-card:hover .project-card_title-row>span,.project-card:hover .project-card_title-row h3{color:var(--accent)}
+.project-card_status{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline-color:var(--accent)}
