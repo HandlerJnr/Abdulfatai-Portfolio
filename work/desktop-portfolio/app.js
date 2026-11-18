@@ -19,25 +19,194 @@ const aboutCards = [
   ['Working together','Good work is a shared effort.','I value open communication, generous critique, and teams that make it safe to ask better questions.','Better together'],
   ['Say hello','Let’s make something meaningful.','If you’re working on a thoughtful product or want to compare notes, I’d be happy to hear from you.','Until next time']
 ];
-const windowsEl=document.querySelector('#windows'),dock=document.querySelector('#dock'),toast=document.querySelector('#toast');
-let z=10,activeFilter=new Set(),aboutIndex=0,toastTimer;
-document.querySelector('#year').textContent=new Date().getFullYear();
-function previewMarkup(p){if(p.kindPreview==='dashboard')return `<div class="dash-nav"><b>Workspace</b><span>Overview</span><span>Explore</span><span>Saved</span><span>Settings</span></div><div class="dash-main"><p class="mini-label">A little more clarity</p><h3>${p.title}</h3><div class="dash-lines"><i></i><i></i><i></i><i></i></div></div>`;if(p.kindPreview==='editor')return `<div class="editor-card"><p class="mini-label">A thoughtful starting point</p><h3>${p.title}</h3><div class="line long"></div><div class="line"></div><div class="line short"></div></div>`;if(p.kindPreview==='notes')return `<div class="editor-card"><h3>Little thoughts,<br>kept close.</h3><div class="line long"></div><div class="line short"></div></div>`;return `<p class="mini-label">An idea in progress</p><h3>${p.title}</h3><p class="preview-mark">EXPLORE &nbsp;·&nbsp; MAKE &nbsp;·&nbsp; REFINE</p>`}
-function makeWindow(p,index){const w=document.createElement('article');w.className='project-window';w.dataset.id=p.id;w.dataset.kind=p.kind;w.style.setProperty('--x',p.x);w.style.setProperty('--y',p.y);w.style.zIndex=p.layer;w.innerHTML=`<header class="window-bar"><div class="traffic"><button class="red" aria-label="Close ${p.name}"></button><button class="yellow" aria-label="Minimize ${p.name}"></button><button class="green" aria-label="Maximize ${p.name}"></button></div><span>${p.name}</span></header><div class="window-content"><div class="preview ${p.kindPreview||''}">${previewMarkup(p)}</div></div><footer class="window-meta"><h2>${p.title}</h2><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag">${p.kind}</span></div></footer>`;w.addEventListener('pointerdown',()=>focusWindow(w));w.querySelector('.red').addEventListener('click',e=>{e.stopPropagation();w.remove();document.querySelector(`.dock-app[data-id="${p.id}"]`).classList.remove('open')});w.querySelector('.yellow').addEventListener('click',e=>{e.stopPropagation();w.remove();document.querySelector(`.dock-app[data-id="${p.id}"]`).classList.remove('open')});w.querySelector('.green').addEventListener('click',e=>{e.stopPropagation();w.classList.toggle('maximized');focusWindow(w)});makeDraggable(w);return w}
-function focusWindow(w){w.style.zIndex=++z;document.querySelectorAll('.project-window').forEach(x=>x.classList.remove('focused'));w.classList.add('focused');document.querySelectorAll('.dock-app').forEach(x=>x.classList.toggle('selected',x.dataset.id===w.dataset.id))}
-function visibleProjects(){return projects.filter(p=>!activeFilter.size||activeFilter.has(p.kind))}
-function render(){const visible=visibleProjects();windowsEl.replaceChildren();dock.replaceChildren();visible.forEach((p,i)=>{const w=makeWindow(p,i);windowsEl.append(w);const b=document.createElement('button');b.className='dock-app open';b.dataset.id=p.id;b.style.setProperty('--appcolor',p.color);b.style.setProperty('--apptext',p.text);b.setAttribute('aria-label',`Open ${p.name}`);b.innerHTML=`${p.mark}<span class="dock-label">${p.name}</span>`;b.addEventListener('click',()=>{let existing=windowsEl.querySelector(`[data-id="${p.id}"]`);if(existing){focusWindow(existing);return}const newW=makeWindow(p);windowsEl.append(newW);focusWindow(newW)});dock.append(b)});}
-function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1800)}
-function makeDraggable(w){const bar=w.querySelector('.window-bar');let sx=0,sy=0,ox=0,oy=0,drag=false;bar.addEventListener('pointerdown',e=>{if(e.target.closest('button')||w.classList.contains('maximized'))return;focusWindow(w);drag=true;sx=e.clientX;sy=e.clientY;ox=w.offsetLeft;oy=w.offsetTop;bar.setPointerCapture(e.pointerId)});bar.addEventListener('pointermove',e=>{if(!drag)return;const parent=w.parentElement.getBoundingClientRect();const x=Math.max(0,Math.min(parent.width-w.offsetWidth,ox+e.clientX-sx));const y=Math.max(0,Math.min(parent.height-w.offsetHeight,oy+e.clientY-sy));w.style.left=`${x}px`;w.style.top=`${y}px`});bar.addEventListener('pointerup',()=>drag=false)}
+const windowsEl = document.querySelector('#windows');
+const dock = document.querySelector('#dock');
+const toast = document.querySelector('#toast');
+const M = window.Motion;
+let z = 10, activeFilter = new Set(), aboutIndex = 0, toastTimer, renderToken = 0;
+document.querySelector('#year').textContent = new Date().getFullYear();
+
+function previewMarkup(p) {
+  if (p.kindPreview === 'dashboard') return `<div class="dash-nav"><b>Workspace</b><span>Overview</span><span>Explore</span><span>Saved</span><span>Settings</span></div><div class="dash-main"><p class="mini-label">A little more clarity</p><h3>${p.title}</h3><div class="dash-lines"><i></i><i></i><i></i><i></i></div></div>`;
+  if (p.kindPreview === 'editor') return `<div class="editor-card"><p class="mini-label">A thoughtful starting point</p><h3>${p.title}</h3><div class="line long"></div><div class="line"></div><div class="line short"></div></div>`;
+  if (p.kindPreview === 'notes') return `<div class="editor-card"><h3>Little thoughts,<br>kept close.</h3><div class="line long"></div><div class="line short"></div></div>`;
+  return `<p class="mini-label">An idea in progress</p><h3>${p.title}</h3><p class="preview-mark">EXPLORE &nbsp;·&nbsp; MAKE &nbsp;·&nbsp; REFINE</p>`;
+}
+
+const dockIcon = id => dock.querySelector(`.dock-app[data-id="${id}"]`);
+
+function makeWindow(p) {
+  const w = document.createElement('article');
+  w.className = 'project-window';
+  w.dataset.id = p.id;
+  w.dataset.kind = p.kind;
+  w.style.setProperty('--x', p.x);
+  w.style.setProperty('--y', p.y);
+  w.style.zIndex = p.layer;
+  w.innerHTML = `<header class="window-bar"><div class="traffic"><button class="red" aria-label="Close ${p.name}"></button><button class="yellow" aria-label="Minimize ${p.name}"></button><button class="green" aria-label="Maximize ${p.name}"></button></div><span>${p.name}</span></header><div class="window-content"><div class="preview ${p.kindPreview || ''}">${previewMarkup(p)}</div></div><footer class="window-meta"><h2>${p.title}</h2><div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}<span class="tag">${p.kind}</span></div></footer>`;
+  const closed = () => { w.remove(); dockIcon(p.id)?.classList.remove('open', 'selected'); };
+  w.addEventListener('pointerdown', () => focusWindow(w));
+  w.querySelector('.red').addEventListener('click', e => { e.stopPropagation(); M.closeWindow(w, closed); });
+  w.querySelector('.yellow').addEventListener('click', e => { e.stopPropagation(); M.minimizeToDock(w, dockIcon(p.id), closed); });
+  w.querySelector('.green').addEventListener('click', e => { e.stopPropagation(); focusWindow(w); M.toggleMaximize(w); });
+  makeDraggable(w);
+  return w;
+}
+
+function focusWindow(w) {
+  w.style.zIndex = ++z;
+  document.querySelectorAll('.project-window').forEach(x => x.classList.toggle('focused', x === w));
+  document.querySelectorAll('.dock-app').forEach(x => x.classList.toggle('selected', x.dataset.id === w.dataset.id));
+}
+
+const visibleProjects = () => projects.filter(p => !activeFilter.size || activeFilter.has(p.kind));
+
+function makeDockApp(p) {
+  const b = document.createElement('button');
+  b.className = 'dock-app open';
+  b.dataset.id = p.id;
+  b.style.setProperty('--appcolor', p.color);
+  b.style.setProperty('--apptext', p.text);
+  b.setAttribute('aria-label', `Open ${p.name}`);
+  b.innerHTML = `${p.mark}<span class="dock-label">${p.name}</span>`;
+  b.addEventListener('click', () => {
+    const existing = windowsEl.querySelector(`[data-id="${p.id}"]`);
+    if (existing) { focusWindow(existing); M.nudge(existing); return; }
+    const w = makeWindow(p);
+    windowsEl.append(w);
+    b.classList.add('open');
+    focusWindow(w);
+    M.launch(b);
+    M.openFromDock(w, b);
+  });
+  return b;
+}
+
+function render() {
+  windowsEl.replaceChildren();
+  dock.replaceChildren();
+  visibleProjects().forEach(p => {
+    windowsEl.append(makeWindow(p));
+    dock.append(makeDockApp(p));
+  });
+}
+
+/** Filter changes animate the old set out, then cascade the new set in. */
+function rerender() {
+  const token = ++renderToken;
+  M.leave([...windowsEl.children, ...dock.children]).then(() => {
+    if (token !== renderToken) return;
+    render();
+    M.cascadeIn([...windowsEl.children]);
+    M.popDock([...dock.children], 80);
+  });
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+function makeDraggable(w) {
+  const bar = w.querySelector('.window-bar');
+  let sx = 0, sy = 0, ox = 0, oy = 0, lastX = 0, drag = false;
+  bar.addEventListener('pointerdown', e => {
+    if (e.target.closest('button') || w.classList.contains('maximized')) return;
+    focusWindow(w);
+    drag = true;
+    sx = lastX = e.clientX; sy = e.clientY;
+    ox = w.offsetLeft; oy = w.offsetTop;
+    bar.setPointerCapture(e.pointerId);
+    M.dragStart(w);
+  });
+  bar.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const parent = w.parentElement.getBoundingClientRect();
+    const x = Math.max(0, Math.min(parent.width - w.offsetWidth, ox + e.clientX - sx));
+    const y = Math.max(0, Math.min(parent.height - w.offsetHeight, oy + e.clientY - sy));
+    w.style.left = `${x}px`;
+    w.style.top = `${y}px`;
+    M.dragMove(w, e.clientX - lastX);
+    lastX = e.clientX;
+  });
+  const end = () => { if (!drag) return; drag = false; M.dragEnd(w); };
+  bar.addEventListener('pointerup', end);
+  bar.addEventListener('pointercancel', end);
+}
+
+/* Popovers */
+const popovers = [['#filterToggle', '#filterPop'], ['#controlToggle', '#controlPop']]
+  .map(([b, p]) => [document.querySelector(b), document.querySelector(p)]);
+function closePopovers(except) {
+  popovers.forEach(([btn, pop]) => { if (pop !== except && !pop.hidden) { btn.setAttribute('aria-expanded', 'false'); M.closePopover(pop); } });
+}
+popovers.forEach(([btn, pop]) => btn.addEventListener('click', e => {
+  e.stopPropagation();
+  closePopovers(pop);
+  const show = pop.hidden;
+  btn.setAttribute('aria-expanded', String(show));
+  show ? M.openPopover(pop) : M.closePopover(pop);
+}));
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.popover-wrap')) closePopovers(); });
+
+document.querySelectorAll('.filter-check').forEach(c => c.addEventListener('change', () => {
+  activeFilter = new Set([...document.querySelectorAll('.filter-check:checked')].map(x => x.value));
+  rerender();
+}));
+
+document.querySelector('#brightness').addEventListener('input', e => {
+  const v = Number(e.target.value);
+  document.querySelector('.workspace').style.setProperty('--brightness', v / 100);
+  document.querySelector('#brightnessValue').textContent = `${v}%`;
+});
+
+let playing = false;
+document.querySelector('#musicPlay').addEventListener('click', e => { playing = !playing; e.currentTarget.textContent = playing ? 'Ⅱ' : '▶'; showToast(playing ? 'Ambient mode on' : 'Ambient mode off'); });
+document.querySelector('#soundToggle').addEventListener('click', e => { playing = !playing; e.currentTarget.classList.toggle('selected', playing); showToast(playing ? 'Ambient mode on' : 'Ambient mode off'); });
+
+/* Overlays and navigation */
+const aboutOverlay = document.querySelector('#aboutOverlay');
+function setNav(action) {
+  document.querySelectorAll('.side-nav .nav-link[data-action]').forEach(x => x.classList.toggle('active', x.dataset.action === action));
+  M.syncNav();
+}
+function hideOverlay(o) {
+  M.hideOverlay(o);
+  if (o === aboutOverlay) setNav('work');
+}
+document.querySelector('#sourceToggle').addEventListener('click', () => M.showOverlay(document.querySelector('#sourceOverlay')));
+document.querySelectorAll('[data-action="about"]').forEach(b => b.addEventListener('click', () => { setNav('about'); M.showOverlay(aboutOverlay); }));
+document.querySelectorAll('[data-action="work"]').forEach(b => b.addEventListener('click', () => hideOverlay(aboutOverlay)));
+
+function renderAbout() {
+  const c = aboutCards[aboutIndex];
+  document.querySelector('#aboutEyebrow').textContent = c[0];
+  document.querySelector('#aboutTitle').textContent = c[1];
+  document.querySelector('#aboutBody').textContent = c[2];
+  document.querySelector('#aboutCaption').textContent = c[3];
+  document.querySelector('#aboutCount').textContent = `${String(aboutIndex + 1).padStart(2, '0')} / ${String(aboutCards.length).padStart(2, '0')}`;
+  document.querySelector('#aboutArt').className = `about-art art-${['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][aboutIndex]}`;
+}
+function stepAbout(dir) {
+  M.swapAbout(dir, () => { aboutIndex = (aboutIndex + dir + aboutCards.length) % aboutCards.length; renderAbout(); });
+}
+document.querySelector('#aboutNext').addEventListener('click', () => stepAbout(1));
+document.querySelector('#aboutPrev').addEventListener('click', () => stepAbout(-1));
+
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => hideOverlay(document.getElementById(b.dataset.close))));
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) hideOverlay(o); }));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.querySelectorAll('.overlay:not([hidden])').forEach(hideOverlay); closePopovers(); }
+  if (aboutOverlay.hidden) return;
+  if (e.key === 'ArrowRight') stepAbout(1);
+  if (e.key === 'ArrowLeft') stepAbout(-1);
+});
+
+/* Boot */
 render();
-document.querySelector('#filterToggle').addEventListener('click',()=>{const el=document.querySelector('#filterPop'),show=el.hidden;el.hidden=!show;document.querySelector('#filterToggle').setAttribute('aria-expanded',String(show))});
-document.querySelectorAll('.filter-check').forEach(c=>c.addEventListener('change',()=>{activeFilter=new Set([...document.querySelectorAll('.filter-check:checked')].map(x=>x.value));render()}));
-document.querySelector('#controlToggle').addEventListener('click',()=>{const el=document.querySelector('#controlPop'),show=el.hidden;el.hidden=!show;document.querySelector('#controlToggle').setAttribute('aria-expanded',String(show))});
-document.querySelector('#brightness').addEventListener('input',e=>{const v=Number(e.target.value);document.querySelector('.workspace').style.setProperty('--brightness',v/100);document.querySelector('#brightnessValue').textContent=`${v}%`});
-let playing=false;document.querySelector('#musicPlay').addEventListener('click',e=>{playing=!playing;e.currentTarget.textContent=playing?'Ⅱ':'▶';showToast(playing?'Ambient mode on':'Ambient mode off')});document.querySelector('#soundToggle').addEventListener('click',e=>{playing=!playing;e.currentTarget.classList.toggle('selected',playing);showToast(playing?'Ambient mode on':'Ambient mode off')});
-document.querySelector('#sourceToggle').addEventListener('click',()=>document.querySelector('#sourceOverlay').hidden=false);
-function openAbout(){document.querySelector('#aboutOverlay').hidden=false;document.querySelector('.about-content').focus?.();}
-document.querySelectorAll('[data-action="about"]').forEach(b=>b.addEventListener('click',openAbout));document.querySelectorAll('[data-action="work"]').forEach(b=>b.addEventListener('click',()=>{document.querySelector('#aboutOverlay').hidden=true;document.querySelectorAll('.nav-link').forEach(x=>x.classList.toggle('active',x===b))}));
-function renderAbout(){const c=aboutCards[aboutIndex];document.querySelector('#aboutEyebrow').textContent=c[0];document.querySelector('#aboutTitle').textContent=c[1];document.querySelector('#aboutBody').textContent=c[2];document.querySelector('#aboutCaption').textContent=c[3];document.querySelector('#aboutCount').textContent=`${String(aboutIndex+1).padStart(2,'0')} / 08`;document.querySelector('#aboutArt').className=`about-art art-${['one','two','three','four','five','six','seven','eight'][aboutIndex]}`}
-document.querySelector('#aboutNext').addEventListener('click',()=>{aboutIndex=(aboutIndex+1)%aboutCards.length;renderAbout()});document.querySelector('#aboutPrev').addEventListener('click',()=>{aboutIndex=(aboutIndex+aboutCards.length-1)%aboutCards.length;renderAbout()});
-document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.close).hidden=true));document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.hidden=true}));document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay').forEach(x=>x.hidden=true);if(e.key==='ArrowRight'&&!document.querySelector('#aboutOverlay').hidden)document.querySelector('#aboutNext').click();if(e.key==='ArrowLeft'&&!document.querySelector('#aboutOverlay').hidden)document.querySelector('#aboutPrev').click()});
+M.bindDock(dock);
+M.bindNav(document.querySelector('.side-nav'));
+M.bindParallax(document.querySelector('.workspace'));
+M.intro();
