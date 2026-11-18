@@ -1,0 +1,103 @@
+/* "Ask Jamiu": the AI guide, styled after Siri on macOS */
+.siri {
+  position: absolute; z-index: 11; top: 76px; right: 22px;
+  width: 348px; max-height: calc(100svh - 176px);
+  display: flex; flex-direction: column; align-items: stretch;
+  padding: 12px 14px 12px; border-radius: 26px;
+  background: rgba(240, 244, 246, .74);
+  backdrop-filter: blur(40px) saturate(1.9); -webkit-backdrop-filter: blur(40px) saturate(1.9);
+  border: 1px solid rgba(255, 255, 255, .6);
+  box-shadow: inset 0 .5px 0 rgba(255, 255, 255, .9), 0 26px 70px rgba(18, 32, 38, .26);
+  color: var(--ink, #1d2327); transform-origin: 90% 0;
+}
+.siri[hidden] { display: none; }
+
+.siri-top { display: flex; justify-content: space-between; height: 26px; }
+.siri-tool { width: 26px; height: 26px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: rgba(30, 40, 43, .07); color: var(--ink-2, #4a5458); cursor: pointer; transition: background .2s; }
+.siri-tool:hover { background: rgba(30, 40, 43, .13); }
+.siri-tool svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.siri-voice[aria-pressed="false"] { color: var(--ink-3, #7b8589); }
+
+/* The orb: fluid colour with the asterisk mark on top */
+.siri-orb { --size: 128px; position: relative; flex: none; width: var(--size); height: var(--size); margin: -8px auto 12px; border-radius: 50%; cursor: default; transition: width .55s var(--ease-out, ease), height .55s var(--ease-out, ease), margin .55s var(--ease-out, ease); }
+.siri.has-answer .siri-orb { --size: 62px; margin: -18px auto 8px; }
+.siri[data-state="thinking"] .siri-orb, .siri[data-state="speaking"] .siri-orb { cursor: pointer; }
+.orb-fluid { position: absolute; inset: 0; overflow: hidden; border-radius: 50%; isolation: isolate;
+  background: radial-gradient(circle at 50% 115%, #1d6bff 0%, #1043c9 45%, #0b2a7d 100%);
+  box-shadow: 0 12px 34px rgba(16, 92, 255, .32), inset 0 -6px 18px rgba(0, 18, 80, .35), inset 0 4px 14px rgba(255, 255, 255, .35); }
+.orb-fluid::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 34% 22%, rgba(255, 255, 255, .62), transparent 34%); }
+.orb-fluid i { position: absolute; width: 92%; height: 92%; border-radius: 42% 58% 63% 37% / 45% 40% 60% 55%; filter: blur(9px); mix-blend-mode: screen; animation: orb-turn 9s linear infinite; }
+.orb-fluid i:nth-child(1) { left: -18%; top: -22%; background: radial-gradient(circle at 40% 40%, #ffffff 0%, #a9eaff 30%, transparent 64%); }
+.orb-fluid i:nth-child(2) { right: -24%; top: 2%; background: radial-gradient(circle at 60% 40%, #36a2ff, transparent 64%); animation-duration: 12s; animation-direction: reverse; }
+.orb-fluid i:nth-child(3) { left: 4%; bottom: -30%; background: radial-gradient(circle at 50% 60%, #8f7bff, transparent 62%); animation-duration: 7.5s; }
+.orb-fluid i:nth-child(4) { left: 20%; top: 18%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(220, 245, 255, .9), transparent 66%); animation-duration: 14s; animation-direction: reverse; }
+@keyframes orb-turn { to { rotate: 360deg; } }
+.orb-glyph { position: absolute; left: 50%; top: 50%; width: 38%; height: 38%; translate: -50% -50%; fill: #fff; filter: drop-shadow(0 2px 6px rgba(0, 24, 90, .45)); animation: glyph-breathe 4s ease-in-out infinite; }
+@keyframes glyph-breathe { 50% { scale: 1.07; } }
+@keyframes glyph-spin { to { rotate: 360deg; } }
+@keyframes orb-listen { 50% { scale: 1.07; } }
+.siri[data-state="thinking"] .orb-fluid i { animation-duration: 2.6s; }
+.siri[data-state="thinking"] .orb-glyph { animation: glyph-spin 1.6s cubic-bezier(.65, 0, .35, 1) infinite; }
+.siri[data-state="speaking"] .orb-fluid i { animation-duration: 4s; }
+.siri[data-state="listening"] .siri-orb { animation: orb-listen 1s ease-in-out infinite; }
+.siri[data-state="listening"] .orb-fluid { background: radial-gradient(circle at 50% 115%, #2fb8ff 0%, #1463ff 50%, #0b2a7d 100%); }
+
+/* Words */
+.siri-status { min-height: 18px; margin: 0 6px 6px; text-align: center; font-size: 13px; color: var(--ink-2, #4a5458); }
+.siri.has-answer .siri-status:empty { display: none; }
+.siri-question { margin: 0 6px 8px; text-align: center; font-size: 12.5px; color: var(--ink-3, #7b8589); }
+.siri-caption { position: relative; max-height: 172px; overflow-y: auto; margin: 0 2px; padding: 2px 6px 4px; font-size: 16.5px; line-height: 1.45; font-weight: 500; letter-spacing: -.012em; scrollbar-width: thin; overscroll-behavior: contain; }
+.siri-caption:empty { display: none; }
+.siri-caption .w { opacity: .22; transition: opacity .28s ease, color .28s ease; }
+.siri-caption .w.on { opacity: 1; }
+.siri-caption .w.now { color: #0a63e0; }
+
+/* Suggestions and follow-up actions */
+.siri-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 10px 0 2px; }
+.siri-chips:empty { display: none; }
+.siri-chip { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; padding: 7px 12px; border: 0; border-radius: 99px; background: rgba(255, 255, 255, .72); box-shadow: 0 0 0 .5px rgba(0, 0, 0, .06), 0 1px 2px rgba(20, 34, 38, .06); color: var(--ink, #1d2327); font: inherit; font-size: 12.5px; text-decoration: none; cursor: pointer; transition: background .2s, scale .15s var(--ease-spring, ease); }
+.siri-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.siri-chip:hover { background: #fff; }
+.siri-chip:active { scale: .96; }
+.siri-chip.is-action { color: #0a63e0; font-weight: 500; }
+.siri-chip svg { flex: none; width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Input */
+.siri-form { display: flex; align-items: center; gap: 6px; margin-top: 12px; padding: 4px 4px 4px 14px; border-radius: 99px; background: rgba(255, 255, 255, .78); box-shadow: 0 0 0 .5px rgba(0, 0, 0, .07); }
+.siri-form:focus-within { box-shadow: 0 0 0 2px rgba(10, 132, 255, .55); }
+.siri-form input { flex: 1; min-width: 0; height: 30px; border: 0; background: none; font: inherit; font-size: 13.5px; color: var(--ink, #1d2327); outline: none; }
+.siri-form input::placeholder { color: var(--ink-3, #7b8589); }
+.siri-mic, .siri-send { flex: none; width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; cursor: pointer; transition: background .2s, scale .15s var(--ease-spring, ease); }
+.siri-mic { background: rgba(30, 40, 43, .07); color: var(--ink-2, #4a5458); }
+.siri-mic[aria-pressed="true"] { background: #ff3b30; color: #fff; }
+.siri-send { background: #0a84ff; color: #fff; }
+.siri-send.is-stop { background: #1d2327; }
+.siri-mic:active, .siri-send:active { scale: .9; }
+.siri-mic svg, .siri-send svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.siri-stop-square { width: 10px; height: 10px; border-radius: 2px; background: currentColor; }
+.siri-note { margin: 8px 0 0; text-align: center; font-size: 10.5px; color: var(--ink-3, #7b8589); }
+.siri :focus-visible { outline: 2px solid var(--accent, #0a84ff); outline-offset: 2px; }
+.siri-form :focus-visible { outline: none; }
+
+/* Dark appearance */
+.dark-appearance .siri { background: rgba(38, 44, 48, .76); border-color: rgba(255, 255, 255, .14); color: #eef3f4; }
+.dark-appearance .siri-tool, .dark-appearance .siri-mic { background: rgba(255, 255, 255, .12); color: #eef3f4; }
+.dark-appearance .siri-status, .dark-appearance .siri-question, .dark-appearance .siri-note { color: rgba(238, 243, 244, .66); }
+.dark-appearance .siri-caption { color: #f2f6f7; }
+.dark-appearance .siri-caption .w.now, .dark-appearance .siri-chip.is-action { color: #64b0ff; }
+.dark-appearance .siri-chip { background: rgba(255, 255, 255, .12); color: #eef3f4; }
+.dark-appearance .siri-form { background: rgba(255, 255, 255, .1); }
+.dark-appearance .siri-form input { color: #eef3f4; }
+.dark-appearance .siri-send.is-stop { background: #eef3f4; color: #1d2327; }
+
+/* Phone: a sheet above the dock, like Siri on iPhone */
+@media (max-width: 760px) {
+  .siri { top: auto; left: 8px; right: 8px; bottom: calc(80px + env(safe-area-inset-bottom)); width: auto; max-height: calc(100svh - 150px); transform-origin: 50% 100%; }
+  .siri-orb { --size: 104px; }
+  .siri-form input { font-size: 16px; } /* stops iOS zooming into the field */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-fluid i, .orb-glyph, .siri-orb { animation: none !important; }
+}
+.reduce-motion .orb-fluid i, .reduce-motion .orb-glyph, .reduce-motion .siri-orb { animation: none !important; }
