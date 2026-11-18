@@ -74,3 +74,11 @@
 @media (max-width: 760px) {
   .sidebar:hover .side-nav, .sidebar:focus-within .side-nav { display: grid; }
 }
+
+/* Minimised windows live in the dock until restored */
+.project-window.minimized { display: none; }
+.window-meta { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.project-window.dragging .window-meta { cursor: grabbing; }
+.project-window.dragging { transition: rotate .18s var(--ease-out), scale .2s, box-shadow .2s, translate .2s; }
+@media (min-width: 761px) { .side-nav .nav-pill { border-radius: 11px; } }
+
