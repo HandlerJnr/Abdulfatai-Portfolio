@@ -44,10 +44,12 @@ function makeWindow(p) {
   w.style.setProperty('--y', p.y);
   w.style.zIndex = p.layer;
   w.innerHTML = `<header class="window-bar"><div class="traffic"><button class="red" aria-label="Close ${p.name}"></button><button class="yellow" aria-label="Minimize ${p.name}"></button><button class="green" aria-label="Maximize ${p.name}"></button></div><span>${p.name}</span></header><div class="window-content"><div class="preview ${p.kindPreview || ''}">${previewMarkup(p)}</div></div><footer class="window-meta"><h2>${p.title}</h2><div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}<span class="tag">${p.kind}</span></div></footer>`;
-  const closed = () => { w.remove(); dockIcon(p.id)?.classList.remove('open', 'selected'); };
+  const closed = () => { w.remove(); dockIcon(p.id)?.classList.remove('open', 'selected'); focusTopWindow(); };
+  const minimized = () => { w.classList.add('minimized'); w.classList.remove('focused'); dockIcon(p.id)?.classList.remove('selected'); focusTopWindow(); };
   w.addEventListener('pointerdown', () => focusWindow(w));
   w.querySelector('.red').addEventListener('click', e => { e.stopPropagation(); M.closeWindow(w, closed); });
-  w.querySelector('.yellow').addEventListener('click', e => { e.stopPropagation(); M.minimizeToDock(w, dockIcon(p.id), closed); });
+  w.querySelector('.yellow').addEventListener('click', e => { e.stopPropagation(); M.minimizeToDock(w, dockIcon(p.id), minimized); });
+  w.querySelector('.window-bar').addEventListener('dblclick', e => { if (!e.target.closest('button')) M.minimizeToDock(w, dockIcon(p.id), minimized); });
   w.querySelector('.green').addEventListener('click', e => { e.stopPropagation(); focusWindow(w); M.toggleMaximize(w); });
   makeDraggable(w);
   return w;
@@ -57,6 +59,13 @@ function focusWindow(w) {
   w.style.zIndex = ++z;
   document.querySelectorAll('.project-window').forEach(x => x.classList.toggle('focused', x === w));
   document.querySelectorAll('.dock-app').forEach(x => x.classList.toggle('selected', x.dataset.id === w.dataset.id));
+}
+
+/** Like macOS: when a window goes away, the next window up takes focus. */
+function focusTopWindow() {
+  const open = [...windowsEl.querySelectorAll('.project-window:not(.minimized)')];
+  if (!open.length) return;
+  focusWindow(open.reduce((a, b) => (Number(b.style.zIndex) > Number(a.style.zIndex) ? b : a)));
 }
 
 const visibleProjects = () => projects.filter(p => !activeFilter.size || activeFilter.has(p.kind));
@@ -71,6 +80,12 @@ function makeDockApp(p) {
   b.innerHTML = `${p.mark}<span class="dock-label">${p.name}</span>`;
   b.addEventListener('click', () => {
     const existing = windowsEl.querySelector(`[data-id="${p.id}"]`);
+    if (existing && existing.classList.contains('minimized')) {
+      existing.classList.remove('minimized');
+      focusWindow(existing);
+      M.restoreFromDock(existing, b);
+      return;
+    }
     if (existing) { focusWindow(existing); M.nudge(existing); return; }
     const w = makeWindow(p);
     windowsEl.append(w);
@@ -109,31 +124,68 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
 }
 
+/**
+ * Keeps a window reachable but lets it travel partly off-screen, like macOS:
+ * at least 120px stays visible sideways and the title bar never goes above the top.
+ */
+function clampWindow(w, x, y) {
+  const area = w.parentElement;
+  const keep = Math.min(120, w.offsetWidth);
+  const nx = Math.min(area.clientWidth - keep, Math.max(keep - w.offsetWidth, x));
+  const ny = Math.min(area.clientHeight + 40, Math.max(0, y));
+  return [nx, ny];
+}
+
 function makeDraggable(w) {
-  const bar = w.querySelector('.window-bar');
-  let sx = 0, sy = 0, ox = 0, oy = 0, lastX = 0, drag = false;
-  bar.addEventListener('pointerdown', e => {
-    if (e.target.closest('button') || w.classList.contains('maximized')) return;
+  const handles = [w.querySelector('.window-bar'), w.querySelector('.window-meta')];
+  let sx = 0, sy = 0, ox = 0, oy = 0, lastX = 0, lastY = 0, lastT = 0, vx = 0, vy = 0, drag = null;
+
+  const start = (handle, e) => {
+    if (e.button !== 0 || e.target.closest('button, a')) return;
     focusWindow(w);
-    drag = true;
-    sx = lastX = e.clientX; sy = e.clientY;
-    ox = w.offsetLeft; oy = w.offsetTop;
-    bar.setPointerCapture(e.pointerId);
+    M.stopGlide(w);
+    const area = w.parentElement.getBoundingClientRect();
+    if (w.classList.contains('maximized')) {
+      // Dragging a maximised window restores it under the pointer, as on a Mac.
+      const r = w.getBoundingClientRect();
+      const ratio = (e.clientX - r.left) / r.width;
+      w.classList.remove('maximized');
+      w.style.left = `${e.clientX - area.left - ratio * w.offsetWidth}px`;
+      w.style.top = `${Math.max(0, e.clientY - area.top - 18)}px`;
+    }
+    w.classList.add('moved');
+    drag = handle;
+    sx = lastX = e.clientX; sy = lastY = e.clientY; lastT = performance.now();
+    ox = w.offsetLeft; oy = w.offsetTop; vx = vy = 0;
+    handle.setPointerCapture(e.pointerId);
     M.dragStart(w);
-  });
-  bar.addEventListener('pointermove', e => {
+  };
+  const move = e => {
     if (!drag) return;
-    const parent = w.parentElement.getBoundingClientRect();
-    const x = Math.max(0, Math.min(parent.width - w.offsetWidth, ox + e.clientX - sx));
-    const y = Math.max(0, Math.min(parent.height - w.offsetHeight, oy + e.clientY - sy));
+    const [x, y] = clampWindow(w, ox + e.clientX - sx, oy + e.clientY - sy);
     w.style.left = `${x}px`;
     w.style.top = `${y}px`;
+    const now = performance.now(), dt = Math.max(1, now - lastT);
+    vx = 0.7 * ((e.clientX - lastX) / dt) + 0.3 * vx;
+    vy = 0.7 * ((e.clientY - lastY) / dt) + 0.3 * vy;
     M.dragMove(w, e.clientX - lastX);
-    lastX = e.clientX;
+    lastX = e.clientX; lastY = e.clientY; lastT = now;
+  };
+  const end = () => {
+    if (!drag) return;
+    drag = null;
+    M.dragEnd(w);
+    if (performance.now() - lastT > 80) vx = vy = 0; // paused before release: no throw
+    const cap = v => Math.max(-2.5, Math.min(2.5, v));
+    M.glide(w, cap(vx), cap(vy), clampWindow);
+  };
+  handles.forEach(h => {
+    if (!h) return;
+    h.addEventListener('pointerdown', e => start(h, e));
+    h.addEventListener('pointermove', move);
+    h.addEventListener('pointerup', end);
+    h.addEventListener('pointercancel', end);
   });
-  const end = () => { if (!drag) return; drag = false; M.dragEnd(w); };
-  bar.addEventListener('pointerup', end);
-  bar.addEventListener('pointercancel', end);
 }
 
 /* Popovers */
