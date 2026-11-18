@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c9dce2">
+  <meta name="description" content="A desktop-inspired interactive portfolio starter.">
+  <title>Portfolio — Design & Engineering</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="desktop" id="desktop">
+    <aside class="sidebar">
+      <a href="#home" class="brand" aria-label="Go to portfolio home">Portfolio</a>
+      <p class="intro">Designing thoughtful digital products from first sketch to shipped interface.</p>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-action="work">Work</button>
+        <button class="nav-link" data-action="about">About</button>
+        <a class="nav-link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        <a class="nav-link" href="https://www.are.na/" target="_blank" rel="noreferrer">Elsewhere ↗</a>
+      </nav>
+      <div class="sidebar-foot">Independent portfolio concept<br><span>© <span id="year"></span></span></div>
+    </aside>
+
+    <section class="workspace" aria-label="Interactive portfolio desktop">
+      <div class="landscape" aria-hidden="true"><div class="ridge ridge-back"></div><div class="ridge ridge-front"></div><div class="ground"></div></div>
+      <div class="toolbar" aria-label="Desktop controls">
+        <div class="popover-wrap">
+          <button class="tool-button" id="filterToggle" aria-label="Filter projects" aria-expanded="false" title="Filter projects"><svg viewBox="0 0 24 24"><path d="M4 5h16l-6.2 7.2v5.1l-3.6 1.8v-6.9L4 5Z"/></svg></button>
+          <div class="popover filter-pop" id="filterPop" hidden>
+            <label><input type="checkbox" value="Case study" class="filter-check"> Case study</label>
+            <label><input type="checkbox" value="Demo" class="filter-check"> Demo</label>
+          </div>
+        </div>
+        <button class="tool-button" id="soundToggle" aria-label="Toggle ambient sound" title="Ambient sound"><svg viewBox="0 0 24 24"><path d="M3 10v4m4-7v10m4-13v16m4-12v8m4-6v4m3-7v10"/></svg></button>
+        <div class="popover-wrap">
+          <button class="tool-button" id="controlToggle" aria-label="Open control panel" aria-expanded="false" title="Display controls"><svg viewBox="0 0 24 24"><path d="M4 7h9m4 0h3M4 17h3m4 0h9M13 4v6M9 14v6"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
+          <div class="popover control-pop" id="controlPop" hidden>
+            <div class="brightness-label"><span>Display</span><span id="brightnessValue">100%</span></div>
+            <input id="brightness" type="range" min="55" max="115" value="100" aria-label="Display brightness">
+            <div class="music-card"><div class="album-art">♫</div><div><strong>Quiet Hours</strong><small>Portfolio radio</small></div><button id="musicPlay" aria-label="Play music">▶</button></div>
+          </div>
+        </div>
+        <button class="tool-button" id="sourceToggle" aria-label="View source code" title="About this build"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 9 3 3-3 3m5 0h4"/></svg></button>
+      </div>
+
+      <div class="windows" id="windows" aria-live="polite"></div>
+      <div class="dock-shell"><nav class="dock" id="dock" aria-label="Projects"></nav></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <section class="overlay" id="aboutOverlay" aria-label="About portfolio owner" hidden>
+    <button class="overlay-close" data-close="aboutOverlay" aria-label="Close About">×</button>
+    <div class="about-art art-one" id="aboutArt" aria-hidden="true"><span></span><i></i></div>
+    <div class="about-content"><div class="about-card"><p class="eyebrow" id="aboutEyebrow">A little about me</p><h2 id="aboutTitle">Designing with care, from idea to interface.</h2><p id="aboutBody">I’m a multidisciplinary designer who enjoys turning complex problems into clear, useful digital experiences.</p></div><div class="about-caption" id="aboutCaption">A small introduction</div><div class="about-controls"><span id="aboutCount">01 / 08</span><button id="aboutPrev" aria-label="Previous card">←</button><button id="aboutNext">Next <span>→</span></button></div></div>
+  </section>
+
+  <section class="overlay source-overlay" id="sourceOverlay" aria-label="About this portfolio starter" hidden>
+    <button class="overlay-close" data-close="sourceOverlay" aria-label="Close panel">×</button>
+    <div class="source-card"><p class="eyebrow">A portfolio starter</p><h2>Make this desktop yours.</h2><p>This interactive concept is a self-contained HTML, CSS, and JavaScript project. Replace the sample projects, links, and About cards with your own approved work.</p><div class="source-actions"><a href="README.md">Read setup notes ↗</a><button data-close="sourceOverlay">Back to portfolio</button></div></div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
