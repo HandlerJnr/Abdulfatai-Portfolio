@@ -1,0 +1,76 @@
+/* Motion styles for the desktop portfolio. Pairs with motion.js. */
+:root {
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.34, 1.45, .64, 1);
+  --shadow-focus: 0 34px 90px rgba(30, 40, 43, .28);
+  --shadow-drag: 0 44px 110px rgba(30, 40, 43, .32);
+}
+
+/* Windows: hover/drag use individual properties so JS transforms never collide. */
+.project-window {
+  transition: translate .35s var(--ease-out), rotate .4s var(--ease-out), scale .3s var(--ease-out), box-shadow .35s var(--ease-out);
+  will-change: transform;
+}
+.project-window:hover { translate: 0 -3px; }
+.project-window.focused { box-shadow: var(--shadow-focus); }
+.project-window:not(.focused) .window-bar span { opacity: .65; transition: opacity .3s; }
+.project-window.dragging { translate: 0 -4px; scale: 1.01; box-shadow: var(--shadow-drag); transition: rotate .18s var(--ease-out), scale .2s, box-shadow .2s; }
+.project-window.dragging .window-bar { cursor: grabbing; }
+.traffic button { transition: filter .15s, scale .15s var(--ease-spring); }
+.traffic:hover button { filter: saturate(1.15) brightness(.95); }
+.traffic button:active { scale: .85; }
+
+/* Toolbar */
+.tool-button { transition: transform .25s var(--ease-out), background .2s, scale .15s var(--ease-spring); }
+.tool-button:active { scale: .93; }
+.popover { transform-origin: top right; }
+
+/* Dock magnification, driven by --mag from motion.js */
+.dock-app {
+  --mag: 1;
+  transform-origin: 50% 100%;
+  transform: translateY(calc((var(--mag) - 1) * -20px)) scale(var(--mag));
+  margin-inline: calc((var(--mag) - 1) * 13px);
+  transition: transform .2s var(--ease-out), margin .2s var(--ease-out), box-shadow .2s;
+}
+.dock-app:hover { box-shadow: 0 10px 18px #25323540; }
+.dock-app:after { transition: opacity .3s, scale .3s var(--ease-spring); scale: .4; }
+.dock-app.open:after { scale: 1; }
+.dock-app.selected:after { background: #2f3d41; }
+.dock-label { translate: 0 6px; transition: opacity .15s, translate .25s var(--ease-out); }
+.dock-app:hover .dock-label { translate: 0 0; }
+@media (min-width: 761px) { .dock { overflow: visible; } }
+
+/* Sidebar nav: one pill slides between hovered and active links */
+.side-nav { position: relative; }
+.side-nav .nav-link { position: relative; z-index: 1; }
+.side-nav .nav-link:hover, .side-nav .nav-link.active { background: none; }
+.nav-pill {
+  position: absolute; left: 0; right: 0; top: 0; height: 0; z-index: 0;
+  border-radius: 13px; background: rgba(255, 255, 255, .38);
+  transition: transform .45s var(--ease-out), height .3s var(--ease-out), opacity .2s;
+  pointer-events: none;
+}
+
+/* Toast */
+.toast { transition: opacity .25s, transform .4s var(--ease-spring); }
+
+/* Wallpaper layers move with the pointer */
+.ridge, .ground { will-change: translate; }
+
+/* About controls */
+.about-controls button { transition: background .2s, scale .15s var(--ease-spring); }
+.about-controls button:active { scale: .95; }
+.about-controls #aboutNext span { display: inline-block; transition: translate .25s var(--ease-out); }
+.about-controls #aboutNext:hover span { translate: 3px 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .project-window:hover, .project-window.dragging { translate: none; scale: none; rotate: none; }
+}
+
+/* Fixes surfaced in preview */
+.window-bar { user-select: none; -webkit-user-select: none; touch-action: none; }
+@media (max-width: 760px) {
+  .sidebar:hover .side-nav, .sidebar:focus-within .side-nav { display: grid; }
+}
