@@ -8,7 +8,7 @@
 (() => {
   const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
   const hoverQuery = matchMedia('(hover: hover) and (pointer: fine)');
-  const still = () => reduceQuery.matches;
+  const still = () => reduceQuery.matches || document.documentElement.classList.contains('reduce-motion');
 
   const ease = {
     out: 'cubic-bezier(.22,1,.36,1)',
