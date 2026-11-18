@@ -231,6 +231,13 @@
   }
 
   /* ---------- Captions and speech ---------- */
+  /** Soft edges show when the answer runs past the caption box. */
+  function fades() {
+    const more = caption.scrollHeight - caption.clientHeight > 4;
+    caption.classList.toggle('fade-bottom', more && caption.scrollTop + caption.clientHeight < caption.scrollHeight - 4);
+    caption.classList.toggle('fade-top', more && caption.scrollTop > 4);
+  }
+  caption.addEventListener('scroll', fades, { passive: true });
   function present(text, run) {
     const words = [];
     caption.replaceChildren();
@@ -264,7 +271,13 @@
         orb.animate([{ scale: '1' }, { scale: '1.045' }, { scale: '1' }], { duration: 260, easing: 'ease-out' });
       }
     };
-    const revealAll = () => { reveal(words.length); words[words.length - 1]?.el.classList.remove('now'); };
+    const revealAll = () => {
+      reveal(words.length);
+      words[words.length - 1]?.el.classList.remove('now');
+      // Finished: return to the start so the whole answer reads top to bottom.
+      caption.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      fades();
+    };
 
     return new Promise(resolve => {
       let done = false, timers = [];
