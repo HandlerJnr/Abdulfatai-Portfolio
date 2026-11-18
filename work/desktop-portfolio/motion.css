@@ -82,3 +82,7 @@
 .project-window.dragging { transition: rotate .18s var(--ease-out), scale .2s, box-shadow .2s, translate .2s; }
 @media (min-width: 761px) { .side-nav .nav-pill { border-radius: 11px; } }
 
+
+/* Visitor-chosen reduced motion (Control Center), same as the system setting */
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+.reduce-motion .project-window:hover, .reduce-motion .project-window.dragging { translate: none; scale: none; rotate: none; }
