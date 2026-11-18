@@ -30,3 +30,10 @@ All animation lives in `motion.js` and `motion.css`; `app.js` only calls `Motion
 
 
 Floating navigation and controls use a Liquid Glass treatment, while project windows remain opaque for readability. Menu, sound controls, Control Center tiles, and Now Playing are local interface simulations. They do not change device settings or play audio.
+
+## Desktop structure
+
+- **Dock** = navigation: Home, About, Projects, Gallery (`apps` in `app.js`). Home minimises every window to reveal the wallpaper.
+- **Projects** opens one Finder-style window listing every project (filters, cards, detail view with back button). Projects come from the `projects` array.
+- **Gallery** is a Photos-style window. Add images to the `gallery` array, e.g. `{ src: 'assets/gallery/01.jpg', caption: 'Brighton' }`; placeholders show until then.
+- **Menu bar**: hamburger menu (left), clock and a macOS-style Control Center (right) with Wi-Fi/Bluetooth/AirDrop, Focus, Stage Manager (tidies windows), Dark Mode, Display, Sound and Now Playing.
