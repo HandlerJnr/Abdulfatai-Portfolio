@@ -9,6 +9,7 @@ const M = window.Motion;
 let z = 10, toastTimer;
 document.querySelector('#year').textContent = new Date().getFullYear();
 
+const phone = matchMedia('(max-width: 760px)');
 const dockIcon = id => dock.querySelector(`.dock-app[data-id="${id}"]`);
 
 /* ---------- Desktop apps: the dock carries navigation, not individual projects ---------- */
@@ -138,6 +139,7 @@ function makeProjectsWindow() {
       hero.src = b.dataset.src; hero.alt = b.dataset.alt;
     });
     grid.hidden = true; detail.hidden = false; back.hidden = false; count.hidden = true;
+    w.dataset.project = p.id;
     title.textContent = filterLabel;
     scroll.scrollTop = 0;
     M.play(detail, [{ opacity: 0, transform: 'translateX(20px)' }, { opacity: 1, transform: 'none' }], { duration: 340 });
@@ -146,6 +148,7 @@ function makeProjectsWindow() {
   const showGrid = () => {
     if (grid.hidden === false) return;
     detail.hidden = true; grid.hidden = false; back.hidden = true; count.hidden = false;
+    delete w.dataset.project;
     title.textContent = filterLabel;
     M.play(grid, [{ opacity: 0, transform: 'translateX(-20px)' }, { opacity: 1, transform: 'none' }], { duration: 340 });
   };
@@ -157,6 +160,7 @@ function makeProjectsWindow() {
     filter = b.dataset.filter; filterLabel = b.querySelector('span').textContent;
     sidebar.querySelectorAll('.side-item').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     detail.hidden = true; grid.hidden = false; back.hidden = true; count.hidden = false;
+    delete w.dataset.project;
     title.textContent = filterLabel;
     renderGrid(true);
   });
@@ -267,9 +271,24 @@ function focusTopWindow() {
   focusWindow(open.reduce((a, b) => (Number(b.style.zIndex) > Number(a.style.zIndex) ? b : a)));
 }
 
+/** The AI guide sits after a divider, like Siri at the end of a Mac dock. */
+function makeAskApp() {
+  const b = document.createElement('button');
+  b.className = 'dock-app ask-app';
+  b.dataset.id = 'ask';
+  b.setAttribute('aria-label', 'Ask Jamiu, the AI guide');
+  b.setAttribute('aria-controls', 'siri');
+  b.innerHTML = '<img src="/assets/db99cb95c28524de.png" alt="" width="48" height="48"><span class="dock-label">Ask Jamiu</span>';
+  b.addEventListener('click', () => window.Siri && window.Siri.toggle(b));
+  return b;
+}
+
 function render() {
   windowsEl.replaceChildren();
-  dock.replaceChildren(...apps.map(makeDockApp));
+  const divider = document.createElement('span');
+  divider.className = 'dock-divider';
+  divider.setAttribute('aria-hidden', 'true');
+  dock.replaceChildren(...apps.map(makeDockApp), divider, makeAskApp());
 }
 
 function showToast(message) {
@@ -297,6 +316,7 @@ function makeDraggable(w) {
 
   const start = (handle, e) => {
     if (e.button !== 0 || e.target.closest('button, a, input')) return;
+    if (phone.matches) return; // on a phone, windows are fixed sheets
     focusWindow(w);
     M.stopGlide(w);
     const area = w.parentElement.getBoundingClientRect();
@@ -359,53 +379,46 @@ popovers.forEach(([btn, pop]) => btn.addEventListener('click', e => {
 document.addEventListener('pointerdown', e => { if (!e.target.closest('.popover-wrap')) closePopovers(); });
 document.querySelector('#menuPop').addEventListener('click', e => { if (e.target.closest('.nav-link')) closePopovers(); });
 
-/* Control Center sliders fill like macOS: the track colour follows the value */
-function paintSlider(input) {
-  const pct = (input.value - input.min) / (input.max - input.min) * 100;
-  input.style.setProperty('--fill', `${pct}%`);
+/* Control Center: only what helps a visitor — contact, the AI guide, layout, appearance, motion */
+const EMAIL = 'aabdulfataijamiu@gmail.com';
+try { if (localStorage.getItem('reduce-motion') === '1') document.documentElement.classList.add('reduce-motion'); } catch {}
+document.querySelector('[data-control="motion"]').setAttribute('aria-checked', String(document.documentElement.classList.contains('reduce-motion')));
+
+async function copyEmail() {
+  try { await navigator.clipboard.writeText(EMAIL); showToast('Email copied'); }
+  catch { showToast(EMAIL); }
 }
-document.querySelectorAll('.cc-slider input').forEach(paintSlider);
-
-document.querySelector('#brightness').addEventListener('input', e => {
-  paintSlider(e.target);
-  document.querySelector('.workspace').style.setProperty('--brightness', Number(e.target.value) / 100);
-});
-
-let playing = false, trackIndex = 0;
-const tracks = [['Quiet Hours', 'Portfolio radio'], ['Soft Focus', 'Studio mix'], ['Open Skies', 'Field recordings']];
-const playIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
-const pauseIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
-function syncPlayer() {
-  const [title, artist] = tracks[trackIndex];
-  document.querySelector('#trackTitle').textContent = title;
-  document.querySelector('#trackArtist').textContent = artist;
-  const btn = document.querySelector('#playerToggle');
-  btn.innerHTML = playing ? pauseIcon : playIcon;
-  btn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-  document.querySelector('.cc-now').classList.toggle('playing', playing);
-}
-document.querySelector('#playerToggle').addEventListener('click', () => { playing = !playing; syncPlayer(); });
-document.querySelector('#nextTrack').addEventListener('click', () => { trackIndex = (trackIndex + 1) % tracks.length; syncPlayer(); });
-document.querySelector('#volume').addEventListener('input', e => {
-  paintSlider(e.target);
-  document.querySelector('.cc-sound-ico').classList.toggle('muted', Number(e.target.value) === 0);
-});
-document.querySelector('#outputToggle').addEventListener('click', e => { const on = e.currentTarget.classList.toggle('active'); showToast(on ? 'Output: Headphones' : 'Output: Speakers'); });
-
-/* Toggles: connectivity rows, Focus, Stage Manager and Appearance */
-const subtitles = { wifi: ['Off', 'Portfolio-5G'], bluetooth: ['Off', 'On'], airdrop: ['Receiving Off', 'Everyone'] };
 document.querySelectorAll('[data-control]').forEach(el => el.addEventListener('click', () => {
   const key = el.dataset.control;
   if (key === 'appearance') {
     const dark = document.body.classList.toggle('dark-appearance');
     el.classList.toggle('active', dark);
+    el.setAttribute('aria-pressed', String(dark));
     return;
   }
   if (key === 'stage') return tidyWindows(el);
-  const on = el.classList.toggle('active');
-  if (subtitles[key]) el.querySelector('small').textContent = subtitles[key][Number(on)];
-  if (key === 'focus') { el.querySelector('small').textContent = on ? 'On' : ''; showToast(on ? 'Focus on' : 'Focus off'); }
+  if (key === 'copy') return copyEmail();
+  if (key === 'ask') { closePopovers(); return window.Siri && window.Siri.open(); }
+  if (key === 'motion') {
+    const on = document.documentElement.classList.toggle('reduce-motion');
+    el.setAttribute('aria-checked', String(on));
+    try { localStorage.setItem('reduce-motion', on ? '1' : '0'); } catch {}
+    showToast(on ? 'Reduced motion on' : 'Reduced motion off');
+  }
 }));
+
+/** Brighton time, and how far it is from the visitor's own clock. */
+function tickLocal() {
+  const now = new Date();
+  document.querySelector('#localTime').textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+  const london = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
+  const here = new Date(now.toLocaleString('en-US'));
+  const diff = Math.round((london - here) / 36e5 * 2) / 2;
+  const h = Math.abs(diff), unit = h === 1 ? 'hour' : 'hours';
+  document.querySelector('#localNote').textContent = diff === 0 ? 'Local time, same as yours' : `Local time, ${h} ${unit} ${diff > 0 ? 'ahead of' : 'behind'} you`;
+}
+tickLocal();
+setInterval(tickLocal, 30000);
 
 /** Stage Manager: gathers open windows into a neat cascade. */
 function tidyWindows(tile) {
@@ -440,8 +453,24 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   const viewer = document.querySelector('.photo-viewer:not([hidden])');
   if (viewer) return viewer.querySelector('.viewer-close').click();
+  if (window.Siri && window.Siri.isOpen()) return window.Siri.close();
   closePopovers();
 });
+
+/* Hooks for the AI guide */
+window.Desktop = {
+  openApp,
+  closePopovers,
+  openProject(id) {
+    openApp('projects');
+    const w = windowsEl.querySelector('.project-window[data-id="projects"]');
+    if (w && w.openProject) w.openProject(id);
+  },
+  currentProject() {
+    const w = windowsEl.querySelector('.project-window[data-id="projects"]:not(.minimized)');
+    return w ? w.dataset.project || '' : '';
+  }
+};
 
 /* Boot */
 render();
