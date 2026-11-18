@@ -71,6 +71,12 @@ const sideGlyph = {
   health: '<path d="M12 19.5s-7.5-4.3-7.5-9.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 2.3c0 5.3-7.5 9.6-7.5 9.6z"/>'
 };
 const sideIcon = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${sideGlyph[id]}</svg>`;
+/** The first metric, marked as reported when the source says it is company-reported. */
+const keyResult = p => {
+  const m = p.metrics[0]; if (!m) return '';
+  const reported = /reported/i.test(p.metricNote || '') && !/reported/i.test(m.label);
+  return `<span class="card-metric"><strong>${esc(m.value)}</strong> ${esc(m.label.toLowerCase())}${reported ? ' (reported)' : ''}</span>`;
+};
 const matches = (p, f) => f === 'all' || (f === 'shipped' && p.shipped) || (f === 'explorations' && !p.shipped) || p.domain === f;
 
 function makeProjectsWindow() {
@@ -99,6 +105,7 @@ function makeProjectsWindow() {
       <span class="card-cover"><img src="${esc(p.cover)}" alt="" loading="lazy"></span>
       <span class="card-row"><strong>${esc(p.name)}</strong><small>${esc(p.year)}</small></span>
       <span class="card-line">${esc(p.line)}</span>
+      <span class="card-meta"><span class="tag ${p.shipped ? 'tag-live' : ''}">${p.shipped ? 'Shipped' : 'Exploration'}</span>${keyResult(p)}</span>
     </button>`).join('');
     count.textContent = `${list.length} ${list.length === 1 ? 'project' : 'projects'}`;
     if (animate) M.cascadeIn([...grid.children]);
@@ -109,6 +116,7 @@ function makeProjectsWindow() {
     const imgs = p.images.length ? p.images : [{ src: p.cover, alt: p.name }];
     detail.innerHTML = `
       <header class="detail-head"><h3>${esc(p.name)}</h3><p>${esc(p.line)}</p></header>
+      ${p.metrics.length ? `<section class="detail-outcomes" aria-label="${p.shipped ? 'Outcomes and scope' : 'Scope'}"><div class="metrics">${p.metrics.map(m => `<div><strong>${esc(m.value)}</strong><span>${esc(m.label)}</span></div>`).join('')}</div>${p.metricNote ? `<p class="metric-note">${esc(p.metricNote)}</p>` : ''}</section>` : ''}
       <figure class="detail-media"><img class="detail-hero" src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}">
         ${imgs.length > 1 ? `<div class="detail-thumbs" role="group" aria-label="Project images">${imgs.map((im, i) => `<button aria-pressed="${i === 0}" aria-label="Show ${esc(im.alt)}" data-src="${esc(im.src)}" data-alt="${esc(im.alt)}"><img src="${esc(im.src)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}
       </figure>
@@ -121,7 +129,6 @@ function makeProjectsWindow() {
       ${p.problem ? `<section class="detail-section"><h4>The problem</h4><p>${esc(p.problem)}</p></section>` : ''}
       ${p.decisions.length ? `<section class="detail-section"><h4>Key decisions</h4><ul class="decisions">${p.decisions.map(d => `<li><strong>${esc(d.title)}</strong> ${esc(d.text)}</li>`).join('')}</ul></section>` : ''}
       ${p.result ? `<section class="detail-section"><h4>What shipped</h4><p>${esc(p.result)}</p></section>` : ''}
-      ${p.metrics.length ? `<section class="detail-section"><h4>${p.shipped ? 'Outcomes and scope' : 'Scope'}</h4><div class="metrics">${p.metrics.map(m => `<div><strong>${esc(m.value)}</strong><span>${esc(m.label)}</span></div>`).join('')}</div>${p.metricNote ? `<p class="metric-note">${esc(p.metricNote)}</p>` : ''}</section>` : ''}
       ${links ? `<div class="detail-links">${links}</div>` : ''}`;
     const hero = detail.querySelector('.detail-hero');
     detail.querySelector('.detail-thumbs')?.addEventListener('click', e => {
