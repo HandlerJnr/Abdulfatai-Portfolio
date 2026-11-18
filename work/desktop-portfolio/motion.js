@@ -94,23 +94,71 @@
     ], { duration: 200, easing: ease.in, fill: 'forwards' }).then(done);
   }
 
-  /** Lightweight "genie": the window narrows, drops and shrinks into its dock icon. */
+  /*
+   * macOS "genie" minimise. The bottom edge first pinches to the dock icon's width,
+   * then the whole window is pulled down through that funnel into the icon.
+   * Built from a clip-path trapezoid plus a vertical slide, so the content never distorts.
+   */
+  function genieFrames(win, icon) {
+    const b = win.getBoundingClientRect();
+    const i = icon.getBoundingClientRect();
+    const L = ((i.left + i.width * 0.12 - b.left) / b.width * 100).toFixed(2);
+    const R = ((i.right - i.width * 0.12 - b.left) / b.width * 100).toFixed(2);
+    const dy = (i.top + i.height / 2 - b.bottom).toFixed(1);
+    return [
+      { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', transform: 'translateY(0px)', opacity: 1, offset: 0 },
+      { clipPath: `polygon(0% 0%, 100% 0%, ${R}% 100%, ${L}% 100%)`, transform: 'translateY(0px)', opacity: 1, offset: 0.38 },
+      { clipPath: `polygon(${L}% 100%, ${R}% 100%, ${R}% 100%, ${L}% 100%)`, transform: `translateY(${dy}px)`, opacity: 0.4, offset: 1 }
+    ];
+  }
+
   function minimizeToDock(win, icon, done) {
     if (!icon || !icon.offsetParent) return closeWindow(win, done);
+    clear(win);
     win.style.pointerEvents = 'none';
-    const box = win.getBoundingClientRect();
-    const from = centre(box);
-    const to = centre(icon.getBoundingClientRect());
-    const dx = to.x - from.x, dy = to.y - from.y;
-    const s = Math.max(icon.offsetWidth / box.width, 0.05);
-    return play(win, [
-      { opacity: 1, transform: 'none' },
-      { opacity: 0.9, transform: `translate(${dx * 0.35}px, ${dy * 0.6}px) scale(.6, .42)`, offset: 0.55 },
-      { opacity: 0, transform: `translate(${dx}px, ${dy}px) scale(${s})` }
-    ], { duration: 480, easing: ease.inOut, fill: 'forwards' }).then(() => {
-      receive(icon);
-      done && done();
-    });
+    return play(win, genieFrames(win, icon), { duration: 560, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' })
+      .then(() => {
+        receive(icon);
+        done && done();
+        clear(win);
+        win.style.pointerEvents = '';
+      });
+  }
+
+  /** Reverse genie: the window pours back out of its dock icon. */
+  function restoreFromDock(win, icon) {
+    clear(win);
+    win.style.pointerEvents = '';
+    if (!icon || !icon.offsetParent) return cascadeIn([win]);
+    return play(win, genieFrames(win, icon).reverse().map(f => ({ ...f, offset: 1 - f.offset })),
+      { duration: 520, easing: 'cubic-bezier(.3,0,.2,1)' });
+  }
+
+  /* ---------- Momentum after a drag ---------- */
+  const glides = new WeakMap();
+  function stopGlide(win) {
+    cancelAnimationFrame(glides.get(win));
+    glides.delete(win);
+  }
+  function glide(win, vx, vy, clamp) {
+    stopGlide(win);
+    if (still() || Math.hypot(vx, vy) < 0.05) return;
+    let x = win.offsetLeft, y = win.offsetTop, last = performance.now();
+    const step = now => {
+      const dt = Math.min(32, now - last);
+      last = now;
+      const decay = Math.pow(0.9, dt / 16);
+      vx *= decay; vy *= decay;
+      if (Math.hypot(vx, vy) < 0.02) { glides.delete(win); return; }
+      const [cx, cy] = clamp(win, x + vx * dt, y + vy * dt);
+      if (cx !== x + vx * dt) vx = 0;
+      if (cy !== y + vy * dt) vy = 0;
+      x = cx; y = cy;
+      win.style.left = `${x}px`;
+      win.style.top = `${y}px`;
+      glides.set(win, requestAnimationFrame(step));
+    };
+    glides.set(win, requestAnimationFrame(step));
   }
 
   /** FLIP between the floating and maximised layouts. */
@@ -311,7 +359,8 @@
   }
 
   window.Motion = {
-    ease, play, intro, cascadeIn, openFromDock, closeWindow, minimizeToDock, toggleMaximize, nudge,
+    ease, play, intro, cascadeIn, openFromDock, closeWindow, minimizeToDock, restoreFromDock, toggleMaximize, nudge,
+    glide, stopGlide,
     dragStart, dragMove, dragEnd, popDock, launch, receive, bindDock, leave,
     openPopover, closePopover, showOverlay, hideOverlay, swapAbout, bindNav, bindParallax,
     syncNav: () => navSync()
