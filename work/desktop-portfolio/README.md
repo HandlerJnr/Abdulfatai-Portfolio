@@ -37,3 +37,9 @@ Floating navigation and controls use a Liquid Glass treatment, while project win
 - **Projects** opens one Finder-style window listing every project (filters, cards, detail view with back button). Projects come from the `projects` array.
 - **Gallery** is a Photos-style window. Add images to the `gallery` array, e.g. `{ src: 'assets/gallery/01.jpg', caption: 'Brighton' }`; placeholders show until then.
 - **Menu bar**: hamburger menu (left), clock and a macOS-style Control Center (right) with Wi-Fi/Bluetooth/AirDrop, Focus, Stage Manager (tidies windows), Dark Mode, Display, Sound and Now Playing.
+
+## Content and wallpaper
+
+- **`data.js`** holds all content: About details, the 12 projects (role, problem, decisions, result, metrics with source notes, images, links) and the gallery list. Copy mirrors the published portfolio; edit here, not in `app.js`.
+- **Wallpaper** is an inline SVG of the Seven Sisters cliffs near Brighton, in layers (`ridge-back`, `ridge-front`, `ground`) so the pointer parallax still works. Its colours are CSS variables: golden hour by default, night (moon and stars) in Dark Mode.
+- Images use root paths (`/assets/...`), so preview the folder from the repository root, not by opening the file directly.
