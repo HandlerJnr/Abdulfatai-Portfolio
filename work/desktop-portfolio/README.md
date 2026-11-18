@@ -15,3 +15,15 @@ Open `index.html` in a browser. No build step or package installation is needed.
 - Change colors, layout, and responsive behavior in `styles.css`.
 
 All included portfolio copy and interface artwork are original sample content for this starter. Replace it with accurate information about your own work before publishing.
+
+## Motion
+
+All animation lives in `motion.js` and `motion.css`; `app.js` only calls `Motion.*` hooks.
+
+- **Intro:** the wallpaper settles, sidebar items fade up, toolbar and dock spring in, and windows cascade.
+- **Dock:** macOS-style magnification follows the pointer; a launch bounce plays when an app opens.
+- **Windows:** they open from their dock icon, minimise into it, close with a quick scale-out, and maximise with a FLIP transition. Dragging adds a slight velocity tilt and lift.
+- **Filters:** the current set animates out, then the filtered set cascades in.
+- **Popovers and overlays:** these scale and fade from their origin. The About carousel slides in the direction of travel.
+- **Ambient:** a pill slides behind the sidebar nav, and the wallpaper has gentle pointer parallax.
+- **Accessibility:** `prefers-reduced-motion` collapses all durations and disables tilt, parallax and magnification.
