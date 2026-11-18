@@ -189,7 +189,7 @@ function makeDraggable(w) {
 }
 
 /* Popovers */
-const popovers = [['#filterToggle', '#filterPop'], ['#controlToggle', '#controlPop']]
+const popovers = [['#menuToggle', '#menuPop'], ['#filterToggle', '#filterPop'], ['#soundToggle', '#soundPop'], ['#controlToggle', '#controlPop'], ['#nowPlayingToggle', '#nowPlayingPop']]
   .map(([b, p]) => [document.querySelector(b), document.querySelector(p)]);
 function closePopovers(except) {
   popovers.forEach(([btn, pop]) => { if (pop !== except && !pop.hidden) { btn.setAttribute('aria-expanded', 'false'); M.closePopover(pop); } });
@@ -202,6 +202,7 @@ popovers.forEach(([btn, pop]) => btn.addEventListener('click', e => {
   show ? M.openPopover(pop) : M.closePopover(pop);
 }));
 document.addEventListener('pointerdown', e => { if (!e.target.closest('.popover-wrap')) closePopovers(); });
+document.querySelector('#menuPop').addEventListener('click', e => { if (e.target.closest('.nav-link')) { closePopovers(); document.querySelector('#menuToggle').setAttribute('aria-expanded','false'); } });
 
 document.querySelectorAll('.filter-check').forEach(c => c.addEventListener('change', () => {
   activeFilter = new Set([...document.querySelectorAll('.filter-check:checked')].map(x => x.value));
@@ -214,9 +215,37 @@ document.querySelector('#brightness').addEventListener('input', e => {
   document.querySelector('#brightnessValue').textContent = `${v}%`;
 });
 
-let playing = false;
-document.querySelector('#musicPlay').addEventListener('click', e => { playing = !playing; e.currentTarget.textContent = playing ? 'Ⅱ' : '▶'; showToast(playing ? 'Ambient mode on' : 'Ambient mode off'); });
-document.querySelector('#soundToggle').addEventListener('click', e => { playing = !playing; e.currentTarget.classList.toggle('selected', playing); showToast(playing ? 'Ambient mode on' : 'Ambient mode off'); });
+let playing = false, muted = false, trackIndex = 0;
+const tracks = [['Quiet Hours','Portfolio radio'],['Soft Focus','Studio mix'],['Open Skies','Field recordings']];
+function syncPlayer() {
+  const [title, artist] = tracks[trackIndex];
+  document.querySelector('#trackTitle').textContent = title;
+  document.querySelector('#trackArtist').textContent = artist;
+  document.querySelector('#musicPlay').textContent = playing ? 'Ⅱ' : '▶';
+  document.querySelector('#playerToggle').textContent = playing ? 'Ⅱ' : '▶';
+  document.querySelector('#musicPlay').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  document.querySelector('#playerToggle').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  document.querySelector('#trackProgress').style.width = playing ? '42%' : '28%';
+  document.querySelector('#soundToggle').classList.toggle('selected', playing && !muted);
+}
+function togglePlayback() { playing = !playing; syncPlayer(); showToast(playing ? 'Now playing' : 'Playback paused'); }
+document.querySelector('#musicPlay').addEventListener('click', togglePlayback);
+document.querySelector('#playerToggle').addEventListener('click', togglePlayback);
+document.querySelector('#previousTrack').addEventListener('click', () => { trackIndex = (trackIndex + tracks.length - 1) % tracks.length; syncPlayer(); });
+document.querySelector('#nextTrack').addEventListener('click', () => { trackIndex = (trackIndex + 1) % tracks.length; syncPlayer(); });
+document.querySelector('#volume').addEventListener('input', e => { document.querySelector('#volumeValue').textContent = e.target.value + '%'; });
+document.querySelector('#muteToggle').addEventListener('click', e => { muted = !muted; e.currentTarget.textContent = muted ? 'Unmute' : 'Mute'; e.currentTarget.classList.toggle('active', muted); syncPlayer(); });
+document.querySelector('#outputToggle').addEventListener('click', e => { e.currentTarget.classList.toggle('selected'); showToast(e.currentTarget.classList.contains('selected') ? 'Headphones selected' : 'MacBook Speakers selected'); });
+document.querySelectorAll('.control-tile').forEach(tile => tile.addEventListener('click', () => {
+  const key = tile.dataset.control, small = tile.querySelector('small');
+  if (key === 'appearance') {
+    const dark = document.body.classList.toggle('dark-appearance');
+    small.textContent = dark ? 'Dark' : 'Light';
+  } else {
+    const enabled = tile.classList.toggle('active');
+    small.textContent = key === 'focus' ? (enabled ? 'On' : 'Off') : (enabled ? (key === 'wifi' ? 'Connected' : 'On') : 'Off');
+  }
+}));
 
 /* Overlays and navigation */
 const aboutOverlay = document.querySelector('#aboutOverlay');
@@ -228,7 +257,7 @@ function hideOverlay(o) {
   M.hideOverlay(o);
   if (o === aboutOverlay) setNav('work');
 }
-document.querySelector('#sourceToggle').addEventListener('click', () => M.showOverlay(document.querySelector('#sourceOverlay')));
+document.querySelector('[data-action="source"]').addEventListener('click', () => M.showOverlay(document.querySelector('#sourceOverlay')));
 document.querySelectorAll('[data-action="about"]').forEach(b => b.addEventListener('click', () => { setNav('about'); M.showOverlay(aboutOverlay); }));
 document.querySelectorAll('[data-action="work"]').forEach(b => b.addEventListener('click', () => hideOverlay(aboutOverlay)));
 
